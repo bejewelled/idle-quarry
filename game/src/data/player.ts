@@ -1,9 +1,10 @@
 
-import { writable } from 'svelte/store';
+import { writable, get } from 'svelte/store';
+import { miningUpgrades } from './mining';
 
 function single(context: any) {
     // @ts-ignore
-    const {subscribe, set, update, get} = writable(context);
+    const {subscribe, set, update} = writable(context);
     return {
         subscribe,
         set(amt: any) {
@@ -37,7 +38,7 @@ function single(context: any) {
 }
 function array(context: any) {
     // @ts-ignore
-    const {subscribe, set, update, get} = writable(context);
+    const {subscribe, set, update} = writable(context);
     return {
         subscribe,
         set(amt: any) {
@@ -72,7 +73,7 @@ function array(context: any) {
 
 function object(context: any) {
     // @ts-ignore
-    const {subscribe, set, update, get} = writable(context);
+    const {subscribe, set, update} = writable(context);
     return {
         subscribe,
         set(obj: object) {
@@ -115,6 +116,59 @@ function object(context: any) {
     }
 }
 
+// same as object with additional methods
+function dropTable(context: any) {
+    // @ts-ignore
+    const {subscribe, set, update } = writable(context);
+    return {
+        subscribe,
+        set(item: string | number, amt: any) {
+            update((i: any) => {
+                i[item] = amt;
+                return i;
+            })
+        },
+        add(item: string | number, amt: any) {
+            update((i: any) => {
+                i[item] += amt;
+                return i;
+            })
+        },
+        sub(item: string | number, amt: any, negatable = false) {
+            update((i: any) => {
+                if (negatable) i[item] -= amt;
+                else i[item] = Math.max(i[item],0);
+                return i;
+            })
+        },
+        multiply(item: string | number, amt: any) {
+            update((i: any) => {
+                i[item] *= amt;
+                return i;
+            })
+        },
+        divide(item: string | number, amt: any) {         
+            update((i: any) => {
+                i[item] /= amt;
+                return i;
+            })
+        },
+        updateTable() {
+            update((i: any) => {
+                for (let [item, val] of Object.entries(i)) {
+                    console.log(item, val)
+                    console.log(get(miningUpgradeLevels));
+                    i[item]= [
+                        Math.min(1,val[0] * (get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2]))),
+                        val[1]
+                    ]
+                }
+                return i;
+            })
+        }
+    }
+}
+
 
 // edit when changing the level of the haste upgrade
 export const wallet = object({
@@ -122,9 +176,9 @@ export const wallet = object({
     gold: 0,
 })
 
-export const miningUpgradeLevels = array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+export const miningUpgradeLevels = array(Array(20).fill(0));
 
-export const miningDropTable = object({
-    gold: [0.10,1], // 10% chance to drop 1 gold
+export const miningDropTable = dropTable({
+    gold: [0.90,1], // 10% chance to drop 1 gold
     key1: [0.04,1], 
 });

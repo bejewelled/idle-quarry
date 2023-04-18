@@ -4,13 +4,17 @@
         <span class='px-2 mx-4 tooltip tooltip-text shadow-lg p-1
         border-white border-double border bg-[#222529] ml-16
           pointer-events-none'>
+          <!-- Drop Table Display -->
           {#each Object.entries($miningDropTable) as drop}
-            <div class='drop-table-disp grid grid-cols-8'>
-                <div class='col-span-4 {ref.colors[drop[0]] || text-white}'>
-                    {drop[0]}
+            <div class='drop-table-disp grid grid-cols-10'>
+                <div class='col-span-2 {ref.dropTierColors[ref.dropTiers[drop[0]]] ||'text-white'}'>
+                [ {'*'.repeat(ref.dropTiers[drop[0]])} ]
                 </div>
-                <div class='col-span-4 text-left'>
-                    {fp(drop[1][0])}
+                <div class='col-span-4 {ref.colors[drop[0]] || 'text-white'}'>
+                    {ref.displayNames[drop[0]] || drop[0]}
+                </div>
+                <div class='col-span-4 text-right'>
+                    {fpf(drop[1][0])}
                 </div>
             </div>
           {/each}
@@ -49,7 +53,14 @@ const f = (n: number, pl = 0) => {
 
 const fp = (n: unknown, pl = 3, subOne = false) => {
     if (subOne) n -= 1;
-    if (n < 1e9) return n.toFixed(pl).toLocaleString() + "%";
+    if (n < 1e9) return (n*100).toFixed(pl).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "%";
     else return (n*100).toExponential(pl).toString().replace('+', '') + "%";
 }
+
+const fpf = (n: unknown, subOne = false) => {
+    if (subOne) n -= 1;
+    if (n < 1e9) return (n*100).toFixed(3).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "%";
+    else return (n*100).toExponential(3).toString().replace('+', '') + "%";
+}
+
 </script>

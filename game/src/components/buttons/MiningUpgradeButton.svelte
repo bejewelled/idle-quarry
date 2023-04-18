@@ -49,7 +49,7 @@ select-none'>{$miningUpgrades[index]['name']}
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
-    import { wallet, miningUpgradeLevels } from '../../data/player';
+    import { wallet, miningUpgradeLevels, miningDropTable } from '../../data/player';
     import { progress, progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
     import ref from '../../calcs/ref'
 // @ts-nocheck
@@ -67,8 +67,10 @@ select-none'>{$miningUpgrades[index]['name']}
     let affordInterval;
     
     onMount(() => {
-        costs = getCosts();
-        affordable = canAfford();
+        setTimeout(() => {
+            costs = getCosts();
+            affordable = canAfford();
+        }, 50)
         affordInterval = setInterval(() => {
             affordable = canAfford();
             unlocked = isUnlocked();
@@ -85,7 +87,7 @@ select-none'>{$miningUpgrades[index]['name']}
 
     const fp = (n, pl = 3, subOne = false) => {
         if (subOne) n -= 1;
-        if (n < 1e9) return n.toFixed(pl).toLocaleString() + "%";
+        if (n < 1e9) return (n*100).toFixed(pl).toLocaleString() + "%";
         else return (n*100).toExponential(pl).toString().replace('+', '') + "%";
     }
 
@@ -106,6 +108,7 @@ select-none'>{$miningUpgrades[index]['name']}
         $miningUpgradeLevels[index]++;
         costs = getCosts();
         permUnlocked = true;
+        miningDropTable.updateTable();
     }
 
     function canAfford() {

@@ -109,6 +109,7 @@ function object(context: any) {
     }
 }
 
+
 const pow = (b: number, e: number) => Math.pow(b,e);
 const log = (b: number, e: number) => Math.log(e)/Math.log(b);
 const floor = (n: number) => Math.floor(n);

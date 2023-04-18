@@ -1,4 +1,4 @@
-<ConcurrentAdders />
+<Adders />
 <div class='wrapper'>
 
     <div class='main-page grid grid-cols-12'>
@@ -29,7 +29,7 @@
                 {#if tab === 'mining'}
                     <Mining />
                 {:else if tab === 'upgrades'}
-                    <Upgrades />
+                    <Keys />
                     <div class='game-text'> sasds</div>
                 {/if}
 
@@ -43,10 +43,10 @@
 // @ts-nocheck
 
 import Decimal from 'break_infinity.js'
-import {wallet, miningUpgradeLevels} from '../data/player.js'
-import ConcurrentAdders from '../components/adders/ConcurrentAdders.svelte';
+import {wallet, miningUpgradeLevels, miningDropTable} from '../data/player.js'
+import Adders from '../components/adders/Adders.svelte';
 import Mining from '../components/tabs/Mining.svelte';
-import Upgrades from '../components/tabs/Upgrades.svelte';
+import Keys from '../components/tabs/Keys.svelte';
 import MiningUpgradeButton from '../components/buttons/MiningUpgradeButton.svelte';
 import ref from '../calcs/ref.ts'
 
@@ -93,6 +93,7 @@ const load = () => {
 
 onMount(() => {
     load();
+    miningDropTable.updateTable();
     setInterval(() => {
         if (AUTOSAVE) {
             save();
@@ -140,17 +141,18 @@ onMount(() => {
         font-size: 16px;
     }  
     :global(.game-btn) {
-        border: 1px solid #c9c9c9;
-        color: #c9c9c9;
+        border: 1px solid #d9d9d9;
+        color: #d9d9d9;
         cursor: pointer;
     }
     :global(.game-btn:hover) {
         border: 1px solid #ffffff;
         color: #ffffff;
+        background-color: #3a3a3a;
     }
     :global(.game-btn-noafford) {
-        border: 1px solid #999999;
-        color: #999999;
+        border: 1px solid #888888;
+        color: #888888;
         cursor: pointer;
     }
     :global(.control-btn) {

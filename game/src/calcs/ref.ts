@@ -7,7 +7,21 @@ export default class ref {
     }
 
     static displayNames = {
-        key1: '*keys',
+        key1: '*key',
+    }
+
+    static dropTiers = {
+        default: 1,
+        gems: 0,
+        gold: 1,
+        key1: 1,
+    }
+
+    static dropTierColors = {
+        0: 'text-white',
+        1: 'text-white',
+        2: 'text-green-200',
+        3: 'text-blue-300'
     }
 
 }
