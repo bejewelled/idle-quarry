@@ -126,19 +126,43 @@ export const miningUpgrades = array([{
     name: 'Haste',
     description: 'Increases progress per tick.',
     cost: {
-        gems: 100,
+        gems: 10,
     },
-    ratio: 2,
-    formula: (lv: any) => lv+1,
+    ratio: 3,
+    formula: (lv: any) => Math.pow(lv,0.9)+1,
+    unlockAt: {
+        gems: 3
+    },
+    isPercent: false,
     notes: 'Progress equal to level + 1.'
 },
 {
     name: 'Efficiency',
     description: 'Increases gem yield.',
     cost: {
-        gems: 400,
+        gems: 20,
     },
     ratio: 1.25,
+    unlockAt: {
+        gems: 12
+    },
     formula: (lv: any) => (1+floor(lv*0.1))*pow(lv,0.6),
+    isPercent: false,
     notes: '(1 + floor(level/10)) * level^0.6'
+},
+{
+    name: 'Fortune',
+    description: 'Improves droprates for common items.',
+    cost: {
+        gems: 100,
+        gold: 15
+    },
+    ratio: 1.5,
+    unlockAt: {
+        gold: 1
+    },
+    formula: (lv: any) => (1 + Math.pow(lv, 0.33)*0.1),
+    isPercent: true,
+    prefix: '+',
+    notes: '(1 + floor(level/10)) * level^0.6'  
 }]);

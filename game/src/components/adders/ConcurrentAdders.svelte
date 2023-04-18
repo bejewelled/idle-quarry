@@ -7,7 +7,7 @@
 
 import Decimal from 'break_infinity.js'
 import {progress, progressThreshold, progressPerTick, miningUpgrades} from '../../data/mining' 
-import {wallet} from '../../data/player'
+import {miningUpgradeLevels, wallet, miningDropTable} from '../../data/player'
 
 import { onMount } from 'svelte'
 
@@ -37,12 +37,14 @@ onMount(() => {
     }, 1000/UPDATE_SPEED)
 })
 
-
+let progressGain = 0;
 function addProgress(delta) {
     const gemAt = $progressThreshold['gems'];
-    $progress += $progressPerTick * delta*120;
+    progressGain = $miningUpgrades[0]['formula']($miningUpgradeLevels[0]);
+    $progress += progressGain * delta;
     if ($progress >= gemAt) {
         addGems(Math.floor($progress / gemAt));
+        dropRoll(Math.floor($progress / gemAt));
         $progress %= gemAt;
     }
 }
@@ -51,6 +53,17 @@ function addProgress(delta) {
  * @param n - number of times to add gems
  */
 function addGems(n) {
-    $wallet['gems'] += (n * 1);
+    $wallet['gems'] += 1 + 
+    n * $miningUpgrades[1]['formula']($miningUpgradeLevels[1]);
+}
+
+function dropRoll(n) {
+    for (let [item, val] of Object.entries($miningDropTable)) {
+        if ((Math.random() / n) < val[0]) {
+            console.log(val[1])
+            
+            $wallet[item] = ($wallet[item] || 0) + val[1];
+        }
+    }
 }
 </script>

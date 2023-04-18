@@ -1,6 +1,5 @@
 
 import { writable } from 'svelte/store';
-import Decimal  from 'break_infinity.js';
 
 function single(context: any) {
     // @ts-ignore
@@ -76,7 +75,13 @@ function object(context: any) {
     const {subscribe, set, update, get} = writable(context);
     return {
         subscribe,
-        set(item: string, amt: any) {
+        set(obj: object) {
+            update((i: any) => {
+                i = obj;
+                return i;
+            })
+        },
+        setItem(item: string, amt: any) {
             update((i: any) => {
                 i[item.toString().toLowerCase()] = amt;
                 return i;
@@ -113,7 +118,13 @@ function object(context: any) {
 
 // edit when changing the level of the haste upgrade
 export const wallet = object({
-    gems: 0
+    gems: 0,
+    gold: 0,
 })
 
 export const miningUpgradeLevels = array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+
+export const miningDropTable = object({
+    gold: [0.10,1], // 10% chance to drop 1 gold
+    key1: [0.04,1], 
+});
