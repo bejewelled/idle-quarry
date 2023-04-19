@@ -1,6 +1,7 @@
 
 import { writable, get } from 'svelte/store';
 import { miningUpgrades } from './mining';
+import { miningUpgradeLevels, wallet } from './player';
 
 function single(context: any) {
     // @ts-ignore
@@ -170,22 +171,11 @@ function dropTable(context: any) {
 }
 
 
-// edit when changing the level of the haste upgrade
-export const wallet = object({
-    gems: 0,
-    gold: 0,
-})
-
-export const unlocked = new Set();
-
-export const visibleTier = single(1); 
-
-export const miningUpgradeLevels = array(Array(20).fill(0));
-
-export const miningDropTable = dropTable({
-    gold: [0.10,1], // 10% chance to drop 1 gold
-    key1: [0.04,1], 
+export const key1DropTable = dropTable({
+    gems: [0.6, 100, 500], // [chance, min, max]
+    orbs:  [0.4, 1, 1], // [chance, min, max]
+    key1: [0.4, 1, 1],
+    key2: [0.002, 1, 1],
 });
 
-
-export const keysOpened = array([0,0,0,0,0])
+export const keyRewardText = object('')

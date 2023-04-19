@@ -147,7 +147,7 @@ export const miningUpgrades = array([{
     unlockAt: {
         gems: 12
     },
-    formula: (lv: any) => (1+floor(lv*0.1))*pow(lv,0.6),
+    formula: (lv: any) => (1+lv*0.1)*pow(lv,0.6),
     isPercent: false,
     notes: '(1 + floor(level/10)) * level^0.6'
 },
@@ -160,7 +160,8 @@ export const miningUpgrades = array([{
     },
     ratio: 1.5,
     unlockAt: {
-        gold: 1
+        gems: 30,
+        gold: 3
     },
     formula: (lv: any) => (1 + Math.pow(lv, 0.33)*0.1),
     isPercent: true,

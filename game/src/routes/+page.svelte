@@ -21,16 +21,15 @@
                 <button class='py-1 text-small save-btn control-btn' on:click={() => reset()}>Reset</button>
             </div>
             <div class='py-1 row-span-2 tab-buttons'>
-                {#each ['mining', 'upgrades'] as tab}
+                {#each ['mining', 'keys'] as tab}
                     <button class='p-1 text-small control-btn' on:click={() => changeTab(tab)}>{tab}</button>
                 {/each}
             </div>
             <div class='row-span-10 main-panel-display'>
                 {#if tab === 'mining'}
                     <Mining />
-                {:else if tab === 'upgrades'}
+                {:else if tab === 'keys'}
                     <Keys />
-                    <div class='game-text'> sasds</div>
                 {/if}
 
             </div>
@@ -53,7 +52,7 @@ import ref from '../calcs/ref.ts'
 import { onMount } from 'svelte'
 
 let tab = 'mining'
-let AUTOSAVE = true;
+let AUTOSAVE = false;
 let AUTOSAVE_INTERVAL = 30000;
 
 const changeTab = (t: string) => {

@@ -23,6 +23,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"break_infinity.js": "^2.2.0"
+		"break_infinity.js": "^2.2.0",
+		"statistics.js": "^1.0.0"
 	}
 }
