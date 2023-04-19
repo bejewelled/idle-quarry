@@ -6,7 +6,7 @@ class='has-tooltip tooltip-text
 {affordable ? 'game-btn' : 'game-btn-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)}]
-         <span class='px-2 mx-4 tooltip tooltip-text shadow-lg p-1
+         <span class='px-2 mx-4 max-w-[290px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
          <div class='title text-small-gray items-start text-center pb-1'>
@@ -30,9 +30,12 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
         <hr />
         <div class='pt-1 cost items-start text-center grid grid-cols-4'>
             {#each Object.entries(costs) as c}
-                <div class='{ref.colors[c[0]] || ref.colors['default']} col-span-2'>{
-                $wallet[c[0]] && $wallet[c[0]] > 0 ? c[0] : "???"}</div>
-                <div class='col-span-2 text-left'>{f(c[1])}</div>
+                {#if c[1] >= 1}
+                    <div class='{ref.colors[c[0]] || ref.colors['default']} col-span-2'>{
+                    $wallet[c[0]] && $wallet[c[0]] > 0 ? 
+                    (ref.displayNames[c[0]] ? ref.displayNames[c[0]] : c[0]) : "???"}</div>
+                    <div class='col-span-2 text-left'>{f(c[1])}</div>
+                {/if}
             {/each}
         </div>
          </span>
@@ -96,12 +99,12 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
 
     function buy() {
         for (let [type, val] of Object.entries(costs)) {
-            if ($wallet[type] < val) {
+            if (val >=  1 && $wallet[type] < val) {
                 return;
             }
         }
         for (let [type, val] of Object.entries(costs)) {
-            $wallet[type] -= val;
+            if (val >= 1) $wallet[type] -= val;
         }
         $miningUpgradeLevels[index]++;
         costs = getCosts();
@@ -111,7 +114,7 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
 
     function canAfford() {
         for (let [type, val] of Object.entries(costs)) {
-            if ($wallet[type] < val) {
+            if (val >= 1 && $wallet[type] < val) {
                 return false;
             }
         }  

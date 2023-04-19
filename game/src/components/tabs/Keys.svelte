@@ -25,14 +25,14 @@
                 You received the following rewards:
             </div>
             {#each Object.entries($keyRewardText) as r}
-                <div class='col-span-2'></div>
-                <div class='col-span-3 text-left py-1 {ref.colors[r[0]] || 'text-white'}'>
+                <div class='col-span-3'></div>
+                <div class='col-span-1 text-left py-1 {ref.colors[r[0]] || 'text-white'}'>
                     {ref.displayNames[r[0]] ? ref.displayNames[r[0]] : r[0]}: 
                 </div>
                 <div class='col-span-1 py-1 text-left {ref.colors[r[0]] || 'text-white'}'>
                     {f.f(parseInt(r[1]),0)}
                 </div>
-                <div class='col-span-2'></div>
+                <div class='col-span-3'></div>
             {/each}
         </div>
         {/if}

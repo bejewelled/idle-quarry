@@ -117,7 +117,7 @@ const floor = (n: number) => Math.floor(n);
 const ceil = (n: number) => Math.ceil(n);
 
 export const progressThreshold = object({
-    gems: 100,
+    gems: 500,
     key1: 50000,
     key2: 2000000,
 })
@@ -125,16 +125,22 @@ export const progressThreshold = object({
 // edit when changing the level of the haste upgrade
 export const progressPerTick = single(1);
 
+
+/* NOTE:
+*  The cost of a specific item must be at least 1 to be imposed on the player.
+*  If an upgrade should cost additional TYPES of resources at later levels, they must be added to the cost
+*  object at a value of less than 1.
+*/
 export const miningUpgrades = array([{
     name: 'Haste',
     description: 'Increases progress per tick.',
     cost: {
-        gems: 10,
+        gems: 3,
     },
-    ratio: 3,
-    formula: (lv: any) => (Math.pow(lv,0.9)+1 >= 10 ? 
-    9+Math.pow(lv, 0.2) : Math.pow(lv,0.9)+1),
-    unlockAt: () => (get(wallet)['gems'] >= 3),
+    ratio: 1.6,
+    formula: (lv: any) => (lv>=36 ? 
+    10 +(lv-36)*0.025 : lv*0.25+1),
+    unlockAt: () => (get(wallet)['gems'] >= 1),
     isPercent: false,
     notes: 'Progress equal to level + 1.'
 },
@@ -142,17 +148,19 @@ export const miningUpgrades = array([{
     name: 'Efficiency',
     description: 'Increases gem yield.',
     cost: {
-        gems: 20,
+        gems: 10,
     },
     ratio: 1.25,
-    unlockAt: () => (get(wallet)['gems'] > 11),
+    unlockAt: () => (get(wallet)['gems'] >= 3 && get(miningUpgradeLevels)[0] >= 1),
     formula: (lv: any) => lv*0.35*pow(lv,0.6),
     isPercent: false,
+    prefix: '+',
+    suffix: ' gems',
     notes: '(1 + floor(level/10)) * level^0.6'
 },
 {
     name: 'Fortune',
-    description: 'Improves droprates for common items.',
+    description: 'Improves droprates for common [*] items.',
     cost: {
         gems: 100,
         gold: 15
@@ -167,13 +175,13 @@ export const miningUpgrades = array([{
 {
     name: '[*] Key Finder',
     description: 'While mining, you will occasionally find a bundle of 10 T1 [*] keys.' 
-    + ' Upgrades increase the frequency.',
+    + '\nUpgrades increase the frequency.',
     cost: {
         orbs: 15,
     },
     ratio: 1.5,
     unlockAt: () => (get(wallet)['orbs'] >= 1),
-    formula: (lv: any) => (1 + Math.pow(lv, 0.6)*0.15),
+    formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
     isPercent: false,
     suffix: 'x speed',
     notes: '(1 + floor(level/10)) * level^0.6' 
@@ -181,13 +189,13 @@ export const miningUpgrades = array([{
 {
     name: '[**] Key Finder',
     description: 'While mining, you will occasionally find a bundle of 3 T2 [**] keys.' 
-    + ' Upgrades increase the frequency.',
+    + '\nUpgrades increase the frequency.',
     cost: {
         orbs: 30000,
         beacons: 200
     },
     ratio: 1.5,
-    unlockAt: () => (get(wallet)['orbs'] >= 1),
+    unlockAt: () => (get(wallet)['orbs'] >= 1000 && get(miningUpgradeLevels)[3] >= 1),
     formula: (lv: any) => (1 + Math.pow(lv, 0.5)*0.15),
     isPercent: false,
     suffix: 'x speed',
@@ -198,7 +206,8 @@ export const miningUpgrades = array([{
     description: 'Increases the number of keys found when a Key Finder of any rarity triggers.',
     cost: {
         orbs: 1000,
-        key1: 50
+        key1: 50,
+        key2: 0.25
     },
     ratio: 1.15,
     unlockAt: () => (get(miningUpgradeLevels)[3] > 0),
@@ -206,10 +215,28 @@ export const miningUpgrades = array([{
     isPercent: false,
     suffix: 'x keys',
     notes: ''
-}]);
+},
+{
+    name: 'Lootmaster I',
+    description: 'The first level unlocks a new tier of findable drops. Additional levels increase all drop rates.',
+    cost: {
+        gold: 10000,
+    },
+    ratio: 1.25,
+    unlockAt: () => (get(miningUpgradeLevels)[0] > 10 && get(miningUpgradeLevels)[1] > 10),
+    formula: (lv: any) => ((1 + Math.max(0, Math.pow(lv-1, 0.325))) || 1),
+    isPercent: false,
+    suffix: 'x keys',
+    notes: ''
+},]);
 
 // if true, progress bars will be solid instead of flickering
 export const antiFlickerFlags = object({
     gems: false,
     key1: false,
 })
+
+// for flavor text on mining page
+export const gemGainFlavorText = single(0)
+export const gemProgressFlavorText = single(0)
+export const gemProgressFlavorNextUpdate = single(Date.now() + 500)

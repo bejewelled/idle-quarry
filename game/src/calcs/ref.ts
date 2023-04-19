@@ -12,11 +12,11 @@ export default class ref {
     }
 
     static displayNames = {
-        key1: '[*]key',
-        key2: '[**]key',
-        key3: '[***]key',
-        key4: '[****]key',
-        key5: '[*****]key',
+        key1: '[*] key',
+        key2: '[**] key',
+        key3: '[***] key',
+        key4: '[****] key',
+        key5: '[*****] key',
     }
 
     static dropTiers = {

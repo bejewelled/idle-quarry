@@ -2,18 +2,24 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div on:click={() => open()}
 class='has-tooltip tooltip-text 
-{affordable ? 'game-btn' : 'game-btn-noafford'}
+{affordable && keyKnowledgeCriteria() ? 'game-btn' : 'game-btn-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>
-{#if unlocked}
+{#if unlocked && keyKnowledgeCriteria()}
     {#if amt == 1}
     Use <span class='{ref.colors['key' + rarity]}'>{getKeyDisplayName()}</span> Key
     {:else}
     x{amt}
     {/if}
-{:else}
+{:else if keyKnowledgeCriteria()}
     {#if amt == 1}
         Find a key of this rarity to use it.
+    {:else}
+        ---
+    {/if}
+{:else}
+    {#if amt == 1}
+        {keyNoKnowledgeText()}
     {:else}
         ---
     {/if}
@@ -62,7 +68,7 @@ select-none'>
 
 
     function open() {
-        if ($wallet['key'+rarity.toString()] >= amt) {
+        if (keyKnowledgeCriteria() && $wallet['key'+rarity.toString()] >= amt) {
             $wallet['key'+rarity.toString()] -= amt;
             $keysOpened['key'+(rarity-1)] += amt;
             openKeys(amt);
@@ -126,6 +132,37 @@ select-none'>
         const display = ['T1 [*]', 'T2 [**]', 'T3 [***]', 'T4 [****]', 'T5 [*****]'];
         return display[rarity-1];
     }
+
+    function keyKnowledgeCriteria() {
+        switch (rarity) {
+            case 1:
+                return $wallet['key1'] && $wallet['key1'] >= 1;
+            case 2:
+                return $wallet['beacon'] && $wallet['beacon'] >= 1;
+            case 3:
+                return $wallet['sigil'] && $wallet['sigil'] >= 1;
+            case 4:
+                return $wallet['artifactsTotal'] && $wallet['artifactsTotal'] >= 1;
+            case 5:
+                return $wallet['holyLight'] && $wallet['holyLight'] >= 1;
+        }
+    }
+
+    function keyNoKnowledgeText() {
+        switch (rarity) {
+            case 1:
+                return 'Requires 1 [*] key';
+            case 2:
+                return 'Requires 1 beacon';
+            case 3:
+                return 'Requires 1 sigil';
+            case 4:
+                return 'Requires 1 artifact (any kind)';
+            case 5:
+                return 'Requires 1 holy light';
+        }
+    }
+    
 
  </script>
 <style>

@@ -180,3 +180,6 @@ export const key1DropTable = dropTable({
 
 
 export const keyRewardText = object('')
+
+// for displaying keys gained on mining page
+export const keyGainFlavorText = object({})

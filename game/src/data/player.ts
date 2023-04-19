@@ -1,5 +1,6 @@
 
 import { writable, get } from 'svelte/store';
+import ref from '../calcs/ref'
 import { miningUpgrades } from './mining';
 
 function single(context: any) {
@@ -156,10 +157,13 @@ function dropTable(context: any) {
         updateTable() {
             update((i: any) => {
                 for (let [item, val] of Object.entries(i)) {
-                    console.log(item, val)
-                    console.log(get(miningUpgradeLevels));
                     i[item]= [
-                        Math.min(1,val[0] * (get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2]))),
+                        // add drop table multipliers here
+                        Math.min(1,val[0] * 
+                            //@ts-ignore - Fortune (T1) item multiplier
+                            (ref.dropTierColors[item] === 1 ?
+                            get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2]) : 1) *
+                            (get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6]))),
                         val[1]
                     ]
                 }
@@ -197,3 +201,7 @@ export const miningDropTable = dropTable({
 
 
 export const keysOpened = array([0,0,0,0,0])
+
+export const settings = object({
+    UPDATE_SPEED: 20,
+})

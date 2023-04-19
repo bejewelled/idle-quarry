@@ -7,7 +7,14 @@
             <div class='res-display-space py-2'></div>
             <div class='res-display-wrap grid grid-cols-12'>
                 {#each Object.entries($wallet) as res}
-                    {#if $unlockedRes.has(res[0])}   
+                    {#if $unlockedRes.has(res[0]) && !res[0].includes('key')}   
+                        <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
+                        <div class='game-text res-amount col-span-5'>{f(res[1],0)}</div>
+                    {/if}
+                {/each}
+                <div class='res-break py-2 col-span-12'></div>
+                {#each Object.entries($wallet) as res}
+                    {#if $unlockedRes.has(res[0]) && res[0].includes('key')}   
                         <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
                         <div class='game-text res-amount col-span-5'>{f(res[1],0)}</div>
                     {/if}
