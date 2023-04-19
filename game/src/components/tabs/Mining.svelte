@@ -48,7 +48,7 @@
         </div>
         <div class='col-span-3 pl-1 text-left align-text-middle'>
             <div class='text-[#989898] text-small'>[*] +<strong>{$keyGainFlavorText[0] > 1 ? f($keyGainFlavorText[0],3) : 1}</strong>
-                x {f($progressThisSecond['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key1'], 3)} / sec
+                x {f($progressThisSecond['key1']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key1'], 3)} / sec
 
             </div>
         </div>

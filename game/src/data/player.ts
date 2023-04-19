@@ -205,8 +205,10 @@ export const progress = object({
 export const miningUpgradeLevels = array(Array(20).fill(0));
 
 export const baseMiningDropTable = dropTable({
-    gold: [0.90,1,3], // 10% chance to drop 1 gold
-    key1: [0.84,19,19], 
+    gold: [0.10,1,3], // 10% chance to drop 1 gold
+    key1: [0.02,1,1], 
+    orbs: [0.01,1,2],
+    beacons: [0.005,1,1]
 });
 
 export const miningDropTable = dropTable({

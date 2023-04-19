@@ -8,7 +8,8 @@ export default class ref {
         key2: 'text-blue-400',
         key3: 'text-pink-400',
         key4: 'text-violet-400',
-        key5: 'text-amber-400'
+        key5: 'text-amber-400',
+        beacons: 'text-sky-400'
     }
 
     static displayNames = {
@@ -24,6 +25,8 @@ export default class ref {
         gems: 0,
         gold: 1,
         key1: 1,
+        orbs: 1,
+        beacons: 1
     }
     
     static keyMainNames = {
