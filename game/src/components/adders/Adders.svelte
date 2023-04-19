@@ -6,8 +6,8 @@
 
 
 import Decimal from 'break_infinity.js'
-import {progress, progressThreshold, progressPerTick, miningUpgrades} from '../../data/mining' 
-import {miningUpgradeLevels, wallet, miningDropTable} from '../../data/player'
+import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags} from '../../data/mining' 
+import {progress, miningUpgradeLevels, wallet, miningDropTable, unlockedRes} from '../../data/player'
 
 import { onMount } from 'svelte'
 
@@ -30,22 +30,45 @@ const UPDATE_SPEED = 50; // ms per tick
 let last, dt;
 onMount(() => {
     last = Date.now();
-    setInterval(() => {
+    const mainLoop = setInterval(() => {
         const dt = (Date.now() - last) / 50;
         addProgress(dt);
         last = Date.now();
     }, 1000/UPDATE_SPEED)
+    // slowLoop updates at random intervals, do NOT add time-dependent items here!
+    const slowLoop = setInterval(() => {
+        for (let [k,v] of Object.entries($wallet)) {
+            if (v > 0 && !$unlockedRes.has(k)) $unlockedRes.add(k);
+        }
+    },773 + Math.random()*227)
 })
 
 let progressGain = 0;
 function addProgress(delta) {
     const gemAt = $progressThreshold['gems'];
-    progressGain = $miningUpgrades[0]['formula']($miningUpgradeLevels[0]);
-    $progress += progressGain * delta;
-    if ($progress >= gemAt) {
-        addGems(Math.floor($progress / gemAt));
-        dropRoll(Math.floor($progress / gemAt));
-        $progress %= gemAt;
+    const key1At = $progressThreshold['key1'];
+    const PROGRESS_BASE = 10 * delta;
+    if (true) {
+        let progGems = (PROGRESS_BASE * $miningUpgrades[0]['formula']($miningUpgradeLevels[0]));
+        $progress['gems'] += progGems;
+        if (progGems > gemAt*0.33) $antiFlickerFlags['gems'] = true;
+    }
+    if ($miningUpgradeLevels[3] > 0) {
+        let progKey1 = PROGRESS_BASE *
+        $miningUpgrades[3]['formula']($miningUpgradeLevels[3]);
+        $progress['key1'] += progKey1;
+        if (progKey1 > key1At*0.1) $antiFlickerFlags['key1'] = true;
+    }
+    if ($progress['gems'] >= gemAt) {
+        addGems(Math.floor($progress['gems'] / gemAt));
+        dropRoll(Math.floor($progress['gems'] / gemAt));
+        $progress['gems'] %= gemAt;
+    }
+    if ($progress['key1'] >= key1At) {
+        const KEY1_BASE = 10;
+        const key1Gain = KEY1_BASE * $miningUpgrades[4]['formula']($miningUpgradeLevels[4])
+        $wallet['key1'] = ($wallet['key1'] || 0) + key1Gain * Math.floor($progress['key1'] / key1At);
+        $progress['key1'] %= key1At;
     }
 }
 

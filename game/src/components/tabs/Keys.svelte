@@ -18,19 +18,21 @@
                 </div>
         {/each}
     </div>
-    <div class='reward-disp-wrapper'>
+    <div class='reward-disp-wrapper items-center'>
         {#if $keyRewardText != ''}
         <div class='grid grid-cols-8'>
-            <div class='col-span-8 game-text'>
+            <div class='col-span-8 game-text text-left'>
                 You received the following rewards:
             </div>
             {#each Object.entries($keyRewardText) as r}
-                <div class='col-span-2 py-1 {ref.colors[r[0]] || 'text-white'}'>
-                    {r[0]}: 
+                <div class='col-span-2'></div>
+                <div class='col-span-3 text-left py-1 {ref.colors[r[0]] || 'text-white'}'>
+                    {ref.displayNames[r[0]] ? ref.displayNames[r[0]] : r[0]}: 
                 </div>
-                <div class='col-span-6 py-1 text-left {ref.colors[r[0]] || 'text-white'}'>
-                    {r[1]}
+                <div class='col-span-1 py-1 text-left {ref.colors[r[0]] || 'text-white'}'>
+                    {f.f(parseInt(r[1]),0)}
                 </div>
+                <div class='col-span-2'></div>
             {/each}
         </div>
         {/if}
@@ -43,7 +45,7 @@
     //@ts-nocheck
 import { onMount } from 'svelte';
 import { wallet, visibleTier } from '../../data/player';
-import { progress, progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
+import { progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
 import { miningUpgradeLevels } from '../../data/player';
 import { keyRewardText } from '../../data/keys'
 import { f } from '../../data/format';

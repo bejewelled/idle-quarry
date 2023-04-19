@@ -1,5 +1,6 @@
 
-import { writable } from 'svelte/store';
+import { writable, get } from 'svelte/store';
+import {wallet, miningUpgradeLevels} from './player'
 import Decimal  from 'break_infinity.js';
 
 function single(context: any) {
@@ -115,9 +116,10 @@ const log = (b: number, e: number) => Math.log(e)/Math.log(b);
 const floor = (n: number) => Math.floor(n);
 const ceil = (n: number) => Math.ceil(n);
 
-export const progress = single(0);
 export const progressThreshold = object({
     gems: 100,
+    key1: 50000,
+    key2: 2000000,
 })
 
 // edit when changing the level of the haste upgrade
@@ -130,10 +132,9 @@ export const miningUpgrades = array([{
         gems: 10,
     },
     ratio: 3,
-    formula: (lv: any) => Math.pow(lv,0.9)+1,
-    unlockAt: {
-        gems: 3
-    },
+    formula: (lv: any) => (Math.pow(lv,0.9)+1 >= 10 ? 
+    9+Math.pow(lv, 0.2) : Math.pow(lv,0.9)+1),
+    unlockAt: () => (get(wallet)['gems'] >= 3),
     isPercent: false,
     notes: 'Progress equal to level + 1.'
 },
@@ -144,10 +145,8 @@ export const miningUpgrades = array([{
         gems: 20,
     },
     ratio: 1.25,
-    unlockAt: {
-        gems: 12
-    },
-    formula: (lv: any) => (1+lv*0.1)*pow(lv,0.6),
+    unlockAt: () => (get(wallet)['gems'] > 11),
+    formula: (lv: any) => lv*0.35*pow(lv,0.6),
     isPercent: false,
     notes: '(1 + floor(level/10)) * level^0.6'
 },
@@ -159,12 +158,58 @@ export const miningUpgrades = array([{
         gold: 15
     },
     ratio: 1.5,
-    unlockAt: {
-        gems: 30,
-        gold: 3
-    },
+    unlockAt: () => (get(wallet)['gems'] > 30 && get(wallet)['gold'] > 5),
     formula: (lv: any) => (1 + Math.pow(lv, 0.33)*0.1),
     isPercent: true,
     prefix: '+',
     notes: '(1 + floor(level/10)) * level^0.6'  
+},
+{
+    name: '[*] Key Finder',
+    description: 'While mining, you will occasionally find a bundle of 10 T1 [*] keys.' 
+    + ' Upgrades increase the frequency.',
+    cost: {
+        orbs: 15,
+    },
+    ratio: 1.5,
+    unlockAt: () => (get(wallet)['orbs'] >= 1),
+    formula: (lv: any) => (1 + Math.pow(lv, 0.6)*0.15),
+    isPercent: false,
+    suffix: 'x speed',
+    notes: '(1 + floor(level/10)) * level^0.6' 
+},
+{
+    name: '[**] Key Finder',
+    description: 'While mining, you will occasionally find a bundle of 3 T2 [**] keys.' 
+    + ' Upgrades increase the frequency.',
+    cost: {
+        orbs: 30000,
+        beacons: 200
+    },
+    ratio: 1.5,
+    unlockAt: () => (get(wallet)['orbs'] >= 1),
+    formula: (lv: any) => (1 + Math.pow(lv, 0.5)*0.15),
+    isPercent: false,
+    suffix: 'x speed',
+    notes: '' 
+},
+{
+    name: '[*] Key Mastery',
+    description: 'Increases the number of keys found when a Key Finder of any rarity triggers.',
+    cost: {
+        orbs: 1000,
+        key1: 50
+    },
+    ratio: 1.15,
+    unlockAt: () => (get(miningUpgradeLevels)[3] > 0),
+    formula: (lv: any) => (1 + Math.pow(lv, 0.5)*0.1),
+    isPercent: false,
+    suffix: 'x keys',
+    notes: ''
 }]);
+
+// if true, progress bars will be solid instead of flickering
+export const antiFlickerFlags = object({
+    gems: false,
+    key1: false,
+})

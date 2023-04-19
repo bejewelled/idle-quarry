@@ -7,13 +7,13 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>
 {#if unlocked}
     {#if amt == 1}
-    Open <span class='{ref.colors['key' + rarity]}'>{getKeyDisplayName()}</span> Key
+    Use <span class='{ref.colors['key' + rarity]}'>{getKeyDisplayName()}</span> Key
     {:else}
     x{amt}
     {/if}
 {:else}
     {#if amt == 1}
-        Unlock this key later in the game.
+        Find a key of this rarity to use it.
     {:else}
         ---
     {/if}
@@ -27,7 +27,7 @@ select-none'>
 
     import { onDestroy, onMount } from 'svelte';
     import { wallet, miningUpgradeLevels, miningDropTable, keysOpened} from '../../data/player';
-    import { progress, progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
+    import { progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
     import ref from '../../calcs/ref'
     import { key1DropTable } from '../../data/keys';
     import { keyRewardText } from '../../data/keys'
@@ -79,9 +79,17 @@ select-none'>
                 const val = Array.from({length: Math.floor(Math.sqrt(amt))}, 
                 () => Math.floor(vals[1] + Math.random()*vals[2]));
                 const c = (Math.random()*2.83)+0.01;
-                const numWins = vals[0] +
-                ((Math.random() > 0.5 ? 1 : -1) * Math.pow(c/(c-5), 6));
-                console.log(numWins);
+                const numWins = vals[0]*amt +
+                Math.max(((Math.random() > 0.5 ? 1 : -1) * Math.pow(c/(c-5), 6)),0);
+
+                // monte carlo value selector
+                const rewardVal = (val[Math.floor(Math.random()*val.length)] + 
+                val[Math.floor(Math.random()*val.length)] + 
+                val[Math.floor(Math.random()*val.length)]) / 3
+
+                console.log(val);
+                rewards[type] = (rewards[type] || 0) + numWins*rewardVal;
+
             } else {
                 for (let i = 0; i < amt; i++) {
                     if (Math.random() < vals[0]) {

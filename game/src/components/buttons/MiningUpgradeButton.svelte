@@ -1,12 +1,11 @@
 
-
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-{#if unlocked || permUnlocked}
+{#if $miningUpgrades[index]['unlockAt']() || permUnlocked}
 <div on:click={() => buy(index)}
 class='has-tooltip tooltip-text 
 {affordable ? 'game-btn' : 'game-btn-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
-select-none'>{$miningUpgrades[index]['name']}
+select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)}]
          <span class='px-2 mx-4 tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
@@ -16,18 +15,14 @@ select-none'>{$miningUpgrades[index]['name']}
         <div class='text-center effect-wrapper'>
             <div class='tooltip-text-xs text-[#cccccc]'>
                  <span class='current text-[#cccccc]'>
-                    {$miningUpgrades[index]['prefix'] || ""}
-                    {$miningUpgrades[index]['isPercent'] ?
+                    {$miningUpgrades[index]['prefix'] || ""}{$miningUpgrades[index]['isPercent'] ?
                     fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]),3, true) :
-                    f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]),3)}
-                    {$miningUpgrades[index]['suffix'] || ""}
+                    f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]),3)}{$miningUpgrades[index]['suffix'] || ""}
                  </span>
                  <span class='current text-[#999999]'>  => 
-                    {$miningUpgrades[index]['prefix'] || ""}
-                    {$miningUpgrades[index]['isPercent'] ?
+                    {$miningUpgrades[index]['prefix'] || ""}{$miningUpgrades[index]['isPercent'] ?
                    fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+1),3, true) :
-                   f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+1),3)}
-                    {$miningUpgrades[index]['suffix'] || ""}
+                   f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+1),3)}{$miningUpgrades[index]['suffix'] || ""}
                  </span>
 
             </div>
@@ -35,7 +30,8 @@ select-none'>{$miningUpgrades[index]['name']}
         <hr />
         <div class='pt-1 cost items-start text-center grid grid-cols-4'>
             {#each Object.entries(costs) as c}
-                <div class='{ref.colors[c[0]] || ref.colors['default']} col-span-2'>{c[0]}</div>
+                <div class='{ref.colors[c[0]] || ref.colors['default']} col-span-2'>{
+                $wallet[c[0]] && $wallet[c[0]] > 0 ? c[0] : "???"}</div>
                 <div class='col-span-2 text-left'>{f(c[1])}</div>
             {/each}
         </div>
@@ -49,8 +45,8 @@ select-none'>{$miningUpgrades[index]['name']}
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
-    import { wallet, miningUpgradeLevels, miningDropTable } from '../../data/player';
-    import { progress, progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
+    import { progress, wallet, miningUpgradeLevels, miningDropTable } from '../../data/player';
+    import {progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
     import ref from '../../calcs/ref'
 // @ts-nocheck
     export let index;
@@ -70,10 +66,12 @@ select-none'>{$miningUpgrades[index]['name']}
         setTimeout(() => {
             costs = getCosts();
             affordable = canAfford();
+            if ($miningUpgrades[index]['unlockAt']()) permUnlocked = true;
         }, 50)
         affordInterval = setInterval(() => {
             affordable = canAfford();
             unlocked = isUnlocked();
+            if ($miningUpgrades[index]['unlockAt']()) permUnlocked = true;
         }, 100 + (Math.random() * 20))
     })
 

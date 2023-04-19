@@ -176,9 +176,17 @@ export const wallet = object({
     gold: 0,
 })
 
-export const unlocked = new Set();
+export const unlockedRes = single(new Set());
 
 export const visibleTier = single(1); 
+
+
+export const progress = object({
+    gems: 0,
+    key1: 0
+});
+
+
 
 export const miningUpgradeLevels = array(Array(20).fill(0));
 

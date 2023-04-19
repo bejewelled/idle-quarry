@@ -7,9 +7,9 @@
             <div class='res-display-space py-2'></div>
             <div class='res-display-wrap grid grid-cols-12'>
                 {#each Object.entries($wallet) as res}
-                    {#if res[1] !== undefined}   
-                        <div class='{ref.colors[res[0]]} res-name col-span-5'>{ref.displayNames[res[0]] || res[0]}</div>
-                        <div class='game-text res-amount col-span-7'>{f(res[1],0)}</div>
+                    {#if $unlockedRes.has(res[0])}   
+                        <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
+                        <div class='game-text res-amount col-span-5'>{f(res[1],0)}</div>
                     {/if}
                 {/each}
              </div>
@@ -21,15 +21,20 @@
                 <button class='py-1 text-small save-btn control-btn' on:click={() => reset()}>Reset</button>
             </div>
             <div class='py-1 row-span-2 tab-buttons'>
-                {#each ['mining', 'keys'] as tab}
+                {#each ref.tabs as tab}
                     <button class='p-1 text-small control-btn' on:click={() => changeTab(tab)}>{tab}</button>
                 {/each}
             </div>
             <div class='row-span-10 main-panel-display'>
-                {#if tab === 'mining'}
+                {#if tab === 'mining' && (tabUnlockCriteria['mining'])}
                     <Mining />
-                {:else if tab === 'keys'}
+                {:else if tab === 'keys'  && (tabUnlockCriteria['mining'])}
                     <Keys />
+                {:else if tab === 'beacons' && (tabUnlockCriteria['beacons'])}
+                {/if}
+
+                {#if tab !== 'mining' && tab !== 'keys'}
+                <div class='game-text'>{ref.tabNotUnlockedText[tab]}</div>
                 {/if}
 
             </div>
@@ -42,7 +47,7 @@
 // @ts-nocheck
 
 import Decimal from 'break_infinity.js'
-import {wallet, miningUpgradeLevels, miningDropTable} from '../data/player.js'
+import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes, progress} from '../data/player.js'
 import Adders from '../components/adders/Adders.svelte';
 import Mining from '../components/tabs/Mining.svelte';
 import Keys from '../components/tabs/Keys.svelte';
@@ -71,9 +76,20 @@ const f = (n, pl = 3) => {
     else return n.toExponential(3).toString().replace('+', '');
 }
 
+const tabUnlockCriteria = {
+        mining: () => true,
+        keys: () => true,
+        beacons: () => ($wallet['beacons'] && $wallet['beacons'] > 0),
+        sigils: () => ($wallet['sigils'] && $wallet['sigils'] > 0),
+
+    }
+
 const save = () => {
     localStorage.setItem('wallet', JSON.stringify($wallet));
     localStorage.setItem('miningUpgradeLevels', JSON.stringify($miningUpgradeLevels));
+    localStorage.setItem('unlockedRes', JSON.stringify([...$unlockedRes]));
+    console.log(JSON.stringify([...$unlockedRes]))
+    localStorage.setItem('progress', JSON.stringify($progress))
 }
 
 const reset = () => {
@@ -88,6 +104,14 @@ const load = () => {
     if (localStorage.getItem('miningUpgradeLevels')) {
         miningUpgradeLevels.set((JSON.parse(localStorage.getItem('miningUpgradeLevels'))));
     }
+    if (localStorage.getItem('progress'))
+        unlockedRes.set(JSON.parse(localStorage.getItem('progress')))
+
+    $unlockedRes = new Set();
+    //re-init unlocked resources
+    for (let [k,v] of Object.entries($wallet)) {
+            if (v > 0 && !$unlockedRes.has(k)) $unlockedRes.add(k);
+    }
 }
 
 onMount(() => {
@@ -99,6 +123,8 @@ onMount(() => {
         }
     }, AUTOSAVE_INTERVAL);
 })
+
+
 
 </script>
 

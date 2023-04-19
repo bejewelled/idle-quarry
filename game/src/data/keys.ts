@@ -172,10 +172,11 @@ function dropTable(context: any) {
 
 
 export const key1DropTable = dropTable({
-    gems: [0.6, 100, 500], // [chance, min, max]
-    orbs:  [0.4, 1, 1], // [chance, min, max]
-    key1: [0.4, 1, 1],
+    gems: [0.6, 10, 100], // [chance, min, max]
+    orbs: [0.4, 1, 4], // [chance, min, max]
+    key1: [0.1, 1, 2],
     key2: [0.002, 1, 1],
 });
+
 
 export const keyRewardText = object('')

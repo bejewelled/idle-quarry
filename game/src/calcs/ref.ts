@@ -3,7 +3,7 @@ export default class ref {
         default: '#ffffff',
         gems: 'text-red-500',
         gold: 'text-yellow-500',
-        orbs: 'text-neutral-500',
+        orbs: 'text-neutral-400',
         key1: 'text-green-400',
         key2: 'text-blue-400',
         key3: 'text-pink-400',
@@ -12,7 +12,11 @@ export default class ref {
     }
 
     static displayNames = {
-        key1: '*key',
+        key1: '[*]key',
+        key2: '[**]key',
+        key3: '[***]key',
+        key4: '[****]key',
+        key5: '[*****]key',
     }
 
     static dropTiers = {
@@ -35,6 +39,23 @@ export default class ref {
         1: 'text-white',
         2: 'text-green-200',
         3: 'text-blue-300'
+    }
+
+    static tabs = [
+        'mining', 'keys', 'beacons', 'sigils', 'artifacts', 'relocate',
+        'fame', 'challenges', 'artifacts', 'mastery', 'ascension'
+    ]
+
+    static tabNotUnlockedText = {
+        beacons: "Find a beacon while mining to unlock.",
+        sigils: "Find a sigil while mining to unlock.",
+        relocate: "Use 10,000 total keys to unlock.",
+        fame: "Relocate and gain at least 1 fame to unlock.",
+        challenges: "Buy challenges with fame to unlock.",
+        artifacts: "Find an artifact with a T3 [***] or higher key to unlock.",
+        mastery: "Reach level 10,000 on any mining upgrade to unlock.",
+        ascension: "Have at least 1e25 fame and 10,000 challenge points to unlock.",
+
     }
 
 }
