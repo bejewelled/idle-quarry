@@ -32,7 +32,8 @@ select-none'>
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
-    import { wallet, miningUpgradeLevels, miningDropTable, keysOpened} from '../../data/player';
+    import { wallet, miningUpgradeLevels, miningDropTable, keysOpened, 
+    keyItemsUnlocked} from '../../data/player';
     import { progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
     import ref from '../../calcs/ref'
     import { key1DropTable } from '../../data/keys';
@@ -56,13 +57,13 @@ select-none'>
         clearInterval(affordInterval);
     })
     const f = (n, pl = 0) => {
-        if (n < 1e9) return n.toFixed(pl).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         else return n.toExponential(3).toString().replace('+', '');
     }   
 
     const fp = (n, pl = 3, subOne = false) => {
         if (subOne) n -= 1;
-        if (n < 1e9) return (n*100).toFixed(pl).toLocaleString() + "%";
+        if (n < 1e9) return (n*100).toFixed((n < 1e3 ? pl : 0)).toLocaleString() + "%";
         else return (n*100).toExponential(pl).toString().replace('+', '') + "%";
     }
 
@@ -83,7 +84,7 @@ select-none'>
             if (amt*vals[0] > 5) {
                 const stdev= Math.sqrt(amt*vals[0]*(1-vals[0]));
                 const val = Array.from({length: Math.floor(Math.sqrt(amt))}, 
-                () => Math.floor(vals[1] + Math.random()*vals[2]));
+                () => Math.floor(vals[1] + Math.random()*(vals[2]-vals[1])));
                 const c = (Math.random()*2.83)+0.01;
                 const numWins = vals[0]*amt +
                 Math.max(((Math.random() > 0.5 ? 1 : -1) * Math.pow(c/(c-5), 6)),0);
@@ -107,7 +108,9 @@ select-none'>
 
     for (let [type, amt] of Object.entries(rewards)) {
         $wallet[type] = ($wallet[type] || 0) + amt;
+        $keyItemsUnlocked['key'+rarity].add(type);
     }
+    console.log($keyItemsUnlocked)
     updateKeyRewardText(rewards);
 }
     let rewardTextTimeout = undefined;

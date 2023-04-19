@@ -1,12 +1,58 @@
 <div class='key-amount-wrapper items-center'>
-    <div class='grid grid-cols-8 align-middle'>
+    <div class='grid grid-cols-8'>
         {#each [1,2,3,4,5] as i}
-            <div class='col-span-2 py-1 {ref.colors['key' + i]}'>
+            <div class='col-span-1 py-1 {ref.colors['key' + i]}'>
                 {$wallet['key'+i] > 0 || $visibleTier >= i ? ref.keyMainNames[i]: '?????'}
             </div>
                 <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
                     {f.f($wallet['key' + i])}
                 </div>
+                <div class='has-tooltip tooltip-text 
+                    game-btn py-2 items-center text-center 
+                    border-solid m-1 ml-1 mr-1 col-span-1 select-none'>
+                    [drops]
+                    {#key $keysOpened}
+                    <span class='px-2 mx-4 tooltip tooltip-text shadow-lg p-1
+                    border-white border-double border bg-[#222529] ml-8
+                      pointer-events-none'>
+                      <!-- Drop Table Display -->
+                      {#each Object.entries(get(eval('key'+i+'DropTable')) || {}) as drop}
+                        {#if $keyItemsUnlocked['key'+i].has(drop[0])}
+                        <div class='drop-table-disp grid grid-cols-10'>
+                            <div class='col-span-3 text-left pl-[8px] {ref.colors[drop[0]] || 'text-white'}'>
+                                {ref.displayNames[drop[0]] || drop[0]}
+                            </div>
+                            <div class='col-span-3 text-left pl-1'>
+                                {fp(drop[1][0],3)}
+                            </div>
+                            <div class='col-span-3 text-right pl-1'>
+                               [ {f.f(drop[1][1], 0)} - {f.f(drop[1][2], 0)} ]
+                            </div>
+                        </div>
+                        {/if}
+                        {/each}
+                        {#if $keyItemsUnlocked['key'+i].size < 
+                        Object.entries(get(eval('key'+i+'DropTable'))).length}
+                        <div class='drop-table-disp grid grid-cols-10'>
+                            <div class='col-span-2 text-left pl-[8px] text-white'>
+                                ???
+                            </div>
+                            <div class='col-span-7 text-center pl-1'>
+                                There are <span class='text-white font-bold'>
+                                     {Object.entries(get(eval('key'+i+'DropTable'))).length
+                                     - $keyItemsUnlocked['key'+i].size} </span>
+                                 more items that can drop from this key.
+                            </div>
+                        </div>
+                        {/if}
+                    </span>
+                    {/key}
+                </div>
+
+
+
+
+                <!-- key open buttons -->
                 <div class='col-span-3 py-1 text-left {ref.colors['key' + i]}'>
                     <KeyOpenButton rarity={i} amt=1/>
                 </div>
@@ -44,12 +90,28 @@
 <script lang='ts'>
     //@ts-nocheck
 import { onMount } from 'svelte';
-import { wallet, visibleTier } from '../../data/player';
+import {get} from 'svelte/store';
+import { wallet, visibleTier, keyItemsUnlocked, keysOpened } from '../../data/player';
 import { progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
 import { miningUpgradeLevels } from '../../data/player';
-import { keyRewardText } from '../../data/keys'
+import { keyRewardText, key1DropTable, key2DropTable, key3DropTable,
+     key4DropTable, key5DropTable } from '../../data/keys'
 import { f } from '../../data/format';
 import ref from '../../calcs/ref';
 import KeyOpenButton  from '../buttons/KeyOpenButton.svelte';
+
+
+const fp = (n: unknown, pl = 3, subOne = false) => {
+    if (subOne) n -= 1;
+    if (n < 1e9) return (n*100).toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "%";
+    else return (n*100).toExponential(pl).toString().replace('+', '') + "%";
+}
+
+const fpf = (n: unknown, subOne = false) => {
+    if (subOne) n -= 1;
+    if (n < 1e9) return (n*100).toFixed(3).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "%";
+    else return (n*100).toExponential(3).toString().replace('+', '') + "%";
+}
+
 
 </script>

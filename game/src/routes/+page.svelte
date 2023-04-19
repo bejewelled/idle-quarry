@@ -7,14 +7,14 @@
             <div class='res-display-space py-2'></div>
             <div class='res-display-wrap grid grid-cols-12'>
                 {#each Object.entries($wallet) as res}
-                    {#if $unlockedRes.has(res[0]) && !res[0].includes('key')}   
+                    {#if $wallet[res[0]] && !res[0].includes('key')}   
                         <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
                         <div class='game-text res-amount col-span-5'>{f(res[1],0)}</div>
                     {/if}
                 {/each}
                 <div class='res-break py-2 col-span-12'></div>
                 {#each Object.entries($wallet) as res}
-                    {#if $unlockedRes.has(res[0]) && res[0].includes('key')}   
+                    {#if $wallet[res[0]] && res[0].includes('key')}   
                         <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
                         <div class='game-text res-amount col-span-5'>{f(res[1],0)}</div>
                     {/if}
@@ -26,6 +26,8 @@
             <div class='py-1 row-span-2 control-buttons'>
                 <button class='py-1 text-small save-btn control-btn' on:click={() => save()}>Save</button>
                 <button class='py-1 text-small save-btn control-btn' on:click={() => reset()}>Reset</button>
+                <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>               
+                <div class='tooltip-text-xs saved-confirm'>{saveConfirm ? 'Saved!' : ''}</div>
             </div>
             <div class='py-1 row-span-2 tab-buttons'>
                 {#each ref.tabs as tab}
@@ -54,7 +56,8 @@
 // @ts-nocheck
 
 import Decimal from 'break_infinity.js'
-import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes, progress} from '../data/player.js'
+import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes, 
+    progress, keysOpened, keyItemsUnlocked, settings, baseMiningDropTable} from '../data/player.js'
 import Adders from '../components/adders/Adders.svelte';
 import Mining from '../components/tabs/Mining.svelte';
 import Keys from '../components/tabs/Keys.svelte';
@@ -66,6 +69,8 @@ import { onMount } from 'svelte'
 let tab = 'mining'
 let AUTOSAVE = false;
 let AUTOSAVE_INTERVAL = 30000;
+let saveConfirm;
+let buyAmount = 1;
 
 const changeTab = (t: string) => {
     tab = t;
@@ -75,11 +80,19 @@ const changeTab = (t: string) => {
 const d = (i: string | number) => {
     return new Decimal(i); 
 }
+
+const cycleBuyAmount = () => {
+    if (buyAmount === 1) buyAmount = 10;
+    else if (buyAmount === 10) buyAmount = 100;
+    else if (buyAmount === 100) buyAmount = 1;
+
+    $settings['buyAmount'] = buyAmount;
+}
 /**
  * number formatting
  */
 const f = (n, pl = 3) => {
-    if (n < 1e9) return n.toFixed(pl).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
     else return n.toExponential(3).toString().replace('+', '');
 }
 
@@ -92,11 +105,22 @@ const tabUnlockCriteria = {
     }
 
 const save = () => {
+    console.log('s')
     localStorage.setItem('wallet', JSON.stringify($wallet));
     localStorage.setItem('miningUpgradeLevels', JSON.stringify($miningUpgradeLevels));
     localStorage.setItem('unlockedRes', JSON.stringify([...$unlockedRes]));
-    console.log(JSON.stringify([...$unlockedRes]))
+    let keyItems = {}
+    for (let key of Object.keys($keyItemsUnlocked)) {
+        console.log(key);
+        keyItems[key] = Array.from($keyItemsUnlocked[key] || []);
+    }
+    localStorage.setItem('keyItemsUnlocked', JSON.stringify(keyItems));
+    localStorage.setItem('keysOpened', JSON.stringify($keysOpened));
     localStorage.setItem('progress', JSON.stringify($progress))
+    saveConfirm = true;
+    setTimeout(() => {
+        saveConfirm = false;
+    }, 1000);
 }
 
 const reset = () => {
@@ -105,6 +129,7 @@ const reset = () => {
 }
 
 const load = () => {
+    if (localStorage === null) return;
     if (localStorage.getItem('wallet')) {
         wallet.set((JSON.parse(localStorage.getItem('wallet'))));
     }
@@ -113,7 +138,16 @@ const load = () => {
     }
     if (localStorage.getItem('progress'))
         unlockedRes.set(JSON.parse(localStorage.getItem('progress')))
-
+    if (localStorage.getItem('keysOpened'))
+        keysOpened.set(JSON.parse(localStorage.getItem('keysOpened')))
+    if (localStorage.getItem('keyItemsUnlocked')) {
+        const loadedValues = JSON.parse(localStorage.getItem('keyItemsUnlocked'));
+        const keyItems = {};
+        for (let key in loadedValues) {
+            keyItems[key] = new Set(loadedValues[key]);
+        }
+        keyItemsUnlocked.set(keyItems);
+    }
     $unlockedRes = new Set();
     //re-init unlocked resources
     for (let [k,v] of Object.entries($wallet)) {
@@ -124,6 +158,7 @@ const load = () => {
 onMount(() => {
     load();
     miningDropTable.updateTable();
+    console.log($baseMiningDropTable);
     setInterval(() => {
         if (AUTOSAVE) {
             save();

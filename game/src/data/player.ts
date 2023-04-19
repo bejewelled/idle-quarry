@@ -156,16 +156,26 @@ function dropTable(context: any) {
         },
         updateTable() {
             update((i: any) => {
-                for (let [item, val] of Object.entries(i)) {
+                i = {};
+                for (let [item, val] of Object.entries(get(baseMiningDropTable))) {
                     i[item]= [
                         // add drop table multipliers here
                         Math.min(1,val[0] * 
                             //@ts-ignore - Fortune (T1) item multiplier
-                            (ref.dropTierColors[item] === 1 ?
+                            (ref.dropTiers[item] === 1 ?
                             get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2]) : 1) *
-                            (get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6]))),
-                        val[1]
+                            get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6])),
+                        //@ts-ignore
+                        val[1],
+                        //@ts-ignore
+                        val[2]
                     ]
+                    console.log(i[item])
+                    if (item === 'gold') {
+                        i[item][1] = val[1] * get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]);
+                        i[item][2] = val[2] * get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]);
+                        console.log(i);
+                    }
                 }
                 return i;
             })
@@ -194,14 +204,29 @@ export const progress = object({
 
 export const miningUpgradeLevels = array(Array(20).fill(0));
 
+export const baseMiningDropTable = dropTable({
+    gold: [0.90,1,3], // 10% chance to drop 1 gold
+    key1: [0.84,19,19], 
+});
+
 export const miningDropTable = dropTable({
-    gold: [0.10,1], // 10% chance to drop 1 gold
-    key1: [0.04,1], 
+
 });
 
 
-export const keysOpened = array([0,0,0,0,0])
+export const keysOpened = array(Array(20).fill(0))
 
 export const settings = object({
     UPDATE_SPEED: 20,
+    buyAmount: 1,
 })
+
+export const keyItemsUnlocked = object({
+    key1: new Set(),
+    key2: new Set(),
+    key3: new Set(),
+    key4: new Set(),
+    key5: new Set(),
+})
+
+export const progressThisSecond = object({})

@@ -1,12 +1,12 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-{#if $miningUpgrades[index]['unlockAt']() || permUnlocked}
+{#if $miningUpgrades[index]['unlockAt']() || permUnlocked || $miningUpgradeLevels[index] > 0}
 <div on:click={() => buy(index)}
 class='has-tooltip tooltip-text 
 {affordable ? 'game-btn' : 'game-btn-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
-select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)}]
-         <span class='px-2 mx-4 max-w-[290px] tooltip tooltip-text shadow-lg p-1
+select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)} / {f($miningUpgrades[index]['maxLevel'],0)}]
+         <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
          <div class='title text-small-gray items-start text-center pb-1'>
@@ -21,22 +21,26 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
                  </span>
                  <span class='current text-[#999999]'>  => 
                     {$miningUpgrades[index]['prefix'] || ""}{$miningUpgrades[index]['isPercent'] ?
-                   fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+1),3, true) :
-                   f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+1),3)}{$miningUpgrades[index]['suffix'] || ""}
+                   fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+$settings['buyAmount']),3, true) :
+                   f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+$settings['buyAmount']),3)}{$miningUpgrades[index]['suffix'] || ""}
                  </span>
 
             </div>
         </div>
         <hr />
         <div class='pt-1 cost items-start text-center grid grid-cols-4'>
+            {#if $miningUpgradeLevels[index] >= $miningUpgrades[index]['maxLevel']}
+                <div class='col-span-4 text-[#999999]'>This upgrade is at max level.</div>
+            {:else}
             {#each Object.entries(costs) as c}
                 {#if c[1] >= 1}
                     <div class='{ref.colors[c[0]] || ref.colors['default']} col-span-2'>{
-                    $wallet[c[0]] && $wallet[c[0]] > 0 ? 
+                    $wallet[c[0]] || $wallet[c[0]] > 0 ? 
                     (ref.displayNames[c[0]] ? ref.displayNames[c[0]] : c[0]) : "???"}</div>
                     <div class='col-span-2 text-left'>{f(c[1])}</div>
                 {/if}
             {/each}
+            {/if}
         </div>
          </span>
      </div>
@@ -48,9 +52,11 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
-    import { progress, wallet, miningUpgradeLevels, miningDropTable } from '../../data/player';
+    import { progress, wallet, miningUpgradeLevels, miningDropTable,
+         settings} from '../../data/player';
     import {progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
     import ref from '../../calcs/ref'
+    import formula from '../../calcs/formula'
 // @ts-nocheck
     export let index;
     let getCosts = () => {
@@ -70,6 +76,7 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
             costs = getCosts();
             affordable = canAfford();
             if ($miningUpgrades[index]['unlockAt']()) permUnlocked = true;
+            permUnlocked = ($miningUpgradeLevels[index] > 0)
         }, 50)
         affordInterval = setInterval(() => {
             affordable = canAfford();
@@ -82,22 +89,27 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
         clearInterval(affordInterval);
     })
     const f = (n, pl = 0) => {
-        if (n < 1e9) return n.toFixed(pl).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         else return n.toExponential(3).toString().replace('+', '');
     }   
 
     const fp = (n, pl = 3, subOne = false) => {
         if (subOne) n -= 1;
-        if (n < 1e9) return (n*100).toFixed(pl).toLocaleString() + "%";
+        if (n < 1e9) return (n*100).toFixed((n < 1e3 ? pl : 0)).toLocaleString() + "%";
         else return (n*100).toExponential(pl).toString().replace('+', '') + "%";
     }
 
-    function cost(base) {
-        return base * Math.pow($miningUpgrades[index]['ratio'], 
-                   $miningUpgradeLevels[index]);   
+    function cost(start) {
+       const base = start * Math.pow($miningUpgrades[index]['ratio'], $miningUpgradeLevels[index]);  
+       const r =  $miningUpgrades[index]['ratio']
+       const l = $settings['buyAmount']
+
+        if (index==1) console.log('base ' + base + ' r ' + r + ' l ' + l + ' ' + formula.gSum(base,r,l))
+       return formula.gSum(base,r,l)
     }
 
     function buy() {
+        costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
             if (val >=  1 && $wallet[type] < val) {
                 return;
@@ -106,13 +118,14 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1) $wallet[type] -= val;
         }
-        $miningUpgradeLevels[index]++;
+        $miningUpgradeLevels[index] += $settings['buyAmount'];
         costs = getCosts();
         permUnlocked = true;
         miningDropTable.updateTable();
     }
 
     function canAfford() {
+        costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1 && $wallet[type] < val) {
                 return false;

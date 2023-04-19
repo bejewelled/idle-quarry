@@ -118,7 +118,7 @@ const ceil = (n: number) => Math.ceil(n);
 
 export const progressThreshold = object({
     gems: 500,
-    key1: 50000,
+    key1: 500,
     key2: 2000000,
 })
 
@@ -142,6 +142,7 @@ export const miningUpgrades = array([{
     10 +(lv-36)*0.025 : lv*0.25+1),
     unlockAt: () => (get(wallet)['gems'] >= 1),
     isPercent: false,
+    maxLevel: 1000,
     notes: 'Progress equal to level + 1.'
 },
 {
@@ -156,8 +157,10 @@ export const miningUpgrades = array([{
     isPercent: false,
     prefix: '+',
     suffix: ' gems',
+    maxLevel: 1000,
     notes: '(1 + floor(level/10)) * level^0.6'
 },
+// i = 2
 {
     name: 'Fortune',
     description: 'Improves droprates for common [*] items.',
@@ -170,12 +173,13 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (1 + Math.pow(lv, 0.33)*0.1),
     isPercent: true,
     prefix: '+',
+    maxLevel: 300,
     notes: '(1 + floor(level/10)) * level^0.6'  
 },
 {
     name: '[*] Key Finder',
     description: 'While mining, you will occasionally find a bundle of 10 T1 [*] keys.' 
-    + '\nUpgrades increase the frequency.',
+    + '\nUpgrades increase progress gained towards this milestone.',
     cost: {
         orbs: 15,
     },
@@ -184,12 +188,13 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
     isPercent: false,
     suffix: 'x speed',
+    maxLevel: 300,
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
 {
     name: '[**] Key Finder',
     description: 'While mining, you will occasionally find a bundle of 3 T2 [**] keys.' 
-    + '\nUpgrades increase the frequency.',
+    + '\nUpgrades increase progress gained towards this milestone.',
     cost: {
         orbs: 30000,
         beacons: 200
@@ -199,8 +204,10 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (1 + Math.pow(lv, 0.5)*0.15),
     isPercent: false,
     suffix: 'x speed',
+    maxLevel: 300,
     notes: '' 
 },
+// i = 5
 {
     name: '[*] Key Mastery',
     description: 'Increases the number of keys found when a Key Finder of any rarity triggers.',
@@ -214,6 +221,7 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (1 + Math.pow(lv, 0.5)*0.1),
     isPercent: false,
     suffix: 'x keys',
+    maxLevel: 100,
     notes: ''
 },
 {
@@ -226,9 +234,26 @@ export const miningUpgrades = array([{
     unlockAt: () => (get(miningUpgradeLevels)[0] > 10 && get(miningUpgradeLevels)[1] > 10),
     formula: (lv: any) => ((1 + Math.max(0, Math.pow(lv-1, 0.325))) || 1),
     isPercent: false,
-    suffix: 'x keys',
+    suffix: 'x droprates',
+    maxLevel: 100,
     notes: ''
-},]);
+},
+{
+    name: 'Shiny',
+    description: 'Gold drops are significantly improved.',
+    cost: {
+        gems: 10000,
+    },
+    ratio: 1.25,
+    unlockAt: () => (get(miningUpgradeLevels)[0] > 10 && get(miningUpgradeLevels)[1] > 10),
+    formula: (lv: any) => (1 + lv*0.5*pow(lv, 0.11)),
+    isPercent: false,
+    suffix: 'x gold from drops',
+    maxLevel: 300,
+    notes: ''
+},
+// i = 8
+]);
 
 // if true, progress bars will be solid instead of flickering
 export const antiFlickerFlags = object({

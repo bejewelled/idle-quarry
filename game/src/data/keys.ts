@@ -161,7 +161,8 @@ function dropTable(context: any) {
                     console.log(get(miningUpgradeLevels));
                     i[item]= [
                         Math.min(1,val[0] * (get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2]))),
-                        val[1]
+                        val[1], 
+                        val[2]
                     ]
                 }
                 return i;
@@ -178,8 +179,30 @@ export const key1DropTable = dropTable({
     key2: [0.002, 1, 1],
 });
 
+export const key2DropTable = dropTable({
+    gems: [0.25, 1e3, 1e4], // [chance, min, max]
+    orbs: [0.15, 20, 75],
+    key1: [0.15, 3, 10],
+    key2: [0.05, 1, 1],
+    beacons: [0.05, 1, 3]
+})
+
+export const key3DropTable = dropTable({
+    
+})
+
+export const key4DropTable = dropTable({
+    
+})
+
+export const key5DropTable = dropTable({
+    
+})
+
 
 export const keyRewardText = object('')
 
 // for displaying keys gained on mining page
 export const keyGainFlavorText = object({})
+export const keyProgressFlavorText = array(Array(20).fill(0))
+export const keyProgressFlavorNextUpdate = single(Date.now()+500)
