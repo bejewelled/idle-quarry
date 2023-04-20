@@ -134,7 +134,7 @@ function dropRoll(n) {
                 () => Math.floor(vals[1] + Math.random()*(vals[2]-vals[1])));
                 const c = (Math.random()*2.83)+0.01;
                 const numWins = vals[0]*n +
-                Math.max(((Math.random() > 0.5 ? 1 : -1) * Math.pow(c/(c-5), 6)),0);
+                Math.max(((Math.random() > 0.5 ? 1 : -1) * stdev * Math.pow(c/(c-5), 6)),0);
 
                 // monte carlo value selector
                 const rewardVal = (val[Math.floor(Math.random()*val.length)] + 
@@ -164,7 +164,7 @@ function addBeaconProgress(delta) {
     // check for levelups
     for (let i = 0; i < $beaconProgress.length; i++) {
         if ($beaconProgress[i] >= $beaconNextReqs[i]) {
-            const numLevels = formula.maxNumGeom($beaconProgress[i], $beaconNextReqs[i], $beaconNums[i][1]);
+            const numLevels = Math.min(1,formula.maxNumGeom($beaconProgress[i], $beaconNextReqs[i], $beaconNums[i][1]));
             // subtract excess progress
             $beaconProgress[i] -= formula.gSum($beaconNextReqs[i], $beaconNums[i][1], numLevels);   
             // increase levels         
