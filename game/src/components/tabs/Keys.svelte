@@ -1,5 +1,8 @@
 <div class='key-amount-wrapper items-center'>
     <div class='grid grid-cols-8'>
+        <div class='col-span-8 tooltip-text text-center'>
+            Total Keys Opened: {f.f(formula.sumArray($keysOpened),0)}
+        </div>
         {#each [1,2,3,4,5] as i}
             <div class='col-span-1 py-1 {ref.colors['key' + i]}'>
                 {$wallet['key'+i] > 0 || $visibleTier >= i ? ref.keyMainNames[i]: '?????'}
@@ -96,6 +99,7 @@ import { keyRewardText, key1DropTable, key2DropTable, key3DropTable,
 import { f } from '../../data/format';
 import ref from '../../calcs/ref';
 import KeyOpenButton  from '../buttons/KeyOpenButton.svelte';
+    import formula from '../../calcs/formula';
 
 
 const fp = (n: unknown, pl = 3, subOne = false) => {

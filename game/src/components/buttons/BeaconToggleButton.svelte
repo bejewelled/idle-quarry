@@ -57,7 +57,6 @@ import ref from '../../calcs/ref'
     }
 
     function sub() {
-        if (!$wallet['beacons']) return;
         const amt = Math.min($beaconActivations[index], $beaconAmt);
         $beaconActivations[index] -= amt;
         $wallet['beacons'] += amt;

@@ -94,10 +94,10 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
     }   
 
     const fp = (n, pl = 3, subOne = false) => {
-        if (subOne) n -= 1;
-        if (n < 1e9) return (n*100).toFixed((n < 1e3 ? pl : 0)).toLocaleString() + "%";
-        else return (n*100).toExponential(pl).toString().replace('+', '') + "%";
-    }
+    if (subOne) n -= 1;
+    if (n < 1e9) return (n*100).toFixed((n*100 < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "%";
+    else return (n*100).toExponential(pl).toString().replace('+', '') + "%";
+}
 
     function cost(start) {
        const base = start * Math.pow($miningUpgrades[index]['ratio'], $miningUpgradeLevels[index]);  

@@ -105,7 +105,7 @@ function addProgress(delta) {
     }
     // add keys
     if ($progress['key1'] >= keyAt[0]) {
-       addKeys(Math.floor($progress['key1'] / keyAt[0]));
+       addKeys(Math.floor($progress['key1'] / keyAt[0]), keyAt);
     }
 }
 
@@ -114,14 +114,15 @@ function addProgress(delta) {
  */
 function addGems(n) {
     const GEM_BASE = 1;
-    const gemGain = n*(GEM_BASE + $miningUpgrades[1]['formula']($miningUpgradeLevels[1]));
+    const gemGain = n * (GEM_BASE + $miningUpgrades[1]['formula']($miningUpgradeLevels[1]))
+    * ($miningUpgrades[8]['formula']($miningUpgradeLevels[8]));
     $gemGainFlavorText = gemGain;
     $wallet['gems'] += gemGain;
 }
 
-function addKeys(n) {
+function addKeys(n, keyAt) {
     const KEY1_BASE = 10;
-        const key1Gain = KEY1_BASE * $miningUpgrades[4]['formula']($miningUpgradeLevels[4]);
+        const key1Gain = KEY1_BASE * $miningUpgrades[5]['formula']($miningUpgradeLevels[5]);
         $wallet['key1'] = ($wallet['key1'] || 0) + key1Gain * n;
         $progress['key1'] %= keyAt[0];
         $keyGainFlavorText['key1'] = key1Gain;
@@ -182,9 +183,10 @@ function addBeaconProgress(delta) {
         }
     }
     const maxLevel = Math.max(...$beaconLevels);
-    // add beacon power, gain more power if all levels are nearly equal
+    // add beacon power, gain more power if all levels are nearly equal (but the effect
+    // decreases at higher tiers of beacon path)
     $resources['beaconPower'] = ($resources['beaconPower'] || 0) + 
-    Math.log10($beaconLevels.reduce((s, c) => s+Math.pow(c/maxLevel+1, 4), 0)) * delta;
+    Math.log10($beaconLevels.reduce((s, c) => s+(c*Math.pow(c/(maxLevel+1), 4), 0))) * delta;
 
 }
 

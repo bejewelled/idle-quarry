@@ -12,6 +12,7 @@ export default class formula {
       }
 
     static sumArray(array: Array<number>) {
+        console.log(array)
         return array.reduce((sum, value) => sum + value, 0);
       }
 }
