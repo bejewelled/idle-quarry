@@ -174,9 +174,13 @@ function dropTable(context: any) {
 
 export const beaconPower = single(0);
 
-export const beaconNums = array(Array(10).fill([100,1.025]).concat(Array(10).fill([2000,1.03])).concat(Array(10).fill([10000,1.04])))
+export const beaconNums = array(
+    Array(3).fill([100, 1.025])
+    .concat(Array(3).fill([500, 1.03])
+    .concat(Array(2).fill([2500, 1.035])
+    .concat(Array(2).fill([10000, 1.04])))))
 
-export const beaconBonuses = array(Array(30).fill(0))
+export const beaconBonuses = array(Array(30).fill(1))
 
 // for reference
 export const beaconNameText = array([
@@ -187,7 +191,7 @@ export const beaconNameText = array([
 
 export const beaconFormulas = array([
     function(lv: number) {return 1 + (Math.pow(lv,0.3) * 0.01)},
-    function(lv: number) {return 1 + (Math.pow(lv,0.15) * (Math.log(lv)/Math.log(2) * 0.004))},
+    function(lv: number) {return 1 + (Math.pow(lv,0.15) * (Math.log(lv+1)/Math.log(2) * 0.004))},
     function(lv: number) {return (lv > 100000 ? 12.07+Math.pow(lv-100000, 0.075) : 1 + (Math.pow(lv,0.3)*0.35))}]
     .concat(Array(27).fill(function(lv: number) {return 1}))
 )

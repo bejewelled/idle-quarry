@@ -135,12 +135,12 @@ export const miningUpgrades = array([{
     name: 'Haste',
     description: 'Increases progress per tick.',
     cost: {
-        gems: 3,
+        gems: 5,
     },
-    ratio: 1.3,
-    formula: (lv: any) => (lv >= 916 ? 
-    54 + Math.pow((lv-916),0.5)*0.05 : 
-    (lv>=36 ? 10 + (lv-36)*0.05 : lv*0.25+1)),
+    ratio: 1.275,
+    formula: (lv: any) => (lv >= 952 ? 
+    54 + Math.pow((lv-952),0.5)*0.05 : 
+    (lv>=72 ? 10 + (lv-72)*0.05 : lv*0.125+1)),
     unlockAt: () => (get(wallet)['gems'] >= 1),
     isPercent: false,
     maxLevel: 1000,

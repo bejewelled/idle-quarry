@@ -35,16 +35,17 @@
                 {/each}
             </div>
             <div class='row-span-10 main-panel-display'>
-                {#if tab === 'mining' && (tabUnlockCriteria['mining'])}
+                {#if tab === 'mining' && (tabUnlockCriteria['mining']())}
                     <Mining />
-                {:else if tab === 'keys'  && (tabUnlockCriteria['mining'])}
+                {:else if tab === 'keys'  && (tabUnlockCriteria['mining']())}
                     <Keys />
-                {:else if tab === 'beacons' && (tabUnlockCriteria['beacons'])}
+                {:else if tab === 'beacons' && (tabUnlockCriteria['beacons']()) && $wallet['beacons']}
                     <Beacons />
-                {:else if tab === 'sigils' && (tabUnlockCriteria['sigils'])}
+                {:else if tab === 'sigils' && (tabUnlockCriteria['sigils']())}
                 {/if}
 
-                {#if tab !== 'mining' && tab !== 'keys' && (tab !== 'beacons' || !tabUnlockCriteria['beacons']) && (tab !== 'sigils' || !tabUnlockCriteria['sigils'])}
+                {#if !(tabUnlockCriteria[tab]())}
+        
                 <div class='game-text'>{ref.tabNotUnlockedText[tab]}</div>
                 {/if}
 
@@ -72,7 +73,7 @@ import ref from '../calcs/ref.ts'
 import { onMount } from 'svelte'
 
 let tab = 'mining'
-let AUTOSAVE = false;
+let AUTOSAVE = true;
 let AUTOSAVE_INTERVAL = 30000;
 let saveConfirm;
 let buyAmount = 1;
@@ -104,8 +105,8 @@ const f = (n, pl = 3) => {
 const tabUnlockCriteria = {
         mining: () => true,
         keys: () => true,
-        beacons: () => ($wallet['beacons'] && $wallet['beacons'] > 0),
-        sigils: () => ($wallet['sigils'] && $wallet['sigils'] > 0),
+        beacons: () => ($wallet['beacons'] && $wallet['beacons'] > 0.02),
+        sigils: () => ($wallet['sigils'] && $wallet['sigils'] > 0.02),
 
     }
 
@@ -187,13 +188,16 @@ const load = () => {
     if (localStorage.getItem('beaconActivations')) {
         beaconActivations.set(JSON.parse(localStorage.getItem('beaconActivations')));
     }
+    for (let i = 0; i < $beaconActivations.length; i++) {
+        if (isNaN(i) || !i) $beaconActivations[i] = 0;
+    }
+    if ($wallet['beacons'] == null) delete $wallet['beacons']
     delete $wallet['beaconPower'];
 }
 
 onMount(() => {
     load();
     miningDropTable.updateTable();
-    console.log($baseMiningDropTable);
     setInterval(() => {
         if (AUTOSAVE) {
             save();
