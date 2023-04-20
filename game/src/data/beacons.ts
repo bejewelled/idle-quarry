@@ -1,8 +1,7 @@
 
 import { writable, get } from 'svelte/store';
-import ref from '../calcs/ref'
 import { miningUpgrades } from './mining';
-import { beaconUpgrades, beaconBonuses } from './beacons';
+import { miningUpgradeLevels, wallet } from './player';
 
 function single(context: any) {
     // @ts-ignore
@@ -157,28 +156,14 @@ function dropTable(context: any) {
         },
         updateTable() {
             update((i: any) => {
-                i = {};
-                for (let [item, val] of Object.entries(get(baseMiningDropTable))) {
+                for (let [item, val] of Object.entries(i)) {
+                    console.log(item, val)
+                    console.log(get(miningUpgradeLevels));
                     i[item]= [
-                        // add drop table multipliers here
-                        Math.min(1,val[0] * 
-                            //@ts-ignore - Fortune (T1) item multiplier
-                            (ref.dropTiers[item] === 1 ?
-                            get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2]) *
-                            get(beaconBonuses)[2]
-                            : 1) *
-                            get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6])),
-                        //@ts-ignore
-                        val[1],
-                        //@ts-ignore
+                        Math.min(1,val[0] * (get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2]))),
+                        val[1], 
                         val[2]
                     ]
-                    console.log(i[item])
-                    if (item === 'gold') {
-                        i[item][1] = val[1] * get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]);
-                        i[item][2] = val[2] * get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]);
-                        console.log(i);
-                    }
                 }
                 return i;
             })
@@ -187,67 +172,40 @@ function dropTable(context: any) {
 }
 
 
-// edit when changing the level of the haste upgrade
-export const wallet = object({
-    gems: 0,
-    gold: 0,
-})
+export const beaconPower = single(0);
 
-export const resources = object({
+export const beaconNums = array(Array(10).fill([100,1.025]).concat(Array(10).fill([2000,1.03])).concat(Array(10).fill([10000,1.04])))
 
-})
+export const beaconBonuses = array(Array(30).fill(0))
 
-export const unlockedRes = single(new Set());
+// for reference
+export const beaconNameText = array([
+    'Beacon Power Multiplier',
+    'Mining Progress Multiplier',
+    '[I] Droprate Multiplier'].concat(Array(27).fill(''))
+)
 
-export const visibleTier = single(1); 
+export const beaconFormulas = array([
+    function(lv: number) {return 1 + (Math.pow(lv,0.3) * 0.01)},
+    function(lv: number) {return 1 + (Math.pow(lv,0.15) * (Math.log(lv)/Math.log(2) * 0.004))},
+    function(lv: number) {return (lv > 100000 ? 12.07+Math.pow(lv-100000, 0.075) : 1 + (Math.pow(lv,0.3)*0.35))}]
+    .concat(Array(27).fill(function(lv: number) {return 1}))
+)
 
+export const beaconNextReqs = array(Array(10).fill(100).concat(Array(10).fill(2000)).concat(Array(10).fill(10000)))
 
-export const progress = object({
-    gems: 0,
-    key1: 0
-});
+export const beaconAmt = single(1);
 
-
-
-export const miningUpgradeLevels = array(Array(20).fill(0));
-
-export const baseMiningDropTable = dropTable({
-    gold: [0.20,1,4], // 10% chance to drop 1 gold
-    key1: [0.05,1,1], 
-    orbs: [0.01,1,2],
-    beacons: [0.005,1,1]
-});
-
-export const miningDropTable = dropTable({
-
-});
-
-
-export const keysOpened = array(Array(20).fill(0))
-
-export const settings = object({
-    UPDATE_SPEED: 20,
-    buyAmount: 1,
-})
-
-export const keyItemsUnlocked = object({
-    key1: new Set(),
-    key2: new Set(),
-    key3: new Set(),
-    key4: new Set(),
-    key5: new Set(),
-})
-
-// used for calculations
-export const progressThisTick = object({})
-
-// assuming dt=1, used for display text
-export const progressAverage = object({})
-
-export const beaconActivations = array(Array(30).fill(0))
-
-export const beaconLevels = array(Array(30).fill(0))
-
-export const beaconProgress = array(Array(30).fill(0))
-
-export const beaconUpgradeLevels = array(Array(20).fill(0))
+export const beaconUpgrades = array([{
+    name: 'Supercharged',
+    description: 'Increases all beacon path progress.',
+    cost: {
+        beaconPower: 5000,
+    },
+    ratio: 1.5,
+    formula: (lv: any) => (1+Math.pow(lv,0.85)*0.33),
+    isPercent: true,
+    prefix: '+',
+    maxLevel: 300,
+    notes: '0.25*lv until 36, (lv-36)*0.025 until 916, sqrt(lv-916)*0.025 after'
+},])

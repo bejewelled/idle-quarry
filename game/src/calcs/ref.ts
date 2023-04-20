@@ -9,7 +9,8 @@ export default class ref {
         key3: 'text-pink-400',
         key4: 'text-violet-400',
         key5: 'text-amber-400',
-        beacons: 'text-sky-400'
+        beacons: 'text-sky-400',
+        beaconPower: 'text-cyan-300'
     }
 
     static displayNames = {
@@ -18,6 +19,7 @@ export default class ref {
         key3: '[***] key',
         key4: '[****] key',
         key5: '[*****] key',
+        beaconPower: 'Beacon Power',
     }
 
     static dropTiers = {
@@ -25,8 +27,8 @@ export default class ref {
         gems: 0,
         gold: 1,
         key1: 1,
-        orbs: 1,
-        beacons: 1
+        orbs: 2,
+        beacons: 2
     }
     
     static keyMainNames = {

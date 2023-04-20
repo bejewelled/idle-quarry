@@ -35,7 +35,7 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
             {#each Object.entries(costs) as c}
                 {#if c[1] >= 1}
                     <div class='{ref.colors[c[0]] || ref.colors['default']} col-span-2'>{
-                    $wallet[c[0]] || $wallet[c[0]] > 0 ? 
+                    $wallet[c[0]] || $unlockedRes.has(c[0]) ? 
                     (ref.displayNames[c[0]] ? ref.displayNames[c[0]] : c[0]) : "???"}</div>
                     <div class='col-span-2 text-left'>{f(c[1])}</div>
                 {/if}
@@ -53,7 +53,7 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
 
     import { onDestroy, onMount } from 'svelte';
     import { progress, wallet, miningUpgradeLevels, miningDropTable,
-         settings} from '../../data/player';
+         settings, visibleTier, unlockedRes} from '../../data/player';
     import {progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
@@ -122,6 +122,7 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
         costs = getCosts();
         permUnlocked = true;
         miningDropTable.updateTable();
+        if (index === 6) $visibleTier = 2;
     }
 
     function canAfford() {

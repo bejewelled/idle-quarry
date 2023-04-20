@@ -14,7 +14,7 @@
                 {/each}
                 <div class='res-break py-2 col-span-12'></div>
                 {#each Object.entries($wallet) as res}
-                    {#if $wallet[res[0]] && res[0].includes('key')}   
+                    {#if ($wallet[res[0]] || $unlockedRes.has(res[0])) && res[0].includes('key')}   
                         <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
                         <div class='game-text res-amount col-span-5'>{f(res[1],0)}</div>
                     {/if}
@@ -40,9 +40,11 @@
                 {:else if tab === 'keys'  && (tabUnlockCriteria['mining'])}
                     <Keys />
                 {:else if tab === 'beacons' && (tabUnlockCriteria['beacons'])}
+                    <Beacons />
+                {:else if tab === 'sigils' && (tabUnlockCriteria['sigils'])}
                 {/if}
 
-                {#if tab !== 'mining' && tab !== 'keys'}
+                {#if tab !== 'mining' && tab !== 'keys' && (tab !== 'beacons' || !tabUnlockCriteria['beacons']) && (tab !== 'sigils' || !tabUnlockCriteria['sigils'])}
                 <div class='game-text'>{ref.tabNotUnlockedText[tab]}</div>
                 {/if}
 
@@ -57,7 +59,10 @@
 
 import Decimal from 'break_infinity.js'
 import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes, 
-    progress, keysOpened, keyItemsUnlocked, settings, baseMiningDropTable} from '../data/player.js'
+    progress, keysOpened, keyItemsUnlocked, settings, baseMiningDropTable,
+    visibleTier, beaconProgress, beaconLevels, beaconUpgradeLevels,
+    resources, beaconActivations} from '../data/player.js'
+import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
 import Mining from '../components/tabs/Mining.svelte';
 import Keys from '../components/tabs/Keys.svelte';
@@ -116,7 +121,14 @@ const save = () => {
     }
     localStorage.setItem('keyItemsUnlocked', JSON.stringify(keyItems));
     localStorage.setItem('keysOpened', JSON.stringify($keysOpened));
-    localStorage.setItem('progress', JSON.stringify($progress))
+    localStorage.setItem('progress', JSON.stringify($progress));
+    localStorage.setItem('dropTier', JSON.stringify($visibleTier));
+    localStorage.setItem('settings', JSON.stringify($settings));
+    localStorage.setItem('beaconProgress', JSON.stringify($beaconProgress));
+    localStorage.setItem('beaconLevels', JSON.stringify($beaconLevels));
+    localStorage.setItem('beaconUpgradeLevels', JSON.stringify($beaconUpgradeLevels));
+    localStorage.setItem('resources', JSON.stringify($resources));
+    localStorage.setItem('beaconActivations', JSON.stringify($beaconActivations));
     saveConfirm = true;
     setTimeout(() => {
         saveConfirm = false;
@@ -153,6 +165,29 @@ const load = () => {
     for (let [k,v] of Object.entries($wallet)) {
             if (v > 0 && !$unlockedRes.has(k)) $unlockedRes.add(k);
     }
+
+    // increase mining drop tier if needed
+    if ($miningUpgradeLevels[6] > 0) $visibleTier++;
+    if (localStorage.getItem('settings')) {
+        settings.set(JSON.parse(localStorage.getItem('settings')));
+        buyAmount = $settings['buyAmount'];
+    }
+    if (localStorage.getItem('beaconProgress')) {
+        beaconProgress.set(JSON.parse(localStorage.getItem('beaconProgress')));
+    }
+    if (localStorage.getItem('beaconLevels')) {
+        beaconLevels.set(JSON.parse(localStorage.getItem('beaconLevels')));
+    }
+    if (localStorage.getItem('beaconUpgradeLevels')) {
+        beaconUpgradeLevels.set(JSON.parse(localStorage.getItem('beaconUpgradeLevels')));
+    }
+    if (localStorage.getItem('resources')) {
+        resources.set(JSON.parse(localStorage.getItem('resources')));
+    }
+    if (localStorage.getItem('beaconActivations')) {
+        beaconActivations.set(JSON.parse(localStorage.getItem('beaconActivations')));
+    }
+    delete $wallet['beaconPower'];
 }
 
 onMount(() => {

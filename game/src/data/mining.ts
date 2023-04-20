@@ -137,13 +137,14 @@ export const miningUpgrades = array([{
     cost: {
         gems: 3,
     },
-    ratio: 1.6,
-    formula: (lv: any) => (lv>=36 ? 
-    10 +(lv-36)*0.025 : lv*0.25+1),
+    ratio: 1.3,
+    formula: (lv: any) => (lv >= 916 ? 
+    54 + Math.pow((lv-916),0.5)*0.05 : 
+    (lv>=36 ? 10 + (lv-36)*0.05 : lv*0.25+1)),
     unlockAt: () => (get(wallet)['gems'] >= 1),
     isPercent: false,
     maxLevel: 1000,
-    notes: 'Progress equal to level + 1.'
+    notes: '0.25*lv until 36, (lv-36)*0.025 until 916, sqrt(lv-916)*0.025 after'
 },
 {
     name: 'Efficiency',
@@ -151,7 +152,7 @@ export const miningUpgrades = array([{
     cost: {
         gems: 10,
     },
-    ratio: 1.25,
+    ratio: 1.2,
     unlockAt: () => (get(wallet)['gems'] >= 3 && get(miningUpgradeLevels)[0] >= 1),
     formula: (lv: any) => lv*0.35*pow(lv,0.6),
     isPercent: false,
@@ -168,9 +169,9 @@ export const miningUpgrades = array([{
         gems: 100,
         gold: 15
     },
-    ratio: 1.5,
+    ratio: 1.33,
     unlockAt: () => (get(wallet)['gems'] > 30 && get(wallet)['gold'] > 5),
-    formula: (lv: any) => (1 + Math.pow(lv, 0.33)*0.1),
+    formula: (lv: any) => (1 + Math.pow(lv, 0.65)*0.2 + (lv * 0.0005)),
     isPercent: true,
     prefix: '+',
     maxLevel: 300,
@@ -178,7 +179,7 @@ export const miningUpgrades = array([{
 },
 {
     name: '[*] Key Finder',
-    description: 'While mining, you will occasionally find a bundle of 10 T1 [*] keys.' 
+    description: 'While mining, you will occasionally find a bundle of T1 [*] keys.' 
     + '\nUpgrades increase progress gained towards this milestone.',
     cost: {
         orbs: 15,
@@ -193,7 +194,7 @@ export const miningUpgrades = array([{
 },
 {
     name: '[**] Key Finder',
-    description: 'While mining, you will occasionally find a bundle of 3 T2 [**] keys.' 
+    description: 'While mining, you will occasionally find a bundle of T2 [**] keys.' 
     + '\nUpgrades increase progress gained towards this milestone.',
     cost: {
         orbs: 30000,
@@ -228,7 +229,7 @@ export const miningUpgrades = array([{
     name: 'Lootmaster I',
     description: 'The first level unlocks a new tier of findable drops. Additional levels increase all drop rates.',
     cost: {
-        gold: 10000,
+        gold: 400,
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[0] > 10 && get(miningUpgradeLevels)[1] > 10),

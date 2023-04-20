@@ -1,12 +1,14 @@
 <div class='wrapper py-2'>
+    {#key clockr}
     <div class='has-tooltip mining-flavor game-btn text-med text-center'>
         Hover for Possible Drops
         <span class='px-2 mx-4 tooltip tooltip-text shadow-lg p-1
         border-white border-double border bg-[#222529] ml-16
           pointer-events-none'>
           <!-- Drop Table Display -->
+          
           {#each Object.entries($miningDropTable) as drop}
-            {#if ref.dropTiers[drop[0]] >= $visibleTier}
+            {#if $visibleTier >= ref.dropTiers[drop[0]]}
             <div class='drop-table-disp grid grid-cols-10'>
                 <div class='col-span-1 text-left {ref.dropTierColors[ref.dropTiers[drop[0]]] ||'text-white'}'>
                 [ {romanNumerals[Math.max(0,ref.dropTiers[drop[0]]-1)]} ]
@@ -23,12 +25,14 @@
             </div>
             {/if}
           {/each}
+          
         </span>
     </div>
+    {/key}
     <!-- progress bar (gems) -->
     <div class='text-[#989898] text-small pt-4'>gem progress [ 
         <strong>{$gemGainFlavorText > 1 ? f($gemGainFlavorText,3) : 1}</strong>
-         x {f($progressThisSecond['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'], 2) } times / sec ]</div>
+         x {f($progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'], 2) } times / sec ]</div>
     <div class='mine-bar-wrapper pb-2'>
         <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
             <div class="bg-red-300 h-2.5 rounded-full" 
@@ -47,8 +51,8 @@
             </div>
         </div>
         <div class='col-span-3 pl-1 text-left align-text-middle'>
-            <div class='text-[#989898] text-small'>[*] +<strong>{$keyGainFlavorText[0] > 1 ? f($keyGainFlavorText[0],3) : 1}</strong>
-                x {f($progressThisSecond['key1']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key1'], 3)} / sec
+            <div class='text-[#989898] text-small'>[*] <strong>{$keyGainFlavorText['key1'] > 1 ? f($keyGainFlavorText['key1'],0) : '???'}</strong>
+                x {f($progressAverage['key1']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key1'], 3)} / sec
 
             </div>
         </div>
@@ -68,7 +72,7 @@
  //@ts-nocheck
 import { onMount } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
-    settings, visibleTier, progressThisSecond} from '../../data/player';
+    settings, visibleTier, progressThisTick, progressAverage} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
@@ -78,9 +82,13 @@ import ref from '../../calcs/ref'
 $: mineBarWidth = `${$progress['gems'] / $progressThreshold['gems'] * 100}%`;
 $: key1BarWidth = `${$progress['key1'] / $progressThreshold['key1'] * 100}%`;
 
+// for triggering #key
+let clockr = false;
+
 onMount(() => {
-    setInterval(() => {
-    }, 500)
+    const clock = setInterval(() => {
+        clockr = !clockr;
+    }, 523) // prime number to avoid sync with other intervals
 })
 
 const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']

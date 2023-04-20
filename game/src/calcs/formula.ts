@@ -5,5 +5,13 @@ export default class formula {
       
         return sum;
       }
-      
+    static maxNumGeom(x: number, b: number, r: number) {
+        const n = Math.floor(Math.log((x/b) * (r - 1) + 1) / Math.log(r));
+        const actualPrice = b * Math.pow(r, n);
+        return Math.min(n, Math.floor(x/actualPrice));
+      }
+
+    static sumArray(array: Array<number>) {
+        return array.reduce((sum, value) => sum + value, 0);
+      }
 }
