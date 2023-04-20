@@ -135,12 +135,12 @@ export const miningUpgrades = array([{
     name: 'Haste',
     description: 'Increases progress per tick.',
     cost: {
-        gems: 3,
+        gems: 5,
     },
-    ratio: 1.3,
-    formula: (lv: any) => (lv >= 916 ? 
-    54 + Math.pow((lv-916),0.5)*0.05 : 
-    (lv>=36 ? 10 + (lv-36)*0.05 : lv*0.25+1)),
+    ratio: 1.275,
+    formula: (lv: any) => (lv >= 952 ? 
+    54 + Math.pow((lv-952),0.5)*0.05 : 
+    (lv>=72 ? 10 + (lv-72)*0.05 : lv*0.125+1)),
     unlockAt: () => (get(wallet)['gems'] >= 1),
     isPercent: false,
     maxLevel: 1000,
@@ -152,9 +152,9 @@ export const miningUpgrades = array([{
     cost: {
         gems: 10,
     },
-    ratio: 1.2,
+    ratio: 1.3,
     unlockAt: () => (get(wallet)['gems'] >= 3 && get(miningUpgradeLevels)[0] >= 1),
-    formula: (lv: any) => lv*0.35*pow(lv,0.6),
+    formula: (lv: any) => 0.35*pow(lv,0.5+Math.log10(lv+1)),
     isPercent: false,
     prefix: '+',
     suffix: ' gems',
@@ -166,7 +166,6 @@ export const miningUpgrades = array([{
     name: 'Fortune',
     description: 'Improves droprates for common [*] items.',
     cost: {
-        gems: 100,
         gold: 15
     },
     ratio: 1.33,
@@ -243,9 +242,9 @@ export const miningUpgrades = array([{
     name: 'Shiny',
     description: 'Gold drops are significantly improved.',
     cost: {
-        gems: 10000,
+        gems: 1000,
     },
-    ratio: 1.25,
+    ratio: 1.3,
     unlockAt: () => (get(miningUpgradeLevels)[0] > 10 && get(miningUpgradeLevels)[1] > 10),
     formula: (lv: any) => (1 + lv*0.5*pow(lv, 0.11)),
     isPercent: false,
@@ -254,6 +253,21 @@ export const miningUpgrades = array([{
     notes: ''
 },
 // i = 8
+{
+    name: 'Efficiency II',
+    description: 'Increases gem yield again.',
+    cost: {
+        gems: 2500,
+    },
+    ratio: 1.25,
+    unlockAt: () => (get(miningUpgradeLevels)[0] > 10 && get(miningUpgradeLevels)[1] > 10),
+    formula: (lv: any) => (1+lv*(0.1 + Math.pow(lv/15, 0.2) - 1)),
+    isPercent: true,
+    prefix: '+',
+    suffix: ' gems',
+    maxLevel: 300,
+    notes: ''
+},
 ]);
 
 // if true, progress bars will be solid instead of flickering

@@ -78,7 +78,8 @@ select-none'>
 
     function openKeys(amt) {
         let rewards = {};
-        $keysOpened['key'+(rarity-1)] += amt;
+        $keysOpened[(rarity-1)] += parseInt(amt);
+        const dropTable = eval('$key'+rarity+'DropTable') || {}
         for (let [type, vals] of Object.entries($key1DropTable)) {
             // if E[x] > 5, then we can calculate based on variance
             if (amt*vals[0] > 5) {

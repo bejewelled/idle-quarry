@@ -24,28 +24,28 @@
 
         <div class='px-2 py-2 main-panel col-span-7 grid grid-rows-12'>
             <div class='py-1 row-span-2 control-buttons'>
-                <button class='py-1 text-small save-btn control-btn' on:click={() => save()}>Save</button>
+                <button class='py-1 text-small save-btn control-btn {saveConfirm ? 'bg-green-400' : ''}' on:click={() => save()}>Save</button>
                 <button class='py-1 text-small save-btn control-btn' on:click={() => reset()}>Reset</button>
-                <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>               
-                <div class='tooltip-text-xs saved-confirm'>{saveConfirm ? 'Saved!' : ''}</div>
-            </div>
+                <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>                           </div>
             <div class='py-1 row-span-2 tab-buttons'>
                 {#each ref.tabs as tab}
                     <button class='p-1 text-small control-btn' on:click={() => changeTab(tab)}>{tab}</button>
                 {/each}
             </div>
             <div class='row-span-10 main-panel-display'>
-                {#if tab === 'mining' && (tabUnlockCriteria['mining'])}
+                {#if tab === 'mining' && (tabUnlockCriteria['mining']())}
                     <Mining />
-                {:else if tab === 'keys'  && (tabUnlockCriteria['mining'])}
+                {:else if tab === 'keys'  && (tabUnlockCriteria['mining']())}
                     <Keys />
-                {:else if tab === 'beacons' && (tabUnlockCriteria['beacons'])}
+                {:else if tab === 'beacons' && (tabUnlockCriteria['beacons']())}
                     <Beacons />
-                {:else if tab === 'sigils' && (tabUnlockCriteria['sigils'])}
+                {:else if tab === 'sigils' && (tabUnlockCriteria['sigils']())}
                 {/if}
 
-                {#if tab !== 'mining' && tab !== 'keys' && (tab !== 'beacons' || !tabUnlockCriteria['beacons']) && (tab !== 'sigils' || !tabUnlockCriteria['sigils'])}
-                <div class='game-text'>{ref.tabNotUnlockedText[tab]}</div>
+                {#if (tabUnlockCriteria[tab] && !tabUnlockCriteria[tab]()) ||
+                    !(tabUnlockCriteria[tab])}
+        
+                <div class='game-text'>{ref.tabNotUnlockedText[tab] || ''}</div>
                 {/if}
 
             </div>
@@ -70,9 +70,10 @@ import MiningUpgradeButton from '../components/buttons/MiningUpgradeButton.svelt
 import ref from '../calcs/ref.ts'
 
 import { onMount } from 'svelte'
+    import formula from '../calcs/formula.js';
 
 let tab = 'mining'
-let AUTOSAVE = false;
+let AUTOSAVE = true;
 let AUTOSAVE_INTERVAL = 30000;
 let saveConfirm;
 let buyAmount = 1;
@@ -104,8 +105,9 @@ const f = (n, pl = 3) => {
 const tabUnlockCriteria = {
         mining: () => true,
         keys: () => true,
-        beacons: () => ($wallet['beacons'] && $wallet['beacons'] > 0),
-        sigils: () => ($wallet['sigils'] && $wallet['sigils'] > 0),
+        beacons: () => (($wallet['beacons']) || formula.sumArray($beaconActivations)>0),
+        sigils: () => ($wallet['sigils'] && $wallet['sigils'] > 0.02),
+        default: () => false,
 
     }
 
@@ -187,13 +189,15 @@ const load = () => {
     if (localStorage.getItem('beaconActivations')) {
         beaconActivations.set(JSON.parse(localStorage.getItem('beaconActivations')));
     }
+    for (let i = 0; i < $beaconActivations.length; i++) {
+        if (isNaN(i) || !i) $beaconActivations[i] = 0;
+    }
     delete $wallet['beaconPower'];
 }
 
 onMount(() => {
     load();
     miningDropTable.updateTable();
-    console.log($baseMiningDropTable);
     setInterval(() => {
         if (AUTOSAVE) {
             save();
