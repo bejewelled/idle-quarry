@@ -173,11 +173,9 @@ function dropTable(context: any) {
                         //@ts-ignore
                         val[2]
                     ]
-                    console.log(i[item])
                     if (item === 'gold') {
                         i[item][1] = val[1] * get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]);
                         i[item][2] = val[2] * get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]);
-                        console.log(i);
                     }
                 }
                 return i;
@@ -212,7 +210,7 @@ export const progress = object({
 export const miningUpgradeLevels = array(Array(20).fill(0));
 
 export const baseMiningDropTable = dropTable({
-    gold: [0.20,1,4], // 10% chance to drop 1 gold
+    gold: [0.20,1,3], // 10% chance to drop 1 gold
     key1: [0.05,1,1], 
     orbs: [0.01,1,2],
     beacons: [0.005,1,1]
@@ -228,6 +226,7 @@ export const keysOpened = array(Array(5).fill(0))
 export const settings = object({
     UPDATE_SPEED: 20,
     buyAmount: 1,
+    activeTab: '',
 })
 
 export const keyItemsUnlocked = object({

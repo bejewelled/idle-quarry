@@ -261,7 +261,7 @@ export const miningUpgrades = array([{
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[0] > 10 && get(miningUpgradeLevels)[1] > 10),
-    formula: (lv: any) => (1+lv*(0.1 + Math.pow(lv/15, 0.2) - 1)),
+    formula: (lv: any) => (1+Math.pow(lv,1.2)*0.1),
     isPercent: true,
     prefix: '+',
     suffix: ' gems',

@@ -84,6 +84,7 @@ let buyAmount = 1;
 
 const changeTab = (t: string) => {
     tab = t;
+    $settings['activeTab'] = t;
     console.log(tab);
 }
 
@@ -199,6 +200,8 @@ const load = () => {
         if (isNaN(i) || !i) $beaconActivations[i] = 0;
     }
     delete $wallet['beaconPower'];
+    if ($resources['beaconPower'] < 0) $resources['beaconPower'] = 0;
+
 }
 
 onMount(() => {

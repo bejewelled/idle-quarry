@@ -1,7 +1,7 @@
 
 import { writable, get } from 'svelte/store';
 import { miningUpgrades } from './mining';
-import { miningUpgradeLevels, wallet } from './player';
+import { miningUpgradeLevels, wallet, resources } from './player';
 
 function single(context: any) {
     // @ts-ignore
@@ -212,4 +212,31 @@ export const beaconUpgrades = array([{
     prefix: '+',
     maxLevel: 300,
     notes: '0.25*lv until 36, (lv-36)*0.025 until 916, sqrt(lv-916)*0.025 after'
+},
+{
+    name: 'Shining Light',
+    description: 'Each level gained in a path gives beacons.',
+    cost: {
+        beaconPower: 100000,
+    },
+    ratio: 2.5,
+    formula: (lv: any) => lv,
+    isPercent: false,
+    prefix: '+',
+    suffix: '*[path level]',
+    maxLevel: 100,
+    notes: '0.25*lv until 36, (lv-36)*0.025 until 916, sqrt(lv-916)*0.025 after'
+},
+{
+    name: 'Ramping Power',
+    description: 'Unspent beacon power boosts beacon path progress. Upgrades multiply this amount.',
+    cost: {
+        beaconPower: 2.5e6,
+    },
+    ratio: 4,
+    formula: (lv: any) => (lv === 0 ? 1 : Math.log(get(resources)['beaconPower']*3 + 1) / Math.log(8 - lv*0.5)),
+    isPercent: true,
+    suffix: ' bonus',
+    maxLevel: 10,
+    notes: ''
 },])
