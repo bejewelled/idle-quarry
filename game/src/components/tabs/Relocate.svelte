@@ -1,18 +1,44 @@
 <div class='wrapper py-2'>
 <div class='grid grid-cols-12 game-text text-center'>
     <div class='col-span-12'>Relocate to a new mine and gain
-        <span class='text-orange-400'> fame </span> based on your past success.
+        fame based on your past success.
     </div>
-    <div class='col-span-12 py-1'>You will gain [PLACEHOLDER] fame by relocating.</div>
+    <div class='col-span-12'>Relocating resets all previous resources and upgrades. 
+        Keys are not removed.
+    </div>
+    <div class='col-span-12 py-1'>You will gain 
+        <span class='text-orange-400 font-bold'>{calcFameGain()}</span> fame by relocating.</div>
     <div class='col-span-12 py-1'><hr /></div> 
-    <div class='col-span-4 py-1'>Keys Used: </div>
-    <div class='col-span-1 py-1'></div>
-    <div class='col-span-8 py-1'>
+    <!-- display for keys -->
+    <div class='col-span-3 text-left py-1'>Keys Used: </div>
+    <div class='col-span-1 py-1 text-right'>
+        <span class='font-bold'>+{f(formula.sumArray(fameGainKeys), 3)}</span>
+    </div>
+    <div class='col-span-8 text-right py-1'>
+        [ 
         {#each $keysOpened as k, i}
             <span class='{ref.colors['key'+((i+1).toString())]}'>
-                {" " + f(fameGainKeys[i],0)} </span> {#if i < $keysOpened.length}+{/if} 
+                {" " + f(fameGainKeys[i],2)} </span> {#if i+1 < $keysOpened.length}+{/if} 
         {/each}
+         ]
     </div>
+
+    {#each fameGridInfo as fitem, i}
+        {#if i > 0 && (fitem['criteria'])}
+            <div class=' {ref.colors[fitem['colorRef']] || 'text-white'} 
+            col-span-3 text-left py-1'>{fitem['name']}: </div>
+            <div class=' {ref.colors[fitem['colorRef']] || 'text-white'}
+            col-span-1 text-right py-1'>
+                <span class='font-bold'>x{f(fitem['value'](), 3)}</span>
+            </div>
+            <div class='col-span-8'></div>
+        {/if}
+    {/each}
+    </div>
+    <div class='col-span-12 pt-3'>
+        <div class='game-btn text-center' on:click={() => relocate()}>
+            Relocate
+        </div>
     </div>
 </div>
 
@@ -20,11 +46,11 @@
 
 <script lang='ts'>
  //@ts-nocheck
-import { onMount } from 'svelte';
+import { onMount, onDestroy } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
     settings, visibleTier, progressThisTick, progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources,
-     keysOpened, unlockedRes} from '../../data/player';
+     keysOpened, unlockedRes, beaconUpgradeLevels} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
@@ -36,26 +62,25 @@ import ref from '../../calcs/ref'
 import formula from '../../calcs/formula';
 import BeaconToggleButton from '../buttons/BeaconToggleButton.svelte';
 import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte';
+import RelocateButton from '../buttons/RelocateButton.svelte'
 
 $: pbarWidths = Array(30).fill(0);
 $: beaconDispBonus = $beaconBonuses
 $: fameGainKeys = formula.calcFameGainKeys($keysOpened);
+$: fameMultiGems = formula.calcFameGemMulti($wallet['gems']);
+$: fameMultiBeaconLevels = 0;
 let beaconDispBonus = $beaconBonuses;
 
 onMount(() => {
-    beaconDispBonus = $beaconBonuses;
-    const pbarUpdater = setInterval(() => {
-        for (let i = 0; i < 30; i++) {
-            pbarWidths[i] = Math.min(100, ($beaconProgress[i] / $beaconNextReqs[i]) * 100)
-        }
-        pbarWidths = pbarWidths;
-    }, $settings['UPDATE_SPEED'])
+    const reloadFameGain = setTimeout(() => {
+        fameGainKeys = formula.calcFameGainKeys($keysOpened);
+        fameMultiGems = formula.calcFameGemMulti($wallet['gems']);
+        fameMultiBeaconLevels = formula.calcFameBeaconMulti(formula.sumArray($beaconLevels));
+    }, 100)
 })
 
-
-
-const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
-
+onDestroy(() => {
+})
 const f = (n: number, pl = 0) => {
         if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         else return n.toExponential(3).toString().replace('+', '');
@@ -72,5 +97,51 @@ const fpf = (n: unknown, subOne = false) => {
     if (n < 1e9) return (n*100).toFixed(3).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "%";
     else return (n*100).toExponential(3).toString().replace('+', '') + "%";
 }
+
+const fameGridInfo = [
+    {
+     name: 'Keys Used',
+     value: () => formula.sumArray(fameGainKeys || []),
+     criteria: true
+    },
+    {
+     name: 'Gem Amount', 
+     value: () => fameMultiGems, 
+     colorRef: 'gems',
+     criteria: $wallet['gems'] > 0
+    },
+    {
+     name: 'Beacon Paths', 
+     value: () => fameMultiBeaconLevels,
+     colorRef: 'beacons',
+     criteria: $wallet['beacons'] > 0
+    },
+]
+
+function calcFameGain() {
+    return formula.sumArray(fameGainKeys) * fameMultiGems * fameMultiBeaconLevels;
+}
+
+const walletResetItems = ['gems', 'gold', 'orbs', 'beacons']
+function relocate() {
+        if (confirm("Are you sure? Relocating will reset all previous progress.")) {
+            $wallet['fame'] += calcFameGain();
+            for (let i of walletResetItems) {
+                $wallet[i] = 0;
+            }
+            for (let i in $beaconLevels) {
+                $beaconLevels[i] = 0;
+                $beaconProgress[i] = 0;
+                $beaconActivations[i] = 0;
+            }
+            $keysOpened = Array($keysOpened.length).fill(0);
+            $miningUpgradeLevels = Array($miningUpgradeLevels.length).fill(0);
+            $beaconUpgradeLevels = Array($beaconUpgradeLevels.length).fill(0);
+        }
+}
+
+const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+
+
 
 </script>

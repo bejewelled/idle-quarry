@@ -73,10 +73,5 @@ import ref from '../../calcs/ref'
 
  </script>
 <style>
-  .tooltip {
-    @apply invisible absolute;
-  }
-  .has-tooltip:hover .tooltip {
-    @apply visible z-50;
-  }
+
 </style>

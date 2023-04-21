@@ -21,4 +21,12 @@ export default class formula {
         return FINAL;
     }
 
+    static calcFameGemMulti(n: number) {
+      return (n > 1e20 ? 20 + Math.pow(Math.log10(n-50),2.5) : Math.log10(n+1))
+    }
+
+    static calcFameBeaconMulti(n: number) {
+      return (n > 1e10 ? 2000 + Math.pow(n-1e10, 0.35): Math.pow(n, 0.33))
+    }
+
 }

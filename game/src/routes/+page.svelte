@@ -28,9 +28,15 @@
                 <button class='py-1 text-small save-btn control-btn' on:click={() => reset()}>Reset</button>
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>                           </div>
             <div class='py-1 row-span-2 tab-buttons'>
-                {#each ref.tabs as tab}
-                    <button class='p-1 text-small control-btn' on:click={() => changeTab(tab)}>{tab}</button>
+                {#key tabsUnlocked}
+                {#each ref.tabs as t}
+                    <button class='p-1 text-small 
+                    {!tabUnlockCriteria[t] ? 'control-btn-nounlock' : 
+                    (tabUnlockCriteria[t]() ? 
+                    (t === tab ? 'control-btn-selected' : 'control-btn') : 'control-btn-nounlock')}' 
+                    on:click={() => changeTab(t)}>{t}</button>
                 {/each}
+                {/key}
             </div>
             <div class='row-span-10 main-panel-display'>
                 {#if tab === 'mining' && (tabUnlockCriteria['mining']())}
@@ -116,6 +122,15 @@ const tabUnlockCriteria = {
         default: () => false,
 
     }
+const tabsUnlocked = {
+    mining: true,
+    keys: true,
+    beacons: false,
+    sigils: false,
+    relocate: false,
+    default: false,
+}
+
 
 const save = () => {
     console.log('s')
@@ -212,6 +227,11 @@ onMount(() => {
             save();
         }
     }, AUTOSAVE_INTERVAL);
+    setInterval(() => {
+        for (let tab of ref.tabs) {
+            tabsUnlocked[tab] = (!tabUnlockCriteria[tab] ? false : tabUnlockCriteria[tab]());
+        }
+    }, AUTOSAVE_INTERVAL);
 })
 
 
@@ -271,13 +291,23 @@ onMount(() => {
         cursor: pointer;
     }
     :global(.control-btn) {
-        border: 1px solid #858585;
-        color: #858585;
+        border: 1px solid #969696;
+        color: #969696;
         cursor: pointer;
     }
     :global(.control-btn:hover) {
         border: 1px solid #ffffff;
         color: #ffffff;
+    }
+    :global(.control-btn-selected) {
+        border: 1px solid #eeeeee;
+        color: #eeeeee;
+        cursor: pointer;
+    }
+    :global(.control-btn-nounlock) {
+        border: 1px solid #555555;
+        color: #555555;
+        cursor: pointer;
     }
     :global(.tooltip) {
       @apply invisible absolute;

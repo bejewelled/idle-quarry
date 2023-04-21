@@ -8,7 +8,8 @@ function format(context: any) {
     return {
         subscribe,
         f(n: number, pl = 0) {
-            if (!n) return 'N/A';
+            if (isNaN(n)) return 'N/A';
+            else if (!n) return 'undef';
             if (n < 1e9) return n.toFixed(pl).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
             else return n.toExponential(3).toString().replace('+', '');
         },

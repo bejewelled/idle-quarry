@@ -9,7 +9,7 @@ select-none'>
     {#if amt == 1}
     Use <span class='{ref.colors['key' + rarity]}'>{getKeyDisplayName()}</span> Key
     {:else}
-    x{amt}
+    x{f(parseInt(amt),0)}
     {/if}
 {:else if keyKnowledgeCriteria()}
     {#if amt == 1}
@@ -32,12 +32,14 @@ select-none'>
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
+    import { get } from 'svelte/store'
     import { wallet, miningUpgradeLevels, miningDropTable, keysOpened, 
     keyItemsUnlocked} from '../../data/player';
     import { progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
     import ref from '../../calcs/ref'
     import { key1DropTable } from '../../data/keys';
     import { keyRewardText } from '../../data/keys'
+    import { combinations } from 'mathjs'
 // @ts-nocheck
     export let rarity, amt;
     let affordable, unlocked;
@@ -70,19 +72,25 @@ select-none'>
 
     function open() {
         if (keyKnowledgeCriteria() && $wallet['key'+rarity.toString()] >= amt) {
-            $wallet['key'+rarity.toString()] -= amt;
-            $keysOpened['key'+(rarity-1)] += amt;
+            $wallet['key'+rarity.toString()] -= parseInt(amt);
+            $keysOpened['key'+(rarity-1)] += parseInt(amt);
             openKeys(amt);
         }
     }
-
+    /**
+     * Key opening formula O_O
+     * If E[x] > 1, use hybrid monte carlo sampling + variance
+     * If E[x] < 1, use binomial sequences
+     * @param amt
+     */
     function openKeys(amt) {
+        amt = parseInt(amt);
         let rewards = {};
         $keysOpened[(rarity-1)] += parseInt(amt);
-        const dropTable = eval('$key'+rarity+'DropTable') || {}
-        for (let [type, vals] of Object.entries($key1DropTable)) {
+        const dropTable = get(eval('key'+rarity+'DropTable')) || {}
+        for (let [type, vals] of Object.entries(dropTable)) {
             // if E[x] > 5, then we can calculate based on variance
-            if (amt*vals[0] > 5) {
+            if (parseInt(amt)*vals[0] >= 1) {
                 const stdev= Math.sqrt(amt*vals[0]*(1-vals[0]));
                 const val = Array.from({length: Math.floor(Math.sqrt(amt))}, 
                 () => Math.floor(vals[1] + Math.random()*(vals[2]-vals[1])));
@@ -91,21 +99,44 @@ select-none'>
                 Math.max(((Math.random() > 0.5 ? 1 : -1) * Math.pow(c/(c-5), 6)),0);
 
                 // monte carlo value selector
-                const rewardVal = (val[Math.floor(Math.random()*val.length)] + 
+                const rewardVal = Math.max((val[Math.floor(Math.random()*val.length)] + 
                 val[Math.floor(Math.random()*val.length)] + 
-                val[Math.floor(Math.random()*val.length)]) / 3
+                val[Math.floor(Math.random()*val.length)]) / 3, 1)
 
                 console.log(val);
                 rewards[type] = (rewards[type] || 0) + numWins*rewardVal;
 
             } else {
-                for (let i = 0; i < amt; i++) {
-                    if (Math.random() < vals[0]) {
-                        rewards[type] = (rewards[type] || 0) + Math.floor(vals[1] + Math.random()*vals[2]) ;
+                    if (parseInt(amt) === 1) {
+                        rewards[type] = (Math.random() < vals[0] ? 
+                        vals[1] + Math.random()*(vals[2] - vals[1]) : 0);
+                        continue;
+                    } else {
+                    console.log(amt);
+                    rewards[type] = 0;
+                    const div = Math.floor(Math.log10(amt))
+                    const nEff = (amt > 100 ? Math.round(amt / Math.pow(10, div)) : amt);
+                    const pEff = (amt > 100 ? vals[0] * Math.pow(10, div) : amt);
+                    console.log(nEff);
+                    let done = false;
+                    let wins = 0;
+                    let k = 1;
+                    let pK = combinations(nEff, k) * Math.pow(pEff, k) * Math.pow(1-pEff, nEff-k);
+                    const rVal = Math.random();
+                    console.log(pK);
+                    while (!done) {
+                        if (rVal >= pK) {
+                            done = true;
+                        } else {
+                            rewards[type] += vals[1] + Math.random()*(vals[2] - vals[1])
+                            console.log(nEff);
+                            k++;
+                            pK = combinations(nEff, k) * Math.pow(pEff, k) * Math.pow(1-pEff, nEff-k);
+                        }
                     }
-                }   
+                }
+            }  
         }
-    }
 
     for (let [type, amt] of Object.entries(rewards)) {
         $wallet[type] = ($wallet[type] || 0) + amt;

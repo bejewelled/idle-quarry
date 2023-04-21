@@ -234,7 +234,7 @@ export const beaconUpgrades = array([{
         beaconPower: 2.5e6,
     },
     ratio: 4,
-    formula: (lv: any) => (lv === 0 ? 1 : Math.log(get(resources)['beaconPower']*3 + 1) / Math.log(8 - lv*0.5)),
+    formula: (lv: any) => (lv === 0 ? 1 : Math.log(get(resources)['beaconPower']*3 + 1) / Math.log(1 + 8 - lv*0.5)),
     isPercent: true,
     suffix: ' bonus',
     maxLevel: 10,

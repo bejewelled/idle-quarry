@@ -1,6 +1,6 @@
 <div class='key-amount-wrapper items-center'>
-    <div class='grid grid-cols-8'>
-        <div class='col-span-8 tooltip-text text-center'>
+    <div class='grid grid-cols-9'>
+        <div class='col-span-9 tooltip-text text-center'>
             Total Keys Opened: {f.f(formula.sumArray($keysOpened),0)}
         </div>
         {#each [1,2,3,4,5] as i}
@@ -60,7 +60,10 @@
                     <KeyOpenButton rarity={i} amt=10 />
                 </div>
                 <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
-                    <KeyOpenButton rarity={i} amt=100 />
+                    <KeyOpenButton rarity={i} amt=250 />
+                </div>
+                <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
+                    <KeyOpenButton rarity={i} amt=10000 />
                 </div>
         {/each}
     </div>
@@ -71,6 +74,7 @@
                 You received the following rewards:
             </div>
             {#each Object.entries($keyRewardText) as r}
+                {#if parseInt(r[1]) >= 0.99997}
                 <div class='col-span-3'></div>
                 <div class='col-span-1 text-left py-1 {ref.colors[r[0]] || 'text-white'}'>
                     {ref.displayNames[r[0]] ? ref.displayNames[r[0]] : r[0]}: 
@@ -79,6 +83,7 @@
                     {f.f(parseInt(r[1]),0)}
                 </div>
                 <div class='col-span-3'></div>
+                {/if}
             {/each}
         </div>
         {/if}
