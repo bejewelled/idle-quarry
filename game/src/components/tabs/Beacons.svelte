@@ -6,8 +6,8 @@
     Earn more beacon power by equally leveling your beacon paths.
 </div>
 <div class='py-2'></div>
-<div class='beacon-assign-grid grid grid-cols-11'>
-        <div class='p-1 m-1 col-span-11'>
+<div class='beacon-assign-grid grid grid-cols-12'>
+        <div class='p-1 m-1 col-span-12'>
             <input id='max' class="content-center w-20  bg-gray-700 text-white" placeholder='1' bind:value={$beaconAmt}>
         </div>
     {#each $beaconLevels as b, i}
@@ -26,7 +26,7 @@
                 +{fp(Math.max(beaconDispBonus[i], 1), 3, true)}
             </div>
         </div>
-        <div class='col-span-6 grid grid-rows-2'>
+        <div class='col-span-7 grid grid-rows-2'>
             <div class='row-span-1 tooltip-text'>{$beaconNameText[i]}</div>
             <div class='mine-bar-wrapper align-middle'>
                 <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
@@ -39,6 +39,7 @@
     {/each}
     <div class='py-2'></div>
     {#each $beaconUpgrades as b,i}
+    <div class='pt-1'></div>
         <BeaconPowerUpgradeButton index={i} />
     {/each}
 </div>

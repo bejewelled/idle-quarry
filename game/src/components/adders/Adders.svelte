@@ -47,6 +47,7 @@ let lastDropTableUpdate = Date.now();
 
 const UPDATE_SPEED = $settings['UPDATE_SPEED']; // ms per tick
 let last, dt;
+let beaconCounter = 0;
 onMount(() => {
     updateBeaconBonuses();
     last = Date.now();
@@ -54,7 +55,15 @@ onMount(() => {
     const mainLoop = setInterval(() => {
         dt = (Date.now() - last) / UPDATE_SPEED;
         addProgress(dt);
-        addBeaconProgress(dt);
+        if ($settings['activeTab'] !== 'beacons') {
+            if (beaconCounter >= 10) {
+                addBeaconProgress(dt*10);
+                beaconCounter = 0;
+            } else beaconCounter++;
+        } else {
+            addBeaconProgress(dt);
+            beaconCounter++;
+        }
         last = Date.now();
     }, UPDATE_SPEED)
     // slowLoop updates at random intervals, do NOT add time-dependent items here!
@@ -159,17 +168,26 @@ function dropRoll(n) {
     }
 }
 
+let locks = new Set(); // makes sure levelups don't repeat when leveling up from next function call
 function addBeaconProgress(delta) {
-    const progressGains = $beaconActivations.map((e) => e * delta * 
-    $beaconUpgrades[0]['formula']($beaconUpgradeLevels[0]));
+    const progressGains = $beaconActivations.map((e) => e * delta
+    * $beaconUpgrades[0]['formula']($beaconUpgradeLevels[0]))
+    * Math.max(1,$beaconUpgrades[2]['formula']($beaconUpgradeLevels[2]));
     // adds progressGains to progress
     $beaconProgress = $beaconProgress.map((e, i) => e + progressGains[i]);
     // check for levelups
     for (let i = 0; i < $beaconProgress.length; i++) {
-        if ($beaconProgress[i] >= $beaconNextReqs[i]) {
-            const numLevels = Math.min(1,formula.maxNumGeom($beaconProgress[i], $beaconNextReqs[i], $beaconNums[i][1]));
+        if (i === 2) console.log($beaconProgress[i] + " " + $beaconNextReqs[i] + " " + locks.has(i))
+        if ($beaconProgress[i] >= $beaconNextReqs[i] && !locks.has(i)) {
+            // console.log('LEVELUP!!!')
+            locks.add(i);
+            // console.log("LOCKS")
+            // console.log(locks)
+            const numLevels = Math.max(1,formula.maxNumGeom($beaconProgress[i], $beaconNextReqs[i], $beaconNums[i][1]));
             // subtract excess progress
-            $beaconProgress[i] -= formula.gSum($beaconNextReqs[i], $beaconNums[i][1], numLevels);   
+            // console.log("PROG SUBTRACTED: " + formula.gSum($beaconNextReqs[i], $beaconNums[i][1], numLevels));
+            $beaconProgress[i] -= Math.max($beaconNextReqs[i], 
+            formula.gSum($beaconNextReqs[i], $beaconNums[i][1], numLevels));   
             // increase levels         
             $beaconLevels[i] += numLevels;
             // update formulas as needed
@@ -180,13 +198,17 @@ function addBeaconProgress(delta) {
                 lastDropTableUpdate = Date.now();
                 miningDropTable.updateTable();
             }
+
+            $wallet['beacons'] = ($wallet['beacons'] || 0) + ($beaconUpgradeLevels[2] * $beaconLevels[i]);
+            console.log(Date.now())
+            locks.delete(i);
         }
     }
     const maxLevel = Math.max(...$beaconLevels);
     // add beacon power, gain more power if all levels are nearly equal (but the effect
     // decreases at higher tiers of beacon path)
     $resources['beaconPower'] = ($resources['beaconPower'] || 0) + 
-    Math.log10($beaconLevels.reduce((s, c) => s+(c*Math.pow(c/(maxLevel+1), 4), 0))) * delta;
+    Math.log10(1 + $beaconLevels.reduce((s, c) => s+(c*Math.pow(c/(maxLevel+1), 4), 0))) * delta;
 
 }
 

@@ -1,11 +1,12 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div on:click={() => buy(index)}
-class='has-tooltip tooltip-text 
+class='has-tooltip tooltip-text py-1
 {affordable ? 'game-btn' : 'game-btn-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>{$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index],0)} / {f($beaconUpgrades[index]['maxLevel'],0)}]
-         <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
+        {#key $resources['beaconPower']} 
+        <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
          <div class='title text-small-gray items-start text-center pb-1'>
@@ -41,6 +42,7 @@ select-none'>{$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index],0)
             {/if}
         </div>
          </span>
+        {/key}
      </div>
 
         

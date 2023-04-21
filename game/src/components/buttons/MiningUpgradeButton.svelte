@@ -1,9 +1,10 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
+{#key permUnlocked || affordable || $miningUpgradeLevels[index] > 0}
 {#if $miningUpgrades[index]['unlockAt']() || permUnlocked || $miningUpgradeLevels[index] > 0}
 <div on:click={() => buy(index)}
 class='has-tooltip tooltip-text 
-{affordable ? 'game-btn' : 'game-btn-noafford'}
+{affordable || $miningUpgradeLevels[index] >= $miningUpgrades[index]['maxLevel'] ? 'game-btn' : 'game-btn-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)} / {f($miningUpgrades[index]['maxLevel'],0)}]
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
@@ -34,7 +35,7 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
             {:else}
             {#each Object.entries(costs) as c}
                 {#if c[1] >= 1}
-                    <div class='{ref.colors[c[0]] || ref.colors['default']} col-span-2'>{
+                    <div class='{ref.colors[c[0]] || ref.colors['default']} text-right pr-3 col-span-2'>{
                     $wallet[c[0]] || $unlockedRes.has(c[0]) ? 
                     (ref.displayNames[c[0]] ? ref.displayNames[c[0]] : c[0]) : "???"}</div>
                     <div class='col-span-2 text-left'>{f(c[1])}</div>
@@ -45,6 +46,7 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
          </span>
      </div>
         {/if}
+    {/key}
 
         
 
