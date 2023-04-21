@@ -106,7 +106,6 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
        const r =  $miningUpgrades[index]['ratio']
        const l = $settings['buyAmount']
 
-        if (index==1) console.log('base ' + base + ' r ' + r + ' l ' + l + ' ' + formula.gSum(base,r,l))
        return formula.gSum(base,r,l)
     }
 

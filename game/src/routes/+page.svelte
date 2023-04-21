@@ -1,4 +1,6 @@
+{#if loadingFinished}
 <Adders />
+{/if}
 <div class='wrapper'>
 
     <div class='main-page grid grid-cols-12'>
@@ -7,11 +9,18 @@
             <div class='res-display-space py-2'></div>
             <div class='res-display-wrap grid grid-cols-12'>
                 {#each Object.entries($wallet) as res}
-                    {#if $wallet[res[0]] && !res[0].includes('key')}   
+                    {#if $wallet[res[0]] && !res[0].includes('key') && res[0] !== 'fame'}   
                         <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
                         <div class='game-text res-amount col-span-5'>{f(res[1],0)}</div>
                     {/if}
                 {/each}
+                <div class='res-break py-2 col-span-12'></div>
+                {#each Object.entries($wallet) as res}
+                    {#if $wallet[res[0]] && !res[0].includes('key') && res[0] === 'fame'}   
+                        <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
+                        <div class='game-text res-amount col-span-5'>{f(res[1],0)}</div>
+                    {/if}
+                 {/each}
                 <div class='res-break py-2 col-span-12'></div>
                 {#each Object.entries($wallet) as res}
                     {#if ($wallet[res[0]] || $unlockedRes.has(res[0])) && res[0].includes('key')}   
@@ -70,7 +79,8 @@ import Decimal from 'break_infinity.js'
 import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes, 
     progress, keysOpened, keyItemsUnlocked, settings, baseMiningDropTable,
     visibleTier, beaconProgress, beaconLevels, beaconUpgradeLevels,
-    resources, beaconActivations} from '../data/player.js'
+    resources, beaconActivations, flags} from '../data/player.js'
+import {beaconNextReqs} from '../data/beacons.ts'
 import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
 import Mining from '../components/tabs/Mining.svelte';
@@ -87,6 +97,7 @@ let AUTOSAVE = true;
 let AUTOSAVE_INTERVAL = 30000;
 let saveConfirm;
 let buyAmount = 1;
+let loadingFinished = false;
 
 const changeTab = (t: string) => {
     tab = t;
@@ -152,6 +163,9 @@ const save = () => {
     localStorage.setItem('beaconUpgradeLevels', JSON.stringify($beaconUpgradeLevels));
     localStorage.setItem('resources', JSON.stringify($resources));
     localStorage.setItem('beaconActivations', JSON.stringify($beaconActivations));
+    // this is not in the player class
+    // however, it is saved to prevent mismatches in beacon path levels on load
+    localStorage.setItem('beaconNextReqs', JSON.stringify($beaconNextReqs));
     saveConfirm = true;
     setTimeout(() => {
         saveConfirm = false;
@@ -163,7 +177,7 @@ const reset = () => {
     location.reload();
 }
 
-const load = () => {
+const load = async () => {
     if (localStorage === null) return;
     if (localStorage.getItem('wallet')) {
         wallet.set((JSON.parse(localStorage.getItem('wallet'))));
@@ -202,6 +216,9 @@ const load = () => {
     if (localStorage.getItem('beaconLevels')) {
         beaconLevels.set(JSON.parse(localStorage.getItem('beaconLevels')));
     }
+    if (localStorage.getItem('beaconNextReqs')) {
+        beaconNextReqs.set(JSON.parse(localStorage.getItem('beaconNextReqs')));
+    }
     if (localStorage.getItem('beaconUpgradeLevels')) {
         beaconUpgradeLevels.set(JSON.parse(localStorage.getItem('beaconUpgradeLevels')));
     }
@@ -216,7 +233,9 @@ const load = () => {
     }
     delete $wallet['beaconPower'];
     if ($resources['beaconPower'] < 0) $resources['beaconPower'] = 0;
+    if ($wallet['fame'] == null) $wallet['fame'] = 0;
 
+    loadingFinished = true;
 }
 
 onMount(() => {
@@ -227,11 +246,17 @@ onMount(() => {
             save();
         }
     }, AUTOSAVE_INTERVAL);
+
+    // use for visual refreshing or testing, not for any game-related logic
     setInterval(() => {
         for (let tab of ref.tabs) {
             tabsUnlocked[tab] = (!tabUnlockCriteria[tab] ? false : tabUnlockCriteria[tab]());
         }
-    }, AUTOSAVE_INTERVAL);
+        if ($flags['relocateNavBack']) {
+            tab = 'mining';
+            $flags['relocateNavBack'] = false;
+        }
+    }, 1163); // prime number to avoid sync with other intervals
 })
 
 

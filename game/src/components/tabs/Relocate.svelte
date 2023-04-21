@@ -6,8 +6,9 @@
     <div class='col-span-12'>Relocating resets all previous resources and upgrades. 
         Keys are not removed.
     </div>
+    {#key reloadClock}
     <div class='col-span-12 py-1'>You will gain 
-        <span class='text-orange-400 font-bold'>{calcFameGain()}</span> fame by relocating.</div>
+        <span class='text-orange-400 font-bold'>{f(calcFameGain(),3)}</span> fame by relocating.</div>
     <div class='col-span-12 py-1'><hr /></div> 
     <!-- display for keys -->
     <div class='col-span-3 text-left py-1'>Keys Used: </div>
@@ -34,12 +35,14 @@
             <div class='col-span-8'></div>
         {/if}
     {/each}
+    {/key}
     </div>
     <div class='col-span-12 pt-3'>
         <div class='game-btn text-center' on:click={() => relocate()}>
             Relocate
         </div>
     </div>
+    
 </div>
 
 
@@ -50,26 +53,27 @@ import { onMount, onDestroy } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
     settings, visibleTier, progressThisTick, progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources,
-     keysOpened, unlockedRes, beaconUpgradeLevels} from '../../data/player';
+     keysOpened, unlockedRes, beaconUpgradeLevels, flags} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import {beaconPower, beaconBonuses,
     beaconFormulas, beaconNums, beaconNextReqs, beaconAmt,
-beaconUpgrades, beaconNameText} from '../../data/beacons';
+beaconUpgrades, beaconNameText, baseBeaconNextReqs} from '../../data/beacons';
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
 import formula from '../../calcs/formula';
 import BeaconToggleButton from '../buttons/BeaconToggleButton.svelte';
 import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte';
-import RelocateButton from '../buttons/RelocateButton.svelte'
 
 $: pbarWidths = Array(30).fill(0);
 $: beaconDispBonus = $beaconBonuses
 $: fameGainKeys = formula.calcFameGainKeys($keysOpened);
 $: fameMultiGems = formula.calcFameGemMulti($wallet['gems']);
-$: fameMultiBeaconLevels = 0;
+$: fameMultiBeaconLevels = formula.calcFameBeaconMulti(formula.sumArray($beaconLevels));
 let beaconDispBonus = $beaconBonuses;
+let reloadClock = true;
+let reloadNumbers;
 
 onMount(() => {
     const reloadFameGain = setTimeout(() => {
@@ -77,9 +81,13 @@ onMount(() => {
         fameMultiGems = formula.calcFameGemMulti($wallet['gems']);
         fameMultiBeaconLevels = formula.calcFameBeaconMulti(formula.sumArray($beaconLevels));
     }, 100)
+    reloadNumbers = setInterval(() => {
+        reloadClock= !reloadClock;
+    }, 1049)
 })
 
 onDestroy(() => {
+    clearInterval(reloadNumbers)
 })
 const f = (n: number, pl = 0) => {
         if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -125,7 +133,12 @@ function calcFameGain() {
 const walletResetItems = ['gems', 'gold', 'orbs', 'beacons']
 function relocate() {
         if (confirm("Are you sure? Relocating will reset all previous progress.")) {
-            $wallet['fame'] += calcFameGain();
+            $flags['relocateNavBack'] = true;
+            $wallet['fame'] = ($wallet['fame'] || 0) + calcFameGain();
+
+
+            // reset stuff
+            $visibleTier = 1;
             for (let i of walletResetItems) {
                 $wallet[i] = 0;
             }
@@ -134,6 +147,7 @@ function relocate() {
                 $beaconProgress[i] = 0;
                 $beaconActivations[i] = 0;
             }
+            $beaconNextReqs = $baseBeaconNextReqs;
             $keysOpened = Array($keysOpened.length).fill(0);
             $miningUpgradeLevels = Array($miningUpgradeLevels.length).fill(0);
             $beaconUpgradeLevels = Array($beaconUpgradeLevels.length).fill(0);

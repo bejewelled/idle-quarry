@@ -229,6 +229,10 @@ export const settings = object({
     activeTab: '',
 })
 
+export const flags = object({
+    relocateNavBack: false,
+})
+
 export const keyItemsUnlocked = object({
     key1: new Set(),
     key2: new Set(),

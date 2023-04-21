@@ -9,7 +9,7 @@ function format(context: any) {
         subscribe,
         f(n: number, pl = 0) {
             if (isNaN(n)) return 'N/A';
-            else if (!n) return 'undef';
+            else if (!n) return '0';
             if (n < 1e9) return n.toFixed(pl).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
             else return n.toExponential(3).toString().replace('+', '');
         },

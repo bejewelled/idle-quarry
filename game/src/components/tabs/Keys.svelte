@@ -60,7 +60,7 @@
                     <KeyOpenButton rarity={i} amt=10 />
                 </div>
                 <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
-                    <KeyOpenButton rarity={i} amt=250 />
+                    <KeyOpenButton rarity={i} amt=200 />
                 </div>
                 <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
                     <KeyOpenButton rarity={i} amt=10000 />

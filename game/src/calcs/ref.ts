@@ -10,7 +10,8 @@ export default class ref {
         key4: 'text-violet-400',
         key5: 'text-amber-400',
         beacons: 'text-sky-400',
-        beaconPower: 'text-cyan-300'
+        beaconPower: 'text-cyan-300',
+        fame: 'text-orange-400'
     }
 
     static displayNames = {

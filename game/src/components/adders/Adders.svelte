@@ -52,7 +52,6 @@ let beaconCounter = 0;
 onMount(() => {
     updateBeaconBonuses();
     last = Date.now();
-    let dt;
     const mainLoop = setInterval(() => {
         dt = (Date.now() - last) / UPDATE_SPEED;
         addProgress(dt);
@@ -114,7 +113,7 @@ function addProgress(delta) {
         else if ($antiFlickerFlags['gems'] && $progressThisTick['gems'] < gemAt*0.025) {
             $antiFlickerFlags['gems'] = false;
         }
-        addGems(Math.floor($progress['gems'] / gemAt));
+        addGems($progress['gems'] / gemAt, $progressAverage['gems']);
         dropRoll(Math.floor($progress['gems'] / gemAt));
         $progress['gems'] %= gemAt;
     }
@@ -127,12 +126,17 @@ function addProgress(delta) {
 /** 
  * @param n - number of times to add gems
  */
-function addGems(n) {
+let lastGemGainTextUpdate = Date.now();
+function addGems(n, avgProgress) {
     const GEM_BASE = 1;
-    const gemGain = n * (GEM_BASE + $miningUpgrades[1]['formula']($miningUpgradeLevels[1]))
+    const gemGain = (GEM_BASE + $miningUpgrades[1]['formula']($miningUpgradeLevels[1]))
     * ($miningUpgrades[8]['formula']($miningUpgradeLevels[8]));
-    $gemGainFlavorText = gemGain;
-    $wallet['gems'] += gemGain;
+    // update the flavor text if there is a minor change, otherwise don't
+    if (Date.now() - lastGemGainTextUpdate > 1000) {
+        $gemGainFlavorText = gemGain * avgProgress / $progressThreshold['gems'];
+        lastGemGainTextUpdate = Date.now();
+    }
+    $wallet['gems'] += gemGain * n;
 }
 
 function addKeys(n, keyAt) {

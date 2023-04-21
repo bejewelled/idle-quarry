@@ -196,7 +196,9 @@ export const beaconFormulas = array([
     .concat(Array(27).fill(function(lv: number) {return 1}))
 )
 
-export const beaconNextReqs = array(Array(10).fill(100).concat(Array(10).fill(2000)).concat(Array(10).fill(10000)))
+export const beaconNextReqs = array(Array(10).fill(100).concat(Array(10).fill(30000)).concat(Array(10).fill(9000000)))
+
+export const baseBeaconNextReqs = array(Array(10).fill(100).concat(Array(10).fill(30000)).concat(Array(10).fill(9000000)))
 
 export const beaconAmt = single(1);
 
