@@ -8,7 +8,8 @@
 import Decimal from 'break_infinity.js'
 import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags, 
     gemGainFlavorText, gemProgressFlavorText, gemProgressFlavorNextUpdate} from '../../data/mining' 
-import {keyGainFlavorText, keyProgressFlavorText, keyProgressFlavorNextUpdate} from '../../data/keys'
+import {keyGainFlavorText, keyProgressFlavorText, keyProgressFlavorNextUpdate,
+key1DropTable, key2DropTable, key3DropTable, key4DropTable, key5DropTable} from '../../data/keys'
 import {progress, miningUpgradeLevels, wallet, miningDropTable, 
     unlockedRes, settings, progressThisTick, visibleTier,progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources, beaconUpgradeLevels} from '../../data/player'
@@ -78,7 +79,7 @@ onMount(() => {
     }, 191) // set intervals to prime numbers to avoid sync
 })
 
-const PROGRESS_BASE = 1;
+const PROGRESS_BASE = 40;
 
 function updateprogressThisTick(delta) {
     const progGems = PROGRESS_BASE
@@ -86,6 +87,7 @@ function updateprogressThisTick(delta) {
     * (Math.max(1,$beaconBonuses[1]));
     $progressAverage['gems'] = progGems;
     $progressThisTick['gems'] = progGems * delta;
+    
     const progKey1 = ($miningUpgradeLevels[3] > 0 ?
     PROGRESS_BASE * $miningUpgrades[3]['formula']($miningUpgradeLevels[3]) : 0);
     $progressAverage['key1'] = progKey1;
@@ -108,6 +110,10 @@ function addProgress(delta) {
         $progress[k] += v;
     }
     if ($progress['gems'] >= gemAt) {
+        if ($progressThisTick['gems'] > gemAt*0.25) $antiFlickerFlags['gems'] = true;
+        else if ($antiFlickerFlags['gems'] && $progressThisTick['gems'] < gemAt*0.025) {
+            $antiFlickerFlags['gems'] = false;
+        }
         addGems(Math.floor($progress['gems'] / gemAt));
         dropRoll(Math.floor($progress['gems'] / gemAt));
         $progress['gems'] %= gemAt;
@@ -171,13 +177,13 @@ function dropRoll(n) {
 let locks = new Set(); // makes sure levelups don't repeat when leveling up from next function call
 function addBeaconProgress(delta) {
     const progressGains = $beaconActivations.map((e) => e * delta
-    * $beaconUpgrades[0]['formula']($beaconUpgradeLevels[0]))
-    * Math.max(1,$beaconUpgrades[2]['formula']($beaconUpgradeLevels[2]));
+    * $beaconUpgrades[0]['formula']($beaconUpgradeLevels[0])
+    * Math.max(1,$beaconUpgrades[2]['formula']($beaconUpgradeLevels[2])));
     // adds progressGains to progress
     $beaconProgress = $beaconProgress.map((e, i) => e + progressGains[i]);
     // check for levelups
     for (let i = 0; i < $beaconProgress.length; i++) {
-        if (i === 2) console.log($beaconProgress[i] + " " + $beaconNextReqs[i] + " " + locks.has(i))
+        if (isNaN($beaconProgress[i])) $beaconProgress[i] = 0;
         if ($beaconProgress[i] >= $beaconNextReqs[i] && !locks.has(i)) {
             // console.log('LEVELUP!!!')
             locks.add(i);
@@ -200,7 +206,6 @@ function addBeaconProgress(delta) {
             }
 
             $wallet['beacons'] = ($wallet['beacons'] || 0) + ($beaconUpgradeLevels[2] * $beaconLevels[i]);
-            console.log(Date.now())
             locks.delete(i);
         }
     }
