@@ -15,4 +15,10 @@ export default class formula {
         console.log(array)
         return array.reduce((sum, value) => sum + value, 0);
       }
+    
+    static calcFameGainKeys(array: Array<number>) {
+        const FINAL = array.map((x,i) => Math.pow(x, 0.25+i*0.03));
+        return FINAL;
+    }
+
 }

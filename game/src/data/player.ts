@@ -223,7 +223,7 @@ export const miningDropTable = dropTable({
 });
 
 
-export const keysOpened = array(Array(20).fill(0))
+export const keysOpened = array(Array(5).fill(0))
 
 export const settings = object({
     UPDATE_SPEED: 20,

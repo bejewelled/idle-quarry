@@ -40,6 +40,9 @@
                 {:else if tab === 'beacons' && (tabUnlockCriteria['beacons']())}
                     <Beacons />
                 {:else if tab === 'sigils' && (tabUnlockCriteria['sigils']())}
+                    <Mining />
+                {:else if tab === 'relocate' && (tabUnlockCriteria['relocate']())}
+                    <Relocate />
                 {/if}
 
                 {#if (tabUnlockCriteria[tab] && !tabUnlockCriteria[tab]()) ||
@@ -66,6 +69,7 @@ import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
 import Mining from '../components/tabs/Mining.svelte';
 import Keys from '../components/tabs/Keys.svelte';
+import Relocate from '../components/tabs/Relocate.svelte';
 import MiningUpgradeButton from '../components/buttons/MiningUpgradeButton.svelte';
 import ref from '../calcs/ref.ts'
 
@@ -107,6 +111,7 @@ const tabUnlockCriteria = {
         keys: () => true,
         beacons: () => (($wallet['beacons']) || formula.sumArray($beaconActivations)>0),
         sigils: () => ($wallet['sigils'] && $wallet['sigils'] > 0.02),
+        relocate: () => (formula.sumArray($keysOpened) > 10000),
         default: () => false,
 
     }
@@ -154,6 +159,7 @@ const load = () => {
         unlockedRes.set(JSON.parse(localStorage.getItem('progress')))
     if (localStorage.getItem('keysOpened'))
         keysOpened.set(JSON.parse(localStorage.getItem('keysOpened')))
+        if ($keysOpened.length > 5) $keysOpened = $keysOpened.slice(0,5);
     if (localStorage.getItem('keyItemsUnlocked')) {
         const loadedValues = JSON.parse(localStorage.getItem('keyItemsUnlocked'));
         const keyItems = {};
