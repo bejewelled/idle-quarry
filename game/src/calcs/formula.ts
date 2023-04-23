@@ -29,7 +29,7 @@ export default class formula {
       }
     
     static calcFameGainKeys(array: Array<number>) {
-        const FINAL = array.map((x,i) => Math.pow(x, 0.25+i*0.03));
+        const FINAL = array.map((x,i) => Math.pow((i+1)*(i+1)*(x/1000),0.8));
         return FINAL;
     }
 
@@ -38,7 +38,7 @@ export default class formula {
     }
 
     static calcFameBeaconMulti(n: number) {
-      return (n > 1e10 ? 2000 + Math.pow((n-1e10) / 10000, 0.35): Math.pow(n / 10000, 0.33))
+      return (n > 1e6 ? 100 + Math.pow((n - 1000000) / 1000000, 0.75)  : n / 10000)
     }
 
 }

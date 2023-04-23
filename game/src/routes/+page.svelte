@@ -58,6 +58,10 @@
                     <Mining />
                 {:else if tab === 'relocate' && (tabUnlockCriteria['relocate']())}
                     <Relocate />
+                {:else if tab === 'enchants' && (tabUnlockCriteria['enchants']())}
+                    <Enchants />
+                {:else if tab === 'automation' && (tabUnlockCriteria['automation']())}
+                    <Automation />
                 {/if}
 
                 {#if (tabUnlockCriteria[tab] && !tabUnlockCriteria[tab]()) ||
@@ -79,13 +83,15 @@ import Decimal from 'break_infinity.js'
 import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes, 
     progress, keysOpened, keyItemsUnlocked, settings, baseMiningDropTable,
     visibleTier, beaconProgress, beaconLevels, beaconUpgradeLevels,
-    resources, beaconActivations, flags} from '../data/player.js'
-import {beaconNextReqs} from '../data/beacons.ts'
+    resources, beaconActivations, flags, fameUpgradeLevels} from '../data/player.js'
+import {beaconNextReqs, beaconSpendAmt} from '../data/beacons.ts'
 import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
 import Mining from '../components/tabs/Mining.svelte';
 import Keys from '../components/tabs/Keys.svelte';
 import Relocate from '../components/tabs/Relocate.svelte';
+import Enchants from '../components/tabs/Enchants.svelte';
+import Automation from '../components/tabs/Automation.svelte';
 import MiningUpgradeButton from '../components/buttons/MiningUpgradeButton.svelte';
 import ref from '../calcs/ref.ts'
 
@@ -129,9 +135,10 @@ const tabUnlockCriteria = {
         keys: () => true,
         beacons: () => (($wallet['beacons']) || formula.sumArray($beaconActivations)>0),
         sigils: () => ($wallet['sigils'] && $wallet['sigils'] > 0.02),
-        relocate: () => (formula.sumArray($keysOpened) > 10000),
+        relocate: () => (formula.sumArray($keysOpened) > 1000 || $wallet['fame']),
+        enchants: () => ($wallet['fame'] && $wallet['fame'] >= 0.997),
+        automation: () => ($wallet['fame'] && $wallet['fame'] >= 0.997),
         default: () => false,
-
     }
 const tabsUnlocked = {
     mining: true,
@@ -166,6 +173,10 @@ const save = () => {
     // this is not in the player class
     // however, it is saved to prevent mismatches in beacon path levels on load
     localStorage.setItem('beaconNextReqs', JSON.stringify($beaconNextReqs));
+    localStorage.setItem('flags', JSON.stringify($flags));
+    localStorage.setItem('fameUpgradeLevels', JSON.stringify($fameUpgradeLevels));
+    localStorage.setItem('beaconSpendAmt', JSON.stringify($beaconSpendAmt));
+
     saveConfirm = true;
     setTimeout(() => {
         saveConfirm = false;
@@ -173,8 +184,12 @@ const save = () => {
 }
 
 const reset = () => {
-    localStorage.clear();
-    location.reload();
+    if (confirm("Are you sure? This is a HARD RESET!!!!")) {
+        if (confirm("Are you SURE sure?")) {
+        localStorage.clear();
+        location.reload();
+        }
+    }
 }
 
 const load = async () => {
@@ -197,6 +212,9 @@ const load = async () => {
             keyItems[key] = new Set(loadedValues[key]);
         }
         keyItemsUnlocked.set(keyItems);
+    }
+    if (localStorage.getItem('beaconSpendAmt')) {
+        beaconSpendAmt.set(JSON.parse(localStorage.getItem('beaconSpendAmt')));
     }
     $unlockedRes = new Set();
     //re-init unlocked resources
@@ -227,10 +245,17 @@ const load = async () => {
     }
     if (localStorage.getItem('beaconActivations')) {
         beaconActivations.set(JSON.parse(localStorage.getItem('beaconActivations')));
+        console.log($beaconActivations)
     }
-    for (let i = 0; i < $beaconActivations.length; i++) {
-        if (isNaN(i) || !i) $beaconActivations[i] = 0;
+    if (localStorage.getItem('flags')) {
+        flags.set(JSON.parse(localStorage.getItem('flags')));
     }
+    if (localStorage.getItem('fameUpgradeLevels')) {
+        fameUpgradeLevels.set(JSON.parse(localStorage.getItem('fameUpgradeLevels')));
+    }
+    // for (let i = 0; i < $beaconActivations.length; i++) {
+    //     if (isNaN(i) || !i) $beaconActivations[i] = 0;
+    // }
     delete $wallet['beaconPower'];
     if ($resources['beaconPower'] < 0) $resources['beaconPower'] = 0;
     if ($wallet['fame'] == null) $wallet['fame'] = 0;
@@ -305,6 +330,16 @@ onMount(() => {
         color: #d9d9d9;
         cursor: pointer;
     }
+    :global(.game-btn-encht1) {
+        border: 1px solid #c4b5fd;
+        color: #c4b5fd;
+        cursor: pointer;
+    }
+    :global(.game-btn-encht1-noafford) {
+        border: 1px solid #625b7e;
+        color: #625b7e;
+        cursor: pointer;
+    }
     :global(.game-btn:hover) {
         border: 1px solid #ffffff;
         color: #ffffff;
@@ -313,6 +348,17 @@ onMount(() => {
     :global(.game-btn-noafford) {
         border: 1px solid #888888;
         color: #888888;
+        cursor: pointer;
+    }
+    :global(.game-btn-fame-noafford) {
+        border: 1px solid #6c3f00;
+        color: #6c3f00;
+        cursor: pointer;
+    }
+    :global(.game-btn-automation-maxed) {
+        border: 1px solid #ececec;
+        background-color: #ececec;
+        color: #2f2f2f;
         cursor: pointer;
     }
     :global(.control-btn) {

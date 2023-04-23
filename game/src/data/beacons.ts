@@ -174,33 +174,48 @@ function dropTable(context: any) {
 
 export const beaconPower = single(0);
 
-export const beaconNums = array(
-    Array(3).fill([100, 1.025])
-    .concat(Array(3).fill([500, 1.03])
-    .concat(Array(2).fill([2500, 1.035])
-    .concat(Array(2).fill([10000, 1.04])))))
-
 export const beaconBonuses = array(Array(30).fill(1))
 
 // for reference
 export const beaconNameText = array([
     'Beacon Power Multiplier',
     'Mining Progress Multiplier',
-    '[I] Droprate Multiplier'].concat(Array(27).fill(''))
+    'Droprate Multiplier I',
+    'Gem Bonus']
+    .concat(Array(26).fill(''))
 )
 
 export const beaconFormulas = array([
-    function(lv: number) {return 1 + (Math.pow(lv,0.3) * 0.01)},
-    function(lv: number) {return 1 + (Math.pow(lv,0.15) * (Math.log(lv+1)/Math.log(2) * 0.004))},
-    function(lv: number) {return (lv > 100000 ? 12.07+Math.pow(lv-100000, 0.075) : 1 + (Math.pow(lv,0.3)*0.35))}]
+   /*beacon power*/ function(lv: number) {return 1 + (Math.pow(lv,0.6) * 0.005)},
+   /*mining haste*/ function(lv: number) {return 1 + (Math.pow(lv,0.15) * (Math.log(lv+1)/Math.log(2) * 0.004))},
+   /*droprate*/ function(lv: number) {return 1 + (Math.pow(lv,0.9) * 0.00025)},
+   /*gem bonus*/ function(lv: number) {return 1 + Math.pow(lv,1.1)*0.2}]
     .concat(Array(27).fill(function(lv: number) {return 1}))
 )
 
-export const beaconNextReqs = array(Array(10).fill(100).concat(Array(10).fill(30000)).concat(Array(10).fill(9000000)))
+export const beaconNextReqs = array(Array(3).fill(1e4)
+.concat(Array(3).fill(1e8))
+.concat(Array(2).fill(1e12)
+.concat(Array(2).fill(1e16))))
 
-export const baseBeaconNextReqs = array(Array(10).fill(100).concat(Array(10).fill(30000)).concat(Array(10).fill(9000000)))
+export const baseBeaconNextReqs = array(Array(3).fill(1e4)
+.concat(Array(3).fill(3e6))
+.concat(Array(2).fill(9e8)
+.concat(Array(2).fill(2.7e10))))
 
-export const beaconAmt = single(1);
+export const beaconNums = array(
+    Array(3).fill([1e4, 1.0004])
+    .concat(Array(3).fill([3e6, 1.0008])
+    .concat(Array(2).fill([9e8, 1.0012])
+    .concat(Array(2).fill([2.7e10, 1.0016])))))
+
+export const beaconMaxLevels = array([1.6e6, 1.6e6, 1.6e6, 8e5, 8e5, 8e5, 4e5, 4e5, 2e5, 2e5])
+
+
+
+export const beaconSpendAmt = single(1);
+
+export const beaconPowerFlavorText = single(1);
 
 export const beaconUpgrades = array([{
     name: 'Supercharged',
@@ -209,7 +224,7 @@ export const beaconUpgrades = array([{
         beaconPower: 5000,
     },
     ratio: 1.5,
-    formula: (lv: any) => (1+Math.pow(lv,0.85)*0.33),
+    formula: (lv: any) => 0.3325*lv,
     isPercent: true,
     prefix: '+',
     maxLevel: 300,
@@ -217,15 +232,15 @@ export const beaconUpgrades = array([{
 },
 {
     name: 'Shining Light',
-    description: 'Each level gained in a path gives beacons.',
+    description: 'Every 10 levels gained in a path gives beacons.',
     cost: {
         beaconPower: 100000,
     },
     ratio: 2.5,
-    formula: (lv: any) => lv,
+    formula: (lv: any) => 0.75*lv,
     isPercent: false,
     prefix: '+',
-    suffix: '*[path level]',
+    suffix: ' *[log10(path level)]',
     maxLevel: 100,
     notes: '0.25*lv until 36, (lv-36)*0.025 until 916, sqrt(lv-916)*0.025 after'
 },
@@ -236,7 +251,7 @@ export const beaconUpgrades = array([{
         beaconPower: 2.5e6,
     },
     ratio: 4,
-    formula: (lv: any) => (lv === 0 ? 1 : Math.log(get(resources)['beaconPower']*3 + 1) / Math.log(1 + 8 - lv*0.5)),
+    formula: (lv: any) => (lv === 0 ? 1 : Math.log(get(resources)['beaconPower']/1e3 + 1) / Math.log(1 + 8 - lv*0.5)),
     isPercent: true,
     suffix: ' bonus',
     maxLevel: 10,

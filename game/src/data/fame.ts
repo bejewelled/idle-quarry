@@ -1,0 +1,216 @@
+
+import { writable, get } from 'svelte/store';
+import {wallet, miningUpgradeLevels} from './player'
+import Decimal  from 'break_infinity.js';
+
+function single(context: any) {
+    // @ts-ignore
+    const {subscribe, set, update, get} = writable(context);
+    return {
+        subscribe,
+        set(amt: any) {
+            update((i: any) => {
+                i = amt;
+                return amt;
+            })
+        },
+        add(amt: any) {
+            update((i) => {
+                return i + amt;
+            })
+        },
+        sub(amt: any, negatable = false) {
+            update((i) => {
+                if (negatable) return i - amt;
+                else return Math.max(i,0);
+            })
+        },
+        multiply(amt: any) {
+            update(i => {
+                return i * amt;
+            })
+        },
+        divide(amt: any) {
+            update(i => {
+                return i / amt;
+            })
+        },
+    }
+}
+function array(context: any) {
+    // @ts-ignore
+    const {subscribe, set, update, get} = writable(context);
+    return {
+        subscribe,
+        set(amt: any) {
+            update((i: any) => {
+                i = amt;
+                return amt;
+            })
+        },
+        add(amt: any) {
+            update((i: { plus: (arg0: any) => any; }) => {
+                return i + amt;
+            })
+        },
+        sub(amt: any, negatable = false) {
+            update((i) => {
+                if (negatable) return i - amt;
+                else return Math.max(i,0);
+            })
+        },
+        multiply(amt: any) {
+            update(i => {
+                return i * amt;
+            })
+        },
+        divide(amt: any) {
+            update(i => {
+                return i / amt;
+            })
+        },
+    }
+}
+function object(context: any) {
+    // @ts-ignore
+    const {subscribe, set, update, get} = writable(context);
+    return {
+        subscribe,
+        set(item: string | number, amt: any) {
+            update((i: any) => {
+                i[item] = amt;
+                return i;
+            })
+        },
+        add(item: string | number, amt: any) {
+            update((i: any) => {
+                i[item] += amt;
+                return i;
+            })
+        },
+        sub(item: string | number, amt: any, negatable = false) {
+            update((i: any) => {
+                if (negatable) i[item] -= amt;
+                else i[item] = Math.max(i[item],0);
+                return i;
+            })
+        },
+        multiply(item: string | number, amt: any) {
+            update((i: any) => {
+                i[item] *= amt;
+                return i;
+            })
+        },
+        divide(item: string | number, amt: any) {         
+            update((i: any) => {
+                i[item] /= amt;
+                return i;
+            })
+        }
+    }
+}
+
+
+const pow = (b: number, e: number) => Math.pow(b,e);
+const log = (b: number, e: number) => Math.log(e)/Math.log(b);
+const floor = (n: number) => Math.floor(n);
+const ceil = (n: number) => Math.ceil(n);
+
+
+// the number of mining operations until enchants will have a chance to proc
+export const enchantThreshold = object({
+    t1: 100,
+    t2: 40000,
+    t3: 1e9
+})
+
+export const enchantProgress = object({
+    t1: 0,
+    t2: 0,
+    t3: 0
+})
+
+// edit when changing the level of the haste upgrade
+export const progressPerTick = single(1);
+
+
+/* NOTE:
+*  The cost of a specific item must be at least 1 to be imposed on the player.
+*  If an upgrade should cost additional TYPES of resources at later levels, they must be added to the cost
+*  object at a value of less than 1.
+*/
+export const fameUpgrades = array([{
+    name: 'Mine Size',
+    description: 'Increases your mine size, which increases the effect of many enchants below..',
+    cost: {
+        fame: 10,
+    },
+    ratio: 1.25,
+    formula: (lv: any) => pow(lv+5,2),
+    unlockAt: () => (get(wallet)['fame'] >= 1),
+    isPercent: false,
+    suffix: ' tiles per level',
+    maxLevel: 1000,
+    notes: ''
+},
+{
+    name: 'Mine Quality',
+    description: 'Increases the quality of your mine, which increases the effect of many enchants below.',
+    cost: {
+        fame: 10,
+    },
+    ratio: 1.25,
+    formula: (lv: any) => lv + 10,
+    unlockAt: () => (get(wallet)['fame'] >= 1),
+    isPercent: false,
+    suffix: ' quality rating',
+    maxLevel: 1000,
+    notes: ''
+},
+{
+    name: 'Burst',
+    description: 'Has a chance to clear a mine level, instantly giving mining rewards based on mine size.',
+    cost: {
+        fame: 30,
+    },
+    tier: 1,
+    ratio: 1.25,
+    formula: (lv: any) => 0.00004 * Math.pow(lv, 1.25),
+    unlockAt: () => (get(wallet)['fame'] >= 1),
+    isPercent: true,
+    suffix: ' chance',
+    maxLevel: 400,
+    notes: ''
+},
+{
+    name: 'Orb Rush',
+    description: 'Has a chance to give orbs based on mine quality.',
+    cost: {
+        fame: 30,
+        gems: 1e7
+    },
+    tier: 1,
+    ratio: 1.25,
+    formula: (lv: any) => 0.0000375 * Math.pow(lv, 1.5),
+    unlockAt: () => (get(wallet)['fame'] >= 1),
+    isPercent: true,
+    suffix: '  chance',
+    maxLevel: 400,
+    notes: ''
+},
+
+]);
+
+
+
+
+export const automationUpgrades = array([{
+    name: 'Key Slayer',
+    description: 'Automatically opens keys every few seconds.',
+    cost: {
+        fame: 1e6,
+    },
+    unlockAt: () => (get(wallet)['fame'] >= 1),
+    isPercent: true,
+    suffix: ' chance',
+}]);

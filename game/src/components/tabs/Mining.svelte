@@ -31,7 +31,9 @@
     {/key}
     <!-- progress bar (gems) -->
     <div class='text-[#989898] text-small pt-4'>gem progress [ 
-        <strong>{$gemGainFlavorText > 1 ? f($gemGainFlavorText,3) : 1}</strong>
+        <strong>
+            {$progressAverage['gems'] > $progressThreshold['gems'] ? "~" : ""}
+            {$gemGainFlavorText > 1 ? f($gemGainFlavorText,3) : 1}</strong>
          x {f($progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'], 2) } times / sec ]</div>
     <div class='mine-bar-wrapper pb-2'>
         <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
@@ -42,25 +44,42 @@
     <div class='grid grid-cols-12 align-middle'>
         <!-- progress bar (key1) -->
         {#if $miningUpgradeLevels[3] > 0}
-        <div class='col-span-9'>
-            <div class='mine-bar-wrapper align-middle'>
-                <div class="w-full my-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                    <div class="bg-emerald-400 h-2.5 rounded-full" 
-                    style="width: {$antiFlickerFlags['key1'] ? '100%' : key1BarWidth}"></div>
+            <div class='col-span-9'>
+                <div class='mine-bar-wrapper align-middle'>
+                    <div class="w-full my-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                        <div class="bg-emerald-400 h-2.5 rounded-full" 
+                        style="width: {$antiFlickerFlags['key1'] ? '100%' : key1BarWidth}"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class='col-span-3 pl-1 text-left align-text-middle'>
-            <div class='text-[#989898] text-small'>[*] <strong>{$keyGainFlavorText['key1'] > 1 ? f($keyGainFlavorText['key1'],0) : '???'}</strong>
-                x {f($progressAverage['key1']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key1'], 3)} / sec
+            <div class='col-span-3 pl-1 text-left align-text-middle'>
+                <div class='text-[#989898] text-small'>[*] <strong>{$keyGainFlavorText['key1'] > 1 ? f($keyGainFlavorText['key1'],0) : '???'}</strong>
+                    x {f($progressAverage['key1']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key1'], 3)} / sec
 
+                </div>
             </div>
-        </div>
+        {/if}
+        <!-- progress bar (key2) -->
+        {#if $miningUpgradeLevels[4] > 0}
+            <div class='col-span-9'>
+                <div class='mine-bar-wrapper align-middle'>
+                    <div class="w-full my-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                        <div class="bg-blue-400 h-2.5 rounded-full" 
+                        style="width: {$antiFlickerFlags['key2'] ? '100%' : key2BarWidth}"></div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-span-3 pl-1 text-left align-text-middle'>
+                <div class='text-[#989898] text-small'>[*] <strong>{$keyGainFlavorText['key2'] > 1 ? f($keyGainFlavorText['key2'],0) : '???'}</strong>
+                    x {f($progressAverage['key2']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key2'], 3)} / sec
+
+                </div>
+            </div>
         {/if}
     </div>
     <div class='mine-upgrade-wrapper grid grid-cols-2'>
         {#each Object.entries($miningUpgrades) as upgrade,i}
-            <div class='py-1 col-span-1 mine-upgrade-button-wrapper'>
+            <div class='col-span-1 mine-upgrade-button-wrapper'>
                 <MiningUpgradeButton index={i}/>
             </div>
         {/each}
@@ -81,6 +100,7 @@ import ref from '../../calcs/ref'
 
 $: mineBarWidth = `${$progress['gems'] / $progressThreshold['gems'] * 100}%`;
 $: key1BarWidth = `${$progress['key1'] / $progressThreshold['key1'] * 100}%`;
+$: key2BarWidth = `${$progress['key2'] / $progressThreshold['key2'] * 100}%`;
 
 // for triggering #key
 let clockr = false;
@@ -88,7 +108,7 @@ let clockr = false;
 onMount(() => {
     const clock = setInterval(() => {
         clockr = !clockr;
-    }, 523) // prime number to avoid sync with other intervals
+    })
 })
 
 const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
@@ -109,5 +129,6 @@ const fpf = (n: unknown, subOne = false) => {
     if (n < 1e9) return (n*100).toFixed(3).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "%";
     else return (n*100).toExponential(3).toString().replace('+', '') + "%";
 }
+
 
 </script>

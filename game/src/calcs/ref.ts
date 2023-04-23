@@ -49,14 +49,15 @@ export default class ref {
 
     static tabs = [
         'mining', 'keys', 'beacons', 'sigils', 'artifacts', 'relocate',
-        'fame', 'challenges', 'artifacts', 'mastery', 'ascension'
+        'enchants', 'automation', 'challenges', 'artifacts', 'mastery', 'ascension'
     ]
 
     static tabNotUnlockedText = {
         beacons: "Find a beacon while mining to unlock.",
         sigils: "Find a sigil while mining to unlock.",
         relocate: "Use 10,000 total keys to unlock.",
-        fame: "Relocate and gain at least 1 fame to unlock.",
+        enchants: "Relocate and gain at least 1 fame to unlock.",
+        automation: "Relocate and gain at least 1 fame to unlock.",
         challenges: "Buy challenges with fame to unlock.",
         artifacts: "Find an artifact with a T3 [***] or higher key to unlock.",
         mastery: "Reach level 10,000 on any mining upgrade to unlock.",

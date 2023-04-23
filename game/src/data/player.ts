@@ -164,10 +164,10 @@ function dropTable(context: any) {
                         Math.min(1,val[0] * 
                             //@ts-ignore - Fortune (T1) item multiplier
                             (ref.dropTiers[item] === 1 ?
-                            get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2]) *
-                            get(beaconBonuses)[2]
-                            : 1) *
-                            get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6])),
+                            get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2])
+                            : 1) 
+                            * get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6])
+                            * get(beaconBonuses)[2]),
                         //@ts-ignore
                         val[1],
                         //@ts-ignore
@@ -254,3 +254,8 @@ export const beaconLevels = array(Array(30).fill(0))
 export const beaconProgress = array(Array(30).fill(0))
 
 export const beaconUpgradeLevels = array(Array(20).fill(0))
+
+
+export const fameUpgradeLevels = array(Array(20).fill(0))
+
+export const automationItemsUnlocked = object({})

@@ -1,6 +1,7 @@
 <div class='wrapper py-2'>
 <div class='beacon-power-display text-center text-large game-text'>
-    You have <span class='text-cyan-300 font-bold'>{f($resources['beaconPower'] || 0)}</span> beacon power.
+    You have <span class='text-cyan-300 font-bold'>{f($resources['beaconPower'] || 0)}</span> beacon power. 
+
 </div> 
 <div class='beacon-power-tooltip text-center tooltip-text'>
     Earn more beacon power by equally leveling your beacon paths.
@@ -8,29 +9,32 @@
 <div class='py-2'></div>
 <div class='beacon-assign-grid grid grid-cols-12'>
         <div class='p-1 m-1 col-span-12'>
-            <input id='max' class="content-center w-20  bg-gray-700 text-white" placeholder='1' bind:value={$beaconAmt}>
+            <input id='max' class="content-center w-20  bg-gray-700 text-white" placeholder='1' bind:value={$beaconSpendAmt}>
         </div>
     {#each $beaconLevels as b, i}
     {#if i < 10}
-        <div class='col-span-2'>
+        <div class='col-span-1'>
             <BeaconToggleButton index={i} />
         </div>
         <div class='col-span-1 my-1 text-center game-text'>
                 {f($beaconActivations[i],0)}
         </div>
-        <div class = 'col-span-2 grid grid-rows-2'>
+        <div class = 'col-span-3 grid grid-rows-2'>
             <div class='row-span-1 text-center game-text text-small'>
-                {f($beaconLevels[i],0)}
+                {f($beaconLevels[i],0)} / {fExp($beaconMaxLevels[i],
+                $beaconMaxLevels[i] > 1e6 ? 1 : 0)}
             </div>
             <div class='row-span-1 text-center game-text text-small'>
                 +{fp(Math.max(beaconDispBonus[i], 1), 3, true)}
             </div>
         </div>
         <div class='col-span-7 grid grid-rows-2'>
-            <div class='row-span-1 tooltip-text'>{$beaconNameText[i]}</div>
+            <div class='row-span-1 tooltip-text'>
+                {$beaconNameText[i]} [{fp($beaconProgress[i] / $beaconNextReqs[i], 2)}]
+            </div>
             <div class='mine-bar-wrapper align-middle'>
                 <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
-                    <div class="bg-emerald-400 h-1.5 rounded-full" 
+                    <div class="{getBgColor(i)} h-1.5 rounded-full" 
                     style="width: {pbarWidths[i]}%"></div>
                 </div>
             </div>
@@ -55,9 +59,10 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
 import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
-import {beaconPower, beaconBonuses,
-    beaconFormulas, beaconNums, beaconNextReqs, beaconAmt,
-beaconUpgrades, beaconNameText} from '../../data/beacons';
+import {beaconPower, beaconBonuses, beaconSpendAmt,
+    beaconFormulas, beaconNums, beaconNextReqs,
+beaconUpgrades, beaconNameText, beaconPowerFlavorText,
+beaconMaxLevels} from '../../data/beacons';
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
 import BeaconToggleButton from '../buttons/BeaconToggleButton.svelte';
@@ -96,6 +101,17 @@ const fpf = (n: unknown, subOne = false) => {
     if (subOne) n -= 1;
     if (n < 1e9) return (n*100).toFixed(3).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "%";
     else return (n*100).toExponential(3).toString().replace('+', '') + "%";
+}
+
+const fExp = (n, pl = 3) => {
+    return n.toExponential(pl).toString().replace('+', '');
+}
+
+function getBgColor(i) {
+    if (i < 3) return 'bg-emerald-400';
+    else if (i < 6) return 'bg-yellow-400';
+    else if (i < 8) return 'bg-orange-400';
+    else return 'bg-red-400';
 }
 
 </script>

@@ -1,63 +1,43 @@
 <div class='wrapper py-2'>
-<div class='grid grid-cols-12 game-text text-center'>
-    <div class='col-span-12'>Relocate to a new mine and gain
-        fame based on your past success.
-    </div>
-    <div class='col-span-12'>Relocating resets all previous resources and upgrades. 
-        Keys are not removed.
-    </div>
-    <div class='col-span-12 py-1'>You will gain 
-        <span class='text-orange-400 font-bold'>{f(calcFameGain(),0)}</span> fame by relocating.</div>
-    <div class='col-span-12 py-1'><hr /></div> 
-
-    <div class='col-span-12 pt-3'>
-        <div class='game-btn text-center' on:click={() => relocate()}>
-            Relocate
-        </div>
-    </div>
-</div>
-
-    <div class='py-2'><hr /></div>
-
-<div class='grid grid-cols-12'>
-    {#key reloadClock}
-    <!-- display for keys -->
-    <div class='col-span-3 game-text text-left py-1'>Keys Used: </div>
-    <div class='col-span-1 py-1 game-text text-right'>
-        <span class='font-bold'>+{f(formula.sumArray(fameGainKeys), 3)}</span>
-    </div>
-    <div class='col-span-8 game-text text-right py-1'>
-        [ 
-        {#each $keysOpened as k, i}
-            <span class='{ref.colors['key'+((i+1).toString())]}'>
-                {" " + f(fameGainKeys[i],2)} </span> {#if i+1 < $keysOpened.length}+{/if} 
-        {/each}
-         ]
-    </div>
-
-    {#each fameGridInfo as fitem, i}
-        {#if i > 0 && (fitem['criteria'])}
-            <div class=' {ref.colors[fitem['colorRef']] || 'text-white'} 
-            col-span-3 text-left py-1'>{fitem['name']}: </div>
-            <div class=' {ref.colors[fitem['colorRef']] || 'text-white'}
-            col-span-1 text-right py-1'>
-                <span class='font-bold'>x{f(fitem['value'](), 3)}</span>
+    <div class='fame-upgrade-wrapper grid grid-cols-2 pt-2'>
+        {#each Object.entries($fameUpgrades) as upgrade,i}
+            {#if i < 2}
+            <div class='py-1 col-span-1 mine-upgrade-button-wrapper'>
+                 <FameUpgradeButton index={i}/>
             </div>
-            <div class='col-span-8'></div>
-        {:else if i > 0}
-        <div class=' {ref.colors[fitem['colorRef']] || 'text-white'} 
-        col-span-3 text-left py-1'>???</div>
-        <div class=' {ref.colors[fitem['colorRef']] || 'text-white'}
-        col-span-1 text-right py-1'>
-            <span class='font-bold'>x{f(fitem['value'](), 3)}</span>
+            {/if}
+        {/each}
+    </div>
+    <div class='text-[#989898] text-small pt-4'>enchant progress</div>
+    <div class = 'grid grid-cols-12 pt-1'>
+    <div class='col-span-10'>
+        <div class='ench-t1-wrapper align-middle'>
+            <div class="w-full my-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                <div class="bg-violet-300 h-2.5 rounded-full" 
+                style="width: {encht1BarWidth}"></div>
+            </div>
         </div>
-        <div class='col-span-8'></div>
-        {/if}
-    {/each}
-    {/key}
+    </div>
+    <div class='col-span-2 pl-1 text-center align-text-middle'>
+        <div class='text-[#989898] text-small'> <strong>
+            Weak: {f($enchantProgress['t1'], 0)} / {f($enchantThreshold['t1'], 0)}
+        </strong>
+
+        </div>
+    </div>
+    </div>
+    <div class='py-2'>
+        <div class='fame-upgrade-wrapper grid grid-cols-2 pt-2'>
+            {#each Object.entries($fameUpgrades) as upgrade,i}
+                {#if i >= 2 && $fameUpgrades[i]['unlockAt']()}
+                <div class='py-1 col-span-1 mine-upgrade-button-wrapper'>
+                     <FameUpgradeButton index={i}/>
+                </div>
+                {/if}
+            {/each}
+        </div>
     </div>
 </div>
-
     
 
 

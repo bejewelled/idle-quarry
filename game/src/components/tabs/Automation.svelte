@@ -1,63 +1,16 @@
 <div class='wrapper py-2'>
-<div class='grid grid-cols-12 game-text text-center'>
-    <div class='col-span-12'>Relocate to a new mine and gain
-        fame based on your past success.
-    </div>
-    <div class='col-span-12'>Relocating resets all previous resources and upgrades. 
-        Keys are not removed.
-    </div>
-    <div class='col-span-12 py-1'>You will gain 
-        <span class='text-orange-400 font-bold'>{f(calcFameGain(),0)}</span> fame by relocating.</div>
-    <div class='col-span-12 py-1'><hr /></div> 
-
-    <div class='col-span-12 pt-3'>
-        <div class='game-btn text-center' on:click={() => relocate()}>
-            Relocate
+    <div class='py-2'>
+        <div class='fame-upgrade-wrapper grid grid-cols-2 pt-2'>
+            {#each Object.entries($automationUpgrades) as upgrade,i}
+                {#if $automationUpgrades[i]['unlockAt']()}
+                <div class='py-1 col-span-1 mine-upgrade-button-wrapper'>
+                     <AutomationUpgradeButton index={i}/>
+                </div>
+                {/if}
+            {/each}
         </div>
     </div>
 </div>
-
-    <div class='py-2'><hr /></div>
-
-<div class='grid grid-cols-12'>
-    {#key reloadClock}
-    <!-- display for keys -->
-    <div class='col-span-3 game-text text-left py-1'>Keys Used: </div>
-    <div class='col-span-1 py-1 game-text text-right'>
-        <span class='font-bold'>+{f(formula.sumArray(fameGainKeys), 3)}</span>
-    </div>
-    <div class='col-span-8 game-text text-right py-1'>
-        [ 
-        {#each $keysOpened as k, i}
-            <span class='{ref.colors['key'+((i+1).toString())]}'>
-                {" " + f(fameGainKeys[i],2)} </span> {#if i+1 < $keysOpened.length}+{/if} 
-        {/each}
-         ]
-    </div>
-
-    {#each fameGridInfo as fitem, i}
-        {#if i > 0 && (fitem['criteria'])}
-            <div class=' {ref.colors[fitem['colorRef']] || 'text-white'} 
-            col-span-3 text-left py-1'>{fitem['name']}: </div>
-            <div class=' {ref.colors[fitem['colorRef']] || 'text-white'}
-            col-span-1 text-right py-1'>
-                <span class='font-bold'>x{f(fitem['value'](), 3)}</span>
-            </div>
-            <div class='col-span-8'></div>
-        {:else if i > 0}
-        <div class=' {ref.colors[fitem['colorRef']] || 'text-white'} 
-        col-span-3 text-left py-1'>???</div>
-        <div class=' {ref.colors[fitem['colorRef']] || 'text-white'}
-        col-span-1 text-right py-1'>
-            <span class='font-bold'>x{f(fitem['value'](), 3)}</span>
-        </div>
-        <div class='col-span-8'></div>
-        {/if}
-    {/each}
-    {/key}
-    </div>
-</div>
-
     
 
 
@@ -69,20 +22,22 @@ import { onMount, onDestroy } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
     settings, visibleTier, progressThisTick, progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources,
-     keysOpened, unlockedRes, beaconUpgradeLevels, flags, fameUpgradeLevels} from '../../data/player';
+     keysOpened, unlockedRes, beaconUpgradeLevels, flags, fameUpgradeLevels,
+    automationItemsUnlocked} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import {beaconPower, beaconBonuses,
     beaconFormulas, beaconNums, beaconNextReqs, beaconSpendAmt ,
 beaconUpgrades, beaconNameText, baseBeaconNextReqs} from '../../data/beacons';
-import {fameUpgrades, enchantThreshold, enchantProgress} from '../../data/fame';
+import {fameUpgrades, enchantThreshold, enchantProgress, automationUpgrades} from '../../data/fame';
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
 import formula from '../../calcs/formula';
 import BeaconToggleButton from '../buttons/BeaconToggleButton.svelte';
 import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte';
 import FameUpgradeButton from '../buttons/FameUpgradeButton.svelte';
+import AutomationUpgradeButton from '../buttons/AutomationUpgradeButton.svelte';
 
 
 $: encht1BarWidth = `${$enchantProgress['t1']/$enchantThreshold['t1'] * 100}%`

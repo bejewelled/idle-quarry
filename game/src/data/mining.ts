@@ -119,7 +119,7 @@ const ceil = (n: number) => Math.ceil(n);
 export const progressThreshold = object({
     gems: 200,
     key1: 2000,
-    key2: 2000000,
+    key2: 500000,
 })
 
 // edit when changing the level of the haste upgrade
@@ -154,7 +154,7 @@ export const miningUpgrades = array([{
     },
     ratio: 1.3,
     unlockAt: () => (get(wallet)['gems'] >= 3 && get(miningUpgradeLevels)[0] >= 1),
-    formula: (lv: any) => 0.35*pow(lv,0.5+Math.log10(lv+1)),
+    formula: (lv: any) => 0.35*pow(lv,1.33),
     isPercent: false,
     prefix: '+',
     suffix: ' gems',
@@ -209,7 +209,7 @@ export const miningUpgrades = array([{
 },
 // i = 5
 {
-    name: '[*] Key Mastery',
+    name: 'Key Mastery',
     description: 'Increases the number of keys found when a Key Finder of any rarity triggers.',
     cost: {
         orbs: 1000,
@@ -266,6 +266,21 @@ export const miningUpgrades = array([{
     prefix: '+',
     suffix: ' gems',
     maxLevel: 300,
+    notes: ''
+},
+{
+    name: 'Lootmaster II',
+    description: 'Unlocks a new tier of findable drops.',
+    cost: {
+        gems: 2e7,
+        gold: 4e5
+    },
+    ratio: 1.25,
+    unlockAt: () => (get(wallet)['fame'] > 1 && get(miningUpgradeLevels)[6] >= 0.997),
+    formula: (lv: any) => (0),
+    isPercent: false,
+    suffix: ' (no bonus)',
+    maxLevel: 1,
     notes: ''
 },
 ]);

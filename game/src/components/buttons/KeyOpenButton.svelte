@@ -41,7 +41,7 @@ select-none'>
     import { progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula';
-    import { key1DropTable } from '../../data/keys';
+    import { key1DropTable, key2DropTable, key3DropTable, key4DropTable, key5DropTable} from '../../data/keys';
     import { keyRewardText } from '../../data/keys'
     import { combinations } from 'mathjs'
 // @ts-nocheck
@@ -83,6 +83,7 @@ select-none'>
     }
     /**
      * Key opening formula O_O
+     * DO NOT EDIT unless you are familiar with the math behind this
      * If E[x] > 1, use expected value with simulated randomness
      * If E[x] < 1, use binomial sequences
      * @param amt
@@ -115,7 +116,7 @@ select-none'>
                 // value should usually be between (-2*stdev, 2*stdev) with rare exceptions
                 const trueDev = stdev * devFactor;
                 // now, calculate the expected value of the number of wins +/- the calculated deviation
-                const numWins = (vals[0])*amt + trueDev; // expected value
+                const numWins = (vals[0])*amt + trueDev; // expected value + calcualted deviation
 
 
                 // calculate reward value
@@ -171,8 +172,11 @@ select-none'>
         }
 
     for (let [type, amt] of Object.entries(rewards)) {
-        if (rewards[type] > 0) $wallet[type] = ($wallet[type] || 0) + amt;
-        $keyItemsUnlocked['key'+rarity].add(type);
+        if (rewards[type] > 0) {
+            $wallet[type] = ($wallet[type] || 0) + amt;
+            $keyItemsUnlocked['key'+rarity].add(type);
+        }
+
     }
     updateKeyRewardText(rewards);
 }
@@ -204,7 +208,7 @@ select-none'>
             case 1:
                 return $wallet['key1'] && $wallet['key1'] >= 1;
             case 2:
-                return $wallet['beacon'] && $wallet['beacon'] >= 1;
+                return $wallet['beacons'] && $wallet['beacons'] >= 1;
             case 3:
                 return $wallet['sigil'] && $wallet['sigil'] >= 1;
             case 4:

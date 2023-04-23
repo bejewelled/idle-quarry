@@ -23,7 +23,7 @@ import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import {beaconPower, beaconBonuses, beaconFormulas, 
-    beaconNums, beaconNextReqs, beaconAmt} from '../../data/beacons';
+    beaconNums, beaconNextReqs, beaconSpendAmt} from '../../data/beacons';
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
 // @ts-nocheck
@@ -51,13 +51,13 @@ import ref from '../../calcs/ref'
 
     function add() {
         if (!$wallet['beacons'] || $wallet['beacons']===0) return;
-        const amt = Math.min($wallet['beacons'], $beaconAmt);
+        const amt = Math.min($wallet['beacons'], $beaconSpendAmt);
         $wallet['beacons'] -= amt;
         $beaconActivations[index] += amt;
     }
 
     function sub() {
-        const amt = Math.min($beaconActivations[index], $beaconAmt);
+        const amt = Math.min($beaconActivations[index], $beaconSpendAmt);
         $beaconActivations[index] -= amt;
         $wallet['beacons'] += amt;
     }

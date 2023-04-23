@@ -1,37 +1,40 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-{#key permUnlocked || affordable || $miningUpgradeLevels[index] > 0}
-{#if $miningUpgrades[index]['unlockAt']() || permUnlocked || $miningUpgradeLevels[index] > 0}
-<div class='pt-1'></div>
+{#key permUnlocked || affordable || $fameUpgradeLevels[index] > 0}
+{#if $fameUpgrades[index]['unlockAt']() || permUnlocked || $fameUpgradeLevels[index] > 0}
 <div on:click={() => buy(index)}
 class='has-tooltip tooltip-text 
-{affordable && $miningUpgradeLevels[index] < $miningUpgrades[index]['maxLevel'] ? 'game-btn' : 'game-btn-noafford'}
+{index < 2 ? (affordable || 
+($fameUpgradeLevels[index] < $fameUpgrades[index]['maxLevel'] && $fameUpgradeLevels[index] > 0) ?
+ 'game-btn rainbow-effect' : 'game-btn-noafford rainbow-effect') :
+ (affordable && ($fameUpgradeLevels[index] < $fameUpgrades[index]['maxLevel'] && $fameUpgradeLevels[index] > 0)  ?
+ 'game-btn-encht' + $fameUpgrades[index]['tier'] : 'game-btn-encht' + $fameUpgrades[index]['tier'] + '-noafford')}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
-select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)} / {f($miningUpgrades[index]['maxLevel'],0)}]
+select-none'>{$fameUpgrades[index]['name']} [{f($fameUpgradeLevels[index],0)} / {f($fameUpgrades[index]['maxLevel'],0)}]
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
          <div class='title text-small-gray items-start text-center pb-1'>
-            {$miningUpgrades[index]['description']}
+            {$fameUpgrades[index]['description']}
         </div>
         <div class='text-center effect-wrapper'>
             <div class='tooltip-text-xs text-[#cccccc]'>
                  <span class='current text-[#cccccc]'>
-                    {$miningUpgrades[index]['prefix'] || ""}{$miningUpgrades[index]['isPercent'] ?
-                    fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]),3, true) :
-                    f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]),3)}{$miningUpgrades[index]['suffix'] || ""}
+                    {$fameUpgrades[index]['prefix'] || ""}{$fameUpgrades[index]['isPercent'] ?
+                    fp($fameUpgrades[index]['formula']($fameUpgradeLevels[index]),3, false) :
+                    f($fameUpgrades[index]['formula']($fameUpgradeLevels[index]),3)}{$fameUpgrades[index]['suffix'] || ""}
                  </span>
                  <span class='current text-[#999999]'>  => 
-                    {$miningUpgrades[index]['prefix'] || ""}{$miningUpgrades[index]['isPercent'] ?
-                   fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+$settings['buyAmount']),3, true) :
-                   f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+$settings['buyAmount']),3)}{$miningUpgrades[index]['suffix'] || ""}
+                    {$fameUpgrades[index]['prefix'] || ""}{$fameUpgrades[index]['isPercent'] ?
+                   fp($fameUpgrades[index]['formula']($fameUpgradeLevels[index]+$settings['buyAmount']),3, false) :
+                   f($fameUpgrades[index]['formula']($fameUpgradeLevels[index]+$settings['buyAmount']),3)}{$fameUpgrades[index]['suffix'] || ""}
                  </span>
 
             </div>
         </div>
         <hr />
         <div class='pt-1 cost items-start text-center grid grid-cols-4'>
-            {#if $miningUpgradeLevels[index] >= $miningUpgrades[index]['maxLevel']}
+            {#if $fameUpgradeLevels[index] >= $fameUpgrades[index]['maxLevel']}
                 <div class='col-span-4 text-[#999999]'>This upgrade is at max level.</div>
             {:else}
             {#each Object.entries(costs) as c}
@@ -55,36 +58,37 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
-    import { progress, wallet, miningUpgradeLevels, miningDropTable,
+    import { progress, wallet, fameUpgradeLevels, miningDropTable,
          settings, visibleTier, unlockedRes} from '../../data/player';
-    import {progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
+    import {progressThreshold, progressPerTick } from '../../data/mining';
+    import { fameUpgrades } from '../../data/fame';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
 // @ts-nocheck
     export let index;
     let getCosts = () => {
         let c = {};
-        for (let [type, base] of Object.entries($miningUpgrades[index]['cost'])) {
+        for (let [type, base] of Object.entries($fameUpgrades[index]['cost'])) {
             c[type] = cost(base);
         }
         return c;
     }
     let costs = {};
     let affordable, unlocked;
-    let permUnlocked = ($miningUpgradeLevels[index] > 0)
+    let permUnlocked = ($fameUpgradeLevels[index] > 0)
     let affordInterval;
     
     onMount(() => {
         setTimeout(() => {
             costs = getCosts();
             affordable = canAfford();
-            if ($miningUpgrades[index]['unlockAt']()) permUnlocked = true;
-            permUnlocked = ($miningUpgradeLevels[index] > 0)
+            if ($fameUpgrades[index]['unlockAt']()) permUnlocked = true;
+            permUnlocked = ($fameUpgradeLevels[index] > 0)
         }, 50)
         affordInterval = setInterval(() => {
             affordable = canAfford();
             unlocked = isUnlocked();
-            if ($miningUpgrades[index]['unlockAt']()) permUnlocked = true;
+            if ($fameUpgrades[index]['unlockAt']()) permUnlocked = true;
         }, 100 + (Math.random() * 20))
     })
 
@@ -103,36 +107,32 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
 }
 
     function cost(start) {
-       const base = start * Math.pow($miningUpgrades[index]['ratio'], $miningUpgradeLevels[index]);  
-       const r =  $miningUpgrades[index]['ratio']
+       const base = start * Math.pow($fameUpgrades[index]['ratio'], $fameUpgradeLevels[index]);  
+       const r =  $fameUpgrades[index]['ratio']
        const l = $settings['buyAmount']
 
        return formula.gSum(base,r,l)
     }
 
     function buy() {
-        if ($miningUpgradeLevels[index] >= $miningUpgrades[index]['maxLevel']) return;
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
-            if (val >=  1 && $wallet[type] < val-0.003) {
+            if (val >=  1 && $wallet[type] < val) {
                 return;
             }
         }
         for (let [type, val] of Object.entries(costs)) {
-            if (val >= 1) $wallet[type] -= (val-0.003);
+            if (val >= 1) $wallet[type] -= val;
         }
-        $miningUpgradeLevels[index] += $settings['buyAmount'];
+        $fameUpgradeLevels[index] += $settings['buyAmount'];
         costs = getCosts();
         permUnlocked = true;
-        miningDropTable.updateTable();
-        if (index === 6) $visibleTier = 2;
-        if (index === 9) $visibleTier = 3;
     }
 
     function canAfford() {
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
-            if (val >= 1 && $wallet[type] < val-0.003) {
+            if (val >= 1 && $wallet[type] < val) {
                 return false;
             }
         }  
@@ -140,7 +140,7 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
     }
 
     function isUnlocked() {
-        for (let [type, val] of Object.entries($miningUpgrades[index]['unlockAt'])) {
+        for (let [type, val] of Object.entries($fameUpgrades[index]['unlockAt'])) {
             if ($wallet[type] < val) {
                 return false;
             }
@@ -156,4 +156,41 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
   .has-tooltip:hover .tooltip {
     @apply visible z-50;
   }
+
+  .rainbow-effect {
+  /* Set the initial background color with some opacity */
+  /* Add a transition for smooth color change */
+  transition: background-color 0.5s ease-in-out;
+}
+
+.rainbow-effect > span {
+    opacity: 1;
+}
+
+/* Add the rainbow effect on hover */
+.rainbow-effect:hover {
+    font-weight: 600;
+  /* Use a linear gradient to create the rainbow effect */
+  background-image: linear-gradient(to right, 
+    #f8c102, #e86aa7, #8e2de2, #3a86ff, #4cc9f0, #00c9b1, #b4e332, #f8c102,
+    #b4e332, #00c9b1, #4cc9f0, #3a86ff, #8e2de2, #e86aa7, #f8c102);
+  /* Animate the gradient to create a looping effect */
+  animation: rainbow-animation 6s ease-in-out infinite;
+  /* Set the gradient background size to 400% to create a smooth transition */
+  background-size: 400%;
+  /* Increase the opacity on hover */
+  opacity: 1
+}
+
+/* Define the animation */
+@keyframes rainbow-animation {
+  /* Move the gradient position to create the animation effect */
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
 </style>
