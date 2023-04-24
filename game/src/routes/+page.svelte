@@ -11,14 +11,14 @@
                 {#each Object.entries($wallet) as res}
                     {#if $wallet[res[0]] && !res[0].includes('key') && res[0] !== 'fame'}   
                         <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
-                        <div class='game-text res-amount col-span-5'>{f(res[1],0)}</div>
+                        <div class='game-text res-amount col-span-5'>{f(Math.floor(res[1]),0)}</div>
                     {/if}
                 {/each}
                 <div class='res-break py-2 col-span-12'></div>
                 {#each Object.entries($wallet) as res}
                     {#if $wallet[res[0]] && !res[0].includes('key') && res[0] === 'fame'}   
                         <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
-                        <div class='game-text res-amount col-span-5'>{f(res[1],0)}</div>
+                        <div class='game-text res-amount col-span-5'>{f(Math.floor(res[1]),0)}</div>
                     {/if}
                  {/each}
                 <div class='res-break py-2 col-span-12'></div>
@@ -36,10 +36,10 @@
                 <button class='py-1 text-small save-btn control-btn {saveConfirm ? 'bg-green-400' : ''}' on:click={() => save()}>Save</button>
                 <button class='py-1 text-small save-btn control-btn' on:click={() => reset()}>Reset</button>
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>                           </div>
-            <div class='py-1 row-span-2 tab-buttons'>
+            <div class='row-span-2 tab-buttons'>
                 {#key tabsUnlocked}
                 {#each ref.tabs as t}
-                    <button class='p-1 text-small 
+                    <button class='px-1 py-1 text-small 
                     {!tabUnlockCriteria[t] ? 'control-btn-nounlock' : 
                     (tabUnlockCriteria[t]() ? 
                     (t === tab ? 'control-btn-selected' : 'control-btn') : 'control-btn-nounlock')}' 
@@ -136,8 +136,12 @@ const tabUnlockCriteria = {
         beacons: () => (($wallet['beacons']) || formula.sumArray($beaconActivations)>0),
         sigils: () => ($wallet['sigils'] && $wallet['sigils'] > 0.02),
         relocate: () => (formula.sumArray($keysOpened) > 1000 || $wallet['fame']),
-        enchants: () => ($wallet['fame'] && $wallet['fame'] >= 0.997),
-        automation: () => ($wallet['fame'] && $wallet['fame'] >= 0.997),
+        enchants: () => ($wallet['fame'] && $wallet['fame'] >= 0.997) 
+                        || formula.sumArray($fameUpgradeLevels) > 0
+                        || $miningUpgradeLevels[10] > 0 || $miningUpgradeLevels[11] > 0,
+        automation: () => ($wallet['fame'] && $wallet['fame'] >= 0.997)
+                        || formula.sumArray($fameUpgradeLevels) > 0
+                        || $miningUpgradeLevels[10] > 0 || $miningUpgradeLevels[11] > 0,
         default: () => false,
     }
 const tabsUnlocked = {
@@ -348,6 +352,11 @@ onMount(() => {
     :global(.game-btn-noafford) {
         border: 1px solid #888888;
         color: #888888;
+        cursor: pointer;
+    }
+    :global(.game-btn-fame) {
+        border: 1px solid #fb923c;
+        color: #fb923c;
         cursor: pointer;
     }
     :global(.game-btn-fame-noafford) {

@@ -36,7 +36,7 @@ import ref from '../../calcs/ref'
 import formula from '../../calcs/formula';
 import BeaconToggleButton from '../buttons/BeaconToggleButton.svelte';
 import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte';
-import FameUpgradeButton from '../buttons/FameUpgradeButton.svelte';
+import FameUpgradeButton from '../buttons/EnchantUpgradeButton.svelte';
 import AutomationUpgradeButton from '../buttons/AutomationUpgradeButton.svelte';
 
 

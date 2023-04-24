@@ -29,8 +29,14 @@
             </div>
         </div>
         <div class='col-span-7 grid grid-rows-2'>
-            <div class='row-span-1 tooltip-text'>
-                {$beaconNameText[i]} [{fp($beaconProgress[i] / $beaconNextReqs[i], 2)}]
+            <div class='row-span-1 grid grid-cols-5 tooltip-text'>
+                <div class='col-span-3 text-left'>
+                    {$beaconNameText[i]}
+                </div>
+                <div class = 'col-span-2 text-right'>
+                    [ {fp($beaconProgress[i] / $beaconNextReqs[i], 
+                    $beaconProgress[i] / $beaconNextReqs[i] < 0.0001 ? 4 : 2)} ]
+                </div>
             </div>
             <div class='mine-bar-wrapper align-middle'>
                 <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">

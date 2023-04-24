@@ -3,7 +3,7 @@
         {#each Object.entries($fameUpgrades) as upgrade,i}
             {#if i < 2}
             <div class='py-1 col-span-1 mine-upgrade-button-wrapper'>
-                 <FameUpgradeButton index={i}/>
+                 <EnchantUpgradeButton index={i}/>
             </div>
             {/if}
         {/each}
@@ -31,7 +31,7 @@
             {#each Object.entries($fameUpgrades) as upgrade,i}
                 {#if i >= 2 && $fameUpgrades[i]['unlockAt']()}
                 <div class='py-1 col-span-1 mine-upgrade-button-wrapper'>
-                     <FameUpgradeButton index={i}/>
+                     <EnchantUpgradeButton index={i}/>
                 </div>
                 {/if}
             {/each}
@@ -62,7 +62,7 @@ import ref from '../../calcs/ref'
 import formula from '../../calcs/formula';
 import BeaconToggleButton from '../buttons/BeaconToggleButton.svelte';
 import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte';
-import FameUpgradeButton from '../buttons/FameUpgradeButton.svelte';
+import EnchantUpgradeButton from '../buttons/EnchantUpgradeButton.svelte';
 
 
 $: encht1BarWidth = `${$enchantProgress['t1']/$enchantThreshold['t1'] * 100}%`

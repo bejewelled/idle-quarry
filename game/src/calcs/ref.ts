@@ -11,7 +11,8 @@ export default class ref {
         key5: 'text-amber-400',
         beacons: 'text-sky-400',
         beaconPower: 'text-cyan-300',
-        fame: 'text-orange-400'
+        fame: 'text-orange-400',
+        sigils: 'text-fuschia-600'
     }
 
     static displayNames = {
@@ -29,7 +30,10 @@ export default class ref {
         gold: 1,
         key1: 1,
         orbs: 2,
-        beacons: 2
+        beacons: 2,
+        key2: 3,
+        key3: 3,
+        sigils: 3
     }
     
     static keyMainNames = {

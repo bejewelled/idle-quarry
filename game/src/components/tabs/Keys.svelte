@@ -1,7 +1,13 @@
 <div class='key-amount-wrapper items-center'>
     <div class='grid grid-cols-9'>
-        <div class='col-span-9 tooltip-text text-center'>
+        <div class='col-span-9 pt-3 pb-2 tooltip-text text-center'>
             Total Keys Opened: {f.f(formula.sumArray($keysOpened),0)}
+            [ 
+                {#each $keysOpened as k, i}
+                    <span class='{ref.colors['key'+((i+1).toString())]}'>
+                        {" " + f.f(k,0)} </span> {#if i+1 < $keysOpened.length}+{/if} 
+                {/each}
+         ]
         </div>
         {#each [1,2,3,4,5] as i}
             <div class='col-span-1 py-1 {ref.colors['key' + i]}'>

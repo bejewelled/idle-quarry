@@ -140,7 +140,7 @@ function addProgress(delta) {
         }
 
         if ($progressThisTick['gems'] > gemAt*0.25) $antiFlickerFlags['gems'] = true;
-        else if ($antiFlickerFlags['gems'] && $progressThisTick['gems'] < gemAt*0.025) {
+        else if ($antiFlickerFlags['gems'] && $progressThisTick['gems'] < gemAt*0.15) {
             $antiFlickerFlags['gems'] = false;
         }
         addGems($progress['gems'] / gemAt, $progressAverage['gems']);
@@ -164,14 +164,21 @@ let lastGemGainTextUpdate = Date.now();
 function addGems(n, avgProgress) {
     const GEM_BASE = 1;
     const gemGain = (GEM_BASE + $miningUpgrades[1]['formula']($miningUpgradeLevels[1]))
-    * ($miningUpgrades[8]['formula']($miningUpgradeLevels[8])
-    * (Math.max(1,$beaconBonuses[3])));
+    * ($miningUpgrades[8]['formula']($miningUpgradeLevels[8]))
+    * (Math.max(1,$beaconBonuses[3]))
+    * (Math.max(1,$miningUpgrades[10]['formula']($miningUpgradeLevels[10])));
     // update the flavor text if there is a minor change, otherwise don't
     if (Date.now() - lastGemGainTextUpdate > 1000) {
         $gemGainFlavorText = gemGain;
         lastGemGainTextUpdate = Date.now();
     }
     $wallet['gems'] += gemGain * n;
+
+    // add chance to get fame
+    if (Math.random() < ($miningUpgrades[13]['formula']($miningUpgradeLevels[13]) - 1)) {
+        $wallet['fame'] = ($wallet['fame'] || 0) + 1;
+    }
+
 }
 
 function addKey1(n, keyAt) {
@@ -224,8 +231,9 @@ function dropRoll(n) {
 let locks = new Set(); // makes sure levelups don't repeat when leveling up from next function call
 function addBeaconProgress(delta) {
     const progressGains = $beaconActivations.map((e) => e * delta
-    * $beaconUpgrades[0]['formula']($beaconUpgradeLevels[0])
-    * Math.max(1,$beaconUpgrades[2]['formula']($beaconUpgradeLevels[2])));
+    * Math.max(1, $beaconUpgrades[0]['formula']($beaconUpgradeLevels[0]))
+    * Math.max(1,$beaconUpgrades[2]['formula']($beaconUpgradeLevels[2]))
+    * Math.max(1,$miningUpgrades[12]['formula']($miningUpgradeLevels[12])));
     // adds progressGains to progress
     $beaconProgress = $beaconProgress.map((e, i) => e + progressGains[i]);
     // check for levelups

@@ -169,9 +169,9 @@ function dropTable(context: any) {
                             * get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6])
                             * get(beaconBonuses)[2]),
                         //@ts-ignore
-                        val[1],
+                        val[1] * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11]),
                         //@ts-ignore
-                        val[2]
+                        val[2] * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11]),
                     ]
                     if (item === 'gold') {
                         i[item][1] = val[1] * get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]);
@@ -213,7 +213,10 @@ export const baseMiningDropTable = dropTable({
     gold: [0.20,1,3], // 10% chance to drop 1 gold
     key1: [0.05,1,1], 
     orbs: [0.01,1,2],
-    beacons: [0.005,1,1]
+    beacons: [0.005,1,1],
+    key2: [0.00075,1,1],
+    key3: [1e-6,1,1],
+    sigils: [0.025,1,3]
 });
 
 export const miningDropTable = dropTable({

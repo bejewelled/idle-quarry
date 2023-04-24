@@ -188,7 +188,7 @@ export const beaconNameText = array([
 export const beaconFormulas = array([
    /*beacon power*/ function(lv: number) {return 1 + (Math.pow(lv,0.6) * 0.005)},
    /*mining haste*/ function(lv: number) {return 1 + (Math.pow(lv,0.15) * (Math.log(lv+1)/Math.log(2) * 0.004))},
-   /*droprate*/ function(lv: number) {return 1 + (Math.pow(lv,0.9) * 0.00025)},
+   /*droprate*/ function(lv: number) {return 1 + (Math.pow(lv,0.8) * 0.003)},
    /*gem bonus*/ function(lv: number) {return 1 + Math.pow(lv,1.1)*0.2}]
     .concat(Array(27).fill(function(lv: number) {return 1}))
 )
@@ -224,7 +224,7 @@ export const beaconUpgrades = array([{
         beaconPower: 5000,
     },
     ratio: 1.5,
-    formula: (lv: any) => 0.3325*lv,
+    formula: (lv: any) => 1 + 0.3325*lv,
     isPercent: true,
     prefix: '+',
     maxLevel: 300,
@@ -251,7 +251,7 @@ export const beaconUpgrades = array([{
         beaconPower: 2.5e6,
     },
     ratio: 4,
-    formula: (lv: any) => (lv === 0 ? 1 : Math.log(get(resources)['beaconPower']/1e3 + 1) / Math.log(1 + 8 - lv*0.5)),
+    formula: (lv: any) => (lv === 0 ? 1 : 1 + Math.log(get(resources)['beaconPower']/1e3 + 1) / Math.log(1 + 8 - lv*0.5)),
     isPercent: true,
     suffix: ' bonus',
     maxLevel: 10,

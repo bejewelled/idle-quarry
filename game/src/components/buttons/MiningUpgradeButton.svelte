@@ -5,7 +5,9 @@
 <div class='pt-1'></div>
 <div on:click={() => buy(index)}
 class='has-tooltip tooltip-text 
-{affordable && $miningUpgradeLevels[index] < $miningUpgrades[index]['maxLevel'] ? 'game-btn' : 'game-btn-noafford'}
+{affordable && $miningUpgradeLevels[index] < $miningUpgrades[index]['maxLevel'] ? 
+$miningUpgrades[index]['isFame'] ? 'game-btn-fame' : 'game-btn' : 
+$miningUpgrades[index]['isFame'] ? 'game-btn-fame-noafford' : 'game-btn-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)} / {f($miningUpgrades[index]['maxLevel'],0)}]
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
@@ -13,6 +15,9 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
          pointer-events-none'>
          <div class='title text-small-gray items-start text-center pb-1'>
             {$miningUpgrades[index]['description']}
+            {#if $miningUpgrades[index]['name'] == 'Expansive'}
+                <span class='text-orange-400'> (Upgrades in orange aren't reset when you relocate.) </span>
+            {/if}
         </div>
         <div class='text-center effect-wrapper'>
             <div class='tooltip-text-xs text-[#cccccc]'>
@@ -125,8 +130,9 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
         costs = getCosts();
         permUnlocked = true;
         miningDropTable.updateTable();
-        if (index === 6) $visibleTier = 2;
-        if (index === 9) $visibleTier = 3;
+        if (($miningUpgrades[index]['name'] || '') == 'Lootmaster I') $visibleTier = 2;
+        if (($miningUpgrades[index]['name'] || '') == 'Lootmaster II') $visibleTier = 3;
+        if (($miningUpgrades[index]['name'] || '') == 'Lootmaster III') $visibleTier = 4;
     }
 
     function canAfford() {

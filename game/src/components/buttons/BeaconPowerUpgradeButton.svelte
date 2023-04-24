@@ -78,6 +78,7 @@ select-none'>{$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index],0)
         }, 50)
         affordInterval = setInterval(() => {
             affordable = canAfford();
+            console.log($resources['beaconPower'])
         }, 100 + (Math.random() * 20))
     })
 
@@ -104,6 +105,7 @@ select-none'>{$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index],0)
     }
 
     function buy() {
+        if (isNaN($resources['beaconPower'])) return;
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1 && $resources[type] < val) {
@@ -118,6 +120,7 @@ select-none'>{$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index],0)
     }
 
     function canAfford() {
+        if (isNaN($resources['beaconPower'])) return false;
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1 && $resources[type] < val) {

@@ -169,6 +169,7 @@ select-none'>{$fameUpgrades[index]['name']} [{f($fameUpgradeLevels[index],0)} / 
 
 /* Add the rainbow effect on hover */
 .rainbow-effect:hover {
+    color: #fff;
     font-weight: 600;
   /* Use a linear gradient to create the rainbow effect */
   background-image: linear-gradient(to right, 

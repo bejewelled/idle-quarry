@@ -39,6 +39,7 @@ select-none'>
     import { wallet, miningUpgradeLevels, miningDropTable, keysOpened, 
     keyItemsUnlocked} from '../../data/player';
     import { progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
+    import { beaconLevels } from '../../data/player';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula';
     import { key1DropTable, key2DropTable, key3DropTable, key4DropTable, key5DropTable} from '../../data/keys';
@@ -208,7 +209,7 @@ select-none'>
             case 1:
                 return $wallet['key1'] && $wallet['key1'] >= 1;
             case 2:
-                return $wallet['beacons'] && $wallet['beacons'] >= 1;
+                return ($wallet['beacons'] && $wallet['beacons'] >= 1) || formula.sumArray($beaconLevels) > 0;
             case 3:
                 return $wallet['sigil'] && $wallet['sigil'] >= 1;
             case 4:

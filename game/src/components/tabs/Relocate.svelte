@@ -7,12 +7,14 @@
         Keys are not removed.
     </div>
     <div class='col-span-12 py-1'>You will gain 
-        <span class='text-orange-400 font-bold'>{f(calcFameGain(),0)}</span> fame by relocating.</div>
+        <span class='text-orange-400 font-bold'>{f(Math.floor(calcFameGain()),0)}</span> fame by relocating.</div>
     <div class='col-span-12 py-1'><hr /></div> 
 
     <div class='col-span-12 pt-3'>
-        <div class='game-btn text-center' on:click={() => relocate()}>
-            Relocate
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class='
+        {calcFameGain() >= 5 ? 'game-btn' : 'game-btn-noafford'} text-center' on:click={() => relocate()}>
+            {calcFameGain() >= 5 ? 'Relocate' : 'You need to gain at least 5 fame to relocate.'}
         </div>
     </div>
 </div>
@@ -24,9 +26,9 @@
     <!-- display for keys -->
     <div class='col-span-3 game-text text-left py-1'>Keys Used: </div>
     <div class='col-span-1 py-1 game-text text-right'>
-        <span class='font-bold'>+{f(formula.sumArray(fameGainKeys), 3)}</span>
+        <span class=''>+{f(formula.sumArray(fameGainKeys), 3)}</span>
     </div>
-    <div class='col-span-8 game-text text-right py-1'>
+    <div class='col-span-8 game-text text-left px-2 py-1'>
         [ 
         {#each $keysOpened as k, i}
             <span class='{ref.colors['key'+((i+1).toString())]}'>
@@ -36,12 +38,12 @@
     </div>
 
     {#each fameGridInfo as fitem, i}
-        {#if i > 0 && (fitem['criteria'])}
+        {#if i > 0 && (fitem['criteria']())}
             <div class=' {ref.colors[fitem['colorRef']] || 'text-white'} 
             col-span-3 text-left py-1'>{fitem['name']}: </div>
             <div class=' {ref.colors[fitem['colorRef']] || 'text-white'}
             col-span-1 text-right py-1'>
-                <span class='font-bold'>x{f(fitem['value'](), 3)}</span>
+                <span class=''>x{f(fitem['value'](), 3)}</span>
             </div>
             <div class='col-span-8'></div>
         {:else if i > 0}
@@ -82,7 +84,7 @@ import ref from '../../calcs/ref'
 import formula from '../../calcs/formula';
 import BeaconToggleButton from '../buttons/BeaconToggleButton.svelte';
 import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte';
-import FameUpgradeButton from '../buttons/FameUpgradeButton.svelte';
+import EnchantUpgradeButton from '../buttons/EnchantUpgradeButton.svelte';
 
 
 $: encht1BarWidth = `${$enchantProgress['t1']/$enchantThreshold['t1'] * 100}%`
@@ -136,13 +138,13 @@ const fameGridInfo = [
      name: 'Gem Amount', 
      value: () => fameMultiGems, 
      colorRef: 'gems',
-     criteria: $wallet['gems'] > 0
+     criteria: () => ($wallet['gems'] > 0)
     },
     {
      name: 'Beacon Paths', 
      value: () => fameMultiBeaconLevels,
      colorRef: 'beacons',
-     criteria: $wallet['beacons'] > 0
+     criteria: () => ($wallet['beacons'] > 0 || formula.sumArray($beaconLevels) > 0)
     },
 ]
 
@@ -153,6 +155,7 @@ function calcFameGain() {
 const walletResetItems = ['gems', 'gold', 'orbs', 'beacons']
 const resourceResetItems = ['beaconPower']
 function relocate() {
+    if (calcFameGain() >= 5) {
         if (confirm("Are you sure? Relocating will reset all previous progress.")) {
             $flags['relocateNavBack'] = true;
             $wallet['fame'] = ($wallet['fame'] || 0) + calcFameGain();
@@ -183,9 +186,12 @@ function relocate() {
             $beaconNextReqs = $baseBeaconNextReqs;
             $keysOpened = Array($keysOpened.length).fill(0);
             $beaconBonuses = Array(30).fill(1)
-            $miningUpgradeLevels = Array($miningUpgradeLevels.length).fill(0);
+            for (let i in $miningUpgradeLevels) {
+                if (!$miningUpgrades[i]['isFame']) $miningUpgradeLevels[i] = 0;
+            }
             $beaconUpgradeLevels = Array($beaconUpgradeLevels.length).fill(0);
         }
+    }
 }
 
 const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
