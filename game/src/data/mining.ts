@@ -325,10 +325,10 @@ export const miningUpgrades = array([{
     },
     ratio: 1.6,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + lv * (0.11*formula.calcMineSize(get(fameUpgradeLevels)[0]))),
+    formula: (lv: any) => (1 + Math.pow(lv,0.8) * (0.075*formula.calcMineSize(get(fameUpgradeLevels)[0]))),
     isPercent: true,
     prefix: '+',
-    suffix: ' gem bonus',
+    suffix: ' beacon progress',
     maxLevel: 40,
     isFame: true,
     notes: 'index 10'
