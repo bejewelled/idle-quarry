@@ -124,11 +124,6 @@ export const enchantThreshold = object({
     t3: 1e9
 })
 
-export const enchantProgress = object({
-    t1: 0,
-    t2: 0,
-    t3: 0
-})
 
 // edit when changing the level of the haste upgrade
 export const progressPerTick = single(1);
@@ -139,7 +134,7 @@ export const progressPerTick = single(1);
 *  If an upgrade should cost additional TYPES of resources at later levels, they must be added to the cost
 *  object at a value of less than 1.
 */
-export const fameUpgrades = array([{
+export const enchantUpgrades = array([{
     name: 'Mine Size',
     description: 'Increases your mine size, which increases the effect of many enchants below..',
     cost: {
