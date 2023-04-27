@@ -13,7 +13,8 @@ key1DropTable, key2DropTable, key3DropTable, key4DropTable, key5DropTable} from 
 import {progress, miningUpgradeLevels, wallet, miningDropTable, 
     unlockedRes, settings, progressThisTick, visibleTier,progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources, 
-    beaconUpgradeLevels, enchantProgress, enchantUpgradeLevels} from '../../data/player'
+    beaconUpgradeLevels, enchantProgress, enchantUpgradeLevels, 
+    automationItemsUnlocked, activityLog} from '../../data/player'
 import {beaconFormulas, beaconBonuses, beaconNextReqs, beaconNums, beaconUpgrades, beaconPowerFlavorText} from '../../data/beacons'
 import {enchantUpgrades, enchantThreshold} from '../../data/fame'
 import ref from '../../calcs/ref'
@@ -51,11 +52,19 @@ const calcGameSpeed = () => {
     return 1;
 }
 
+let i = 0;
+function addToActivityLog(text, color) {
+    const item = [text, color]
+    $activityLog = [...$activityLog, item]
+    if ($activityLog.length > 100) $activityLog.shift();
+}
+
+
 let lastDropTableUpdate = Date.now();
 
 const UPDATE_SPEED = $settings['UPDATE_SPEED']; // ms per tick
 let last, dt;
-let beaconCounter = 0;
+let beaconUpdateCounter = 0;
 onMount(() => {
     updateBeaconBonuses();
     last = Date.now();
@@ -63,14 +72,16 @@ onMount(() => {
         dt = (Date.now() - last) / UPDATE_SPEED;
         addProgress(dt);
         if ($settings['activeTab'] !== 'beacons') {
-            if (beaconCounter >= 10) {
+            if (beaconUpdateCounter >= 10) {
                 addBeaconProgress(dt*10);
-                beaconCounter = 0;
-            } else beaconCounter++;
+                beaconUpdateCounter = 0;
+            } else beaconUpdateCounter++;
         } else {
             addBeaconProgress(dt);
-            beaconCounter++;
+            beaconUpdateCounter++;
         }
+        if ($automationItemsUnlocked['beaconizer']) 
+            $wallet['beacons'] = ($wallet['beacons'] || 0) + (1000/UPDATE_SPEED*dt);
         last = Date.now();
     }, UPDATE_SPEED)
     // slowLoop updates at random intervals, do NOT add time-dependent items here!
@@ -178,6 +189,7 @@ function addGems(n, avgProgress) {
     // add chance to get fame
     if (Math.random() < ($miningUpgrades[13]['formula']($miningUpgradeLevels[13]) - 1)) {
         $wallet['fame'] = ($wallet['fame'] || 0) + 1;
+        addToActivityLog(['[Mythical] +1 fame', 'text-orange-400'])
     }
 
 }
@@ -263,11 +275,9 @@ function addBeaconProgress(delta) {
                 miningDropTable.updateTable();
             }
 
-            if ($beaconLevels[i] % 10 == 0) {
-                $wallet['beacons'] = ($wallet['beacons'] || 0) + 
-                ($beaconUpgrades[1]['formula']($beaconUpgradeLevels[1]) 
-                * Math.log10($beaconLevels[i]+1));
-            }
+            $wallet['beacons'] = ($wallet['beacons'] || 0) + 
+                ($beaconUpgrades[1]['formula']($beaconUpgradeLevels[1]));
+
             locks.delete(i);
         }
     }

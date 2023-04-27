@@ -216,11 +216,12 @@ export const miningUpgrades = array([{
     cost: {
         orbs: 1000,
         key1: 50,
-        key2: 0.25
+        key2: 0.25,
+        key3: 0.004
     },
-    ratio: 1.15,
+    ratio: 1.2,
     unlockAt: () => (get(miningUpgradeLevels)[3] > 0),
-    formula: (lv: any) => (1 + Math.pow(lv, 0.5)*0.1),
+    formula: (lv: any) => (1 + lv * 0.1),
     isPercent: false,
     suffix: 'x keys',
     maxLevel: 100,
@@ -343,32 +344,13 @@ export const miningUpgrades = array([{
     ratio: 1.6,
     unlockAt: () => (get(wallet)['fame'] > 0),
     formula: (lv: any) => (lv === 0 ? 1 
-        : 1 + lv * (1.33e-6*formula.calcMineQuality(get(enchantUpgradeLevels)[1]))),
+        : 1 + lv * (1.33e-5*formula.calcMineQuality(get(enchantUpgradeLevels)[1]))),
     isPercent: true,
     suffix: ' chance for fame gain',
     maxLevel: 40,
     isFame: true,
     notes: ''
 },
-{
-    name: 'Lootmaster III',
-    description: 'Unlocks a new tier of findable drops.',
-    cost: {
-        fame: 7.5e6,
-        beacons: 1e6,
-        sigils: 10000,
-        key3: 10
-    },
-    ratio: 1.6,
-    unlockAt: () => (get(wallet)['fame'] > 0 && get(miningUpgradeLevels)[9] > 0.003),
-    formula: (lv: any) => (0),
-    isPercent: true,
-    suffix: ' (no bonus)',
-    maxLevel: 1,
-    isFame: true,
-    notes: ''
-},
-// i = 15
 {
     name: 'Lootmaster III',
     description: 'Unlocks a new tier of findable drops.',
@@ -403,6 +385,39 @@ export const miningUpgrades = array([{
     maxLevel: 1,
     isFame: true,
     notes: 'index 15'
+},
+{
+    name: 'Legendary',
+    description: 'Increases fame gain on relocation.',
+    cost: {
+        gems: 1e7,
+
+    },
+    ratio: 1.5,
+    unlockAt: () => (get(wallet)['totalFame'] > 200),
+    formula: (lv: any) => (1 + (lv * 0.13)),
+    isPercent: true,
+    suffix: '  fame bonus',
+    maxLevel: 100,
+    isFame: false,
+    notes: 'index 16'
+},
+// i = 17
+{
+    name: 'Legendary II',
+    description: 'Increases fame gain on relocation.',
+    cost: {
+        gold: 1e6,
+
+    },
+    ratio: 1.5,
+    unlockAt: () => (get(wallet)['totalFame'] > 200),
+    formula: (lv: any) => (1 + (lv * 0.13)),
+    isPercent: true,
+    suffix: '  fame bonus',
+    maxLevel: 100,
+    isFame: false,
+    notes: 'index 16'
 },
 
 ]);

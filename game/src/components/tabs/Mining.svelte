@@ -7,7 +7,7 @@
           pointer-events-none'>
           <!-- Drop Table Display -->
           
-          {#each Object.entries($miningDropTable) as drop}
+          {#each Object.entries($miningDropTable).sort((a,b) => b[1][0] - a[1][0]) as drop}
             {#if $visibleTier >= ref.dropTiers[drop[0]]}
             <div class='drop-table-disp grid grid-cols-9'>
                 <div class='col-span-1 text-left {ref.dropTierColors[ref.dropTiers[drop[0]]] ||'text-white'}'>
@@ -101,6 +101,7 @@ import ref from '../../calcs/ref'
 $: mineBarWidth = `${$progress['gems'] / $progressThreshold['gems'] * 100}%`;
 $: key1BarWidth = `${$progress['key1'] / $progressThreshold['key1'] * 100}%`;
 $: key2BarWidth = `${$progress['key2'] / $progressThreshold['key2'] * 100}%`;
+$: mDropTable = Object.entries($miningDropTable)
 
 // for triggering #key
 let clockr = false;
@@ -109,6 +110,9 @@ onMount(() => {
     const clock = setInterval(() => {
         clockr = !clockr;
     })
+    const updateDropTable = setInterval(() => {
+        mDropTable = Object.entries($miningDropTable).sort((a,b) => b[1][0] - a[1][0]);
+    }, 5000)
 })
 
 const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']

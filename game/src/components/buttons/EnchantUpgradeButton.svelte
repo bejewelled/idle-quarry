@@ -5,9 +5,9 @@
 <div on:click={() => buy(index)}
 class='has-tooltip tooltip-text 
 {index < 2 ? (affordable || 
-($enchantUpgradeLevels[index] < $enchantUpgrades[index]['maxLevel'] && $enchantUpgradeLevels[index] > 0) ?
+($enchantUpgradeLevels[index] < $enchantUpgrades[index]['maxLevel']) ?
  'game-btn rainbow-effect' : 'game-btn-noafford rainbow-effect') :
- (affordable && ($enchantUpgradeLevels[index] < $enchantUpgrades[index]['maxLevel'] && $enchantUpgradeLevels[index] > 0)  ?
+ (affordable && ($enchantUpgradeLevels[index] < $enchantUpgrades[index]['maxLevel'])  ?
  'game-btn-encht' + $enchantUpgrades[index]['tier'] : 'game-btn-encht' + $enchantUpgrades[index]['tier'] + '-noafford')}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],0)} / {f($enchantUpgrades[index]['maxLevel'],0)}]

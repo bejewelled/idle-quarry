@@ -11,10 +11,10 @@
         </div>
         {#each [1,2,3,4,5] as i}
             <div class='col-span-1 py-1 {ref.colors['key' + i]}'>
-                {$wallet['key'+i] > 0 || $visibleTier >= i ? ref.keyMainNames[i]: '?????'}
+                {$wallet['key'+i] >= 1 || $visibleTier >= i ? ref.keyMainNames[i]: '?????'}
             </div>
                 <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
-                    {f.f($wallet['key' + i])}
+                    {f.f(Math.floor($wallet['key' + i]))}
                 </div>
                 <div class='has-tooltip tooltip-text 
                     game-btn py-2 items-center text-center 
@@ -48,7 +48,7 @@
                                 </div>
                                 <div class='col-span-7 text-center pl-1'>
                                     There are <span class='text-white font-bold'>
-                                        {Object.entries(dropTable).length
+                                        {Object.entries(dropTable[i-1]).length
                                         - $keyItemsUnlocked['key'+i].size} </span>
                                     more items that can drop from this key.
                                 </div>

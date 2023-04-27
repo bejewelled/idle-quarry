@@ -3,9 +3,9 @@
     <div class='col-span-12'>Relocate to a new mine and gain
         fame based on your past success.
     </div>
-    <div class='col-span-12'>Relocating resets all previous resources and upgrades. 
-        Keys are not removed.
+    <div class='col-span-12'>Relocating resets all previous resources and upgrades.
     </div>
+    <div class='col-span-12'>High-tier keys are not reset.</div>
     <div class='col-span-12 py-1'>You will gain 
         <span class='text-orange-400 font-bold'>{f(Math.floor(calcFameGain()),0)}</span> fame by relocating.</div>
     <div class='col-span-12 py-1'><hr /></div> 
@@ -72,7 +72,7 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     settings, visibleTier, progressThisTick, progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources,
      keysOpened, unlockedRes, beaconUpgradeLevels, flags, 
-     enchantUpgradeLevels, enchantProgress} from '../../data/player';
+     enchantUpgradeLevels, enchantProgress, automationItemsUnlocked} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
@@ -147,13 +147,24 @@ const fameGridInfo = [
      colorRef: 'beacons',
      criteria: () => ($wallet['beacons'] > 0 || formula.sumArray($beaconLevels) > 0)
     },
+    {
+     name: 'Legendary Upgrade', 
+     value: () => ($miningUpgrades[16]['formula']($miningUpgradeLevels[16]) 
+        * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])),
+     colorRef: '',
+     criteria: () => ($wallet['totalFame'] > 200)
+    },
 ]
 
 function calcFameGain() {
-    return formula.sumArray(fameGainKeys) * fameMultiGems * fameMultiBeaconLevels;
+    return formula.sumArray(fameGainKeys) 
+    * fameMultiGems 
+    * fameMultiBeaconLevels
+    * $miningUpgrades[16]['formula']($miningUpgradeLevels[16])
+    * $miningUpgrades[17]['formula']($miningUpgradeLevels[17]);
 }
 
-const walletResetItems = ['gems', 'gold', 'orbs', 'beacons']
+const walletResetItems = ['gems', 'gold', 'orbs', 'beacons', 'key1', 'key2']
 const resourceResetItems = ['beaconPower']
 function relocate() {
     if (calcFameGain() >= 5) {
@@ -165,8 +176,10 @@ function relocate() {
 
             // reset stuff
             $visibleTier = 1;
-            for (let i of walletResetItems) {
-                $wallet[i] = 0;
+            if (!$automationItemsUnlocked['omnipotent']) {
+                for (let i of walletResetItems) {
+                    $wallet[i] = 0;
+                }
             }
             for (let i of resourceResetItems) {
                 $resources[i] = 0;
@@ -192,6 +205,16 @@ function relocate() {
                 if (!$miningUpgrades[i]['isFame']) $miningUpgradeLevels[i] = 0;
             }
             $beaconUpgradeLevels = Array($beaconUpgradeLevels.length).fill(0);
+
+            if ($automationItemsUnlocked['jumpstart']) {
+                $wallet['gems'] = 500;
+                $wallet['gold'] = 100;
+            }
+            if ($automationItemsUnlocked['deep pockets']) {
+                $miningUpgradeLevels[6] = 1;
+                $miningUpgradeLevels[8] = 1;
+                $visibleTier = 3;
+            }
         }
     }
 }

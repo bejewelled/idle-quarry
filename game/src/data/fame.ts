@@ -155,7 +155,7 @@ export const enchantUpgrades = array([{
         fame: 10,
     },
     ratio: 1.25,
-    formula: (lv: any) => lv + 10,
+    formula: (lv: any) => (lv*lv) + 10,
     unlockAt: () => (true),
     isPercent: false,
     suffix: ' quality rating',
@@ -200,6 +200,36 @@ export const enchantUpgrades = array([{
 
 
 export const automationUpgrades = array([{
+    name: 'Jumpstart',
+    description: 'Start with 500 gems and 100 gold.',
+    cost: {
+        fame: 1600,
+    },
+    unlockAt: () => (get(wallet)['fame'] >= 1),
+    isPercent: true,
+    suffix: ' chance',
+},
+{
+    name: 'Deep Pockets',
+    description: 'Permanently unlock Lootmaster I and II.',
+    cost: {
+        fame: 15000,
+    },
+    unlockAt: () => (get(wallet)['fame'] >= 1),
+    isPercent: true,
+    suffix: ' chance',
+},
+{
+    name: 'Omnipotent',
+    description: 'Mining upgrades are not reset on relocation',
+    cost: {
+        fame: 50000,
+    },
+    unlockAt: () => (get(wallet)['fame'] >= 1),
+    isPercent: true,
+    suffix: ' chance',
+},
+{
     name: 'Key Slayer',
     description: 'Automatically opens keys every few seconds.',
     cost: {

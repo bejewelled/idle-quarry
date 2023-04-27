@@ -8,26 +8,28 @@
         <div class='px-2 res-display col-span-3'>
             <div class='res-display-space py-2'></div>
             <div class='res-display-wrap grid grid-cols-12'>
+            {#each [1,2,3] as i}
                 {#each Object.entries($wallet) as res}
-                    {#if $wallet[res[0]] && !res[0].includes('key') && res[0] !== 'fame'}   
+                    {#if $wallet[res[0]] && $wallet[res[0]] >= 1 && !res[0].includes('key') && !ref.walletExclude[res[0]]
+                    && (ref.dropTiers[res[0]] || ref.dropTiers['default']) == i}   
                         <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
                         <div class='game-text res-amount col-span-5'>{f(Math.floor(res[1]),0)}</div>
                     {/if}
                 {/each}
                 <div class='res-break py-2 col-span-12'></div>
-                {#each Object.entries($wallet) as res}
-                    {#if $wallet[res[0]] && !res[0].includes('key') && res[0] === 'fame'}   
-                        <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
-                        <div class='game-text res-amount col-span-5'>{f(Math.floor(res[1]),0)}</div>
-                    {/if}
-                 {/each}
-                <div class='res-break py-2 col-span-12'></div>
-                {#each Object.entries($wallet) as res}
-                    {#if ($wallet[res[0]] || $unlockedRes.has(res[0])) && res[0].includes('key') && $wallet[res[0]] > 1}   
-                        <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
-                        <div class='game-text res-amount col-span-5'>{f(Math.floor(res[1]),0)}</div>
-                    {/if}
-                {/each}
+            {/each}
+            <!-- keys -->
+            {#each Object.entries($wallet) as res}
+                {#if ($wallet[res[0]] || $unlockedRes.has(res[0])) && res[0].includes('key') }   
+                    <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
+                    <div class='game-text res-amount col-span-5'>{f(Math.floor(res[1]),0)}</div>
+                {/if}
+            {/each}
+                <div class='alog-break pt-4 col-span-12'></div>
+                <div class='alog-title game-text col-span-9'>Activity Log</div>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class='alog-minimize col-span-3 game-btn text-center game-text'
+                on:click= {() => toggleAlog()}>{alogShow ? "-" : "+"}</div>
              </div>
         </div>
 
@@ -89,7 +91,7 @@ import Decimal from 'break_infinity.js'
 import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes, 
     progress, keysOpened, keyItemsUnlocked, settings, baseMiningDropTable,
     visibleTier, beaconProgress, beaconLevels, beaconUpgradeLevels,
-    resources, beaconActivations, flags, enchantUpgradeLevels} from '../data/player.js'
+    resources, beaconActivations, flags, enchantUpgradeLevels, activityLog} from '../data/player.js'
 import {beaconNextReqs, beaconSpendAmt} from '../data/beacons.ts'
 import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
@@ -110,6 +112,12 @@ let AUTOSAVE_INTERVAL = 30000;
 let saveConfirm;
 let buyAmount = 1;
 let loadingFinished = false;
+let alogShow = true;
+
+const toggleAlog = () => {
+    alogShow = !alogShow;
+    //$settings['alogShow'] = alogShow;
+}
 
 const changeTab = (t: string) => {
     tab = t;
@@ -233,7 +241,8 @@ const load = async () => {
     }
 
     // increase mining drop tier if needed
-    if ($miningUpgradeLevels[6] > 0) $visibleTier++;
+    if ($miningUpgradeLevels[6] > 0) $visibleTier = 2;
+    if ($miningUpgradeLevels[9] > 0) $visibleTier = 3;
     if (localStorage.getItem('settings')) {
         settings.set(JSON.parse(localStorage.getItem('settings')));
         buyAmount = $settings['buyAmount'];

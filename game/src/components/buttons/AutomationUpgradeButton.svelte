@@ -99,7 +99,7 @@ select-none'>{$automationUpgrades[index]['name']}
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1) $wallet[type] -= val;
         }
-        $automationItemsUnlocked[$automationUpgrades[index]['id']] = true;
+        $automationItemsUnlocked[$automationUpgrades[index]['name'].toLowerCase()] = true;
     }
 
     function canAfford() {

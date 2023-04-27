@@ -232,15 +232,15 @@ export const beaconUpgrades = array([{
 },
 {
     name: 'Shining Light',
-    description: 'Every 10 levels gained in a path gives beacons.',
+    description: 'Each level in a beacon path gives beacons.',
     cost: {
         beaconPower: 100000,
     },
     ratio: 2.5,
-    formula: (lv: any) => 0.75*lv,
+    formula: (lv: any) => 0.1*lv,
     isPercent: false,
     prefix: '+',
-    suffix: ' *[log10(path level)]',
+    suffix: ' beacons per level',
     maxLevel: 100,
     notes: '0.25*lv until 36, (lv-36)*0.025 until 916, sqrt(lv-916)*0.025 after'
 },
