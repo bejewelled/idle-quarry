@@ -15,7 +15,8 @@ import {progress, miningUpgradeLevels, wallet, miningDropTable,
     beaconActivations, beaconLevels, beaconProgress, resources, 
     beaconUpgradeLevels, enchantProgress, enchantUpgradeLevels, 
     automationItemsUnlocked, activityLog} from '../../data/player'
-import {beaconFormulas, beaconBonuses, beaconNextReqs, beaconNums, beaconUpgrades, beaconPowerFlavorText} from '../../data/beacons'
+import {beaconFormulas, beaconBonuses, beaconNextReqs, 
+    beaconNums, beaconUpgrades, beaconPowerFlavorText, beaconNameText} from '../../data/beacons'
 import {enchantUpgrades, enchantThreshold} from '../../data/fame'
 import ref from '../../calcs/ref'
 import formula from '../../calcs/formula'
@@ -268,8 +269,10 @@ function addBeaconProgress(delta) {
             // update formulas as needed
             $beaconBonuses[i] = $beaconFormulas[i]($beaconLevels[i]);
             // update next reqs
-            $beaconNextReqs[i] = ($beaconNums[i][0] * $beaconLevels[i])
-            * Math.pow($beaconNums[i][1],$beaconLevels[i]);
+
+            // EDIT WITH CAUTION!! Do not cause an overflow (>1e308) at high levels
+            const EXP_MULTI = 1.00005 
+            $beaconNextReqs[i] = ($beaconNums[i][0] * $beaconLevels[i]) * 1.00005;
             if (Date.now() - lastDropTableUpdate > 1000) {
                 lastDropTableUpdate = Date.now();
                 miningDropTable.updateTable();
@@ -277,7 +280,11 @@ function addBeaconProgress(delta) {
 
             $wallet['beacons'] = ($wallet['beacons'] || 0) + 
                 ($beaconUpgrades[1]['formula']($beaconUpgradeLevels[1]));
-
+            // addToActivityLog('[B] ' + $beaconNameText[i] + ' [' + $beaconLevels[i] + ']', 
+            // i > 7 ? 'text-red-400'    :
+            // i > 5 ? 'text-orange-400' :
+            // i > 2 ? 'text-yellow-400' :
+            // 'text-green-400')
             locks.delete(i);
         }
     }

@@ -209,7 +209,7 @@ export const beaconNums = array(
     .concat(Array(2).fill([9e8, 1.0012])
     .concat(Array(2).fill([2.7e10, 1.0016])))))
 
-export const beaconMaxLevels = array([1.6e6, 1.6e6, 1.6e6, 8e5, 8e5, 8e5, 4e5, 4e5, 2e5, 2e5])
+export const beaconMaxLevels = array(Array(10).fill(1e7))
 
 
 
@@ -237,7 +237,7 @@ export const beaconUpgrades = array([{
         beaconPower: 100000,
     },
     ratio: 2.5,
-    formula: (lv: any) => 0.1*lv,
+    formula: (lv: any) => 0.025*lv,
     isPercent: false,
     prefix: '+',
     suffix: ' beacons per level',

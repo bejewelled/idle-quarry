@@ -1,5 +1,5 @@
 <div class='wrapper py-2'>
-    <div class='fame-upgrade-wrapper grid grid-cols-2 pt-2'>
+    <div class='fame-upgrade-wrapper grid grid-cols-2'>
         {#each Object.entries($enchantUpgrades) as upgrade,i}
             {#if i < 2}
             <div class='py-1 col-span-1 mine-upgrade-button-wrapper'>

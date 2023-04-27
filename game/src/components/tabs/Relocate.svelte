@@ -1,4 +1,4 @@
-<div class='wrapper py-2'>
+<div class='wrapper pt-1'>
 <div class='grid grid-cols-12 game-text text-center'>
     <div class='col-span-12'>Relocate to a new mine and gain
         fame based on your past success.
@@ -26,13 +26,13 @@
     <!-- display for keys -->
     <div class='col-span-3 game-text text-left py-1'>Keys Used: </div>
     <div class='col-span-1 py-1 game-text text-right'>
-        <span class=''>+{f(formula.sumArray(fameGainKeys), 3)}</span>
+        <span class=''>+{f(formula.productArray(fameGainKeys), 3)}</span>
     </div>
-    <div class='col-span-8 game-text text-left px-2 py-1'>
+    <div class='col-span-8 game-text text-center px-2 py-1'>
         [ 
         {#each $keysOpened as k, i}
             <span class='{ref.colors['key'+((i+1).toString())]}'>
-                {" " + f(fameGainKeys[i],2)} </span> {#if i+1 < $keysOpened.length}+{/if} 
+                {" " + f(fameGainKeys[i],2)} </span> {#if i+1 < $keysOpened.length}*{/if} 
         {/each}
          ]
     </div>
@@ -106,6 +106,7 @@ onMount(() => {
     }, 100)
     reloadNumbers = setInterval(() => {
         reloadClock= !reloadClock;
+        console.log(formula.productArray(fameGainKeys))
     }, 1049)
 })
 
@@ -132,7 +133,7 @@ const fpf = (n: unknown, subOne = false) => {
 const fameGridInfo = [
     {
      name: 'Keys Used',
-     value: () => formula.sumArray(fameGainKeys || []),
+     value: () => formula.productArray(fameGainKeys || []),
      criteria: true
     },
     {
@@ -157,7 +158,7 @@ const fameGridInfo = [
 ]
 
 function calcFameGain() {
-    return formula.sumArray(fameGainKeys) 
+    return formula.productArray(fameGainKeys) 
     * fameMultiGems 
     * fameMultiBeaconLevels
     * $miningUpgrades[16]['formula']($miningUpgradeLevels[16])
@@ -207,7 +208,7 @@ function relocate() {
             $beaconUpgradeLevels = Array($beaconUpgradeLevels.length).fill(0);
 
             if ($automationItemsUnlocked['jumpstart']) {
-                $wallet['gems'] = 500;
+                $wallet['gems'] = 5000;
                 $wallet['gold'] = 100;
             }
             if ($automationItemsUnlocked['deep pockets']) {

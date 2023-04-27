@@ -217,7 +217,7 @@ export const baseMiningDropTable = dropTable({
     beacons: [0.005,1,1],
     key2: [0.00075,1,1],
     key3: [1e-6,1,1],
-    sigils: [0.025,1,3]
+    sigils: [0.0003,1,3]
 });
 
 export const miningDropTable = dropTable({

@@ -30,11 +30,20 @@
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class='alog-minimize col-span-3 game-btn text-center game-text'
                 on:click= {() => toggleAlog()}>{alogShow ? "-" : "+"}</div>
+                <div class="alog-cont col-span-12 h-64 relative">
+                    <div class="scrollable-area absolute inset-0 overflow-y-auto">
+                        {#if alogShow}
+                            {#each $activityLog.slice().reverse() as a}
+                            <div class='alog-text text-small {a[1]} col-span-12'>{a[0]}</div>
+                            {/each}
+                        {/if}
+                    </div>
+                </div>
              </div>
         </div>
 
-        <div class='px-2 py-2 main-panel col-span-7 grid grid-rows-12'>
-            <div class='py-1 row-span-2 control-buttons'>
+        <div class='px-2 py-2 main-panel col-span-7 flexbox'>
+            <div class='py-1 control-buttons resize-none'>
                 <button class='py-1 text-small save-btn control-btn {saveConfirm ? 'bg-green-400' : ''}' on:click={() => save()}>Save</button>
                 <button class='py-1 text-small save-btn control-btn' on:click={() => reset()}>Reset</button>
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>   
@@ -44,7 +53,7 @@
                       pointer-events-none'>{tabHelpText[tab] || 'Help coming soon!'}</span>
                 </button>
             </div>
-            <div class='row-span-2 tab-buttons'>
+            <div class='row-span-1 tab-buttons'>
                 {#key tabsUnlocked}
                 {#each ref.tabs as t}
                     <button class='px-1 py-1 text-small 
@@ -414,14 +423,10 @@ onMount(() => {
     }
     :global(.tooltip) {
       @apply invisible absolute;
+      display: none;
     }
     :global(.has-tooltip:hover .tooltip) {
       @apply visible z-50;
+      display: block;
     }  
-    .tooltip {
-    @apply invisible absolute;
-  }
-     .has-tooltip:hover .tooltip {
-    @apply visible z-50;
-  }
 </style>

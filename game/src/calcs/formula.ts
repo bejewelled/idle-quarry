@@ -27,9 +27,13 @@ export default class formula {
     static sumArray(array: Array<number>) {
         return array.reduce((sum, value) => sum + value, 0);
       }
+
+    static productArray(array: Array<number>) {
+        return array.reduce((sum, value) => sum * value, 1);
+      }
     
     static calcFameGainKeys(array: Array<number>) { 
-        const f = array.map((x,i) => Math.pow(Math.pow(i+1, 3)*(x/Math.max(10,(250 - i*50))),0.7));
+        const f = array.map((x,i) => 1 + Math.pow((i+1)*(i+1)*(x/150),0.7));
         return f;
     }
 

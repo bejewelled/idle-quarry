@@ -201,7 +201,7 @@ export const enchantUpgrades = array([{
 
 export const automationUpgrades = array([{
     name: 'Jumpstart',
-    description: 'Start with 500 gems and 100 gold.',
+    description: 'Start with 5000 gems and 100 gold.',
     cost: {
         fame: 1600,
     },
@@ -213,7 +213,7 @@ export const automationUpgrades = array([{
     name: 'Deep Pockets',
     description: 'Permanently unlock Lootmaster I and II.',
     cost: {
-        fame: 15000,
+        fame: 8000,
     },
     unlockAt: () => (get(wallet)['fame'] >= 1),
     isPercent: true,
