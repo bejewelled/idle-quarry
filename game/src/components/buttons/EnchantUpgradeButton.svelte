@@ -1,40 +1,40 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-{#key permUnlocked || affordable || $fameUpgradeLevels[index] > 0}
-{#if $fameUpgrades[index]['unlockAt']() || permUnlocked || $fameUpgradeLevels[index] > 0}
+{#key permUnlocked || affordable || $enchantUpgradeLevels[index] > 0}
+{#if $enchantUpgrades[index]['unlockAt']() || permUnlocked || $enchantUpgradeLevels[index] > 0}
 <div on:click={() => buy(index)}
 class='has-tooltip tooltip-text 
 {index < 2 ? (affordable || 
-($fameUpgradeLevels[index] < $fameUpgrades[index]['maxLevel'] && $fameUpgradeLevels[index] > 0) ?
+($enchantUpgradeLevels[index] < $enchantUpgrades[index]['maxLevel'] && $enchantUpgradeLevels[index] > 0) ?
  'game-btn rainbow-effect' : 'game-btn-noafford rainbow-effect') :
- (affordable && ($fameUpgradeLevels[index] < $fameUpgrades[index]['maxLevel'] && $fameUpgradeLevels[index] > 0)  ?
- 'game-btn-encht' + $fameUpgrades[index]['tier'] : 'game-btn-encht' + $fameUpgrades[index]['tier'] + '-noafford')}
+ (affordable && ($enchantUpgradeLevels[index] < $enchantUpgrades[index]['maxLevel'] && $enchantUpgradeLevels[index] > 0)  ?
+ 'game-btn-encht' + $enchantUpgrades[index]['tier'] : 'game-btn-encht' + $enchantUpgrades[index]['tier'] + '-noafford')}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
-select-none'>{$fameUpgrades[index]['name']} [{f($fameUpgradeLevels[index],0)} / {f($fameUpgrades[index]['maxLevel'],0)}]
+select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],0)} / {f($enchantUpgrades[index]['maxLevel'],0)}]
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
          <div class='title text-small-gray items-start text-center pb-1'>
-            {$fameUpgrades[index]['description']}
+            {$enchantUpgrades[index]['description']}
         </div>
         <div class='text-center effect-wrapper'>
             <div class='tooltip-text-xs text-[#cccccc]'>
                  <span class='current text-[#cccccc]'>
-                    {$fameUpgrades[index]['prefix'] || ""}{$fameUpgrades[index]['isPercent'] ?
-                    fp($fameUpgrades[index]['formula']($fameUpgradeLevels[index]),3, false) :
-                    f($fameUpgrades[index]['formula']($fameUpgradeLevels[index]),3)}{$fameUpgrades[index]['suffix'] || ""}
+                    {$enchantUpgrades[index]['prefix'] || ""}{$enchantUpgrades[index]['isPercent'] ?
+                    fp($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]),3, false) :
+                    f($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]),3)}{$enchantUpgrades[index]['suffix'] || ""}
                  </span>
                  <span class='current text-[#999999]'>  => 
-                    {$fameUpgrades[index]['prefix'] || ""}{$fameUpgrades[index]['isPercent'] ?
-                   fp($fameUpgrades[index]['formula']($fameUpgradeLevels[index]+$settings['buyAmount']),3, false) :
-                   f($fameUpgrades[index]['formula']($fameUpgradeLevels[index]+$settings['buyAmount']),3)}{$fameUpgrades[index]['suffix'] || ""}
+                    {$enchantUpgrades[index]['prefix'] || ""}{$enchantUpgrades[index]['isPercent'] ?
+                   fp($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]+$settings['buyAmount']),3, false) :
+                   f($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]+$settings['buyAmount']),3)}{$enchantUpgrades[index]['suffix'] || ""}
                  </span>
 
             </div>
         </div>
         <hr />
         <div class='pt-1 cost items-start text-center grid grid-cols-4'>
-            {#if $fameUpgradeLevels[index] >= $fameUpgrades[index]['maxLevel']}
+            {#if $enchantUpgradeLevels[index] >= $enchantUpgrades[index]['maxLevel']}
                 <div class='col-span-4 text-[#999999]'>This upgrade is at max level.</div>
             {:else}
             {#each Object.entries(costs) as c}
@@ -58,37 +58,37 @@ select-none'>{$fameUpgrades[index]['name']} [{f($fameUpgradeLevels[index],0)} / 
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
-    import { progress, wallet, fameUpgradeLevels, miningDropTable,
+    import { progress, wallet, enchantUpgradeLevels, miningDropTable,
          settings, visibleTier, unlockedRes} from '../../data/player';
     import {progressThreshold, progressPerTick } from '../../data/mining';
-    import { fameUpgrades } from '../../data/fame';
+    import { enchantUpgrades } from '../../data/fame';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
 // @ts-nocheck
     export let index;
     let getCosts = () => {
         let c = {};
-        for (let [type, base] of Object.entries($fameUpgrades[index]['cost'])) {
+        for (let [type, base] of Object.entries($enchantUpgrades[index]['cost'])) {
             c[type] = cost(base);
         }
         return c;
     }
     let costs = {};
     let affordable, unlocked;
-    let permUnlocked = ($fameUpgradeLevels[index] > 0)
+    let permUnlocked = ($enchantUpgradeLevels[index] > 0)
     let affordInterval;
     
     onMount(() => {
         setTimeout(() => {
             costs = getCosts();
             affordable = canAfford();
-            if ($fameUpgrades[index]['unlockAt']()) permUnlocked = true;
-            permUnlocked = ($fameUpgradeLevels[index] > 0)
+            if ($enchantUpgrades[index]['unlockAt']()) permUnlocked = true;
+            permUnlocked = ($enchantUpgradeLevels[index] > 0)
         }, 50)
         affordInterval = setInterval(() => {
             affordable = canAfford();
             unlocked = isUnlocked();
-            if ($fameUpgrades[index]['unlockAt']()) permUnlocked = true;
+            if ($enchantUpgrades[index]['unlockAt']()) permUnlocked = true;
         }, 100 + (Math.random() * 20))
     })
 
@@ -107,8 +107,8 @@ select-none'>{$fameUpgrades[index]['name']} [{f($fameUpgradeLevels[index],0)} / 
 }
 
     function cost(start) {
-       const base = start * Math.pow($fameUpgrades[index]['ratio'], $fameUpgradeLevels[index]);  
-       const r =  $fameUpgrades[index]['ratio']
+       const base = start * Math.pow($enchantUpgrades[index]['ratio'], $enchantUpgradeLevels[index]);  
+       const r =  $enchantUpgrades[index]['ratio']
        const l = $settings['buyAmount']
 
        return formula.gSum(base,r,l)
@@ -124,7 +124,7 @@ select-none'>{$fameUpgrades[index]['name']} [{f($fameUpgradeLevels[index],0)} / 
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1) $wallet[type] -= val;
         }
-        $fameUpgradeLevels[index] += $settings['buyAmount'];
+        $enchantUpgradeLevels[index] += $settings['buyAmount'];
         costs = getCosts();
         permUnlocked = true;
     }
@@ -140,7 +140,7 @@ select-none'>{$fameUpgrades[index]['name']} [{f($fameUpgradeLevels[index],0)} / 
     }
 
     function isUnlocked() {
-        for (let [type, val] of Object.entries($fameUpgrades[index]['unlockAt'])) {
+        for (let [type, val] of Object.entries($enchantUpgrades[index]['unlockAt'])) {
             if ($wallet[type] < val) {
                 return false;
             }

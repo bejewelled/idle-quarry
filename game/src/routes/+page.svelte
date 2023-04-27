@@ -23,9 +23,9 @@
                  {/each}
                 <div class='res-break py-2 col-span-12'></div>
                 {#each Object.entries($wallet) as res}
-                    {#if ($wallet[res[0]] || $unlockedRes.has(res[0])) && res[0].includes('key')}   
+                    {#if ($wallet[res[0]] || $unlockedRes.has(res[0])) && res[0].includes('key') && $wallet[res[0]] > 1}   
                         <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
-                        <div class='game-text res-amount col-span-5'>{f(res[1],0)}</div>
+                        <div class='game-text res-amount col-span-5'>{f(Math.floor(res[1]),0)}</div>
                     {/if}
                 {/each}
              </div>
@@ -35,7 +35,13 @@
             <div class='py-1 row-span-2 control-buttons'>
                 <button class='py-1 text-small save-btn control-btn {saveConfirm ? 'bg-green-400' : ''}' on:click={() => save()}>Save</button>
                 <button class='py-1 text-small save-btn control-btn' on:click={() => reset()}>Reset</button>
-                <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>                           </div>
+                <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>   
+                <button class='has-tooltip py-1 px-1 text-small control-btn'>Help [{tab}]
+                    <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
+                    border-white border-double border bg-[#222529] ml-16
+                      pointer-events-none'>{tabHelpText[tab] || 'Help coming soon!'}</span>
+                </button>
+            </div>
             <div class='row-span-2 tab-buttons'>
                 {#key tabsUnlocked}
                 {#each ref.tabs as t}
@@ -83,7 +89,7 @@ import Decimal from 'break_infinity.js'
 import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes, 
     progress, keysOpened, keyItemsUnlocked, settings, baseMiningDropTable,
     visibleTier, beaconProgress, beaconLevels, beaconUpgradeLevels,
-    resources, beaconActivations, flags, fameUpgradeLevels} from '../data/player.js'
+    resources, beaconActivations, flags, enchantUpgradeLevels} from '../data/player.js'
 import {beaconNextReqs, beaconSpendAmt} from '../data/beacons.ts'
 import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
@@ -137,10 +143,10 @@ const tabUnlockCriteria = {
         sigils: () => ($wallet['sigils'] && $wallet['sigils'] > 0.02),
         relocate: () => (formula.sumArray($keysOpened) > 1000 || $wallet['fame']),
         enchants: () => ($wallet['fame'] && $wallet['fame'] >= 0.997) 
-                        || formula.sumArray($fameUpgradeLevels) > 0
+                        || formula.sumArray($enchantUpgradeLevels) > 0
                         || $miningUpgradeLevels[10] > 0 || $miningUpgradeLevels[11] > 0,
         automation: () => ($wallet['fame'] && $wallet['fame'] >= 0.997)
-                        || formula.sumArray($fameUpgradeLevels) > 0
+                        || formula.sumArray($enchantUpgradeLevels) > 0
                         || $miningUpgradeLevels[10] > 0 || $miningUpgradeLevels[11] > 0,
         default: () => false,
     }
@@ -178,7 +184,7 @@ const save = () => {
     // however, it is saved to prevent mismatches in beacon path levels on load
     localStorage.setItem('beaconNextReqs', JSON.stringify($beaconNextReqs));
     localStorage.setItem('flags', JSON.stringify($flags));
-    localStorage.setItem('fameUpgradeLevels', JSON.stringify($fameUpgradeLevels));
+    localStorage.setItem('enchantUpgradeLevels', JSON.stringify($enchantUpgradeLevels));
     localStorage.setItem('beaconSpendAmt', JSON.stringify($beaconSpendAmt));
 
     saveConfirm = true;
@@ -254,8 +260,8 @@ const load = async () => {
     if (localStorage.getItem('flags')) {
         flags.set(JSON.parse(localStorage.getItem('flags')));
     }
-    if (localStorage.getItem('fameUpgradeLevels')) {
-        fameUpgradeLevels.set(JSON.parse(localStorage.getItem('fameUpgradeLevels')));
+    if (localStorage.getItem('enchantUpgradeLevels')) {
+        enchantUpgradeLevels.set(JSON.parse(localStorage.getItem('enchantUpgradeLevels')));
     }
     // for (let i = 0; i < $beaconActivations.length; i++) {
     //     if (isNaN(i) || !i) $beaconActivations[i] = 0;
@@ -265,6 +271,14 @@ const load = async () => {
     if ($wallet['fame'] == null) $wallet['fame'] = 0;
 
     loadingFinished = true;
+}
+
+const tabHelpText = {
+    mining: "Each time the red progress bar fills up, gain gems and have a chance for additional drops. Use your currencies on upgrades to your mining rig.",
+    keys: "Use your found keys here! You unlock more information on drops after receiving at least one of the respective item from the respective key.",
+    beacons: "Allocate beacons into paths, leveling them up over time and gaining bonuses. Each color requires drastically more power than the previous one, so you'll need to work up to the later paths. \n You gain beacon power based on your beacon levels.",
+    enchants: "Mine size and Mine quality affect many things, not just enchants! Make sure to check tooltips. \n When the enchant bar of each respective color fills, there's a chance for all enchants of the same color as the bar to fire (chance shown on tooltips), giving a very powerful bonus. Upgrade your enchants to increase the proc chance.",
+    relocate: "Reset to gain fame. Fame can be spent on powerful mining upgrades and enchants. It's recommended for your first relocation to gain at least 25 fame, which should take about 1-2 hours.",
 }
 
 onMount(() => {
@@ -394,5 +408,11 @@ onMount(() => {
     }
     :global(.has-tooltip:hover .tooltip) {
       @apply visible z-50;
-    }
+    }  
+    .tooltip {
+    @apply invisible absolute;
+  }
+     .has-tooltip:hover .tooltip {
+    @apply visible z-50;
+  }
 </style>

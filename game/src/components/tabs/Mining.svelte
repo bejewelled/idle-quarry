@@ -9,9 +9,9 @@
           
           {#each Object.entries($miningDropTable) as drop}
             {#if $visibleTier >= ref.dropTiers[drop[0]]}
-            <div class='drop-table-disp grid grid-cols-10'>
+            <div class='drop-table-disp grid grid-cols-9'>
                 <div class='col-span-1 text-left {ref.dropTierColors[ref.dropTiers[drop[0]]] ||'text-white'}'>
-                [ {romanNumerals[Math.max(0,ref.dropTiers[drop[0]]-1)]} ]
+                [{romanNumerals[Math.max(0,ref.dropTiers[drop[0]]-1)]}]
                 </div>
                 <div class='col-span-3 text-left pl-[8px] {ref.colors[drop[0]] || 'text-white'}'>
                     {ref.displayNames[drop[0]] || drop[0]}
@@ -19,7 +19,7 @@
                 <div class='col-span-3 text-left pl-1'>
                     {fpf(drop[1][0])}
                 </div>
-                <div class='col-span-3 text-right pl-1'>
+                <div class='col-span-2 text-right pl-1'>
                    [ {f(drop[1][1], 0)} - {f(drop[1][2], 0)} ]
                 </div>
             </div>

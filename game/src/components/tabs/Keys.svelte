@@ -25,7 +25,7 @@
                         border-white border-double border bg-[#222529] ml-8
                         pointer-events-none'>
                         <!-- Drop Table Display -->
-                        {#each Object.entries(get(eval('key'+i+'DropTable')) || {}) as drop}
+                        {#each Object.entries(dropTable[i-1]) as drop}
                             {#if $keyItemsUnlocked['key'+i].has(drop[0])}
                             <div class='drop-table-disp grid grid-cols-10'>
                                 <div class='col-span-3 text-left pl-[8px] {ref.colors[drop[0]] || 'text-white'}'>
@@ -48,7 +48,7 @@
                                 </div>
                                 <div class='col-span-7 text-center pl-1'>
                                     There are <span class='text-white font-bold'>
-                                        {Object.entries(get(eval('key'+i+'DropTable'))).length
+                                        {Object.entries(dropTable).length
                                         - $keyItemsUnlocked['key'+i].size} </span>
                                     more items that can drop from this key.
                                 </div>
@@ -111,6 +111,20 @@ import { f } from '../../data/format';
 import ref from '../../calcs/ref';
 import KeyOpenButton  from '../buttons/KeyOpenButton.svelte';
     import formula from '../../calcs/formula';
+
+
+$: dropTable = [
+   $key1DropTable,
+   $key2DropTable,
+   $key3DropTable,
+   $key4DropTable,
+   $key5DropTable
+];
+
+onMount(() => {
+    console.log(dropTable)
+
+})
 
 
 const fp = (n: unknown, pl = 3, subOne = false) => {

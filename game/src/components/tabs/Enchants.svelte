@@ -1,6 +1,6 @@
 <div class='wrapper py-2'>
     <div class='fame-upgrade-wrapper grid grid-cols-2 pt-2'>
-        {#each Object.entries($fameUpgrades) as upgrade,i}
+        {#each Object.entries($enchantUpgrades) as upgrade,i}
             {#if i < 2}
             <div class='py-1 col-span-1 mine-upgrade-button-wrapper'>
                  <EnchantUpgradeButton index={i}/>
@@ -28,8 +28,8 @@
     </div>
     <div class='py-2'>
         <div class='fame-upgrade-wrapper grid grid-cols-2 pt-2'>
-            {#each Object.entries($fameUpgrades) as upgrade,i}
-                {#if i >= 2 && $fameUpgrades[i]['unlockAt']()}
+            {#each Object.entries($enchantUpgrades) as upgrade,i}
+                {#if i >= 2 && $enchantUpgrades[i]['unlockAt']()}
                 <div class='py-1 col-span-1 mine-upgrade-button-wrapper'>
                      <EnchantUpgradeButton index={i}/>
                 </div>
@@ -49,14 +49,15 @@ import { onMount, onDestroy } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
     settings, visibleTier, progressThisTick, progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources,
-     keysOpened, unlockedRes, beaconUpgradeLevels, flags, fameUpgradeLevels} from '../../data/player';
+     keysOpened, unlockedRes, beaconUpgradeLevels, flags, 
+     enchantUpgradeLevels, enchantProgress} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import {beaconPower, beaconBonuses,
     beaconFormulas, beaconNums, beaconNextReqs, beaconSpendAmt ,
 beaconUpgrades, beaconNameText, baseBeaconNextReqs} from '../../data/beacons';
-import {fameUpgrades, enchantThreshold, enchantProgress} from '../../data/fame';
+import {enchantUpgrades, enchantThreshold} from '../../data/fame';
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
 import formula from '../../calcs/formula';

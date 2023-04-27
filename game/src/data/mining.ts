@@ -1,6 +1,6 @@
 
 import { writable, get } from 'svelte/store';
-import {wallet, miningUpgradeLevels, fameUpgradeLevels} from './player'
+import {wallet, miningUpgradeLevels, enchantUpgradeLevels} from './player'
 import formula from '../calcs/formula';
 import Decimal  from 'break_infinity.js';
 
@@ -294,7 +294,7 @@ export const miningUpgrades = array([{
     },
     ratio: 1.6,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + lv * (0.11*formula.calcMineSize(get(fameUpgradeLevels)[0]))),
+    formula: (lv: any) => (1 + lv * (0.11*formula.calcMineSize(get(enchantUpgradeLevels)[0]))),
     isPercent: true,
     prefix: '+',
     suffix: ' gem bonus',
@@ -310,7 +310,7 @@ export const miningUpgrades = array([{
     },
     ratio: 1.6,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + lv * (0.06*formula.calcMineQuality(get(fameUpgradeLevels)[1]))),
+    formula: (lv: any) => (1 + lv * (0.06*formula.calcMineQuality(get(enchantUpgradeLevels)[1]))),
     isPercent: false,
     suffix: 'x amount from drops',
     maxLevel: 40,
@@ -326,7 +326,7 @@ export const miningUpgrades = array([{
     },
     ratio: 1.6,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + Math.pow(lv,0.8) * (0.075*formula.calcMineSize(get(fameUpgradeLevels)[0]))),
+    formula: (lv: any) => (1 + Math.pow(lv,0.8) * (0.075*formula.calcMineSize(get(enchantUpgradeLevels)[0]))),
     isPercent: true,
     prefix: '+',
     suffix: ' beacon progress',
@@ -343,13 +343,32 @@ export const miningUpgrades = array([{
     ratio: 1.6,
     unlockAt: () => (get(wallet)['fame'] > 0),
     formula: (lv: any) => (lv === 0 ? 1 
-        : 1 + lv * (1.33e-6*formula.calcMineQuality(get(fameUpgradeLevels)[1]))),
+        : 1 + lv * (1.33e-6*formula.calcMineQuality(get(enchantUpgradeLevels)[1]))),
     isPercent: true,
     suffix: ' chance for fame gain',
     maxLevel: 40,
     isFame: true,
     notes: ''
 },
+{
+    name: 'Lootmaster III',
+    description: 'Unlocks a new tier of findable drops.',
+    cost: {
+        fame: 7.5e6,
+        beacons: 1e6,
+        sigils: 10000,
+        key3: 10
+    },
+    ratio: 1.6,
+    unlockAt: () => (get(wallet)['fame'] > 0 && get(miningUpgradeLevels)[9] > 0.003),
+    formula: (lv: any) => (0),
+    isPercent: true,
+    suffix: ' (no bonus)',
+    maxLevel: 1,
+    isFame: true,
+    notes: ''
+},
+// i = 15
 {
     name: 'Lootmaster III',
     description: 'Unlocks a new tier of findable drops.',

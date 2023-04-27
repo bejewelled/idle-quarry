@@ -261,6 +261,12 @@ export const beaconProgress = array(Array(30).fill(0))
 export const beaconUpgradeLevels = array(Array(20).fill(0))
 
 
-export const fameUpgradeLevels = array(Array(20).fill(0))
+export const enchantUpgradeLevels = array(Array(20).fill(0))
 
 export const automationItemsUnlocked = object({})
+
+export const enchantProgress = object({
+    t1: 0,
+    t2: 0,
+    t3: 0
+})

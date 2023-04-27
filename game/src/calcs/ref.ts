@@ -12,7 +12,8 @@ export default class ref {
         beacons: 'text-sky-400',
         beaconPower: 'text-cyan-300',
         fame: 'text-orange-400',
-        sigils: 'text-fuschia-600'
+        sigils: 'text-fuschia-600',
+        sigil: 'text-fuschia-600',
     }
 
     static displayNames = {

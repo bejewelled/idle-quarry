@@ -1,7 +1,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 {#key affordable}
-{#if $automationUpgrades[index]['unlockAt']() || permUnlocked || $fameUpgradeLevels[index] > 0}
+{#if $automationUpgrades[index]['unlockAt']() || permUnlocked || $enchantUpgradeLevels[index] > 0}
 <div on:click={() => buy(index)}
 class='has-tooltip tooltip-text 
 {affordable ?
@@ -41,10 +41,10 @@ select-none'>{$automationUpgrades[index]['name']}
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
-    import { progress, wallet, fameUpgradeLevels, miningDropTable,
+    import { progress, wallet, enchantUpgradeLevels, miningDropTable,
          settings, visibleTier, unlockedRes, automationItemsUnlocked} from '../../data/player';
     import {progressThreshold, progressPerTick } from '../../data/mining';
-    import { fameUpgrades, automationUpgrades } from '../../data/fame';
+    import { enchantUpgrades, automationUpgrades } from '../../data/fame';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
 // @ts-nocheck
@@ -58,20 +58,20 @@ select-none'>{$automationUpgrades[index]['name']}
     }
     let costs = {};
     let affordable, unlocked;
-    let permUnlocked = ($fameUpgradeLevels[index] > 0)
+    let permUnlocked = ($enchantUpgradeLevels[index] > 0)
     let affordInterval;
     
     onMount(() => {
         setTimeout(() => {
             costs = getCosts();
             affordable = canAfford();
-            if ($fameUpgrades[index]['unlockAt']()) permUnlocked = true;
-            permUnlocked = ($fameUpgradeLevels[index] > 0)
+            if ($enchantUpgrades[index]['unlockAt']()) permUnlocked = true;
+            permUnlocked = ($enchantUpgradeLevels[index] > 0)
         }, 50)
         affordInterval = setInterval(() => {
             affordable = canAfford();
             unlocked = isUnlocked();
-            if ($fameUpgrades[index]['unlockAt']()) permUnlocked = true;
+            if ($enchantUpgrades[index]['unlockAt']()) permUnlocked = true;
         }, 100 + (Math.random() * 20))
     })
 
@@ -113,7 +113,7 @@ select-none'>{$automationUpgrades[index]['name']}
     }
 
     function isUnlocked() {
-        for (let [type, val] of Object.entries($fameUpgrades[index]['unlockAt'])) {
+        for (let [type, val] of Object.entries($enchantUpgrades[index]['unlockAt'])) {
             if ($wallet[type] < val) {
                 return false;
             }

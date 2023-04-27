@@ -93,7 +93,24 @@ select-none'>
         amt = parseInt(amt);
         let rewards = {};
         $keysOpened[(rarity-1)] += parseInt(amt);
-        const dropTable = get(eval('key'+rarity+'DropTable')) || {}
+        let dropTable;
+        switch(rarity) {
+            case 1:
+                dropTable = get(key1DropTable);
+                break;
+            case 2:
+                dropTable = get(key2DropTable);
+                break;
+            case 3:
+                dropTable = get(key3DropTable);
+                break;
+            case 4:
+                dropTable = get(key4DropTable);
+                break;
+            case 5:
+                dropTable = get(key5DropTable);
+                break;
+        }
         for (let [type, vals] of Object.entries(dropTable)) {
             // if E[x] > 5, then we can calculate based on variance
             if (parseInt(amt)*vals[0] >= 1) {
@@ -142,7 +159,6 @@ select-none'>
                     const pEff = (amt > 100 ? vals[0] * Math.pow(10, div) : amt);
                    // console.log("neff: " + nEff + " peff: " + pEff);
                     let done = false;
-                    let wins = 0;
                     let k = 1;
                     let pK = combinations(nEff, k) * Math.pow(pEff, k) * Math.pow(1-pEff, nEff-k);
                    // console.log(pK + " for k " + k + " and n " + nEff + " and p " + pEff)

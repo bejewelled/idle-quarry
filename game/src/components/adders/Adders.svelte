@@ -12,9 +12,10 @@ import {keyGainFlavorText, keyProgressFlavorText, keyProgressFlavorNextUpdate,
 key1DropTable, key2DropTable, key3DropTable, key4DropTable, key5DropTable} from '../../data/keys'
 import {progress, miningUpgradeLevels, wallet, miningDropTable, 
     unlockedRes, settings, progressThisTick, visibleTier,progressAverage,
-    beaconActivations, beaconLevels, beaconProgress, resources, beaconUpgradeLevels} from '../../data/player'
+    beaconActivations, beaconLevels, beaconProgress, resources, 
+    beaconUpgradeLevels, enchantProgress, enchantUpgradeLevels} from '../../data/player'
 import {beaconFormulas, beaconBonuses, beaconNextReqs, beaconNums, beaconUpgrades, beaconPowerFlavorText} from '../../data/beacons'
-import {fameUpgrades, enchantThreshold, enchantProgress} from '../../data/fame'
+import {enchantUpgrades, enchantThreshold} from '../../data/fame'
 import ref from '../../calcs/ref'
 import formula from '../../calcs/formula'
 
@@ -230,6 +231,7 @@ function dropRoll(n) {
 
 let locks = new Set(); // makes sure levelups don't repeat when leveling up from next function call
 function addBeaconProgress(delta) {
+    if (isNaN($resources['beaconPower'])) $resources['beaconPower'] = 0;
     const progressGains = $beaconActivations.map((e) => e * delta
     * Math.max(1, $beaconUpgrades[0]['formula']($beaconUpgradeLevels[0]))
     * Math.max(1,$beaconUpgrades[2]['formula']($beaconUpgradeLevels[2]))
@@ -285,7 +287,30 @@ function updateBeaconBonuses() {
     }
 }
 
-function procEnchants(n, tier) { /* TODO implement */ }
+function procEnchants(n, tier) { 
+    const size = $enchantUpgrades[0]['formula']($miningUpgradeLevels[0]);
+    const quality = $enchantUpgrades[1]['formula']($miningUpgradeLevels[1]);
+    const rand = Math.random() / n;
+    for (let [i,ench] of $enchantUpgrades.entries()) {
+        if (ench['tier'] > n) break;
+        if (rand < ench['formula']($enchantUpgradeLevels[ench['id']])) {
+            switch(i) {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2: // burst
+                    addGems(size);
+                    break;
+                case 3: // orb rush
+                    $wallet['orbs'] += (Math.random() + 0.3) * Math.pow(quality, 3);
+                    break;
+
+            }
+        }
+    }
+
+}
 
 
 </script>
