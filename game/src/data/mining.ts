@@ -201,7 +201,8 @@ export const miningUpgrades = array([{
         beacons: 200
     },
     ratio: 1.5,
-    unlockAt: () => (get(wallet)['orbs'] >= 1000 && get(miningUpgradeLevels)[3] >= 1),
+    unlockAt: () => (get(wallet)['orbs'] >= 1000 && get(miningUpgradeLevels)[3] >= 1) 
+                    || get(wallet)['fame'] >= 10,
     formula: (lv: any) => (1 + Math.pow(lv, 0.5)*0.15),
     isPercent: false,
     suffix: 'x speed',
@@ -367,6 +368,24 @@ export const miningUpgrades = array([{
     isFame: true,
     notes: ''
 },
+// i = 15
+{
+    name: 'Overload',
+    description: 'Drop chances above 100% increase the amount of drops.',
+    cost: {
+        fame: 500,
+
+    },
+    ratio: 200,
+    unlockAt: () => (get(wallet)['totalFame'] > 200),
+    formula: (lv: any) => (0),
+    isPercent: true,
+    suffix: '  (N/A)',
+    maxLevel: 1,
+    isFame: true,
+    notes: 'index 15'
+},
+
 ]);
 
 // if true, progress bars will be solid instead of flickering

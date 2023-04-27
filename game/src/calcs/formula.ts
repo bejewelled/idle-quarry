@@ -38,8 +38,8 @@ export default class formula {
     }
 
     static calcFameBeaconMulti(n: number) {
-      return (n > 1e6 ? 2 + Math.pow((n - 1e6) / 1e6, 0.75)  : 
-              n > 1e3 ? 1 + (n - 1e3) / 1e6 :
+      return (n > 1e6 ? 11 + Math.pow((n - 1e6) / 1e6, 0.75)  : 
+              n > 1e3 ? 1 + (n - 1e3) / 1e5 :
               n / 1000)
     }
 

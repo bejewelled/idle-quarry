@@ -159,6 +159,7 @@ function relocate() {
         if (confirm("Are you sure? Relocating will reset all previous progress.")) {
             $flags['relocateNavBack'] = true;
             $wallet['fame'] = ($wallet['fame'] || 0) + calcFameGain();
+            $wallet['totalFame'] = ($wallet['fame'] || 0) + calcFameGain();
 
 
             // reset stuff

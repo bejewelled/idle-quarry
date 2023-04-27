@@ -169,9 +169,11 @@ function dropTable(context: any) {
                             * get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6])
                             * get(beaconBonuses)[2]),
                         //@ts-ignore
-                        val[1] * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11]),
+                        val[1] + (get(miningUpgradeLevels)[15] * Math.max(0, (val[0]-1)*val[1]))
+                        * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11]),
                         //@ts-ignore
-                        val[2] * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11]),
+                        val[2] + (get(miningUpgradeLevels)[15] * Math.max(0, (val[0]-1)*val[2]))
+                        * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11]),
                     ]
                     if (item === 'gold') {
                         i[item][1] = val[1] * get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]);
