@@ -75,4 +75,22 @@ export default class ref {
 
     }
 
+    static miningUpgradeSortOrder = {
+        'haste': 0,
+        'efficiency': 1,
+        'fortune': 2,
+        'shiny': 3,
+        '[*] key finder': 4,
+        'lootmaster i': 5,
+        '[**] key finder': 6,
+        'lootmaster ii': 7,
+        '[***] key finder': 8,
+        'lootmaster iii': 9,
+        'legendary': 10,
+        'legendary ii': 11,
+        'default': 12,
+
+
+    }
+
 }

@@ -78,7 +78,7 @@
         {/if}
     </div>
     <div class='mine-upgrade-wrapper grid grid-cols-2'>
-        {#each Object.entries($miningUpgrades) as upgrade,i}
+        {#each upgradeOrder as i}
             <div class='col-span-1 mine-upgrade-button-wrapper'>
                 <MiningUpgradeButton index={i}/>
             </div>
@@ -103,10 +103,12 @@ $: key1BarWidth = `${$progress['key1'] / $progressThreshold['key1'] * 100}%`;
 $: key2BarWidth = `${$progress['key2'] / $progressThreshold['key2'] * 100}%`;
 $: mDropTable = Object.entries($miningDropTable)
 
+$: upgradeOrder = $miningUpgrades.map((_,i) => i).sort((a,b) => miningSort([a,$miningUpgrades[a]], [b,$miningUpgrades[b]]))
 // for triggering #key
 let clockr = false;
 
 onMount(() => {
+    console.log(upgradeOrder)
     const clock = setInterval(() => {
         clockr = !clockr;
     })
@@ -134,5 +136,10 @@ const fpf = (n: unknown, subOne = false) => {
     else return (n*100).toExponential(3).toString().replace('+', '') + "%";
 }
 
+const miningSort = (a,b) => {
+    const ca = ref.miningUpgradeSortOrder[(a[1]['name'] || 'default').toLowerCase()] || ref.miningUpgradeSortOrder['default']
+    const cb = ref.miningUpgradeSortOrder[(b[1]['name'] || 'default').toLowerCase()] || ref.miningUpgradeSortOrder['default']
+    return ca - cb;
+}
 
 </script>
