@@ -271,7 +271,7 @@ function addBeaconProgress(delta) {
             // update next reqs
 
             // EDIT WITH CAUTION!! Do not cause an overflow (>1e308) at high levels
-            const EXP_MULTI = 1.00005 
+            const EXP_MULTI = 1.00005; 
             $beaconNextReqs[i] = ($beaconNums[i][0] * $beaconLevels[i]) * 1.00005;
             if (Date.now() - lastDropTableUpdate > 1000) {
                 lastDropTableUpdate = Date.now();

@@ -52,6 +52,7 @@
     <div class='pt-1'></div>
         <BeaconPowerUpgradeButton index={i} />
     {/each}
+    <div class='pb-7'></div>
 </div>
 </div>
 

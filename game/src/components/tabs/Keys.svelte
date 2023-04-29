@@ -40,6 +40,7 @@
                             </div>
                             {/if}
                             {/each}
+                            <div class='game-text'>{#each Object.entries(dropTable[1]) as l} {l} {/each}</div>
                             {#if $keyItemsUnlocked['key'+i].size < 
                             Object.entries(get(eval('key'+i+'DropTable'))).length}
                             <div class='drop-table-disp grid grid-cols-10'>
@@ -50,7 +51,7 @@
                                     There are <span class='text-white font-bold'>
                                         {Object.entries(dropTable[i-1]).length
                                         - $keyItemsUnlocked['key'+i].size} </span>
-                                    more items that can drop from this key.
+                                    more items that can drop from this key. {$keyItemsUnlocked['key'+i]}
                                 </div>
                             </div>
                             {/if}

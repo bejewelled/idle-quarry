@@ -181,7 +181,8 @@ export const beaconNameText = array([
     'Beacon Power Multiplier',
     'Mining Progress Multiplier',
     'Droprate Multiplier I',
-    'Gem Bonus']
+    'Gem Bonus',
+    'Fame Bonus',]
     .concat(Array(26).fill(''))
 )
 
@@ -189,8 +190,9 @@ export const beaconFormulas = array([
    /*beacon power*/ function(lv: number) {return 1 + (Math.pow(lv,0.6) * 0.005)},
    /*mining haste*/ function(lv: number) {return 1 + (Math.pow(lv,0.15) * (Math.log(lv+1)/Math.log(2) * 0.004))},
    /*droprate*/ function(lv: number) {return 1 + (Math.pow(lv,0.8) * 0.003)},
-   /*gem bonus*/ function(lv: number) {return 1 + Math.pow(lv,1.1)*0.2}]
-    .concat(Array(27).fill(function(lv: number) {return 1}))
+   /*gem bonus*/ function(lv: number) {return 1 + Math.pow(lv,1.1)*0.2},
+    /* fame bonus */ function(lv: number) {return 1 + Math.pow(lv,0.5)*0.02}]
+    .concat(Array(25).fill(function(lv: number) {return 1}))
 )
 
 export const beaconNextReqs = array(Array(3).fill(1e4)

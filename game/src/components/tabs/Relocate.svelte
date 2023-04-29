@@ -149,6 +149,12 @@ const fameGridInfo = [
      criteria: () => ($wallet['beacons'] > 0 || formula.sumArray($beaconLevels) > 0)
     },
     {
+     name: 'Fame Bonus (Beacons)', 
+     value: () => $beaconFormulas[4]($beaconLevels[4]),
+     colorRef: 'beacons',
+     criteria: () => ($wallet['beacons'] > 0 || formula.sumArray($beaconLevels) > 0)
+    },
+    {
      name: 'Legendary Upgrade', 
      value: () => ($miningUpgrades[16]['formula']($miningUpgradeLevels[16]) 
         * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])),
@@ -162,7 +168,8 @@ function calcFameGain() {
     * fameMultiGems 
     * fameMultiBeaconLevels
     * $miningUpgrades[16]['formula']($miningUpgradeLevels[16])
-    * $miningUpgrades[17]['formula']($miningUpgradeLevels[17]);
+    * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])
+    * $beaconFormulas[4]($beaconLevels[4]);
 }
 
 const walletResetItems = ['gems', 'gold', 'orbs', 'beacons', 'key1', 'key2']

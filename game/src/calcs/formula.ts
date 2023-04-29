@@ -12,6 +12,7 @@ export default class formula {
       // Use one of the normally distributed random numbers to generate a random number on the interval [-3,3]
       return Math.min(3,z1*2);
     }
+
     static gSum(a: number, r: number, n: number) {
         // calculate the sum using the formula
         const sum = a * (1 - Math.pow(r, n)) / (1 - r);
@@ -33,7 +34,7 @@ export default class formula {
       }
     
     static calcFameGainKeys(array: Array<number>) { 
-        const f = array.map((x,i) => 1 + Math.pow((i+1)*(i+1)*(x/150),0.7));
+        const f = array.map((x,i) => 1 + Math.pow((i+1)*(i+1)*(x/250),0.5));
         return f;
     }
 
