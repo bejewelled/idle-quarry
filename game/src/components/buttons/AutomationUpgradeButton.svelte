@@ -5,8 +5,8 @@
 <div on:click={() => buy(index)}
 class='has-tooltip tooltip-text 
 {affordable ?
-(!($automationItemsUnlocked[$automationUpgrades[index]['id']]) ? 'game-btn-automation-maxed': 'game-btn')
-: 'game-btn-noafford'}
+(($automationItemsUnlocked[$automationUpgrades[index]['name'].toLowerCase()]) ? 'game-btn-automation-maxed': 'game-btn')
+: ($automationItemsUnlocked[$automationUpgrades[index]['name'].toLowerCase()]) ? 'game-btn-automation-maxed' : 'game-btn-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>{$automationUpgrades[index]['name']}
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
@@ -90,6 +90,7 @@ select-none'>{$automationUpgrades[index]['name']}
 }
 
     function buy() {
+        if ($automationItemsUnlocked[$automationUpgrades[index]['name'].toLowerCase()]) return;
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
             if (val >=  1 && $wallet[type] < val) {

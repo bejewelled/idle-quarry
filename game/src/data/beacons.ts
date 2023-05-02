@@ -187,10 +187,10 @@ export const beaconNameText = array([
 )
 
 export const beaconFormulas = array([
-   /*beacon power*/ function(lv: number) {return 1 + (Math.pow(lv,0.6) * 0.005)},
-   /*mining haste*/ function(lv: number) {return 1 + (Math.pow(lv,0.15) * (Math.log(lv+1)/Math.log(2) * 0.004))},
+   /*beacon power*/ function(lv: number) {return 1 + (Math.pow(lv,0.65) * 0.01)},
+   /*mining haste*/ function(lv: number) {return 1 + 3.125*(lv / (lv+40000))},
    /*droprate*/ function(lv: number) {return 1 + (Math.pow(lv,0.8) * 0.003)},
-   /*gem bonus*/ function(lv: number) {return 1 + Math.pow(lv,1.1)*0.2},
+   /*gem bonus*/ function(lv: number) {return 1 + Math.pow(lv,0.9)*0.02},
     /* fame bonus */ function(lv: number) {return 1 + Math.pow(lv,0.5)*0.02}]
     .concat(Array(25).fill(function(lv: number) {return 1}))
 )
@@ -211,7 +211,7 @@ export const beaconNums = array(
     .concat(Array(2).fill([1e14, 1.0012])
     .concat(Array(2).fill([1e23, 1.0016])))))
 
-export const beaconMaxLevels = array(Array(10).fill(1e7))
+export const beaconMaxLevels = array(Array(10).fill(1e6))
 
 
 

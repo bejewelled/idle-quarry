@@ -40,7 +40,6 @@
                             </div>
                             {/if}
                             {/each}
-                            <div class='game-text'>{#each Object.entries(dropTable[1]) as l} {l} {/each}</div>
                             {#if $keyItemsUnlocked['key'+i].size < 
                             Object.entries(get(eval('key'+i+'DropTable'))).length}
                             <div class='drop-table-disp grid grid-cols-10'>

@@ -210,7 +210,7 @@ function relocate() {
             $keysOpened = Array($keysOpened.length).fill(0);
             $beaconBonuses = Array(30).fill(1)
             for (let i in $miningUpgradeLevels) {
-                if (!$miningUpgrades[i]['isFame']) $miningUpgradeLevels[i] = 0;
+                if (!($miningUpgrades[i]||{})['isFame']) $miningUpgradeLevels[i] = 0;
             }
             $beaconUpgradeLevels = Array($beaconUpgradeLevels.length).fill(0);
 

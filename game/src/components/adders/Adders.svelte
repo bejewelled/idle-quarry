@@ -74,7 +74,7 @@ onMount(() => {
         addProgress(dt);
         if ($settings['activeTab'] !== 'beacons') {
             if (beaconUpdateCounter >= 10) {
-                addBeaconProgress(dt*10);
+                addBeaconProgress(dt*10, true);
                 beaconUpdateCounter = 0;
             } else beaconUpdateCounter++;
         } else {
@@ -243,7 +243,7 @@ function dropRoll(n) {
 }
 
 let locks = new Set(); // makes sure levelups don't repeat when leveling up from next function call
-function addBeaconProgress(delta) {
+function addBeaconProgress(delta, isOffFocus = false) {
     if (isNaN($resources['beaconPower'])) $resources['beaconPower'] = 0;
     const progressGains = $beaconActivations.map((e) => e * delta
     * Math.max(1, $beaconUpgrades[0]['formula']($beaconUpgradeLevels[0]))
@@ -257,9 +257,10 @@ function addBeaconProgress(delta) {
         if ($beaconProgress[i] >= $beaconNextReqs[i] && !locks.has(i)) {
             // console.log('LEVELUP!!!')
             locks.add(i);
-            // console.log("LOCKS")
-            // console.log(locks)
-            const numLevels = Math.max(1,formula.maxNumGeom($beaconProgress[i], $beaconNextReqs[i], $beaconNums[i][1]));
+            
+            // max 3 levels per tick (150 per second)
+            const numLevels = 
+            Math.min(isOffFocus ? 30 : 3, Math.max(1,formula.maxNumGeom($beaconProgress[i], $beaconNextReqs[i], $beaconNums[i][1])));
             // subtract excess progress
             // console.log("PROG SUBTRACTED: " + formula.gSum($beaconNextReqs[i], $beaconNums[i][1], numLevels));
             $beaconProgress[i] -= Math.max($beaconNextReqs[i], 
@@ -271,8 +272,8 @@ function addBeaconProgress(delta) {
             // update next reqs
 
             // EDIT WITH CAUTION!! Do not cause an overflow (>1e308) at high levels
-            const EXP_MULTI = 1.00005; 
-            $beaconNextReqs[i] = ($beaconNums[i][0] * $beaconLevels[i]) * 1.00005;
+            const EXP_MULTI = 1.0005; 
+            $beaconNextReqs[i] = ($beaconNums[i][0] * $beaconLevels[i]) * Math.pow(EXP_MULTI, $beaconLevels[i]);
             if (Date.now() - lastDropTableUpdate > 1000) {
                 lastDropTableUpdate = Date.now();
                 miningDropTable.updateTable();
@@ -280,11 +281,7 @@ function addBeaconProgress(delta) {
 
             $wallet['beacons'] = ($wallet['beacons'] || 0) + 
                 ($beaconUpgrades[1]['formula']($beaconUpgradeLevels[1]));
-            // addToActivityLog('[B] ' + $beaconNameText[i] + ' [' + $beaconLevels[i] + ']', 
-            // i > 7 ? 'text-red-400'    :
-            // i > 5 ? 'text-orange-400' :
-            // i > 2 ? 'text-yellow-400' :
-            // 'text-green-400')
+
             locks.delete(i);
         }
     }

@@ -100,7 +100,7 @@ const f = (n: number, pl = 0) => {
 
 const fp = (n: unknown, pl = 3, subOne = false) => {
     if (subOne) n -= 1;
-    if (n < 1e9) return (n*100).toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "%";
+    if (n < 1e9) return (n*100).toFixed((n*100 < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "%";
     else return (n*100).toExponential(pl).toString().replace('+', '') + "%";
 }
 
