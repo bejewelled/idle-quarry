@@ -65,7 +65,7 @@ export default class ref {
     static tabNotUnlockedText = {
         beacons: "Find a beacon while mining to unlock.",
         sigils: "Find a sigil while mining to unlock.",
-        relocate: "Use 10,000 total keys to unlock.",
+        relocate: "Use 1,000 total keys to unlock.",
         enchants: "Relocate and gain at least 1 fame to unlock.",
         automation: "Relocate and gain at least 1 fame to unlock.",
         challenges: "Buy challenges with fame to unlock.",
@@ -76,19 +76,15 @@ export default class ref {
     }
 
     static miningUpgradeSortOrder = {
-        'haste': 1,
-        'efficiency': 2,
-        'fortune': 3,
-        'shiny': 4,
-        '[*] key finder': 5,
-        'lootmaster i': 6,
-        '[**] key finder': 7,
-        'lootmaster ii': 8,
-        '[***] key finder': 9,
-        'lootmaster iii': 10,
-        'legendary': 11,
-        'legendary ii': 12,
-        'default': 13,
+        'haste': 1, 'efficiency': 2,
+        'fortune': 3, 'shiny': 4,
+        '[*] key finder': 5, 'lootmaster i': 6,
+        '[**] key finder': 7, 'lootmaster ii': 8,
+        '[***] key finder': 9, 'lootmaster iii': 10,
+        'legendary': 11, 'legendary ii': 12,
+        'key mastery': 13, 'efficiency ii': 14,
+        'expansive': 15, '': 16,
+        'default': 1e300,
 
 
     }

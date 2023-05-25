@@ -1,6 +1,6 @@
 
 import { writable, get } from 'svelte/store';
-import {wallet, miningUpgradeLevels} from './player'
+import {wallet, miningUpgradeLevels, enchantUpgradeLevels} from './player'
 import Decimal  from 'break_infinity.js';
 
 function single(context: any) {
@@ -164,7 +164,7 @@ export const enchantUpgrades = array([{
 },
 {
     name: 'Burst',
-    description: 'Has a chance to clear a mine level, instantly giving mining rewards based on mine size.',
+    description: 'Has a chance to clear a mine level, instantly giving mining cycles (the number of mining cycles is equal to mine size).',
     cost: {
         fame: 30,
     },
@@ -230,10 +230,10 @@ export const automationUpgrades = array([{
     suffix: ' chance',
 },
 {
-    name: 'Key Slayer',
-    description: 'Automatically opens keys every few seconds.',
+    name: 'Game On',
+    description: 'Unlocks challenges 1 - 3.',
     cost: {
-        fame: 1e6,
+        fame: 1e5,
     },
     unlockAt: () => (get(wallet)['fame'] >= 1),
     isPercent: true,

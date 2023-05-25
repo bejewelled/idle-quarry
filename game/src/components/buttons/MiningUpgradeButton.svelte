@@ -10,7 +10,7 @@ $miningUpgrades[index]['isFame'] ? 'game-btn-fame' : 'game-btn' :
 $miningUpgrades[index]['isFame'] ? 'game-btn-fame-noafford' : 'game-btn-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)} / {f($miningUpgrades[index]['maxLevel'],0)}]
-         <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
+         <span class='px-2 mx-4 max-w-[275px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
          <div class='title text-small-gray items-start text-center pb-1'>

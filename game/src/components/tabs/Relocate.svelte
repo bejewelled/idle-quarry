@@ -72,7 +72,8 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     settings, visibleTier, progressThisTick, progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources,
      keysOpened, unlockedRes, beaconUpgradeLevels, flags, 
-     enchantUpgradeLevels, enchantProgress, automationItemsUnlocked} from '../../data/player';
+     enchantUpgradeLevels, enchantProgress, automationItemsUnlocked,
+    mineLevel} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
@@ -137,6 +138,12 @@ const fameGridInfo = [
      criteria: true
     },
     {
+     name: 'Mining Level', 
+     value: () => $mineLevel['level']*0.1 + 1, 
+     colorRef: 'gems',
+     criteria: () => ($wallet['gems'] > 0)
+    },
+    {
      name: 'Gem Amount', 
      value: () => fameMultiGems, 
      colorRef: 'gems',
@@ -165,6 +172,7 @@ const fameGridInfo = [
 
 function calcFameGain() {
     return formula.productArray(fameGainKeys) 
+    * ($mineLevel['level']*0.1 + 1)
     * fameMultiGems 
     * fameMultiBeaconLevels
     * $miningUpgrades[16]['formula']($miningUpgradeLevels[16])

@@ -25,6 +25,36 @@
                     <div class='game-text res-amount col-span-5'>{f(Math.floor(res[1]),0)}</div>
                 {/if}
             {/each}
+            <!-- mining level bar -->
+            <div class='col-span-12 has-tooltip'>
+                <div class='text-[#989898] text-small pt-4 pb-1'>Mining Level 
+                    <span class='font-bold text-cyan-400'>{$mineLevel['level']}</span>
+                </div>
+                <span class='px-2 mx-4 tooltip tooltip-text shadow-lg p-1
+                border-white border-double border bg-[#222529] ml-16
+                  pointer-events-none max-w-[300px] text-center weight-bold'>
+                    <div class='grid grid-cols-3'>
+                        <div class='col-span-3 text-center text-cyan-500'>
+                            [ {f($mineLevel['xp'],0)} / {f($mineLevel['xpNextReq'], 0)} ]
+                        </div>
+                        <div class='col-span-3 text-center'>
+                            Each mine operation gives 1xp.
+                        </div>
+                        <div class='col-span-3 text-center'>
+                            Every 1,000 beacon levels gives 3xp.
+                        </div>
+                    </div>
+                </span>
+            </div>
+            <div class='col-span-12'>
+                <div class='mine-bar-wrapper pb-2'>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                        <div class="bg-cyan-500 h-2.5 rounded-full" 
+                        style="width: {mineLevelBarWidth}%"></div>
+                    </div>
+                </div>
+            </div>
+
                 <div class='alog-break pt-4 col-span-12'></div>
                 <div class='alog-title game-text col-span-9'>Activity Log</div>
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -100,7 +130,8 @@ import Decimal from 'break_infinity.js'
 import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes, 
     progress, keysOpened, keyItemsUnlocked, settings, baseMiningDropTable,
     visibleTier, beaconProgress, beaconLevels, beaconUpgradeLevels,
-    resources, beaconActivations, flags, enchantUpgradeLevels, activityLog} from '../data/player.js'
+    resources, beaconActivations, flags, enchantUpgradeLevels, activityLog,
+    mineLevel} from '../data/player.js'
 import {beaconNextReqs, beaconSpendAmt} from '../data/beacons.ts'
 import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
@@ -122,6 +153,7 @@ let saveConfirm;
 let buyAmount = 1;
 let loadingFinished = false;
 let alogShow = true;
+$: mineLevelBarWidth = $mineLevel['xp'] / $mineLevel['xpNextReq'] * 100;
 
 const toggleAlog = () => {
     alogShow = !alogShow;
@@ -203,6 +235,7 @@ const save = () => {
     localStorage.setItem('flags', JSON.stringify($flags));
     localStorage.setItem('enchantUpgradeLevels', JSON.stringify($enchantUpgradeLevels));
     localStorage.setItem('beaconSpendAmt', JSON.stringify($beaconSpendAmt));
+    localStorage.setItem('mineLevel', JSON.stringify($mineLevel));
 
     saveConfirm = true;
     setTimeout(() => {
@@ -280,6 +313,9 @@ const load = async () => {
     }
     if (localStorage.getItem('enchantUpgradeLevels')) {
         enchantUpgradeLevels.set(JSON.parse(localStorage.getItem('enchantUpgradeLevels')));
+    }
+    if (localStorage.getItem('mineLevel')) {
+        mineLevel.set(JSON.parse(localStorage.getItem('mineLevel')));
     }
     // for (let i = 0; i < $beaconActivations.length; i++) {
     //     if (isNaN(i) || !i) $beaconActivations[i] = 0;

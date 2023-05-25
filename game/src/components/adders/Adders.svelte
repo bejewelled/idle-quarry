@@ -14,7 +14,7 @@ import {progress, miningUpgradeLevels, wallet, miningDropTable,
     unlockedRes, settings, progressThisTick, visibleTier,progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources, 
     beaconUpgradeLevels, enchantProgress, enchantUpgradeLevels, 
-    automationItemsUnlocked, activityLog} from '../../data/player'
+    automationItemsUnlocked, activityLog, mineLevel} from '../../data/player'
 import {beaconFormulas, beaconBonuses, beaconNextReqs, 
     beaconNums, beaconUpgrades, beaconPowerFlavorText, beaconNameText} from '../../data/beacons'
 import {enchantUpgrades, enchantThreshold} from '../../data/fame'
@@ -72,6 +72,7 @@ onMount(() => {
     const mainLoop = setInterval(() => {
         dt = (Date.now() - last) / UPDATE_SPEED;
         addProgress(dt);
+        updateMiningLevel();
         if ($settings['activeTab'] !== 'beacons') {
             if (beaconUpdateCounter >= 10) {
                 addBeaconProgress(dt*10, true);
@@ -96,6 +97,14 @@ onMount(() => {
         updateprogressThisTick(dt);
     }, UPDATE_SPEED + Math.random() * 3) // set intervals to prime numbers to avoid sync
 })
+
+function updateMiningLevel() {
+    if ($mineLevel['xp'] >= $mineLevel['xpNextReq']) {
+        $mineLevel['xp'] -= $mineLevel['xpNextReq'];
+        $mineLevel['level']++;
+        $mineLevel['xpNextReq'] = ($mineLevel['xpNextReq'] + 1500) * 1.1;
+    }
+}
 
 const PROGRESS_BASE = 1;
 
@@ -158,7 +167,9 @@ function addProgress(delta) {
         }
         addGems($progress['gems'] / gemAt, $progressAverage['gems']);
         dropRoll(Math.floor($progress['gems'] / gemAt));
-        $progress['gems']  = 0;
+
+        $mineLevel['xp'] += $progress['gems'] / gemAt, $progressAverage['gems'];
+        $progress['gems'] = 0;
     }
     // add keys
     if ($progress['key1'] >= keyAt[0]) {

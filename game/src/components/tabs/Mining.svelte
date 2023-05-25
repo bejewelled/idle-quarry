@@ -33,8 +33,9 @@
     <div class='text-[#989898] text-small pt-4'>gem progress [ 
         <strong>
             {$progressAverage['gems'] > $progressThreshold['gems'] ? "~" : ""}
-            {$gemGainFlavorText > 1 ? f($gemGainFlavorText,3) : 1}</strong>
-         x {f($progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'], 2) } times / sec ]</div>
+            {$gemGainFlavorText > 1 ? f($gemGainFlavorText,0) : 1}</strong>
+         x {f($progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'], 2) } times / sec ]
+    </div>
     <div class='mine-bar-wrapper pb-2'>
         <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
             <div class="bg-red-300 h-2.5 rounded-full" 

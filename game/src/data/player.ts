@@ -208,6 +208,8 @@ export const progress = object({
 
 
 
+export const miningUpgradeLevelsBought = array(Array(20).fill(0));
+export const miningUpgradeLevelsFree = array(Array(20).fill(0));
 export const miningUpgradeLevels = array(Array(20).fill(0));
 
 export const baseMiningDropTable = dropTable({
@@ -271,3 +273,9 @@ export const enchantProgress = object({
 })
 
 export const activityLog = array([])
+
+export const mineLevel = object({
+    level: 0,
+    xp: 0,
+    xpNextReq: 100,
+})

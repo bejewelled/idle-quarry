@@ -133,29 +133,30 @@ export const progressPerTick = single(1);
 *  object at a value of less than 1.
 */
 export const miningUpgrades = array([{
+    index: 0,
     name: 'Haste',
-    description: 'Increases progress per tick.',
+    description: 'Increases base mining speed.',
     cost: {
         gems: 5,
     },
-    ratio: 1.275,
-    formula: (lv: any) => (lv >= 952 ? 
-    54 + Math.pow((lv-952),0.5)*0.05 : 
-    (lv>=72 ? 10 + (lv-72)*0.05 : lv*0.125+1)),
+    ratio: 1.15,
+    formula: (lv: any) => lv * 0.1 + 1,
     unlockAt: () => (get(wallet)['gems'] >= 1),
+    suffix: 'x speed',
     isPercent: false,
     maxLevel: 1000,
     notes: '0.25*lv until 36, (lv-36)*0.025 until 916, sqrt(lv-916)*0.025 after'
 },
 {
+    index: 1,
     name: 'Efficiency',
-    description: 'Increases gem yield.',
+    description: 'Increases gem yield. Improved after level 100.',
     cost: {
         gems: 10,
     },
-    ratio: 1.3,
+    ratio: 1.15,
     unlockAt: () => (get(wallet)['gems'] >= 3 && get(miningUpgradeLevels)[0] >= 1),
-    formula: (lv: any) => 0.35*pow(lv,1.33),
+    formula: (lv: any) => lv * Math.pow(1.05, Math.max(0, lv-100)),
     isPercent: false,
     prefix: '+',
     suffix: ' gems',
@@ -164,6 +165,7 @@ export const miningUpgrades = array([{
 },
 // i = 2
 {
+    index: 2,
     name: 'Fortune',
     description: 'Improves droprates for common [*] items.',
     cost: {
@@ -171,13 +173,14 @@ export const miningUpgrades = array([{
     },
     ratio: 1.33,
     unlockAt: () => (get(wallet)['gems'] > 30 && get(wallet)['gold'] > 5),
-    formula: (lv: any) => (1 + Math.pow(lv, 0.65)*0.2 + (lv * 0.0005)),
+    formula: (lv: any) => 1 + Math.pow(lv, 0.85)*0.1,
     isPercent: true,
     prefix: '+',
     maxLevel: 300,
     notes: '(1 + floor(level/10)) * level^0.6'  
 },
 {
+    index: 3,
     name: '[*] Key Finder',
     description: 'While mining, you will occasionally find a bundle of T1 [*] keys.' 
     + '\nUpgrades increase progress gained towards this milestone.',
@@ -193,6 +196,7 @@ export const miningUpgrades = array([{
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
 {
+    index: 4,
     name: '[**] Key Finder',
     description: 'While mining, you will occasionally find a bundle of T2 [**] keys.' 
     + '\nUpgrades increase progress gained towards this milestone.',
@@ -211,6 +215,7 @@ export const miningUpgrades = array([{
 },
 // i = 5
 {
+    index: 5,
     name: 'Key Mastery',
     description: 'Increases the number of keys found when a Key Finder of any rarity triggers.',
     cost: {
@@ -228,6 +233,7 @@ export const miningUpgrades = array([{
     notes: ''
 },
 {
+    index: 6,
     name: 'Lootmaster I',
     description: 'The first level unlocks a new tier of findable drops. Additional levels increase all drop rates.',
     cost: {
@@ -242,6 +248,7 @@ export const miningUpgrades = array([{
     notes: ''
 },
 {
+    index: 7,
     name: 'Shiny',
     description: 'Gold drops are significantly improved.',
     cost: {
@@ -257,6 +264,7 @@ export const miningUpgrades = array([{
 },
 // i = 8
 {
+    index: 8,
     name: 'Efficiency II',
     description: 'Increases gem yield again.',
     cost: {
@@ -272,6 +280,7 @@ export const miningUpgrades = array([{
     notes: ''
 },
 {
+    index: 9,
     name: 'Lootmaster II',
     description: 'Unlocks a new tier of findable drops.',
     cost: {
@@ -288,14 +297,15 @@ export const miningUpgrades = array([{
 },
 // i = 10
 {
+    index: 10,
     name: 'Expansive',
-    description: 'Your mine size (enchants tab) significantly improves gem gains.',
+    description: 'Significantly improves gem gains.',
     cost: {
         fame: 5
     },
-    ratio: 1.6,
+    ratio: 2,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + lv * (0.11*formula.calcMineSize(get(enchantUpgradeLevels)[0]))),
+    formula: (lv: any) => (1 + lv*1.5),
     isPercent: true,
     prefix: '+',
     suffix: ' gem bonus',
@@ -304,14 +314,15 @@ export const miningUpgrades = array([{
     notes: 'index 10'
 },
 {
+    index: 11,
     name: 'Clockwork',
-    description: 'Your mine quality significantly improves drop amounts.',
+    description: 'Significantly improves drop amounts.',
     cost: {
         fame: 5
     },
-    ratio: 1.6,
+    ratio: 2,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + lv * (0.06*formula.calcMineQuality(get(enchantUpgradeLevels)[1]))),
+    formula: (lv: any) => (1 + lv * 0.5),
     isPercent: false,
     suffix: 'x amount from drops',
     maxLevel: 40,
@@ -320,14 +331,15 @@ export const miningUpgrades = array([{
 },
 // i = 12
 {
+    index: 12,
     name: 'Reflectors',
-    description: 'Your mine size significantly improves beacon path progress.',
+    description: 'Significantly improves beacon path progress.',
     cost: {
         fame: 15
     },
     ratio: 1.6,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + Math.pow(lv,0.8) * (0.075*formula.calcMineSize(get(enchantUpgradeLevels)[0]))),
+    formula: (lv: any) => (1 + lv),
     isPercent: true,
     prefix: '+',
     suffix: ' beacon progress',
@@ -336,15 +348,16 @@ export const miningUpgrades = array([{
     notes: 'index 10'
 },
 {
+    index: 13,
     name: 'Mythical',
-    description: 'Your mine quality gives a small chance to gain 1 fame per mining cycle.',
+    description: 'Gain a small chance to gain 1 fame per mining cycle.',
     cost: {
         fame: 100
     },
-    ratio: 1.6,
+    ratio: 1.3,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (lv === 0 ? 1 
-        : 1 + lv * (1.33e-5*formula.calcMineQuality(get(enchantUpgradeLevels)[1]))),
+    formula: (lv: any) => (lv == 0 ? 1 
+        : 1 + lv*0.025),
     isPercent: true,
     suffix: ' chance for fame gain',
     maxLevel: 40,
@@ -352,6 +365,7 @@ export const miningUpgrades = array([{
     notes: ''
 },
 {
+    index: 14,
     name: 'Lootmaster III',
     description: 'Unlocks a new tier of findable drops.',
     cost: {
@@ -371,6 +385,7 @@ export const miningUpgrades = array([{
 },
 // i = 15
 {
+    index: 15,
     name: 'Overload',
     description: 'Drop chances above 100% increase the amount of drops.',
     cost: {
@@ -387,6 +402,7 @@ export const miningUpgrades = array([{
     notes: 'index 15'
 },
 {
+    index: 16,
     name: 'Legendary',
     description: 'Increases fame gain on relocation.',
     cost: {
@@ -404,6 +420,7 @@ export const miningUpgrades = array([{
 },
 // i = 17
 {
+    index: 17,
     name: 'Legendary II',
     description: 'Increases fame gain on relocation.',
     cost: {
@@ -418,6 +435,23 @@ export const miningUpgrades = array([{
     maxLevel: 100,
     isFame: false,
     notes: 'index 16'
+},
+{
+    index: 18,
+    name: '[***] Key Finder',
+    description: 'While mining, you will occasionally find a bundle of T3 [***] keys.' 
+    + '\nUpgrades increase progress gained towards this milestone.',
+    cost: {
+        orbs: 1e6,
+        sigils: 2500
+    },
+    ratio: 1.5,
+    unlockAt: () => (get(wallet)['key3'] > 0),
+    formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
+    isPercent: false,
+    suffix: 'x speed',
+    maxLevel: 100,
+    notes: '(1 + floor(level/10)) * level^0.6' 
 },
 
 ]);

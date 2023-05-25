@@ -50,7 +50,7 @@
                                     There are <span class='text-white font-bold'>
                                         {Object.entries(dropTable[i-1]).length
                                         - $keyItemsUnlocked['key'+i].size} </span>
-                                    more items that can drop from this key. {$keyItemsUnlocked['key'+i]}
+                                    more items that can drop from this key. 
                                 </div>
                             </div>
                             {/if}

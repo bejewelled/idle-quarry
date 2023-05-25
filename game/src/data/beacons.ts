@@ -179,7 +179,7 @@ export const beaconBonuses = array(Array(30).fill(1))
 // for reference
 export const beaconNameText = array([
     'Beacon Power Multiplier',
-    'Mining Progress Multiplier',
+    'Mine Speed Multiplier',
     'Droprate Multiplier I',
     'Gem Bonus',
     'Fame Bonus',]
