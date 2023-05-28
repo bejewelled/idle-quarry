@@ -17,7 +17,10 @@
                     {ref.displayNames[drop[0]] || drop[0]}
                 </div>
                 <div class='col-span-3 text-left pl-1'>
-                    {fpf(drop[1][0])}
+                    {fp(Math.min(1,drop[1][0]), 
+                    drop[1][0] < 1e-3 ? 
+                    drop[1][0] < 1e-4 ?
+                    drop[1][0] < 1e-5 ? 6 : 5 : 4 : 3)}
                 </div>
                 <div class='col-span-2 text-right pl-1'>
                    [ {f(drop[1][1], 0)} - {f(drop[1][2], 0)} ]

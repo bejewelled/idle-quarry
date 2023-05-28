@@ -161,22 +161,25 @@ function dropTable(context: any) {
                 for (let [item, val] of Object.entries(get(baseMiningDropTable))) {
                     i[item]= [
                         // add drop table multipliers here
-                        Math.min(1,val[0] * 
+                        val[0] * 
                             //@ts-ignore - Fortune (T1) item multiplier
                             (ref.dropTiers[item] === 1 ?
                             get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2])
                             : 1) 
                             * get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6])
-                            * get(beaconBonuses)[2]),
+                            * get(miningUpgrades)[22]['formula'](get(miningUpgradeLevels)[22])
+                            * get(beaconBonuses)[2],
                         //@ts-ignore
-                        (val[1] + (get(miningUpgradeLevels)[15] * Math.max(0, (val[0]-1)*val[1])))
+                        (val[1])
                         * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11])
                         * (item === 'gold' ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1),
                         //@ts-ignore
-                        (val[2] + (get(miningUpgradeLevels)[15] * Math.max(0, (val[0]-1)*val[2])))
+                        (val[2])
                         * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11])
                         * (item === 'gold' ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1),
                     ]
+                    i[item][1] += Math.max(0,(i[item][0]-1)*i[item][1])
+                    i[item][2] += Math.max(0,(i[item][0]-1)*i[item][1])
 
                 }
                 return i;
@@ -214,8 +217,8 @@ export const miningUpgradeLevels = array(Array(20).fill(0));
 
 export const baseMiningDropTable = dropTable({
     gold: [0.20,1,3], // 10% chance to drop 1 gold
-    key1: [0.05,1,1], 
-    orbs: [0.01,1,2],
+    key1: [0.01,1,1], 
+    orbs: [0.01,4,15],
     beacons: [0.005,1,1],
     key2: [0.00075,1,1],
     key3: [1e-6,1,1],
@@ -278,4 +281,27 @@ export const mineLevel = object({
     level: 0,
     xp: 0,
     xpNextReq: 100,
+})
+
+export const buttonNumClicks = object({
+    okay: 0,
+    good: 0,
+    great: 0,
+    excellent: 0,
+    incredible: 0,
+    perfect: 0
+})
+
+export const buttonStats = object({
+    clicksUntilFame: 1e308,
+    totalClicks: 0,
+    totalClicksToday: 0,
+    todayStartTime: Date.now(),
+    hardenedBonus: 1,
+})
+
+export const buttonUpgradeLevels = array(Array(20).fill(0))
+
+export const stats = object({
+    lastRelocate: Date.now(),
 })

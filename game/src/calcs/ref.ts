@@ -12,6 +12,7 @@ export default class ref {
         beacons: 'text-sky-400',
         beaconPower: 'text-cyan-300',
         fame: 'text-orange-400',
+        crystals: 'text-indigo-300',
         sigils: 'text-fuchsia-600',
     }
 
@@ -59,7 +60,8 @@ export default class ref {
 
     static tabs = [
         'mining', 'keys', 'beacons', 'sigils', 'artifacts', 'relocate',
-        'enchants', 'automation', 'challenges', 'artifacts', 'mastery', 'ascension'
+        'enchants', 'automation', 'button', 'challenges', 'artifacts', 
+        'mastery', 'ascension'
     ]
 
     static tabNotUnlockedText = {
@@ -83,7 +85,12 @@ export default class ref {
         '[***] key finder': 9, 'lootmaster iii': 10,
         'legendary': 11, 'legendary ii': 12,
         'key mastery': 13, 'efficiency ii': 14,
-        'expansive': 15, '': 16,
+        'expansive': 15, 'clockwork': 16,
+        'reflectors': 17, 'mythical': 18,
+        'overload': 19, 'lockpicks': 20,
+        'hardened': 21, 'cavernous': 22,
+
+
         'default': 1e300,
 
 

@@ -38,14 +38,15 @@
                             [ {f($mineLevel['xp'],0)} / {f($mineLevel['xpNextReq'], 0)} ]
                         </div>
                         <div class='col-span-3 text-center'>
-                            Each mine operation gives 1xp.
+                            Each mine operation gives 1 xp.
                         </div>
                         <div class='col-span-3 text-center'>
-                            Every 1,000 beacon levels gives 3xp.
+                            Each button hit gives 1 - 3 xp.
                         </div>
                     </div>
                 </span>
             </div>
+
             <div class='col-span-12'>
                 <div class='mine-bar-wrapper pb-2'>
                     <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
@@ -72,7 +73,8 @@
              </div>
         </div>
 
-        <div class='px-2 py-2 main-panel col-span-7 flexbox'>
+        <!-- main display -->
+        <div class='px-2 py-2 main-panel col-span-8 flexbox'>
             <div class='py-1 control-buttons resize-none'>
                 <button class='py-1 text-small save-btn control-btn {saveConfirm ? 'bg-green-400' : ''}' on:click={() => save()}>Save</button>
                 <button class='py-1 text-small save-btn control-btn' on:click={() => reset()}>Reset</button>
@@ -107,6 +109,9 @@
                     <Relocate />
                 {:else if tab === 'enchants' && (tabUnlockCriteria['enchants']())}
                     <Enchants />
+                {:else if tab === 'button' && (tabUnlockCriteria['button']())}
+                    <Button />
+
                 {:else if tab === 'automation' && (tabUnlockCriteria['automation']())}
                     <Automation />
                 {/if}
@@ -131,7 +136,7 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     progress, keysOpened, keyItemsUnlocked, settings, baseMiningDropTable,
     visibleTier, beaconProgress, beaconLevels, beaconUpgradeLevels,
     resources, beaconActivations, flags, enchantUpgradeLevels, activityLog,
-    mineLevel} from '../data/player.js'
+    mineLevel, buttonNumClicks, buttonStats, buttonUpgradeLevels} from '../data/player.js'
 import {beaconNextReqs, beaconSpendAmt} from '../data/beacons.ts'
 import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
@@ -140,6 +145,7 @@ import Keys from '../components/tabs/Keys.svelte';
 import Relocate from '../components/tabs/Relocate.svelte';
 import Enchants from '../components/tabs/Enchants.svelte';
 import Automation from '../components/tabs/Automation.svelte';
+import Button from '../components/tabs/Button.svelte';
 import MiningUpgradeButton from '../components/buttons/MiningUpgradeButton.svelte';
 import ref from '../calcs/ref.ts'
 
@@ -197,6 +203,7 @@ const tabUnlockCriteria = {
         automation: () => ($wallet['fame'] && $wallet['fame'] >= 0.997)
                         || formula.sumArray($enchantUpgradeLevels) > 0
                         || $miningUpgradeLevels[10] > 0 || $miningUpgradeLevels[11] > 0,
+        button: () => true,
         default: () => false,
     }
 const tabsUnlocked = {
@@ -236,6 +243,9 @@ const save = () => {
     localStorage.setItem('enchantUpgradeLevels', JSON.stringify($enchantUpgradeLevels));
     localStorage.setItem('beaconSpendAmt', JSON.stringify($beaconSpendAmt));
     localStorage.setItem('mineLevel', JSON.stringify($mineLevel));
+    localStorage.setItem('buttonNumClicks', JSON.stringify($buttonNumClicks));
+    localStorage.setItem('buttonUpgradeLevels', JSON.stringify($buttonUpgradeLevels));
+    localStorage.setItem('buttonStats', JSON.stringify($buttonStats));
 
     saveConfirm = true;
     setTimeout(() => {
@@ -260,6 +270,10 @@ const load = async () => {
     if (localStorage.getItem('miningUpgradeLevels')) {
         miningUpgradeLevels.set((JSON.parse(localStorage.getItem('miningUpgradeLevels'))));
     }
+    if ($miningUpgradeLevels.length < 100) {
+        $miningUpgradeLevels = [...$miningUpgradeLevels, ...Array(100-$miningUpgradeLevels.length).fill(0)];
+    }
+    console.log($miningUpgradeLevels)
     if (localStorage.getItem('progress'))
         unlockedRes.set(JSON.parse(localStorage.getItem('progress')))
     if (localStorage.getItem('keysOpened'))
@@ -317,6 +331,15 @@ const load = async () => {
     if (localStorage.getItem('mineLevel')) {
         mineLevel.set(JSON.parse(localStorage.getItem('mineLevel')));
     }
+    if (localStorage.getItem('buttonNumClicks')) {
+        buttonNumClicks.set(JSON.parse(localStorage.getItem('buttonNumClicks')));
+    }
+    if (localStorage.getItem('buttonUpgradeLevels')) {
+        buttonUpgradeLevels.set(JSON.parse(localStorage.getItem('buttonUpgradeLevels')));
+    }
+    if (localStorage.getItem('buttonStats')) {
+        buttonStats.set(JSON.parse(localStorage.getItem('buttonStats')));
+    }
     // for (let i = 0; i < $beaconActivations.length; i++) {
     //     if (isNaN(i) || !i) $beaconActivations[i] = 0;
     // }
@@ -333,6 +356,7 @@ const tabHelpText = {
     beacons: "Allocate beacons into paths, leveling them up over time and gaining bonuses. Each color requires drastically more power than the previous one, so you'll need to work up to the later paths. \n You gain beacon power based on your beacon levels.",
     enchants: "Mine size and Mine quality affect many things, not just enchants! Make sure to check tooltips. \n When the enchant bar of each respective color fills, there's a chance for all enchants of the same color as the bar to fire (chance shown on tooltips), giving a very powerful bonus. Upgrade your enchants to increase the proc chance.",
     relocate: "Reset to gain fame. Fame can be spent on powerful mining upgrades and enchants. It's recommended for your first relocation to gain at least 25 fame, which should take about 1-2 hours.",
+    button: "You'll have to figure this one out yourself."
 }
 
 onMount(() => {
@@ -402,6 +426,10 @@ onMount(() => {
         color: #d9d9d9;
         cursor: pointer;
     }
+    :global(.game-btn-nocolor) {
+        border: 1px solid;
+        cursor: pointer;
+    }
     :global(.game-btn-encht1) {
         border: 1px solid #c4b5fd;
         color: #c4b5fd;
@@ -427,11 +455,31 @@ onMount(() => {
         color: #fb923c;
         cursor: pointer;
     }
+    :global(.game-btn-fame:hover) {
+        background-color: #483626;
+        cursor: pointer;
+    }
     :global(.game-btn-fame-noafford) {
         border: 1px solid #6c3f00;
         color: #6c3f00;
         cursor: pointer;
     }
+    :global(.game-btn-crystal) {
+        border: 1px solid #a5b4fc;
+        color: #a5b4fc;
+        cursor: pointer;
+    }
+    :global(.game-btn-crystal:hover) {
+        color: #a5b4fc;
+        background-color: #333851;
+        cursor: pointer;
+    }
+    :global(.game-btn-crystal-noafford) {
+        border: 1px solid #3c4262;
+        color: #3c4262;
+        cursor: pointer;
+    }
+
     :global(.game-btn-automation-maxed) {
         border: 1px solid #ececec;
         background-color: #ececec;

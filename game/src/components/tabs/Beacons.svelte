@@ -12,6 +12,7 @@
             <input id='max' class="content-center w-20  bg-gray-700 text-white" placeholder='1' bind:value={$beaconSpendAmt}>
         </div>
     {#each $beaconLevels as b, i}
+    {#if $mineLevel['level'] >= $beaconMiningLevelReqs[i]}
     {#if i < 10}
         <div class='col-span-1'>
             <BeaconToggleButton index={i} />
@@ -46,13 +47,18 @@
             </div>
         </div>
     {/if}
+    {:else if i < 10}
+        <div class='col-span-12 py-3 text-center text-large {getTextColor(i)}'>
+            Unlock at mining level {$beaconMiningLevelReqs[i]}</div>
+    {/if}
     {/each}
     <div class='py-2'></div>
     {#each $beaconUpgrades as b,i}
     <div class='pt-1'></div>
         <BeaconPowerUpgradeButton index={i} />
     {/each}
-    <div class='pb-7'></div>
+    <div class='col-span-12 pb-15'>i</div>
+    <div>s</div>
 </div>
 </div>
 
@@ -62,14 +68,14 @@
 import { onMount } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
     settings, visibleTier, progressThisTick, progressAverage,
-    beaconActivations, beaconLevels, beaconProgress, resources} from '../../data/player';
+    beaconActivations, beaconLevels, beaconProgress, resources, mineLevel} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import {beaconPower, beaconBonuses, beaconSpendAmt,
     beaconFormulas, beaconNums, beaconNextReqs,
 beaconUpgrades, beaconNameText, beaconPowerFlavorText,
-beaconMaxLevels} from '../../data/beacons';
+beaconMaxLevels, beaconMiningLevelReqs} from '../../data/beacons';
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
 import BeaconToggleButton from '../buttons/BeaconToggleButton.svelte';
@@ -119,6 +125,13 @@ function getBgColor(i) {
     else if (i < 6) return 'bg-yellow-400';
     else if (i < 8) return 'bg-orange-400';
     else return 'bg-red-400';
+}
+
+function getTextColor(i) {
+    if (i < 3) return 'text-emerald-400';
+    else if (i < 6) return 'text-yellow-400';
+    else if (i < 8) return 'text-orange-400';
+    else return 'text-red-400';
 }
 
 </script>

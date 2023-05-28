@@ -185,6 +185,7 @@ export const beaconNameText = array([
     'Fame Bonus',]
     .concat(Array(26).fill(''))
 )
+export const beaconMiningLevelReqs = array([0,0,0,12,12,12,20,20,30,30])
 
 export const beaconFormulas = array([
    /*beacon power*/ function(lv: number) {return 1 + (Math.pow(lv,0.65) * 0.01)},
@@ -227,6 +228,7 @@ export const beaconUpgrades = array([{
     },
     ratio: 1.5,
     formula: (lv: any) => 1 + 0.3325*lv,
+    mineLevelReq: 0,
     isPercent: true,
     prefix: '+',
     maxLevel: 300,
@@ -240,6 +242,7 @@ export const beaconUpgrades = array([{
     },
     ratio: 2.5,
     formula: (lv: any) => 0.025*lv,
+    mineLevelReq: 6,
     isPercent: false,
     prefix: '+',
     suffix: ' beacons per level',
@@ -253,7 +256,8 @@ export const beaconUpgrades = array([{
         beaconPower: 2.5e6,
     },
     ratio: 4,
-    formula: (lv: any) => (lv === 0 ? 1 : 1 + Math.log(get(resources)['beaconPower']/1e3 + 1) / Math.log(1 + 8 - lv*0.5)),
+    formula: (lv: any) => (lv === 0 ? 1 : 1 + Math.log((lv+1) * get(resources)['beaconPower']/1e3 + 1) / Math.log(5)),
+    mineLevelReq: 12,
     isPercent: true,
     suffix: ' bonus',
     maxLevel: 10,

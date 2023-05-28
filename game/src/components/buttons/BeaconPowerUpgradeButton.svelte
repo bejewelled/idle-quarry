@@ -78,7 +78,6 @@ select-none'>{$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index],0)
         }, 50)
         affordInterval = setInterval(() => {
             affordable = canAfford();
-            console.log($resources['beaconPower'])
         }, 100 + (Math.random() * 20))
     })
 

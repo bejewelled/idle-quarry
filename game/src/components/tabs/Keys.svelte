@@ -1,6 +1,6 @@
 <div class='key-amount-wrapper items-center'>
-    <div class='grid grid-cols-9'>
-        <div class='col-span-9 pt-3 pb-2 tooltip-text text-center'>
+    <div class='grid grid-cols-10'>
+        <div class='col-span-10 pt-3 pb-2 tooltip-text text-center'>
             Total Keys Opened: {f.f(formula.sumArray($keysOpened),0)}
             [ 
                 {#each $keysOpened as k, i}
@@ -63,13 +63,16 @@
                     <KeyOpenButton rarity={i} amt=1/>
                 </div>
                 <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
-                    <KeyOpenButton rarity={i} amt=10 />
+                    <KeyOpenButton rarity={i} amt=25 />
                 </div>
                 <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
-                    <KeyOpenButton rarity={i} amt=400 />
+                    <KeyOpenButton rarity={i} amt=500 />
                 </div>
                 <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
                     <KeyOpenButton rarity={i} amt=10000 />
+                </div>
+                <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
+                    <KeyOpenButton rarity={i} amt=1000000 />
                 </div>
         {/each}
     </div>

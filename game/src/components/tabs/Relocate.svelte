@@ -25,10 +25,10 @@
     {#key reloadClock}
     <!-- display for keys -->
     <div class='col-span-3 game-text text-left py-1'>Keys Used: </div>
-    <div class='col-span-1 py-1 game-text text-right'>
+    <div class='col-span-2 py-1 game-text text-right'>
         <span class=''>+{f(formula.productArray(fameGainKeys), 3)}</span>
     </div>
-    <div class='col-span-8 game-text text-center px-2 py-1'>
+    <div class='col-span-7 game-text text-center px-2 py-1'>
         [ 
         {#each $keysOpened as k, i}
             <span class='{ref.colors['key'+((i+1).toString())]}'>
@@ -42,18 +42,18 @@
             <div class=' {ref.colors[fitem['colorRef']] || 'text-white'} 
             col-span-3 text-left py-1'>{fitem['name']}: </div>
             <div class=' {ref.colors[fitem['colorRef']] || 'text-white'}
-            col-span-1 text-right py-1'>
+            col-span-2 text-right py-1'>
                 <span class=''>x{f(fitem['value'](), 3)}</span>
             </div>
-            <div class='col-span-8'></div>
+            <div class='col-span-7'></div>
         {:else if i > 0}
         <div class=' {ref.colors[fitem['colorRef']] || 'text-white'} 
         col-span-3 text-left py-1'>???</div>
         <div class=' {ref.colors[fitem['colorRef']] || 'text-white'}
-        col-span-1 text-right py-1'>
+        col-span-2 text-right py-1'>
             <span class='font-bold'>x{f(fitem['value'](), 3)}</span>
         </div>
-        <div class='col-span-8'></div>
+        <div class='col-span-7'></div>
         {/if}
     {/each}
     {/key}
@@ -73,7 +73,8 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     beaconActivations, beaconLevels, beaconProgress, resources,
      keysOpened, unlockedRes, beaconUpgradeLevels, flags, 
      enchantUpgradeLevels, enchantProgress, automationItemsUnlocked,
-    mineLevel} from '../../data/player';
+    mineLevel, buttonUpgradeLevels, stats} from '../../data/player';
+import {buttonUpgrades} from '../../data/button';
 import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
@@ -131,6 +132,8 @@ const fpf = (n: unknown, subOne = false) => {
     else return (n*100).toExponential(3).toString().replace('+', '') + "%";
 }
 
+
+// make sure to update the actual formula when updating this!
 const fameGridInfo = [
     {
      name: 'Keys Used',
@@ -139,8 +142,8 @@ const fameGridInfo = [
     },
     {
      name: 'Mining Level', 
-     value: () => $mineLevel['level']*0.1 + 1, 
-     colorRef: 'gems',
+     value: () => ($mineLevel['level']**1.5)*0.15 + 1, 
+     colorRef: 'gold',
      criteria: () => ($wallet['gems'] > 0)
     },
     {
@@ -162,33 +165,51 @@ const fameGridInfo = [
      criteria: () => ($wallet['beacons'] > 0 || formula.sumArray($beaconLevels) > 0)
     },
     {
-     name: 'Legendary Upgrade', 
+     name: 'Legendary Upgrades', 
      value: () => ($miningUpgrades[16]['formula']($miningUpgradeLevels[16]) 
         * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])),
      colorRef: '',
      criteria: () => ($wallet['totalFame'] > 200)
     },
+    {
+     name: 'Cavernous Upgrade', 
+     value: () => ($miningUpgrades[25]['formula']($miningUpgradeLevels[25])) ,
+     colorRef: 'crystals',
+     criteria: () => ($wallet['crystals'] > 0)
+    },
+    {
+     name: 'Time Multiplier (Everlasting)', 
+     value: () => (formula.calcFameTimeMultiplier($stats['lastRelocate'])),
+     colorRef: 'crystals',
+     criteria: () => ($wallet['crystals'] > 1e5)
+    },
 ]
 
+// make sure to update the description when updating this!
 function calcFameGain() {
     return formula.productArray(fameGainKeys) 
-    * ($mineLevel['level']*0.1 + 1)
+    * (($mineLevel['level']**1.5)*0.15 + 1)
     * fameMultiGems 
     * fameMultiBeaconLevels
     * $miningUpgrades[16]['formula']($miningUpgradeLevels[16])
     * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])
-    * $beaconFormulas[4]($beaconLevels[4]);
+    * $beaconFormulas[4]($beaconLevels[4])
+    * $miningUpgrades[25]['formula']($miningUpgradeLevels[25])
+    * formula.calcFameTimeMultiplier($stats['lastRelocate']);
 }
 
-const walletResetItems = ['gems', 'gold', 'orbs', 'beacons', 'key1', 'key2']
+// ONLY things in these arrays will be reset on relocate
+const walletResetItems = ['gems', 'gold', 'crystals', 'orbs', 'beacons', 'key1', 'key2', 'fame']
 const resourceResetItems = ['beaconPower']
 function relocate() {
     if (calcFameGain() >= 5) {
         if (confirm("Are you sure? Relocating will reset all previous progress.")) {
+            
             $flags['relocateNavBack'] = true;
             $wallet['fame'] = ($wallet['fame'] || 0) + calcFameGain();
             $wallet['totalFame'] = ($wallet['fame'] || 0) + calcFameGain();
 
+            $stats['lastRelocate'] = Date.now();
 
             // reset stuff
             $visibleTier = 1;

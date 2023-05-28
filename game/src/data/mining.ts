@@ -1,6 +1,7 @@
 
 import { writable, get } from 'svelte/store';
-import {wallet, miningUpgradeLevels, enchantUpgradeLevels} from './player'
+import {wallet, miningUpgradeLevels, 
+    enchantUpgradeLevels,buttonNumClicks,buttonStats} from './player'
 import formula from '../calcs/formula';
 import Decimal  from 'break_infinity.js';
 
@@ -309,8 +310,8 @@ export const miningUpgrades = array([{
     isPercent: true,
     prefix: '+',
     suffix: ' gem bonus',
-    maxLevel: 40,
-    isFame: true,
+    maxLevel: 100,
+    style: 'game-btn-fame',
     notes: 'index 10'
 },
 {
@@ -325,8 +326,8 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (1 + lv * 0.5),
     isPercent: false,
     suffix: 'x amount from drops',
-    maxLevel: 40,
-    isFame: true,
+    maxLevel: 100,
+    style: 'game-btn-fame',
     notes: ''
 },
 // i = 12
@@ -343,8 +344,8 @@ export const miningUpgrades = array([{
     isPercent: true,
     prefix: '+',
     suffix: ' beacon progress',
-    maxLevel: 40,
-    isFame: true,
+    maxLevel: 100,
+    style: 'game-btn-fame',
     notes: 'index 10'
 },
 {
@@ -357,11 +358,11 @@ export const miningUpgrades = array([{
     ratio: 1.3,
     unlockAt: () => (get(wallet)['fame'] > 0),
     formula: (lv: any) => (lv == 0 ? 1 
-        : 1 + lv*0.025),
+     : 1 + (lv**2)*1e-5),
     isPercent: true,
     suffix: ' chance for fame gain',
-    maxLevel: 40,
-    isFame: true,
+    maxLevel: 100,
+    style: 'game-btn-fame',
     notes: ''
 },
 {
@@ -369,10 +370,13 @@ export const miningUpgrades = array([{
     name: 'Lootmaster III',
     description: 'Unlocks a new tier of findable drops.',
     cost: {
-        fame: 7.5e6,
+        gems: 1e19,
+        gold: 1e11,
+        crystals: 1e7,
+        fame: 1e7,
         beacons: 1e6,
         sigils: 10000,
-        key3: 10
+        key3: 100
     },
     ratio: 1.6,
     unlockAt: () => (get(wallet)['fame'] > 0 && get(miningUpgradeLevels)[9] > 0.003),
@@ -380,7 +384,7 @@ export const miningUpgrades = array([{
     isPercent: true,
     suffix: ' (no bonus)',
     maxLevel: 1,
-    isFame: true,
+    style: 'game-btn-fame',
     notes: ''
 },
 // i = 15
@@ -398,7 +402,7 @@ export const miningUpgrades = array([{
     isPercent: true,
     suffix: '  (N/A)',
     maxLevel: 1,
-    isFame: true,
+    style: 'game-btn-fame',
     notes: 'index 15'
 },
 {
@@ -453,6 +457,130 @@ export const miningUpgrades = array([{
     maxLevel: 100,
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
+{
+    index: 19,
+    name: 'Legendary III',
+    description: 'Increases fame gain on relocation.',
+    cost: {
+        orbs: 1e6,
+        sigils: 2500
+    },
+    ratio: 1.5,
+    unlockAt: () => (get(wallet)['key3'] > 0),
+    formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
+    isPercent: false,
+    suffix: 'x speed',
+    maxLevel: 100,
+    notes: '(1 + floor(level/10)) * level^0.6' 
+},
+{
+    index: 20,
+    name: 'Hardened',
+    description: 'Your lifetime number of quality button clicks increase gem gain.',
+    cost: {
+        crystals: 400,
+    },
+    ratio: 1.33,
+    unlockAt: () => (get(wallet)['crystals'] > 0),
+    formula: (lv: any) =>  formula.dispCalcHardenedGemBonus(get(buttonNumClicks), lv),
+    isPercent: true,
+    suffix: ' gems',
+    maxLevel: 100,
+    style: 'game-btn-crystal',
+    notes: '(1 + floor(level/10)) * level^0.6' 
+},
+{
+    index: 21,
+    name: 'PLACEHOLDER',
+    description: '---',
+    cost: {
+        crystals: 1e299,
+    },
+    ratio: 1.33,
+    unlockAt: () => (get(wallet)['crystals'] > 1e299),
+    formula: (lv: any) =>  formula.dispCalcHardenedGemBonus(get(buttonNumClicks), lv),
+    isPercent: true,
+    suffix: ' gems',
+    maxLevel: 100,
+    style: 'game-btn-crystal',
+    notes: '(1 + floor(level/10)) * level^0.6' 
+},
+{
+    index: 22,
+    name: 'Fortune II',
+    description: 'Increases all droprates.',
+    cost: {
+        gems: 1e12,
+    },
+    ratio: 1.25,
+    unlockAt: () => (get(wallet)['crystals'] > 0),
+    formula: (lv: any) =>  1 + lv/10,
+    isPercent: false,
+    suffix: 'x droprates',
+    maxLevel: 100,
+},
+{
+    index: 23,
+    name: 'Geodes',
+    description: 'Increases crystal gain from the button.',
+    cost: {
+        gems: 1e13,
+    },
+    ratio: 1.25,
+    unlockAt: () => (get(wallet)['crystals'] > 0),
+    formula: (lv: any) =>  1 + lv/4,
+    isPercent: true,
+    prefix: '+',
+    suffix: ' crystal gain',
+    maxLevel: 100,
+},
+{
+    index: 24,
+    name: 'Blinding Lights',
+    description: 'Increases beacon path progress.',
+    cost: {
+        gems: 1e14,
+    },
+    ratio: 1.25,
+    unlockAt: () => (get(wallet)['crystals'] > 0),
+    formula: (lv: any) =>  1 + lv/4,
+    isPercent: true,
+    prefix: '+',
+    suffix: ' beacon progress',
+    maxLevel: 100,
+},
+{
+    index: 25,
+    name: 'Cavernous',
+    description: 'Increases fame gain on relocation.',
+    cost: {
+        crystals: 1e6,
+    },
+    ratio: 1.25,
+    unlockAt: () => (get(wallet)['crystals'] > 0),
+    formula: (lv: any) =>  1 + lv * 0.13,
+    isPercent: true,
+    prefix: '+',
+    suffix: ' fame gain',
+    style: 'game-btn-crystal',
+    maxLevel: 100,
+},
+{
+    index: 26,
+    name: 'Lockpicks',
+    description: 'Key Finder speed/amount is dramatically increased.',
+    cost: {
+        fame: 500
+    },
+    ratio: 1.5,
+    unlockAt: () => (get(wallet)['fame'] > 0),
+    formula: (lv: any) => 1 + lv*1.5,
+    isPercent: false,
+    suffix: 'x speed/amount',
+    maxLevel: 25,
+    style: 'game-btn-fame',
+    notes: ''
+},
 
 ]);
 
@@ -466,3 +594,4 @@ export const antiFlickerFlags = object({
 export const gemGainFlavorText = single(0)
 export const gemProgressFlavorText = single(0)
 export const gemProgressFlavorNextUpdate = single(Date.now() + 500)
+

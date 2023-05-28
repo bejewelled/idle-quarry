@@ -1,3 +1,5 @@
+import {buttonUpgradeLevels, miningUpgradeLevels} from '../data/player';
+import { get } from 'svelte/store';
 export default class formula {
 
     // returns a normally random value
@@ -34,7 +36,10 @@ export default class formula {
       }
     
     static calcFameGainKeys(array: Array<number>) { 
-        const f = array.map((x,i) => 1 + Math.pow((i+1)*(i+1)*(x/250),0.5));
+        const f = array.map((x,i) => {
+          if (x < (1e5/(i+1))) { return 1 + ((i+1) * x/1e4)}
+          return 10 + Math.pow((i+1) * (x-1e5)/1e5, 0.5);
+        });
         return f;
     }
 
@@ -48,6 +53,12 @@ export default class formula {
               n / 1000)
     }
 
+    static calcFameTimeMultiplier(last: number) {
+      if (get(buttonUpgradeLevels)[6] < 1) return 1;
+      const sec = (Date.now() - last) / 1000;
+      return 1 + 9*Math.pow(sec/86400, 2);
+    }
+
     static calcMineSize(lv: number) {
       return Math.pow(lv+5,2);
     }
@@ -55,4 +66,26 @@ export default class formula {
     static calcMineQuality(lv: number) {
       return 10 + lv;
     }
+
+    static calcButtonStreakBonus(n: number) {
+      if (get(buttonUpgradeLevels)[1] < 1) return 1;
+      return 1 + Math.pow(n,0.7)/60;
+    }
+    
+    static calcHardenedGemBonus(obj: { [x: string]: number; }) {
+        return ((1 + 0.1*get(miningUpgradeLevels)[20])
+        * ((Math.log(obj['good']+2) / Math.log(9))
+          + (Math.log(obj['great']+2) / Math.log(7))
+          + (Math.log(obj['excellent']+2) / Math.log(5))
+          + (Math.log(obj['incredible']+2) / Math.log(3)) 
+          + (Math.log(obj['perfect']+2) / Math.log(2))));
+    }
+    static dispCalcHardenedGemBonus(obj: { [x: string]: number;}, m: number) {
+      return ((1 + 0.1*m)
+      * ((Math.log(obj['good']+2) / Math.log(9))
+        + (Math.log(obj['great']+2) / Math.log(7))
+        + (Math.log(obj['excellent']+2) / Math.log(5))
+        + (Math.log(obj['incredible']+2) / Math.log(3)) 
+        + (Math.log(obj['perfect']+2) / Math.log(2))));
+  }
 }

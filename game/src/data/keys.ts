@@ -181,7 +181,7 @@ export const key1DropTable = dropTable({
 
 export const key2DropTable = dropTable({
     gems: [0.25, 1e3, 1e4], // [chance, min, max]
-    orbs: [0.15, 20, 75],
+    orbs: [0.15, 50, 250],
     key1: [0.15, 3, 10],
     key2: [0.05, 1, 1],
     beacons: [0.05, 1, 3],
@@ -190,6 +190,17 @@ export const key2DropTable = dropTable({
 })
 
 export const key3DropTable = dropTable({
+    gems: [0.125, 1e8, 1e9], // [chance, min, max]
+    gold: [0.075, 1e6, 5e6],
+    crystals: [0.06, 1000, 10000],
+    orbs: [0.06, 1500, 4500],
+    key1: [0.06, 150, 500],
+    key2: [0.04, 1, 10],
+    beacons: [0.04, 1000, 3500],
+    sigils: [0.025, 10, 75],
+    key3: [0.0025, 1, 1],
+    artifacts: [0.000011, 1, 1],
+    key4: [0.0000005, 1, 1]
     
 })
 

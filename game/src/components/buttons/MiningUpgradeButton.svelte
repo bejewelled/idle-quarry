@@ -5,9 +5,7 @@
 <div class='pt-1'></div>
 <div on:click={() => buy(index)}
 class='has-tooltip tooltip-text 
-{affordable && $miningUpgradeLevels[index] < $miningUpgrades[index]['maxLevel'] ? 
-$miningUpgrades[index]['isFame'] ? 'game-btn-fame' : 'game-btn' : 
-$miningUpgrades[index]['isFame'] ? 'game-btn-fame-noafford' : 'game-btn-noafford'}
+{affordable ? $miningUpgrades[index]['style'] || 'game-btn' : ($miningUpgrades[index]['style'] || 'game-btn')+'-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)} / {f($miningUpgrades[index]['maxLevel'],0)}]
          <span class='px-2 mx-4 max-w-[275px] tooltip tooltip-text shadow-lg p-1
