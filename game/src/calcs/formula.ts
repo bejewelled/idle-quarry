@@ -73,6 +73,7 @@ export default class formula {
     }
     
     static calcHardenedGemBonus(obj: { [x: string]: number; }) {
+      if (get(miningUpgradeLevels)[20] < 1) return 1;
         return ((1 + 0.1*get(miningUpgradeLevels)[20])
         * ((Math.log(obj['good']+2) / Math.log(9))
           + (Math.log(obj['great']+2) / Math.log(7))
@@ -81,11 +82,20 @@ export default class formula {
           + (Math.log(obj['perfect']+2) / Math.log(2))));
     }
     static dispCalcHardenedGemBonus(obj: { [x: string]: number;}, m: number) {
+      if (m < 1) return 1;
       return ((1 + 0.1*m)
-      * ((Math.log(obj['good']+2) / Math.log(9))
-        + (Math.log(obj['great']+2) / Math.log(7))
-        + (Math.log(obj['excellent']+2) / Math.log(5))
-        + (Math.log(obj['incredible']+2) / Math.log(3)) 
-        + (Math.log(obj['perfect']+2) / Math.log(2))));
+      * ((Math.log(obj['good']/40+2) / Math.log(9))
+        + (Math.log(obj['great']/25+2) / Math.log(7))
+        + (Math.log(obj['excellent']/20+2) / Math.log(5))
+        + (Math.log(obj['incredible']/15+2) / Math.log(3)) 
+        + (Math.log(obj['perfect']/10+2) / Math.log(2))));
+  }
+
+  static calcKeySlurryGain(obj: { [x: string]: number; }) {
+    return (obj['key1'] || 0)/16
+    + (obj['key2'] || 0)/8 
+    + (obj['key3'] || 0)/4
+    + (obj['key4'] || 0)/2
+    + (obj['key5'] || 0)/1;
   }
 }

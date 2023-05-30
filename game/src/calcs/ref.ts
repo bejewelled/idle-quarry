@@ -14,6 +14,7 @@ export default class ref {
         fame: 'text-orange-400',
         crystals: 'text-indigo-300',
         sigils: 'text-fuchsia-600',
+        slurry: 'text-teal-400',
     }
 
     static displayNames = {
@@ -39,6 +40,7 @@ export default class ref {
         beacons: 2,
         key2: 3,
         key3: 3,
+        slurry: 3,
         sigils: 3,
         fame: 3
     }
@@ -59,9 +61,9 @@ export default class ref {
     }
 
     static tabs = [
-        'mining', 'keys', 'beacons', 'sigils', 'artifacts', 'relocate',
+        'mining', 'keys', 'beacons', 'artifacts', 'relocate',
         'enchants', 'automation', 'button', 'challenges', 'artifacts', 
-        'mastery', 'ascension'
+        'mastery', 'ascension', 'help'
     ]
 
     static tabNotUnlockedText = {
@@ -74,6 +76,7 @@ export default class ref {
         artifacts: "Find an artifact with a T3 [***] or higher key to unlock.",
         mastery: "Reach level 10,000 on any mining upgrade to unlock.",
         ascension: "Have at least 1e25 fame and 10,000 challenge points to unlock.",
+        button: "Reach Mining Level 8 to unlock.",
 
     }
 

@@ -57,19 +57,21 @@
             </div>
 
                 <div class='alog-break pt-4 col-span-12'></div>
-                <div class='alog-title game-text col-span-9'>Activity Log</div>
+                <div class='alog-title game-text col-span-9 '>Activity Log</div>
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class='alog-minimize col-span-3 game-btn text-center game-text'
                 on:click= {() => toggleAlog()}>{alogShow ? "-" : "+"}</div>
-                <div class="alog-cont col-span-12 h-64 relative">
-                    <div class="scrollable-area absolute inset-0 overflow-y-auto">
-                        {#if alogShow}
+                <div class='col-span-12 py-1'></div>
+                {#if alogShow}
+                <div class="alog-cont col-span-12 h-64 relative bg-gray-700 border-4 border-gray-600">
+                    <div class="scrollable-area absolute inset-0 overflow-y-auto">   
                             {#each $activityLog.slice().reverse() as a}
-                            <div class='alog-text text-small {a[1]} col-span-12'>{a[0]}</div>
+                            <div class='alog-text text-small {a[1]} col-span-12 pt-1 pl-1'>{a[0]}</div>
                             {/each}
-                        {/if}
+                        
                     </div>
                 </div>
+                {/if}
              </div>
         </div>
 
@@ -103,8 +105,6 @@
                     <Keys />
                 {:else if tab === 'beacons' && (tabUnlockCriteria['beacons']())}
                     <Beacons />
-                {:else if tab === 'sigils' && (tabUnlockCriteria['sigils']())}
-                    <Mining />
                 {:else if tab === 'relocate' && (tabUnlockCriteria['relocate']())}
                     <Relocate />
                 {:else if tab === 'enchants' && (tabUnlockCriteria['enchants']())}
@@ -114,6 +114,8 @@
 
                 {:else if tab === 'automation' && (tabUnlockCriteria['automation']())}
                     <Automation />
+                {:else if tab === 'help'}
+                    <Help />
                 {/if}
 
                 {#if (tabUnlockCriteria[tab] && !tabUnlockCriteria[tab]()) ||
@@ -136,7 +138,11 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     progress, keysOpened, keyItemsUnlocked, settings, baseMiningDropTable,
     visibleTier, beaconProgress, beaconLevels, beaconUpgradeLevels,
     resources, beaconActivations, flags, enchantUpgradeLevels, activityLog,
-    mineLevel, buttonNumClicks, buttonStats, buttonUpgradeLevels} from '../data/player.js'
+    mineLevel, buttonNumClicks, buttonStats, buttonUpgradeLevels, 
+    keyUpgradeLevels, keyCraftAmount, keyCraftMastery, 
+    keyCraftTimes} from '../data/player.js'
+import {key1DropTable, key2DropTable, key3DropTable, 
+key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
 import {beaconNextReqs, beaconSpendAmt} from '../data/beacons.ts'
 import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
@@ -146,6 +152,7 @@ import Relocate from '../components/tabs/Relocate.svelte';
 import Enchants from '../components/tabs/Enchants.svelte';
 import Automation from '../components/tabs/Automation.svelte';
 import Button from '../components/tabs/Button.svelte';
+import Help from '../components/tabs/Help.svelte';
 import MiningUpgradeButton from '../components/buttons/MiningUpgradeButton.svelte';
 import ref from '../calcs/ref.ts'
 
@@ -203,8 +210,9 @@ const tabUnlockCriteria = {
         automation: () => ($wallet['fame'] && $wallet['fame'] >= 0.997)
                         || formula.sumArray($enchantUpgradeLevels) > 0
                         || $miningUpgradeLevels[10] > 0 || $miningUpgradeLevels[11] > 0,
-        button: () => true,
+        button: () => $mineLevel['level'] >= 8,
         default: () => false,
+        help: () => true,
     }
 const tabsUnlocked = {
     mining: true,
@@ -246,6 +254,10 @@ const save = () => {
     localStorage.setItem('buttonNumClicks', JSON.stringify($buttonNumClicks));
     localStorage.setItem('buttonUpgradeLevels', JSON.stringify($buttonUpgradeLevels));
     localStorage.setItem('buttonStats', JSON.stringify($buttonStats));
+    localStorage.setItem('keyUpgradeLevels', JSON.stringify($keyUpgradeLevels));
+    localStorage.setItem('keyCraftTimes', JSON.stringify($keyCraftTimes));
+    localStorage.setItem('keyCraftAmount', JSON.stringify($keyCraftAmount));
+    localStorage.setItem('keyCraftMastery', JSON.stringify($keyCraftMastery));
 
     saveConfirm = true;
     setTimeout(() => {
@@ -340,13 +352,29 @@ const load = async () => {
     if (localStorage.getItem('buttonStats')) {
         buttonStats.set(JSON.parse(localStorage.getItem('buttonStats')));
     }
+    if (localStorage.getItem('keyUpgradeLevels')) {
+        keyUpgradeLevels.set(JSON.parse(localStorage.getItem('keyUpgradeLevels')));
+    }
+    if (localStorage.getItem('keyCraftTimes')) {
+        keyCraftTimes.set(JSON.parse(localStorage.getItem('keyCraftTimes')));
+    }
+    if (localStorage.getItem('keyCraftAmount')) {
+        keyCraftAmount.set(JSON.parse(localStorage.getItem('keyCraftAmount')));
+    }
+    if (localStorage.getItem('keyCraftMastery')) {
+        keyCraftMastery.set(JSON.parse(localStorage.getItem('keyCraftMastery')));
+    }
     // for (let i = 0; i < $beaconActivations.length; i++) {
     //     if (isNaN(i) || !i) $beaconActivations[i] = 0;
     // }
     delete $wallet['beaconPower'];
     if ($resources['beaconPower'] < 0) $resources['beaconPower'] = 0;
     if ($wallet['fame'] == null) $wallet['fame'] = 0;
-
+    key1DropTable.updateTable();
+    key2DropTable.updateTable();
+    key3DropTable.updateTable();
+    key4DropTable.updateTable();
+    key5DropTable.updateTable();
     loadingFinished = true;
 }
 
@@ -355,7 +383,7 @@ const tabHelpText = {
     keys: "Use your found keys here! You unlock more information on drops after receiving at least one of the respective item from the respective key.",
     beacons: "Allocate beacons into paths, leveling them up over time and gaining bonuses. Each color requires drastically more power than the previous one, so you'll need to work up to the later paths. \n You gain beacon power based on your beacon levels.",
     enchants: "Mine size and Mine quality affect many things, not just enchants! Make sure to check tooltips. \n When the enchant bar of each respective color fills, there's a chance for all enchants of the same color as the bar to fire (chance shown on tooltips), giving a very powerful bonus. Upgrade your enchants to increase the proc chance.",
-    relocate: "Reset to gain fame. Fame can be spent on powerful mining upgrades and enchants. It's recommended for your first relocation to gain at least 25 fame, which should take about 1-2 hours.",
+    relocate: "Reset to gain fame. Fame can be spent on powerful mining upgrades and enchants. It's recommended for your first relocation to gain at least 25 fame, which should take about 1-2 hours. HINT: Are you stuck? Each fame multiplier is color-coded based on the resource it deals with. If you are struggling to increase fame gains, you may be able to increase a specific multiplier by checking the tab where that resource is generated/used.",
     button: "You'll have to figure this one out yourself."
 }
 

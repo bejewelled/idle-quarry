@@ -115,7 +115,7 @@ onMount(() => {
     console.log(upgradeOrder)
     const clock = setInterval(() => {
         clockr = !clockr;
-    }, 500)
+    }, 517)
     const updateDropTable = setInterval(() => {
         mDropTable = Object.entries($miningDropTable).sort((a,b) => b[1][0] - a[1][0]);
     }, 5000)

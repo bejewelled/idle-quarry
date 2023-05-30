@@ -121,7 +121,7 @@ const ceil = (n: number) => Math.ceil(n);
 export const progressThreshold = object({
     gems: 200,
     key1: 2000,
-    key2: 500000,
+    key2: 90000,
 })
 
 // edit when changing the level of the haste upgrade
@@ -300,17 +300,19 @@ export const miningUpgrades = array([{
 {
     index: 10,
     name: 'Expansive',
-    description: 'Significantly improves gem gains.',
+    description: 'Significantly improves gem gains. Improved after level 100.',
     cost: {
         fame: 5
     },
-    ratio: 2,
+    ratio: 1.5,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + lv*1.5),
+    formula: (lv: any) => (lv > 100 ? 
+        151 + (lv-100)*6 :
+        1 + lv*1.5),
     isPercent: true,
     prefix: '+',
     suffix: ' gem bonus',
-    maxLevel: 100,
+    maxLevel: 1000,
     style: 'game-btn-fame',
     notes: 'index 10'
 },
@@ -321,12 +323,12 @@ export const miningUpgrades = array([{
     cost: {
         fame: 5
     },
-    ratio: 2,
+    ratio: 1.5,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + lv * 0.5),
+    formula: (lv: any) => (1 + lv * 0.3),
     isPercent: false,
     suffix: 'x amount from drops',
-    maxLevel: 100,
+    maxLevel: 1000,
     style: 'game-btn-fame',
     notes: ''
 },
@@ -338,7 +340,7 @@ export const miningUpgrades = array([{
     cost: {
         fame: 15
     },
-    ratio: 1.6,
+    ratio: 1.5,
     unlockAt: () => (get(wallet)['fame'] > 0),
     formula: (lv: any) => (1 + lv),
     isPercent: true,
@@ -378,7 +380,7 @@ export const miningUpgrades = array([{
         sigils: 10000,
         key3: 100
     },
-    ratio: 1.6,
+    ratio: 1e90,
     unlockAt: () => (get(wallet)['fame'] > 0 && get(miningUpgradeLevels)[9] > 0.003),
     formula: (lv: any) => (0),
     isPercent: true,
@@ -399,6 +401,7 @@ export const miningUpgrades = array([{
     ratio: 200,
     unlockAt: () => (get(wallet)['totalFame'] > 200),
     formula: (lv: any) => (0),
+    isFame: true,
     isPercent: true,
     suffix: '  (N/A)',
     maxLevel: 1,

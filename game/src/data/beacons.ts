@@ -182,7 +182,8 @@ export const beaconNameText = array([
     'Mine Speed Multiplier',
     'Droprate Multiplier I',
     'Gem Bonus',
-    'Fame Bonus',]
+    'Fame Bonus',
+    'Key Finder Speed',]
     .concat(Array(26).fill(''))
 )
 export const beaconMiningLevelReqs = array([0,0,0,12,12,12,20,20,30,30])
@@ -192,7 +193,8 @@ export const beaconFormulas = array([
    /*mining haste*/ function(lv: number) {return 1 + 3.125*(lv / (lv+40000))},
    /*droprate*/ function(lv: number) {return 1 + (Math.pow(lv,0.8) * 0.003)},
    /*gem bonus*/ function(lv: number) {return 1 + Math.pow(lv,0.9)*0.02},
-    /* fame bonus */ function(lv: number) {return 1 + Math.pow(lv,0.5)*0.02}]
+    /* fame bonus */ function(lv: number) {return 1 + Math.pow(lv,0.5)*0.02},
+    /* key finder speed */ function(lv: number) {return 1 + Math.pow(lv, 0.5)*0.05}]
     .concat(Array(25).fill(function(lv: number) {return 1}))
 )
 
@@ -226,8 +228,8 @@ export const beaconUpgrades = array([{
     cost: {
         beaconPower: 5000,
     },
-    ratio: 1.5,
-    formula: (lv: any) => 1 + 0.3325*lv,
+    ratio: 1.33,
+    formula: (lv: any) => 1 + 0.25*lv,
     mineLevelReq: 0,
     isPercent: true,
     prefix: '+',

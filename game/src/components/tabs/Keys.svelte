@@ -98,6 +98,29 @@
         {/if}
 
     </div>
+    <div class='pt-6'>
+        <div class='wrapper'>
+            <KeySlurryConvertButton />
+        </div>
+    </div>
+    <div class='grid grid-cols-12 pt-2'>
+        {#each $keyUpgrades as k, i}
+        <div class='col-span-3'>
+            <SlurryUpgradeButton index={i}/>
+        </div>
+        {/each}
+    </div>
+
+    <div class='py-3'></div>
+
+    <div class='grid grid-cols-12 pt-2'>
+        {#each $keyCrafts as k, i}
+        <div class='col-span-12'>
+            <SlurryCraftButton index={i}/>
+        </div>
+        {/each}
+    </div>
+
 
 </div>
 
@@ -109,11 +132,14 @@ import { wallet, visibleTier, keyItemsUnlocked, keysOpened } from '../../data/pl
 import { progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
 import { miningUpgradeLevels } from '../../data/player';
 import { keyRewardText, key1DropTable, key2DropTable, key3DropTable,
-     key4DropTable, key5DropTable } from '../../data/keys'
+     key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../../data/keys'
 import { f } from '../../data/format';
 import ref from '../../calcs/ref';
 import KeyOpenButton  from '../buttons/KeyOpenButton.svelte';
-    import formula from '../../calcs/formula';
+import KeySlurryConvertButton from '../buttons/KeySlurryConvertButton.svelte';
+import SlurryUpgradeButton from '../buttons/SlurryUpgradeButton.svelte';
+import SlurryCraftButton from '../buttons/SlurryCraftButton.svelte';
+import formula from '../../calcs/formula';
 
 
 $: dropTable = [

@@ -73,7 +73,7 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     beaconActivations, beaconLevels, beaconProgress, resources,
      keysOpened, unlockedRes, beaconUpgradeLevels, flags, 
      enchantUpgradeLevels, enchantProgress, automationItemsUnlocked,
-    mineLevel, buttonUpgradeLevels, stats} from '../../data/player';
+    mineLevel, buttonUpgradeLevels, stats, keyCraftAmount} from '../../data/player';
 import {buttonUpgrades} from '../../data/button';
 import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
@@ -199,12 +199,11 @@ function calcFameGain() {
 }
 
 // ONLY things in these arrays will be reset on relocate
-const walletResetItems = ['gems', 'gold', 'crystals', 'orbs', 'beacons', 'key1', 'key2', 'fame']
+const walletResetItems = ['gems', 'gold', 'crystals', 'orbs', 'beacons', 'key1', 'key2']
 const resourceResetItems = ['beaconPower']
 function relocate() {
-    if (calcFameGain() >= 5) {
+    if (calcFameGain() >= 0) {
         if (confirm("Are you sure? Relocating will reset all previous progress.")) {
-            
             $flags['relocateNavBack'] = true;
             $wallet['fame'] = ($wallet['fame'] || 0) + calcFameGain();
             $wallet['totalFame'] = ($wallet['fame'] || 0) + calcFameGain();
@@ -251,6 +250,10 @@ function relocate() {
                 $miningUpgradeLevels[6] = 1;
                 $miningUpgradeLevels[8] = 1;
                 $visibleTier = 3;
+            }
+
+            for (let k of Object.keys($keyCraftAmount)) {
+                $keyCraftAmount[k] = 0;
             }
         }
     }

@@ -9,13 +9,15 @@ import Decimal from 'break_infinity.js'
 import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags, 
     gemGainFlavorText, gemProgressFlavorText, gemProgressFlavorNextUpdate} from '../../data/mining' 
 import {keyGainFlavorText, keyProgressFlavorText, keyProgressFlavorNextUpdate,
-key1DropTable, key2DropTable, key3DropTable, key4DropTable, key5DropTable} from '../../data/keys'
+key1DropTable, key2DropTable, key3DropTable, key4DropTable, key5DropTable,
+keyCrafts, keyUpgrades} from '../../data/keys'
 import {progress, miningUpgradeLevels, wallet, miningDropTable, 
     unlockedRes, settings, progressThisTick, visibleTier,progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources, 
     beaconUpgradeLevels, enchantProgress, enchantUpgradeLevels, 
     automationItemsUnlocked, activityLog, mineLevel, 
-    buttonStats, buttonUpgradeLevels} from '../../data/player'
+    buttonStats, buttonUpgradeLevels, keyCraftMastery, 
+    keyCraftTimes, keyCraftAmount} from '../../data/player'
 import {buttonUpgrades} from '../../data/button'
 import {beaconFormulas, beaconBonuses, beaconNextReqs, 
     beaconNums, beaconUpgrades, beaconPowerFlavorText, beaconNameText} from '../../data/beacons'
@@ -75,6 +77,7 @@ onMount(() => {
         dt = (Date.now() - last) / UPDATE_SPEED;
         addProgress(dt);
         updateMiningLevel();
+        checkForKeyCraftCompletion();
         if ($settings['activeTab'] !== 'beacons') {
             if (beaconUpdateCounter >= 10) {
                 addBeaconProgress(dt*10, true);
@@ -86,6 +89,9 @@ onMount(() => {
         }
         if ($automationItemsUnlocked['beaconizer']) 
             $wallet['beacons'] = ($wallet['beacons'] || 0) + (1000/UPDATE_SPEED*dt);
+        
+        
+        
         last = Date.now();
     }, UPDATE_SPEED)
     // slowLoop updates at random intervals, do NOT add time-dependent items here!
@@ -121,14 +127,15 @@ function updateprogressThisTick(delta) {
     
     const progKey1 = ($miningUpgradeLevels[3] > 0 ?
     PROGRESS_BASE * $miningUpgrades[3]['formula']($miningUpgradeLevels[3]) : 0)
-    * $miningUpgrades[26]['formula']($miningUpgradeLevels[26]);
-
+    * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
+    * $beaconBonuses[5]
     $progressAverage['key1'] = progKey1;
     $progressThisTick['key1'] = progKey1 * delta;
 
     const progKey2 = ($miningUpgradeLevels[4] > 0 ?
     PROGRESS_BASE * $miningUpgrades[4]['formula']($miningUpgradeLevels[4]) : 0)
-    * $miningUpgrades[26]['formula']($miningUpgradeLevels[26]);
+    * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
+    * $beaconBonuses[5]
 
     $progressAverage['key2'] = progKey2;
     $progressThisTick['key2'] = progKey2 * delta;
@@ -198,6 +205,7 @@ function addGems(n, avgProgress) {
     * ($miningUpgrades[8]['formula']($miningUpgradeLevels[8]))
     * (Math.max(1,$beaconBonuses[3]))
     * (Math.max(1,$miningUpgrades[10]['formula']($miningUpgradeLevels[10])))
+    * (Math.max(1,$miningUpgrades[20]['formula']($miningUpgradeLevels[20])))
     * $buttonStats['hardenedBonus'];
     // update the flavor text if there is a minor change, otherwise don't
     if (Date.now() - lastGemGainTextUpdate > 1000) {
@@ -271,6 +279,37 @@ function dropRoll(n) {
     }
 }
 
+function checkForKeyCraftCompletion() {
+    for (let [i, val] of $keyCrafts.entries()) {
+        const item = val['item'];
+        const finish = $keyCraftTimes[item][1];
+        if (Date.now() > finish && finish != -1) {
+            $keyCraftAmount[item]++;
+            $wallet[item] = ($wallet[item] || 0) + calcKeyCraftAmountGained(i);
+            $keyCraftTimes[item][1] = -1;
+    
+            $keyCraftMastery[item][1] = parseInt(($keyCraftMastery[item][1] || 0)) + 1;
+            if ($keyCraftMastery[item][1] > $keyCraftMastery[item][2]) {
+                $keyCraftMastery[item][0]++;
+                $keyCraftMastery[item][1] = 0;
+                $keyCraftMastery[item][2] *= 1.15;
+                $keyCraftMastery[item][2] = Math.floor($keyCraftMastery[item][2]);
+                addToActivityLog('[Keys] Crafting Mastery for ' + item + 'increased! ('
+                +$keyCraftMastery[item][0] + ')', 
+                'text-amber-400')
+            }
+        addToActivityLog('[Keys] Crafting complete: +' 
+        + f(calcKeyCraftAmountGained(i)) + ' ' + $keyCrafts[i]['name'], $keyCrafts[i]['style']||'text-white')
+        }
+        
+    }
+}
+
+function calcKeyCraftAmountGained(i) {
+    return $keyCrafts[i]['baseAmount'];
+}
+
+
 let locks = new Set(); // makes sure levelups don't repeat when leveling up from next function call
 function addBeaconProgress(delta, isOffFocus = false) {
     if (isNaN($resources['beaconPower'])) $resources['beaconPower'] = 0;
@@ -337,7 +376,7 @@ function procEnchants(n, tier) {
     const rand = Math.random() / n;
     for (let [i,ench] of $enchantUpgrades.entries()) {
         if (ench['tier'] > n) break;
-        if (rand < ench['formula']($enchantUpgradeLevels[ench['id']])) {
+        if (rand < ench['formula']($enchantUpgradeLevels[i])) {
             switch(i) {
                 case 0:
                     break;
@@ -345,9 +384,12 @@ function procEnchants(n, tier) {
                     break;
                 case 2: // burst
                     addGems(size);
+                    addToActivityLog('[Burst] ' + size + ' mining cycles', 'text-violet-300');
                     break;
                 case 3: // orb rush
-                    $wallet['orbs'] += (Math.random() + 0.3) * Math.pow(quality, 3);
+                    const val = (Math.random() + 0.3) * Math.pow(quality, 3);
+                    $wallet['orbs'] += val
+                    addToActivityLog('[Orb Rush] +' + val + ' orbs', 'text-violet-300');
                     break;
 
             }

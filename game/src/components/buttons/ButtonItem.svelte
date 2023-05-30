@@ -1,5 +1,5 @@
 {#if showRewardDescription}
-<div class='absolute flex w-[400px] h-[35px] {rewardStyle} 
+<div class='absolute flex w-[350px] h-[35px] {rewardStyle} 
 text-center items-center justify-center'
 style = 'top: {textPosition.y}px; left: {textPosition.x}px;'>
 {rewardDescriptionText}</div>
@@ -18,7 +18,7 @@ style = 'top: {textPosition.y}px; left: {textPosition.x}px;'>
     on:click={handleClick}
   > </button>
 {/if}
-{#if $buttonUpgradeLevels[7] > -1}
+{#if $buttonUpgradeLevels[7] > 0}
 <button
     id="button"
     class="absolute w-[4px] h-[4px] bg-red-400 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
@@ -29,6 +29,8 @@ style = 'top: {textPosition.y}px; left: {textPosition.x}px;'>
 
 
 <script>
+// @ts-nocheck
+
 import { onMount } from 'svelte';
 // @ts-ignore
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
@@ -66,8 +68,8 @@ const BUTTON_SIZE= 100;
     // @ts-ignore
     const handleClick = (event) => {
         textPosition = {
-        x: buttonPosition.x,
-        y: buttonPosition.y
+        x: buttonPosition.x - 100,
+        y: buttonPosition.y - 18
       }
 
 
@@ -95,10 +97,10 @@ const BUTTON_SIZE= 100;
         $wallet['fame'] += 1000;
     }
     console.log(absDist)
-    if (absDist < 0.004) {
+    if (absDist < 0.25) {
         rewardAmount = 400;
         rewardDescriptionText = 'PERFECT! +';
-        rewardStyle = 'border-2 text-large text-amber-500 border-amber-500 font-bold'
+        rewardStyle = 'text-large text-amber-500 border-amber-500 font-bold'
         $buttonNumClicks['perfect']++;
         $mineLevel['xp'] += 3;
     } else if (absDist <= 2) {
@@ -184,10 +186,12 @@ const BUTTON_SIZE= 100;
       showRewardDescriptionTimeout(isLucky);
     }
   
+    let showTimer;
     // @ts-ignore
     function showRewardDescriptionTimeout(isLucky) {
+        clearTimeout(showTimer);
         showRewardDescription = true;
-      setTimeout(() => {
+      showTimer = setTimeout(() => {
         showRewardDescription = false;
       }, (isLucky ? 900 : 500))
     }

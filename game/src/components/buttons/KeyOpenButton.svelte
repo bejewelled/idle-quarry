@@ -227,7 +227,7 @@ select-none'>
             case 2:
                 return ($wallet['beacons'] && $wallet['beacons'] >= 1) || formula.sumArray($beaconLevels) > 0;
             case 3:
-                return $wallet['sigil'] && $wallet['sigil'] >= 1;
+                return $wallet['sigils'] && $wallet['sigils'] >= 1;
             case 4:
                 return $wallet['artifactsTotal'] && $wallet['artifactsTotal'] >= 1;
             case 5:

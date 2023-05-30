@@ -1,7 +1,7 @@
-
+//@ts-nocheck
 import { writable, get } from 'svelte/store';
 import { miningUpgrades } from './mining';
-import { miningUpgradeLevels, wallet } from './player';
+import { miningUpgradeLevels, keyUpgradeLevels, wallet } from './player';
 
 function single(context: any) {
     // @ts-ignore
@@ -160,7 +160,8 @@ function dropTable(context: any) {
                     console.log(item, val)
                     console.log(get(miningUpgradeLevels));
                     i[item]= [
-                        Math.min(1,val[0] * (get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2]))),
+                        Math.min(1,val[0]
+                            * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])),
                         val[1], 
                         val[2]
                     ]
@@ -219,3 +220,85 @@ export const keyRewardText = object('')
 export const keyGainFlavorText = object({})
 export const keyProgressFlavorText = array(Array(20).fill(0))
 export const keyProgressFlavorNextUpdate = single(Date.now()+500)
+
+export const keyUpgrades = array([
+    {
+        name: 'Mysterious Potion',
+        description: 'Concoct a potion that improves key rates for ALL keys.',
+        cost: {
+            slurry: 1e6,
+            sigils: 100
+        },
+        ratio: 1.3,
+        formula: (lv: any) => 1 + 0.25*Math.pow(lv,1.33),
+        unlockAt: () => (get(wallet)['fame'] >= 1),
+        isPercent: true,
+        suffix: '  chance',
+        maxLevel: 400,
+        notes: ''
+    }
+    
+])
+
+export const keyCrafts = array([
+    {
+        item: 'key3',
+        name: '[***] Key',
+        style: 'text-pink-400',
+        stylebg: 'bg-pink-400',
+        cost: {
+            slurry: 1e5,
+        },
+        craftTime: 240, // in seconds
+        baseAmount: 1,
+        ratio: 1.04,
+        unlockAt: () => (get(wallet)['key3'] > 0),
+    },
+    {
+        item: 'key4',
+        name: '[****] Key',
+        style: 'text-violet-400',
+        stylebg: 'bg-violet-400',
+        cost: {
+            slurry: 1e9,
+        },
+        craftTime: 7200, // in seconds
+        baseAmount: 1,
+        ratio: 1.05, 
+        unlockAt: () => (get(wallet)['key4'] > 0),
+    },
+    {
+        item: 'key5',
+        name: '[*****] Key',
+        style: 'text-amber-400',
+        stylebg: 'bg-amber-400',
+        cost: {
+            slurry: 1e14,
+        },
+        craftTime: 86400, // in seconds
+        baseAmount: 1,
+        ratio: 1.06,
+        unlockAt: () => (get(wallet)['key5'] > 0),
+    },
+    {
+        item: 'beacons',
+        name: 'Beacons',
+        style: 'text-sky-400',
+        stylebg: 'bg-sky-400',
+        cost: {
+            slurry: 1e3,
+        },
+        craftTime: 60, // in seconds
+        baseAmount: 100,
+        ratio: 1.025,
+        unlockAt: () => (get(wallet)['beacons'] > 0),
+    },
+
+    /* NOTE!!!
+
+    When adding a new item here, MAKE SURE to update the following:
+    player.slurryCraftFinishTimes
+    player.keyCraftMastery
+
+    */
+])

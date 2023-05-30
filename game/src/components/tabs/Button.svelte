@@ -3,7 +3,7 @@
   <div class='wrapper pt-2'>
     <div class='grid grid-cols-12'>
         <div class='text-center pb-3 text-med game-text col-span-12'>
-          Total Clicks: {$buttonStats['totalClicks']} 
+          Total Clicks: {f($buttonStats['totalClicks'])} 
           [ 
           <span class='text-amber-500 font-bold'>{f($buttonNumClicks['perfect'],0)}</span> + 
           <span class='text-pink-500'>{f($buttonNumClicks['incredible'],0)}</span> + 
@@ -14,7 +14,7 @@
            ]
         </div>
         <div class='col-span-12 pb-3 game-text text-center'>
-           Clicks Today: {$buttonStats['totalClicksToday']}
+           Clicks Today: {f($buttonStats['totalClicksToday'])}
           [ <span class='game-text'>{f(formula.calcButtonStreakBonus($buttonStats['totalClicksToday']),3)}x 
               <span class='text-indigo-300'> crystal bonus</span>
           </span> ]

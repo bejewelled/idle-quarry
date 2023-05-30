@@ -215,6 +215,8 @@ export const miningUpgradeLevelsBought = array(Array(20).fill(0));
 export const miningUpgradeLevelsFree = array(Array(20).fill(0));
 export const miningUpgradeLevels = array(Array(20).fill(0));
 
+export const keyUpgradeLevels = array(Array(50).fill(0));
+
 export const baseMiningDropTable = dropTable({
     gold: [0.20,1,3], // 10% chance to drop 1 gold
     key1: [0.01,1,1], 
@@ -304,4 +306,27 @@ export const buttonUpgradeLevels = array(Array(20).fill(0))
 
 export const stats = object({
     lastRelocate: Date.now(),
+})
+
+export const keyCraftTimes = object({
+    // [start, finish]
+    key3: [-1, -1],
+    key4: [-1, -1],
+    key5: [-1, -1],
+    beacons: [-1, -1],
+})
+
+export const keyCraftMastery = object({
+    // [item]: [level, xp, xpNextReq]
+    key3: [1, 0, 100],
+    key4: [1, 0, 100],
+    key5: [1, 0, 100],
+    beacons: [1 ,0, 100],
+})
+
+export const keyCraftAmount = object({
+    key3: 0,
+    key4: 0,
+    key5: 0,
+    beacons: 0,
 })
