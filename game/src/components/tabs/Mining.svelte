@@ -1,9 +1,9 @@
 <div class='wrapper py-2'>
     {#key clockr}
-    <div class='has-tooltip mining-flavor game-btn text-med text-center'>
+    <div class='has-tooltip mining-flavor game-btn text-med text-center items-right'>
         Hover for Possible Drops
-        <span class='px-2 mx-4 tooltip tooltip-text shadow-lg p-1
-        border-white border-double border bg-[#222529] ml-16
+        <span class='px-2 tooltip tooltip-text shadow-lg p-1
+        border-white border-double border bg-[#222529] ml-20
           pointer-events-none'>
           <!-- Drop Table Display -->
           
@@ -52,7 +52,7 @@
                 <div class='mine-bar-wrapper align-middle'>
                     <div class="w-full my-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
                         <div class="bg-emerald-400 h-2.5 rounded-full" 
-                        style="width: {$antiFlickerFlags['key1'] ? '100%' : key1BarWidth}"></div>
+                        style="width: {$antiFlickerFlags['keyfinder'] ? '100%' : key1BarWidth}"></div>
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                 <div class='mine-bar-wrapper align-middle'>
                     <div class="w-full my-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
                         <div class="bg-blue-400 h-2.5 rounded-full" 
-                        style="width: {$antiFlickerFlags['key2'] ? '100%' : key2BarWidth}"></div>
+                        style="width: {$antiFlickerFlags['keyfinder'] ? '100%' : key2BarWidth}"></div>
                     </div>
                 </div>
             </div>
@@ -95,8 +95,9 @@
  //@ts-nocheck
 import { onMount } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
-    settings, visibleTier, progressThisTick, progressAverage} from '../../data/player';
-import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
+    settings, visibleTier, progressThisTick, antiFlickerFlags,
+    progressAverage} from '../../data/player';
+import {progressThreshold, progressPerTick, miningUpgrades, 
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
@@ -112,7 +113,6 @@ $: upgradeOrder = $miningUpgrades.map((_,i) => i).sort((a,b) => miningSort([a,$m
 let clockr = false;
 
 onMount(() => {
-    console.log(upgradeOrder)
     const clock = setInterval(() => {
         clockr = !clockr;
     }, 517)

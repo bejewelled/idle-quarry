@@ -32,7 +32,9 @@
                 {/each}
                 <div class='col-span-4 py-1 items-center justify-center line'><hr/></div>
                 <div class='text-teal-100 text-left text-xs pr-3 col-span-2'>time</div>
-                    <div class='col-span-2 text-xs text-left'>{f($keyCrafts[index]['craftTime'],0)} seconds</div>
+                    <div class='col-span-2 text-xs text-left'>{f(
+                        $keyCrafts[index]['craftTime'] * Math.pow(0.9, masteryLevel-1),0
+                        )} seconds</div>
             </div>
         </span>
     </div>
@@ -114,7 +116,7 @@
         ((craftFinishTime != craftStartTime) ?
         Math.min(100,(craftFinishTime > ct ?
     (ct - craftStartTime) / (craftFinishTime - craftStartTime) * 100 :
-    0)) : 80);
+    0)) : 0);
     let masteryBarWidth = 0;
     const getMasteryBarWidth = () => (($keyCraftMastery[item][1] / $keyCraftMastery[item][2])*100)
 
@@ -158,7 +160,7 @@
     function cost(start) {
        const base = start * Math.pow($keyCrafts[index]['ratio'], $keyCraftAmount[item]);  
        const r =  $keyCrafts[index]['ratio']
-       const l = $settings['buyAmount']
+       const l = 1; // number of items to buy
 
        return formula.gSum(base,r,l)
     }
@@ -171,6 +173,7 @@
 
     function buy() {
         if (craftFinishTime > ct) return
+        if ($wallet['slurry'] < 1) return
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
             if (val >=  1 && $wallet[type] < val) {

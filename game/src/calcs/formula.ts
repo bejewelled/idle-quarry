@@ -49,8 +49,8 @@ export default class formula {
 
     static calcFameBeaconMulti(n: number) {
       return (n > 1e6 ? 11 + Math.pow((n - 1e6) / 1e6, 0.75)  : 
-              n > 1e3 ? 1 + (n - 1e3) / 1e5 :
-              n / 1000)
+              n > 150 ? 1 + (n - 150) / 1e5 :
+              n / 150)
     }
 
     static calcFameTimeMultiplier(last: number) {

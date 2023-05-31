@@ -186,7 +186,7 @@ export const beaconNameText = array([
     'Key Finder Speed',]
     .concat(Array(26).fill(''))
 )
-export const beaconMiningLevelReqs = array([0,0,0,12,12,12,20,20,30,30])
+export const beaconMiningLevelReqs = array([0,0,0,12,14,16,24,27,36,40])
 
 export const beaconFormulas = array([
    /*beacon power*/ function(lv: number) {return 1 + (Math.pow(lv,0.65) * 0.01)},
@@ -198,19 +198,19 @@ export const beaconFormulas = array([
     .concat(Array(25).fill(function(lv: number) {return 1}))
 )
 
-export const beaconNextReqs = array(Array(3).fill(1e4)
-.concat(Array(3).fill(1e8))
+export const beaconNextReqs = array(Array(3).fill(2e3)
+.concat(Array(3).fill(5e7))
 .concat(Array(2).fill(1e14)
 .concat(Array(2).fill(1e23))))
 
-export const baseBeaconNextReqs = array(Array(3).fill(1e4)
-.concat(Array(3).fill(1e8))
+export const baseBeaconNextReqs = array(Array(3).fill(2e3)
+.concat(Array(3).fill(5e7))
 .concat(Array(2).fill(1e14)
 .concat(Array(2).fill(1e23))))
 
 export const beaconNums = array(
-    Array(3).fill([1e4, 1.0004])
-    .concat(Array(3).fill([1e8, 1.0008])
+    Array(3).fill([2e3, 1.0004])
+    .concat(Array(3).fill([5e7, 1.0008])
     .concat(Array(2).fill([1e14, 1.0012])
     .concat(Array(2).fill([1e23, 1.0016])))))
 

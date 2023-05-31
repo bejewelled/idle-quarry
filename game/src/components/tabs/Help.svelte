@@ -12,7 +12,7 @@
 
     <div class='text-large text-left pb-2 text-gray-300'>Beacons</div>
     <div class='text-small text-white pb-4'>
-    Allocate beacons into paths, leveling them up over time and gaining bonuses. Each color requires drastically more power than the previous one, so you'll need to work up to the later paths. 
+    Allocate beacons into paths, leveling them up over time and gaining bonuses. Each color tier requires drastically more power than the previous one, so you'll need to work up to the later paths. 
     <br />You gain beacon power based on your beacon levels. Beacon power can augment your beacon paths.
     </div>
 

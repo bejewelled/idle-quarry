@@ -6,7 +6,7 @@
 
 
 import Decimal from 'break_infinity.js'
-import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags, 
+import {progressThreshold, progressPerTick, miningUpgrades, 
     gemGainFlavorText, gemProgressFlavorText, gemProgressFlavorNextUpdate} from '../../data/mining' 
 import {keyGainFlavorText, keyProgressFlavorText, keyProgressFlavorNextUpdate,
 key1DropTable, key2DropTable, key3DropTable, key4DropTable, key5DropTable,
@@ -17,7 +17,7 @@ import {progress, miningUpgradeLevels, wallet, miningDropTable,
     beaconUpgradeLevels, enchantProgress, enchantUpgradeLevels, 
     automationItemsUnlocked, activityLog, mineLevel, 
     buttonStats, buttonUpgradeLevels, keyCraftMastery, 
-    keyCraftTimes, keyCraftAmount} from '../../data/player'
+    keyCraftTimes, keyCraftAmount, antiFlickerFlags} from '../../data/player'
 import {buttonUpgrades} from '../../data/button'
 import {beaconFormulas, beaconBonuses, beaconNextReqs, 
     beaconNums, beaconUpgrades, beaconPowerFlavorText, beaconNameText} from '../../data/beacons'
@@ -78,6 +78,7 @@ onMount(() => {
         addProgress(dt);
         updateMiningLevel();
         checkForKeyCraftCompletion();
+        // out of focus - update more slowly to conserve resources
         if ($settings['activeTab'] !== 'beacons') {
             if (beaconUpdateCounter >= 10) {
                 addBeaconProgress(dt*10, true);
@@ -149,7 +150,6 @@ function updateprogressThisTick(delta) {
 
 let progressGain = 0;
 function addProgress(delta) {
-    addBeaconProgress(delta);
     const gemAt = $progressThreshold['gems'];
     const keyAt = [
     $progressThreshold['key1'], 
@@ -175,10 +175,7 @@ function addProgress(delta) {
             }
         }
 
-        if ($progressThisTick['gems'] > gemAt*0.25) $antiFlickerFlags['gems'] = true;
-        else if ($antiFlickerFlags['gems'] && $progressThisTick['gems'] < gemAt*0.15) {
-            $antiFlickerFlags['gems'] = false;
-        }
+       
         addGems($progress['gems'] / gemAt, $progressAverage['gems']);
         dropRoll(Math.floor($progress['gems'] / gemAt));
 
@@ -371,10 +368,11 @@ function updateBeaconBonuses() {
 }
 
 function procEnchants(n, tier) { 
-    const size = $enchantUpgrades[0]['formula']($miningUpgradeLevels[0]);
-    const quality = $enchantUpgrades[1]['formula']($miningUpgradeLevels[1]);
-    const rand = Math.random() / n;
+    const size = $enchantUpgrades[0]['formula']($enchantUpgradeLevels[0]);
+    const quality = $enchantUpgrades[1]['formula']($enchantUpgradeLevels[1]);
+    
     for (let [i,ench] of $enchantUpgrades.entries()) {
+        const rand = Math.random() / n;
         if (ench['tier'] > n) break;
         if (rand < ench['formula']($enchantUpgradeLevels[i])) {
             switch(i) {
@@ -384,12 +382,12 @@ function procEnchants(n, tier) {
                     break;
                 case 2: // burst
                     addGems(size);
-                    addToActivityLog('[Burst] ' + size + ' mining cycles', 'text-violet-300');
+                    addToActivityLog('[Burst] ' + f(size) + ' mining cycles', 'text-violet-300');
                     break;
                 case 3: // orb rush
                     const val = (Math.random() + 0.3) * Math.pow(quality, 3);
                     $wallet['orbs'] += val
-                    addToActivityLog('[Orb Rush] +' + val + ' orbs', 'text-violet-300');
+                    addToActivityLog('[Orb Rush] +' + f(val) + ' orbs', 'text-violet-300');
                     break;
 
             }

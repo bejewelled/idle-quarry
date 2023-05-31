@@ -157,8 +157,6 @@ function dropTable(context: any) {
         updateTable() {
             update((i: any) => {
                 for (let [item, val] of Object.entries(i)) {
-                    console.log(item, val)
-                    console.log(get(miningUpgradeLevels));
                     i[item]= [
                         Math.min(1,val[0]
                             * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])),
@@ -174,8 +172,8 @@ function dropTable(context: any) {
 
 
 export const key1DropTable = dropTable({
-    gems: [0.6, 10, 100], // [chance, min, max]
-    orbs: [0.4, 1, 4], // [chance, min, max]
+    gems: [0.6, 10, 200], // [chance, min, max]
+    orbs: [0.4, 1, 5], // [chance, min, max]
     key1: [0.1, 1, 2],
     key2: [0.002, 1, 1],
 });

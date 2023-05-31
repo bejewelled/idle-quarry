@@ -61,9 +61,9 @@ export default class ref {
     }
 
     static tabs = [
-        'mining', 'keys', 'beacons', 'artifacts', 'relocate',
-        'enchants', 'automation', 'button', 'challenges', 'artifacts', 
-        'mastery', 'ascension', 'help'
+        'mining', 'keys', 'beacons', 'button', 'relocate',
+        'enchants', 'automation', 'challenges',
+        'ascension', 'mastery'
     ]
 
     static tabNotUnlockedText = {

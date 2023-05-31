@@ -164,11 +164,12 @@ function dropTable(context: any) {
                         val[0] * 
                             //@ts-ignore - Fortune (T1) item multiplier
                             (ref.dropTiers[item] === 1 ?
-                            get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2])
+                            Math.max(get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2]),1)
                             : 1) 
-                            * get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6])
-                            * get(miningUpgrades)[22]['formula'](get(miningUpgradeLevels)[22])
-                            * get(beaconBonuses)[2],
+                            * Math.max(1,get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6]))
+                            * Math.max(1,get(miningUpgrades)[22]['formula'](get(miningUpgradeLevels)[22]))
+                            * Math.max(1,get(beaconBonuses)[2]),
+                           
                         //@ts-ignore
                         (val[1])
                         * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11])
@@ -219,7 +220,7 @@ export const keyUpgradeLevels = array(Array(50).fill(0));
 
 export const baseMiningDropTable = dropTable({
     gold: [0.20,1,3], // 10% chance to drop 1 gold
-    key1: [0.01,1,1], 
+    key1: [0.02,1,1], 
     orbs: [0.01,4,15],
     beacons: [0.005,1,1],
     key2: [0.00075,1,1],
@@ -228,7 +229,13 @@ export const baseMiningDropTable = dropTable({
 });
 
 export const miningDropTable = dropTable({
-
+    gold: [0.20,1,3], // 10% chance to drop 1 gold
+    key1: [0.02,1,1], 
+    orbs: [0.01,4,15],
+    beacons: [0.005,1,1],
+    key2: [0.00075,1,1],
+    key3: [1e-6,1,1],
+    sigils: [0.0003,1,3]
 });
 
 
@@ -330,3 +337,16 @@ export const keyCraftAmount = object({
     key5: 0,
     beacons: 0,
 })
+
+export const antiFlickerFlags = object({
+    gems: false,
+    key1: false,
+    key2: false,
+    key3: false,
+    crafting: false,
+    beacons: false,
+})
+
+export const saveVersion = single('0.0.1')
+
+export const startOfGame = single(Date.now());

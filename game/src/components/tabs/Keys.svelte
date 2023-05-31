@@ -113,6 +113,7 @@
 
     <div class='py-3'></div>
 
+    {#if $wallet['slurry'] > 1}
     <div class='grid grid-cols-12 pt-2'>
         {#each $keyCrafts as k, i}
         <div class='col-span-12'>
@@ -120,6 +121,7 @@
         </div>
         {/each}
     </div>
+    {/if}
 
 
 </div>

@@ -170,11 +170,11 @@ export const miningUpgrades = array([{
     name: 'Fortune',
     description: 'Improves droprates for common [*] items.',
     cost: {
-        gold: 15
+        gold: 10
     },
     ratio: 1.33,
     unlockAt: () => (get(wallet)['gems'] > 30 && get(wallet)['gold'] > 5),
-    formula: (lv: any) => 1 + Math.pow(lv, 0.85)*0.1,
+    formula: (lv: any) => 1 + lv*0.1,
     isPercent: true,
     prefix: '+',
     maxLevel: 300,
@@ -236,16 +236,15 @@ export const miningUpgrades = array([{
 {
     index: 6,
     name: 'Lootmaster I',
-    description: 'The first level unlocks a new tier of findable drops. Additional levels increase all drop rates.',
+    description: 'Unlocks a new tier of findable drops.',
     cost: {
         gold: 400,
     },
     ratio: 1.25,
-    unlockAt: () => (get(miningUpgradeLevels)[0] > 10 && get(miningUpgradeLevels)[1] > 10),
-    formula: (lv: any) => ((1 + Math.max(0, Math.pow(lv-1, 0.325))) || 1),
+    unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10),
+    formula: (lv: any) => lv,
     isPercent: false,
-    suffix: 'x droprates',
-    maxLevel: 100,
+    maxLevel: 1,
     notes: ''
 },
 {
@@ -255,9 +254,9 @@ export const miningUpgrades = array([{
     cost: {
         gems: 1000,
     },
-    ratio: 1.3,
-    unlockAt: () => (get(miningUpgradeLevels)[0] > 10 && get(miningUpgradeLevels)[1] > 10),
-    formula: (lv: any) => (1 + lv*0.5*pow(lv, 0.11)),
+    ratio: 1.25,
+    unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10),
+    formula: (lv: any) => (1 + lv*0.25),
     isPercent: false,
     suffix: 'x gold from drops',
     maxLevel: 300,
@@ -272,7 +271,7 @@ export const miningUpgrades = array([{
         gems: 2500,
     },
     ratio: 1.25,
-    unlockAt: () => (get(miningUpgradeLevels)[0] > 10 && get(miningUpgradeLevels)[1] > 10),
+    unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10),
     formula: (lv: any) => (1+Math.pow(lv,1.2)*0.1),
     isPercent: true,
     prefix: '+',
@@ -578,6 +577,7 @@ export const miningUpgrades = array([{
     ratio: 1.5,
     unlockAt: () => (get(wallet)['fame'] > 0),
     formula: (lv: any) => 1 + lv*1.5,
+    isFame: true,
     isPercent: false,
     suffix: 'x speed/amount',
     maxLevel: 25,

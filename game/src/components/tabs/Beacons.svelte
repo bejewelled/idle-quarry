@@ -31,7 +31,7 @@
         </div>
         <div class='col-span-7 grid grid-rows-2'>
             <div class='row-span-1 grid grid-cols-5 tooltip-text'>
-                <div class='col-span-3 text-left'>
+                <div class='col-span-3 {getTextColor(i)} text-left'>
                     {$beaconNameText[i]}
                 </div>
                 <div class = 'col-span-2 text-right'>
@@ -42,7 +42,8 @@
             <div class='mine-bar-wrapper align-middle'>
                 <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
                     <div class="{getBgColor(i)} h-1.5 rounded-full" 
-                    style="width: {pbarWidths[i]}%"></div>
+                    style="width: {$antiFlickerFlags['beacons']
+                    ? '100' : pbarWidths[i]}%"></div>
                 </div>
             </div>
         </div>
@@ -68,8 +69,9 @@
 import { onMount } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
     settings, visibleTier, progressThisTick, progressAverage,
-    beaconActivations, beaconLevels, beaconProgress, resources, mineLevel} from '../../data/player';
-import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
+    beaconActivations, beaconLevels, beaconProgress, resources, 
+    mineLevel, antiFlickerFlags} from '../../data/player';
+import {progressThreshold, progressPerTick, miningUpgrades,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import {beaconPower, beaconBonuses, beaconSpendAmt,

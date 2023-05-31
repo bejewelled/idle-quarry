@@ -80,12 +80,12 @@
             <div class='py-1 control-buttons resize-none'>
                 <button class='py-1 text-small save-btn control-btn {saveConfirm ? 'bg-green-400' : ''}' on:click={() => save()}>Save</button>
                 <button class='py-1 text-small save-btn control-btn' on:click={() => reset()}>Reset</button>
+                <button class='py-1 text-small save-btn control-btn' on:click={() => load(true)}>Import</button>
+                <button class='py-1 text-small save-btn control-btn {exportConfirm ? 'bg-green-400' : ''}' on:click={() => save(true)}>Export</button>
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>   
-                <button class='has-tooltip py-1 px-1 text-small control-btn'>Help [{tab}]
-                    <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
-                    border-white border-double border bg-[#222529] ml-16
-                      pointer-events-none'>{tabHelpText[tab] || 'Help coming soon!'}</span>
-                </button>
+                <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
+                <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
+                <button class='text-xs text-gray-600'>v0.0.1A</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
                 {#key tabsUnlocked}
@@ -116,6 +116,8 @@
                     <Automation />
                 {:else if tab === 'help'}
                     <Help />
+                {:else if tab === 'settings'}
+                    <Settings />
                 {/if}
 
                 {#if (tabUnlockCriteria[tab] && !tabUnlockCriteria[tab]()) ||
@@ -140,7 +142,7 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     resources, beaconActivations, flags, enchantUpgradeLevels, activityLog,
     mineLevel, buttonNumClicks, buttonStats, buttonUpgradeLevels, 
     keyUpgradeLevels, keyCraftAmount, keyCraftMastery, 
-    keyCraftTimes} from '../data/player.js'
+    keyCraftTimes, startOfGame, antiFlickerFlags} from '../data/player.js'
 import {key1DropTable, key2DropTable, key3DropTable, 
 key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
 import {beaconNextReqs, beaconSpendAmt} from '../data/beacons.ts'
@@ -153,6 +155,7 @@ import Enchants from '../components/tabs/Enchants.svelte';
 import Automation from '../components/tabs/Automation.svelte';
 import Button from '../components/tabs/Button.svelte';
 import Help from '../components/tabs/Help.svelte';
+import Settings from '../components/tabs/Settings.svelte';
 import MiningUpgradeButton from '../components/buttons/MiningUpgradeButton.svelte';
 import ref from '../calcs/ref.ts'
 
@@ -162,11 +165,14 @@ import { onMount } from 'svelte'
 let tab = 'mining'
 let AUTOSAVE = true;
 let AUTOSAVE_INTERVAL = 30000;
-let saveConfirm;
+let saveConfirm, exportConfirm;
 let buyAmount = 1;
 let loadingFinished = false;
 let alogShow = true;
+const GAME_SPEED = 20 //only for balancing, doesn't actually change the game speed
 $: mineLevelBarWidth = $mineLevel['xp'] / $mineLevel['xpNextReq'] * 100;
+
+let ct;
 
 const toggleAlog = () => {
     alogShow = !alogShow;
@@ -176,7 +182,6 @@ const toggleAlog = () => {
 const changeTab = (t: string) => {
     tab = t;
     $settings['activeTab'] = t;
-    console.log(tab);
 }
 
 const d = (i: string | number) => {
@@ -213,6 +218,7 @@ const tabUnlockCriteria = {
         button: () => $mineLevel['level'] >= 8,
         default: () => false,
         help: () => true,
+        settings: () => true,
     }
 const tabsUnlocked = {
     mining: true,
@@ -224,14 +230,12 @@ const tabsUnlocked = {
 }
 
 
-const save = () => {
-    console.log('s')
+const save = async (isExport = false) => {
     localStorage.setItem('wallet', JSON.stringify($wallet));
     localStorage.setItem('miningUpgradeLevels', JSON.stringify($miningUpgradeLevels));
     localStorage.setItem('unlockedRes', JSON.stringify([...$unlockedRes]));
     let keyItems = {}
     for (let key of Object.keys($keyItemsUnlocked)) {
-        console.log(key);
         keyItems[key] = Array.from($keyItemsUnlocked[key] || []);
     }
     localStorage.setItem('keyItemsUnlocked', JSON.stringify(keyItems));
@@ -258,11 +262,31 @@ const save = () => {
     localStorage.setItem('keyCraftTimes', JSON.stringify($keyCraftTimes));
     localStorage.setItem('keyCraftAmount', JSON.stringify($keyCraftAmount));
     localStorage.setItem('keyCraftMastery', JSON.stringify($keyCraftMastery));
+    localStorage.setItem('startOfGame', JSON.stringify($startOfGame));
+    localStorage.setItem('settings', JSON.stringify($settings));
+    localStorage.setItem('antiFlickerFlags', JSON.stringify($antiFlickerFlags));
+
 
     saveConfirm = true;
+    if (isExport) {
+        const keys = Object.keys(localStorage);
+        const save = {}
+
+        keys.forEach((key) => {
+            save[key] = localStorage.getItem(key);
+        });
+        const saveFile = btoa(JSON.stringify(save));
+        await parent.navigator.clipboard.writeText(saveFile);
+        alert('Copied save to clipboard.')
+        exportConfirm = true;
+    }
+
     setTimeout(() => {
         saveConfirm = false;
+        exportConfirm = false;
     }, 1000);
+
+
 }
 
 const reset = () => {
@@ -274,7 +298,24 @@ const reset = () => {
     }
 }
 
-const load = async () => {
+const load = async (isImport = false) => {
+    if (isImport) {
+        const saveFile = prompt("Paste your save here.");
+        if (saveFile) {
+            try {
+                const save = JSON.parse(atob(saveFile));
+                const keys = Object.keys(save);
+                keys.forEach((key) => {
+                    localStorage.setItem(key, save[key]);
+                });
+                location.reload();
+            }  catch (e) {
+                alert("Save file invalid, using local save instead. Contact the developer on Discord if this is a mistake.")
+            }
+        } else {
+            alert("Safe file empty, using local save instead.")
+        }
+    }
     if (localStorage === null) return;
     if (localStorage.getItem('wallet')) {
         wallet.set((JSON.parse(localStorage.getItem('wallet'))));
@@ -285,7 +326,6 @@ const load = async () => {
     if ($miningUpgradeLevels.length < 100) {
         $miningUpgradeLevels = [...$miningUpgradeLevels, ...Array(100-$miningUpgradeLevels.length).fill(0)];
     }
-    console.log($miningUpgradeLevels)
     if (localStorage.getItem('progress'))
         unlockedRes.set(JSON.parse(localStorage.getItem('progress')))
     if (localStorage.getItem('keysOpened'))
@@ -332,7 +372,6 @@ const load = async () => {
     }
     if (localStorage.getItem('beaconActivations')) {
         beaconActivations.set(JSON.parse(localStorage.getItem('beaconActivations')));
-        console.log($beaconActivations)
     }
     if (localStorage.getItem('flags')) {
         flags.set(JSON.parse(localStorage.getItem('flags')));
@@ -364,10 +403,21 @@ const load = async () => {
     if (localStorage.getItem('keyCraftMastery')) {
         keyCraftMastery.set(JSON.parse(localStorage.getItem('keyCraftMastery')));
     }
-    // for (let i = 0; i < $beaconActivations.length; i++) {
-    //     if (isNaN(i) || !i) $beaconActivations[i] = 0;
-    // }
-    delete $wallet['beaconPower'];
+    if (localStorage.getItem('startOfGame')) {
+        startOfGame.set(JSON.parse(localStorage.getItem('startOfGame')));
+    }
+    if (localStorage.getItem('settings')) {
+        settings.set(JSON.parse(localStorage.getItem('settings')));
+    }
+    if (localStorage.getItem('antiFlickerFlags')) {
+        antiFlickerFlags.set(JSON.parse(localStorage.getItem('antiFlickerFlags')));
+    }
+
+    // updates older save files to new format
+    versionUpdater();
+
+   miningDropTable.updateTable();
+
     if ($resources['beaconPower'] < 0) $resources['beaconPower'] = 0;
     if ($wallet['fame'] == null) $wallet['fame'] = 0;
     key1DropTable.updateTable();
@@ -376,6 +426,11 @@ const load = async () => {
     key4DropTable.updateTable();
     key5DropTable.updateTable();
     loadingFinished = true;
+    return true;
+}
+
+function versionUpdater() {
+
 }
 
 const tabHelpText = {
@@ -387,14 +442,23 @@ const tabHelpText = {
     button: "You'll have to figure this one out yourself."
 }
 
+async function loadFunc() {
+    await load();
+    setTimeout(() => {
+        miningDropTable.updateTable();
+    },250)
+}
+
 onMount(() => {
-    load();
-    miningDropTable.updateTable();
+    loadFunc();
     setInterval(() => {
         if (AUTOSAVE) {
             save();
         }
     }, AUTOSAVE_INTERVAL);
+    setInterval(() => {
+        ct = Date.now();
+    }, 1000)
 
     // use for visual refreshing or testing, not for any game-related logic
     setInterval(() => {
@@ -448,6 +512,18 @@ onMount(() => {
     }
     :global(.text-large) {
         font-size: 16px;
+    }
+    :global(.game-btn-toggleon) {
+        border: 1px solid #d9d9d9;
+        color: #d9d9d9;
+        background-color: #44c546;
+        cursor: pointer;
+    }  
+    :global(.game-btn-toggleoff) {
+        border: 1px solid #d9d9d9;
+        color: #d9d9d9;
+        background-color: #b23939;
+        cursor: pointer;
     }  
     :global(.game-btn) {
         border: 1px solid #d9d9d9;
