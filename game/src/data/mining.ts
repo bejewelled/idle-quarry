@@ -310,7 +310,7 @@ export const miningUpgrades = array([{
         1 + lv*1.5),
     isPercent: true,
     prefix: '+',
-    isFame: true.
+    isFame: true,
     suffix: ' gem bonus',
     maxLevel: 1000,
     style: 'game-btn-fame',
