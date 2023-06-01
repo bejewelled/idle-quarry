@@ -310,6 +310,7 @@ export const miningUpgrades = array([{
         1 + lv*1.5),
     isPercent: true,
     prefix: '+',
+    isFame: true.
     suffix: ' gem bonus',
     maxLevel: 1000,
     style: 'game-btn-fame',
@@ -326,6 +327,7 @@ export const miningUpgrades = array([{
     unlockAt: () => (get(wallet)['fame'] > 0),
     formula: (lv: any) => (1 + lv * 0.3),
     isPercent: false,
+    isFame: true,
     suffix: 'x amount from drops',
     maxLevel: 1000,
     style: 'game-btn-fame',
@@ -345,6 +347,7 @@ export const miningUpgrades = array([{
     isPercent: true,
     prefix: '+',
     suffix: ' beacon progress',
+    isFame: true,
     maxLevel: 100,
     style: 'game-btn-fame',
     notes: 'index 10'
@@ -361,6 +364,7 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (lv == 0 ? 1 
      : 1 + (lv**2)*1e-5),
     isPercent: true,
+    isFame: true,
     suffix: ' chance for fame gain',
     maxLevel: 100,
     style: 'game-btn-fame',
@@ -383,6 +387,7 @@ export const miningUpgrades = array([{
     unlockAt: () => (get(wallet)['fame'] > 0 && get(miningUpgradeLevels)[9] > 0.003),
     formula: (lv: any) => (0),
     isPercent: true,
+    isFame: true,
     suffix: ' (no bonus)',
     maxLevel: 1,
     style: 'game-btn-fame',
