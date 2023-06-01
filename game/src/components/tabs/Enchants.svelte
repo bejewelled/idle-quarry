@@ -133,41 +133,7 @@ function calcFameGain() {
 
 const walletResetItems = ['gems', 'gold', 'orbs', 'beacons']
 const resourceResetItems = ['beaconPower']
-function relocate() {
-        if (confirm("Are you sure? Relocating will reset all previous progress.")) {
-            $flags['relocateNavBack'] = true;
-            $wallet['fame'] = ($wallet['fame'] || 0) + calcFameGain();
 
-
-            // reset stuff
-            $visibleTier = 1;
-            for (let i of walletResetItems) {
-                $wallet[i] = 0;
-            }
-            for (let i of resourceResetItems) {
-                $resources[i] = 0;
-            }
-            for (let i of Object.entries($progress)) {
-                $progress[i[0]] = 0;
-                $progressAverage[i[0]] = 0;
-                $progressThisTick[i[0]] = 0;
-            }
-            for (let i in $beaconLevels) {
-                $beaconLevels[i] = 0;
-                $beaconProgress[i] = 0;
-                $beaconActivations[i] = 0;
-            }
-            console.log($progress)
-            console.log($progressAverage)
-            console.log($progressThisTick)
-            console.log($progressThreshold)
-            $beaconNextReqs = $baseBeaconNextReqs;
-            $keysOpened = Array($keysOpened.length).fill(0);
-            $beaconBonuses = Array(30).fill(1)
-            $miningUpgradeLevels = Array($miningUpgradeLevels.length).fill(0);
-            $beaconUpgradeLevels = Array($beaconUpgradeLevels.length).fill(0);
-        }
-}
 
 const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
 

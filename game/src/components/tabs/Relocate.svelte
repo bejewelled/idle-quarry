@@ -234,7 +234,9 @@ function relocate() {
             console.log($progressAverage)
             console.log($progressThisTick)
             console.log($progressThreshold)
-            $beaconNextReqs = $baseBeaconNextReqs;
+            for (let bR in $beaconNextReqs) {
+                $beaconNextReqs[bR] = $baseBeaconNextReqs[bR];
+            }
             $keysOpened = Array($keysOpened.length).fill(0);
             $beaconBonuses = Array(30).fill(1)
             for (let i in $miningUpgradeLevels) {
@@ -256,6 +258,7 @@ function relocate() {
             for (let k of Object.keys($keyCraftAmount)) {
                 $keyCraftAmount[k] = 0;
             }
+
         }
     }
 }
