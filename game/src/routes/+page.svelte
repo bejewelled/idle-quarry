@@ -324,6 +324,9 @@ const load = async (isImport = false) => {
     if (localStorage === null) return;
     if (localStorage.getItem('wallet')) {
         wallet.set((JSON.parse(localStorage.getItem('wallet'))));
+        for (let k of Object.keys($wallet)) {
+            if (isNaN($wallet[k])) $wallet[k] = 0;
+        }
     }
     if (localStorage.getItem('miningUpgradeLevels')) {
         miningUpgradeLevels.set((JSON.parse(localStorage.getItem('miningUpgradeLevels'))));
