@@ -70,7 +70,7 @@ export default class ref {
         beacons: "Find a beacon while mining to unlock.",
         sigils: "Find a sigil while mining to unlock.",
         relocate: "Use 1,000 total keys to unlock.",
-        enchants: "Relocate and gain at least 1 fame to unlock.",
+        enchants: "Relocate and gain at least 100 fame to unlock.",
         automation: "Relocate and gain at least 1 fame to unlock.",
         challenges: "Buy challenges with fame to unlock.",
         artifacts: "Find an artifact with a T3 [***] or higher key to unlock.",
