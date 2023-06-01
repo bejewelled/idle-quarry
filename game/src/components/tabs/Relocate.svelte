@@ -13,8 +13,8 @@
     <div class='col-span-12 pt-3'>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class='
-        {calcFameGain() >= 5 ? 'game-btn' : 'game-btn-noafford'} text-center' on:click={() => relocate()}>
-            {calcFameGain() >= 5 ? 'Relocate' : 'You need to gain at least 5 fame to relocate.'}
+        {calcFameGain() >= 10 ? 'game-btn' : 'game-btn-noafford'} text-center' on:click={() => relocate()}>
+            {calcFameGain() >= 10 ? 'Relocate' : 'You need to gain at least 10 fame to relocate.'}
         </div>
     </div>
 </div>
@@ -187,7 +187,7 @@ const fameGridInfo = [
 
 // make sure to update the description when updating this!
 function calcFameGain() {
-    return formula.productArray(fameGainKeys) 
+    return formula.productArray(fameGainKeys)
     * (($mineLevel['level']**1.5)*0.15 + 1)
     * fameMultiGems 
     * fameMultiBeaconLevels
@@ -202,7 +202,7 @@ function calcFameGain() {
 const walletResetItems = ['gems', 'gold', 'crystals', 'orbs', 'beacons', 'key1', 'key2']
 const resourceResetItems = ['beaconPower']
 function relocate() {
-    if (calcFameGain() >= 0) {
+    if (calcFameGain() >= 10) {
         if (confirm("Are you sure? Relocating will reset all previous progress.")) {
             $flags['relocateNavBack'] = true;
             $wallet['fame'] = ($wallet['fame'] || 0) + calcFameGain();

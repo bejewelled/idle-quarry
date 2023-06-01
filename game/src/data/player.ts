@@ -347,6 +347,6 @@ export const antiFlickerFlags = object({
     beacons: false,
 })
 
-export const saveVersion = single('0.0.1')
+export const saveVersion = single(0);
 
 export const startOfGame = single(Date.now());

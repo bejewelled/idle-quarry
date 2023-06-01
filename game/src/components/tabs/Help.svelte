@@ -1,4 +1,11 @@
 <div class='wrapper pt-3'>
+    <div class='text-large text-left pb-2 text-gray-300'>Discord Server</div>
+    <div class='text-small text-white pb-4'>
+        <a href='https://discord.gg/BNp27Vvcqm' class='border-2 border-violet-300 bg-violet-600 hover:bg-violet-400 p-1' target='_blank'>
+            Join our Discord for updates, discussion, and more!
+        </a>
+    </div>
+
     <div class='text-large text-left pb-2 text-gray-300'>Mining</div>
     <div class='text-small text-white pb-4'>
     Each time the red progress bar fills up, gain gems and have a chance for additional drops. <br /> Use your currencies on upgrades to your mining rig.

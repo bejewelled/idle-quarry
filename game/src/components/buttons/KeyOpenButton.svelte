@@ -112,7 +112,7 @@ select-none'>
                 break;
         }
         for (let [type, vals] of Object.entries(dropTable)) {
-            // if E[x] > 5, then we can calculate based on variance
+            // if E[x] > 1, then we can calculate based on variance
             if (parseInt(amt)*vals[0] >= 1) {
                 // vals[0] is the probability of winning
 
@@ -132,10 +132,13 @@ select-none'>
 
                 const stdev = Math.sqrt(amt * vals[0] * (1-vals[0]));
                 // value should usually be between (-2*stdev, 2*stdev) with rare exceptions
+                // BIAS_FIX fixes any constant bias (currently calculated at -0.06, approximately)
                 const trueDev = stdev * devFactor;
+
+                //console.log(formula.rNormTest())
+
                 // now, calculate the expected value of the number of wins +/- the calculated deviation
                 const numWins = (vals[0])*amt + trueDev; // expected value + calcualted deviation
-
 
                 // calculate reward value
                 // this includes "bad luck protection":
@@ -153,17 +156,17 @@ select-none'>
                     } else {
                     //console.log(amt);
                     rewards[type] = 0;
-                    const div = Math.floor(Math.log10(amt))
+                    const div = Math.log10(amt);
                    // console.log('div: ' + div)
                     const nEff = (amt > 100 ? Math.round(amt / Math.pow(10, div)) : amt);
-                    const pEff = (amt > 100 ? vals[0] * Math.pow(10, div) : amt);
+                    const pEff = (amt > 100 ? vals[0] * Math.pow(10, div) : vals[0]);
                    // console.log("neff: " + nEff + " peff: " + pEff);
                     let done = false;
                     let k = 1;
                     let pK = combinations(nEff, k) * Math.pow(pEff, k) * Math.pow(1-pEff, nEff-k);
+
                    // console.log(pK + " for k " + k + " and n " + nEff + " and p " + pEff)
                     const rVal = Math.random();
-                    console.log(pK);
                     while (!done) {
                         //console.log('rval: ' + rVal + ' for k = ' + k);
                         if (rVal >= pK) {
@@ -188,14 +191,17 @@ select-none'>
             }  
         }
 
+    const dispRewards = {};
     for (let [type, amt] of Object.entries(rewards)) {
+        rewards[type] = Math.floor(amt);
         if (rewards[type] > 0) {
             $wallet[type] = ($wallet[type] || 0) + amt;
             $keyItemsUnlocked['key'+rarity].add(type);
+            dispRewards[type] = amt;
         }
 
     }
-    updateKeyRewardText(rewards);
+    updateKeyRewardText(dispRewards);
 }
     let rewardTextTimeout = undefined;
     function updateKeyRewardText(r) {

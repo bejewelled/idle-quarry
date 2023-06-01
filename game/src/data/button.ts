@@ -194,9 +194,9 @@ export const buttonUpgrades = array([
 },
 {
     name: 'Fractals',
-    description: 'Button clicks give fame over time.',
+    description: 'Button clicks give fame over time. [CURRENTLY DISABLED]',
     cost: {
-        crystals: 25000,
+        crystals: 1e200,
     },
     ratio: 4,
     formula: (lv: any) => lv===0 ? 1e308 :(11-lv)**3,

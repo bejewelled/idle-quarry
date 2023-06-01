@@ -4,7 +4,7 @@
 
 </div> 
 <div class='beacon-power-tooltip text-center tooltip-text'>
-    Earn more beacon power by equally leveling your beacon paths.
+    Earn more beacon power by leveling your beacon paths.
 </div>
 <div class='py-2'></div>
 <div class='beacon-assign-grid grid grid-cols-12'>

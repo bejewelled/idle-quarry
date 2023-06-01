@@ -114,6 +114,8 @@
 
                 {:else if tab === 'automation' && (tabUnlockCriteria['automation']())}
                     <Automation />
+                {:else if tab === 'challenges' && (tabUnlockCriteria['challenges']())}
+                    <Challenges />
                 {:else if tab === 'help'}
                     <Help />
                 {:else if tab === 'settings'}
@@ -142,7 +144,8 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     resources, beaconActivations, flags, enchantUpgradeLevels, activityLog,
     mineLevel, buttonNumClicks, buttonStats, buttonUpgradeLevels, 
     keyUpgradeLevels, keyCraftAmount, keyCraftMastery, 
-    keyCraftTimes, startOfGame, antiFlickerFlags} from '../data/player.js'
+    keyCraftTimes, startOfGame, antiFlickerFlags, 
+    automationItemsUnlocked, saveVersion} from '../data/player.js'
 import {key1DropTable, key2DropTable, key3DropTable, 
 key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
 import {beaconNextReqs, beaconSpendAmt} from '../data/beacons.ts'
@@ -156,6 +159,7 @@ import Automation from '../components/tabs/Automation.svelte';
 import Button from '../components/tabs/Button.svelte';
 import Help from '../components/tabs/Help.svelte';
 import Settings from '../components/tabs/Settings.svelte';
+import Challenges from '../components/tabs/Challenges.svelte';
 import MiningUpgradeButton from '../components/buttons/MiningUpgradeButton.svelte';
 import ref from '../calcs/ref.ts'
 
@@ -169,7 +173,7 @@ let saveConfirm, exportConfirm;
 let buyAmount = 1;
 let loadingFinished = false;
 let alogShow = true;
-const GAME_SPEED = 20 //only for balancing, doesn't actually change the game speed
+const GAME_SPEED = 1 //only for balancing, doesn't actually change the game speed
 $: mineLevelBarWidth = $mineLevel['xp'] / $mineLevel['xpNextReq'] * 100;
 
 let ct;
@@ -219,6 +223,7 @@ const tabUnlockCriteria = {
         default: () => false,
         help: () => true,
         settings: () => true,
+        challenges: () => $automationItemsUnlocked['game on']
     }
 const tabsUnlocked = {
     mining: true,
@@ -265,6 +270,7 @@ const save = async (isExport = false) => {
     localStorage.setItem('startOfGame', JSON.stringify($startOfGame));
     localStorage.setItem('settings', JSON.stringify($settings));
     localStorage.setItem('antiFlickerFlags', JSON.stringify($antiFlickerFlags));
+    localStorage.setItem('saveVersion', JSON.stringify($saveVersion));
 
 
     saveConfirm = true;
@@ -412,6 +418,9 @@ const load = async (isImport = false) => {
     if (localStorage.getItem('antiFlickerFlags')) {
         antiFlickerFlags.set(JSON.parse(localStorage.getItem('antiFlickerFlags')));
     }
+    if (localStorage.getItem('saveVersion')) {
+        saveVersion.set(JSON.parse(localStorage.getItem('saveVersion')));
+    }
 
     // updates older save files to new format
     versionUpdater();
@@ -430,7 +439,20 @@ const load = async (isImport = false) => {
 }
 
 function versionUpdater() {
+    const ver = $saveVersion
+    const LATEST_VER = 1
+    if (ver <= 0) {
+        // fix "mysterious potion" error
+        $keyUpgradeLevels[0] = 0;
+        key1DropTable.updateTable();
+        key2DropTable.updateTable();
+        key3DropTable.updateTable();
 
+        // fix NaN slurry error
+        if (isNaN($wallet['slurry'])) $wallet['slurry'] = 0;
+    }
+    $saveVersion = LATEST_VER;
+    save();
 }
 
 const tabHelpText = {
@@ -528,6 +550,17 @@ onMount(() => {
     :global(.game-btn) {
         border: 1px solid #d9d9d9;
         color: #d9d9d9;
+        text-align: center;
+        cursor: pointer;
+    }
+    :global(.game-btn:hover) {
+        border: 1px solid #ffffff;
+        color: #ffffff;
+        background-color: #3a3a3a;
+    }
+    :global(.game-btn-noafford) {
+        border: 1px solid #888888;
+        color: #888888;
         cursor: pointer;
     }
     :global(.game-btn-nocolor) {
@@ -542,16 +575,6 @@ onMount(() => {
     :global(.game-btn-encht1-noafford) {
         border: 1px solid #625b7e;
         color: #625b7e;
-        cursor: pointer;
-    }
-    :global(.game-btn:hover) {
-        border: 1px solid #ffffff;
-        color: #ffffff;
-        background-color: #3a3a3a;
-    }
-    :global(.game-btn-noafford) {
-        border: 1px solid #888888;
-        color: #888888;
         cursor: pointer;
     }
     :global(.game-btn-fame) {
@@ -597,6 +620,7 @@ onMount(() => {
     }
     :global(.control-btn:hover) {
         border: 1px solid #ffffff;
+        background-color: #474646;
         color: #ffffff;
     }
     :global(.control-btn-selected) {

@@ -198,21 +198,21 @@ export const beaconFormulas = array([
     .concat(Array(25).fill(function(lv: number) {return 1}))
 )
 
-export const beaconNextReqs = array(Array(3).fill(2e3)
+export const beaconNextReqs = array(Array(3).fill(700)
 .concat(Array(3).fill(5e7))
 .concat(Array(2).fill(1e14)
 .concat(Array(2).fill(1e23))))
 
-export const baseBeaconNextReqs = array(Array(3).fill(2e3)
+export const baseBeaconNextReqs = array(Array(3).fill(700)
 .concat(Array(3).fill(5e7))
 .concat(Array(2).fill(1e14)
 .concat(Array(2).fill(1e23))))
 
 export const beaconNums = array(
-    Array(3).fill([2e3, 1.0004])
-    .concat(Array(3).fill([5e7, 1.0008])
-    .concat(Array(2).fill([1e14, 1.0012])
-    .concat(Array(2).fill([1e23, 1.0016])))))
+    Array(3).fill([700, 1.0005])
+    .concat(Array(3).fill([5e7, 1.0005])
+    .concat(Array(2).fill([1e14, 1.0005])
+    .concat(Array(2).fill([1e23, 1.0005])))))
 
 export const beaconMaxLevels = array(Array(10).fill(1e6))
 

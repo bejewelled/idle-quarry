@@ -1,4 +1,5 @@
-import {buttonUpgradeLevels, miningUpgradeLevels} from '../data/player';
+import {buttonUpgradeLevels, miningUpgradeLevels, keyUpgradeLevels} from '../data/player';
+import {keyUpgrades} from '../data/keys'
 import { get } from 'svelte/store';
 export default class formula {
 
@@ -11,8 +12,27 @@ export default class formula {
       // Apply the Box-Muller transform to generate two normally distributed random numbers
       const z1 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
 
+      // bias from this is approximately -0.06
+      const BIAS_FIX = 0.03;
       // Use one of the normally distributed random numbers to generate a random number on the interval [-3,3]
-      return Math.min(3,z1*2);
+      return z1*2;
+    }
+
+    static rNormTest() {
+      console.log('rNorm Bias Test started')
+      const test = Array(400).fill(0);
+      const testA = Array(400).fill(0);
+      const testB = Array(5).fill(0);
+      for (let i = 0; i < testA.length; i++) {
+          for (let j = 0; j < test.length; j++) {
+            for (let k = 0; k < testB.length; k++) {
+              test[k] = this.rNorm();
+            }
+          testA[j] = formula.sumArray(test) / 1000;
+          }
+          testB[i] = formula.sumArray(testA) / 400;
+      }
+      return formula.sumArray(testB) / 5;
     }
 
     static gSum(a: number, r: number, n: number) {
@@ -36,11 +56,18 @@ export default class formula {
       }
     
     static calcFameGainKeys(array: Array<number>) { 
-        const f = array.map((x,i) => {
-          if (x < (1e5/(i+1))) { return 1 + ((i+1) * x/1e4)}
-          return 10 + Math.pow((i+1) * (x-1e5)/1e5, 0.5);
-        });
-        return f;
+        const keyArray = [1,1,1,1,1];
+        for (let i = 0; i < array.length; i++) {
+          if (array[i] < 1) continue;
+          else if (array[i] < 10) {
+            keyArray[i] = 1.25 + array[i] * 0.075;
+          } else if (array[i] < 10000) {
+            keyArray[i] = 2 + array[i] * ((i+1)**2) / 5000;
+          } else {
+            keyArray[i] = 2 + 2*((i+1)**2) + Math.pow((i+1)*((array[i] - 10000) / 1000), 0.4);
+          } 
+        }
+        return keyArray;
     }
 
     static calcFameGemMulti(n: number) {
@@ -92,10 +119,15 @@ export default class formula {
   }
 
   static calcKeySlurryGain(obj: { [x: string]: number; }) {
-    return (obj['key1'] || 0)/16
-    + (obj['key2'] || 0)/8 
-    + (obj['key3'] || 0)/4
-    + (obj['key4'] || 0)/2
-    + (obj['key5'] || 0)/1;
+    let amount = (obj['key1'] || 0)/800
+    + (obj['key2'] || 0)/200
+    + (obj['key3'] || 0)/50
+    + (obj['key4'] || 0)/12
+    + (obj['key5'] || 0)/3;
+    if (isNaN(amount)) {
+      alert('note: this feature is bugged, please report this on Discord - reduced slurry gained (using "safe" formula)')
+      return obj['key1'] / 800;
+    }
+    return amount * get(keyUpgrades)[1]['formula'](get(keyUpgradeLevels)[1]);
   }
 }

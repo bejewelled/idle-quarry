@@ -157,7 +157,7 @@ export const miningUpgrades = array([{
     },
     ratio: 1.15,
     unlockAt: () => (get(wallet)['gems'] >= 3 && get(miningUpgradeLevels)[0] >= 1),
-    formula: (lv: any) => lv * Math.pow(1.05, Math.max(0, lv-100)),
+    formula: (lv: any) => lv * (1 + 0.01*lv) * (lv > 100 ? 1+0.03*(lv-100) : 1),
     isPercent: false,
     prefix: '+',
     suffix: ' gems',
@@ -168,7 +168,7 @@ export const miningUpgrades = array([{
 {
     index: 2,
     name: 'Fortune',
-    description: 'Improves droprates for common [*] items.',
+    description: 'Improves mining droprates for common [I] items.',
     cost: {
         gold: 10
     },
@@ -319,7 +319,7 @@ export const miningUpgrades = array([{
 {
     index: 11,
     name: 'Clockwork',
-    description: 'Significantly improves drop amounts.',
+    description: 'Significantly improves drop amounts (mining only).',
     cost: {
         fame: 5
     },
@@ -339,7 +339,7 @@ export const miningUpgrades = array([{
     name: 'Reflectors',
     description: 'Significantly improves beacon path progress.',
     cost: {
-        fame: 15
+        fame: 10
     },
     ratio: 1.5,
     unlockAt: () => (get(wallet)['fame'] > 0),

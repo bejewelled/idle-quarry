@@ -100,9 +100,14 @@
     </div>
     <div class='pt-6'>
         <div class='wrapper'>
+            {#if $wallet['gold'] > 1e6 || $wallet['slurry'] > 0}
             <KeySlurryConvertButton />
+            {:else}
+            <div class='game-btn-noafford text-center py-2'>Unlock a new feature at 1,000,000 gold</div>
+            {/if}
         </div>
     </div>
+
     <div class='grid grid-cols-12 pt-2'>
         {#each $keyUpgrades as k, i}
         <div class='col-span-3'>

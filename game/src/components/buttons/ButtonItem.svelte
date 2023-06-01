@@ -162,7 +162,7 @@ const BUTTON_SIZE= 100;
       const MINX = 370;
       const MAXX = 1050;
       const MINY = 300;
-      const MAXY = 750;
+      const MAXY = 615;
       const moveMulti = $buttonUpgrades[0]['formula']($buttonUpgradeLevels[0]);
       // find a new location then multiply the distance by the multiplier
       let lastX, lastY;

@@ -5,7 +5,7 @@
 <div on:click={() => buy()}
 class='has-tooltip tooltip-text game-btn text-teal-400 
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
-    Convert Keys Into Slurry <span class='text-teal-400'>[ +{f(slurryGain)} ]</span>
+    Convert Keys Into Slurry <span class='text-teal-400'>[ +{f(Math.floor(slurryGain))} ]</span>
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
@@ -79,6 +79,8 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
 
 
     function buy() {
+      console.log($wallet['slurry'])
+      console.log(slurryGain)
         $wallet['slurry'] += slurryGain;
         for (let k of Object.keys($wallet))
           if (k.includes('key')) $wallet[k] = 0;  
