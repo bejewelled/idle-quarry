@@ -85,7 +85,7 @@
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
-                <button class='text-xs text-gray-600'>v0.0.1A</button>  
+                <button class='text-xs text-gray-600'>v0.0.2A</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
                 {#key tabsUnlocked}
@@ -213,9 +213,8 @@ const tabUnlockCriteria = {
         beacons: () => (($wallet['beacons']) || formula.sumArray($beaconActivations)>0),
         sigils: () => ($wallet['sigils'] && $wallet['sigils'] > 0.02),
         relocate: () => (formula.sumArray($keysOpened) > 1000 || $wallet['fame']),
-        enchants: () => ($wallet['fame'] && $wallet['fame'] >= 0.997) 
-                        || formula.sumArray($enchantUpgradeLevels) > 0
-                        || $miningUpgradeLevels[10] > 0 || $miningUpgradeLevels[11] > 0,
+        enchants: () => ($wallet['fame'] && $wallet['fame'] >= 100) 
+                        || formula.sumArray($enchantUpgradeLevels) > 0,
         automation: () => ($wallet['fame'] && $wallet['fame'] >= 0.997)
                         || formula.sumArray($enchantUpgradeLevels) > 0
                         || $miningUpgradeLevels[10] > 0 || $miningUpgradeLevels[11] > 0,
