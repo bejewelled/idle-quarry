@@ -121,7 +121,8 @@ const ceil = (n: number) => Math.ceil(n);
 export const progressThreshold = object({
     gems: 167,
     key1: 2000,
-    key2: 90000,
+    key2: 75000,
+    key3: 390000,
 })
 
 // edit when changing the level of the haste upgrade

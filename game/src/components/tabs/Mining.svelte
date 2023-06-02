@@ -80,6 +80,23 @@
                 </div>
             </div>
         {/if}
+        <!-- key finder 3 -->
+        {#if $miningUpgradeLevels[18] > 0}
+            <div class='col-span-9'>
+                <div class='mine-bar-wrapper align-middle'>
+                    <div class="w-full my-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                        <div class="bg-blue-400 h-2.5 rounded-full" 
+                        style="width: {$antiFlickerFlags['keyfinder'] ? '100%' : key3BarWidth}"></div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-span-3 pl-1 text-left align-text-middle'>
+                <div class='text-[#989898] text-small'>[*] <strong>{$keyGainFlavorText['key3'] > 1 ? f($keyGainFlavorText['key3'],0) : '???'}</strong>
+                    x {f($progressAverage['key3']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key3'], 3)} / sec
+
+                </div>
+            </div>
+        {/if}
     </div>
     <div class='mine-upgrade-wrapper grid grid-cols-2'>
         {#each upgradeOrder as i}
@@ -106,6 +123,7 @@ import ref from '../../calcs/ref'
 $: mineBarWidth = `${$progress['gems'] / $progressThreshold['gems'] * 100}%`;
 $: key1BarWidth = `${$progress['key1'] / $progressThreshold['key1'] * 100}%`;
 $: key2BarWidth = `${$progress['key2'] / $progressThreshold['key2'] * 100}%`;
+$: key3BarWidth = `${$progress['key3'] / $progressThreshold['key3'] * 100}%`;
 $: mDropTable = Object.entries($miningDropTable)
 
 $: upgradeOrder = $miningUpgrades.map((_,i) => i).sort((a,b) => miningSort([a,$miningUpgrades[a]], [b,$miningUpgrades[b]]))

@@ -1,3 +1,4 @@
+<title>Into the Quarry</title>
 {#if loadingFinished}
 <Adders />
 {/if}

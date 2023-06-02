@@ -142,6 +142,14 @@ function updateprogressThisTick(delta) {
     $progressAverage['key2'] = progKey2;
     $progressThisTick['key2'] = progKey2 * delta;
 
+    const progKey3 = ($miningUpgradeLevels[4] > 0 ?
+    PROGRESS_BASE * $miningUpgrades[4]['formula']($miningUpgradeLevels[4]) : 0)
+    * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
+    * $beaconBonuses[5]
+
+    $progressAverage['key3'] = progKey3;
+    $progressThisTick['key3'] = progKey3 * delta;
+
     // TODO change index when adding
     // const progKey3 = ($miningUpgradeLevels[5] > 0 ?
     // PROGRESS_BASE * $miningUpgrades[5]['formula']($miningUpgradeLevels[5]) : 0);
@@ -187,8 +195,11 @@ function addProgress(delta) {
     if ($progress['key1'] >= keyAt[0]) {
        addKey1(Math.floor($progress['key1'] / keyAt[0]), keyAt);
     }
-    if ($progress['key2'] >= keyAt[0]) {
+    if ($progress['key2'] >= keyAt[1]) {
        addKey2(Math.floor($progress['key2'] / keyAt[1]), keyAt);
+    }
+    if ($progress['key2'] >= keyAt[2]) {
+       addKey3(Math.floor($progress['key3'] / keyAt[2]), keyAt);
     }
 
 }
@@ -240,6 +251,17 @@ function addKey2(n, keyAt) {
         $wallet['key2'] = ($wallet['key2'] || 0) + key2Gain * n;
         $progress['key2'] %= keyAt[1];
         $keyGainFlavorText['key2'] = key2Gain;
+}
+
+function addKey3(n, keyAt) {
+    const KEY3_BASE = 2;
+        const key3Gain = KEY3_BASE 
+        * $miningUpgrades[5]['formula']($miningUpgradeLevels[5])
+        * $miningUpgrades[26]['formula']($miningUpgradeLevels[26]);
+         
+        $wallet['key3'] = ($wallet['key3'] || 0) + key3Gain * n;
+        $progress['key3'] %= keyAt[2];
+        $keyGainFlavorText['key3'] = key3Gain;
 }
 
 function dropRoll(n) {
