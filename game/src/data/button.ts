@@ -184,7 +184,7 @@ export const buttonUpgrades = array([
     ratio: 4e150,
     formula: (lv: any) => 1 + 
     Math.min(4,
-        (get(buttonNumClicks)['perfect']*0.025 + get(buttonNumClicks)['incredible']*0.0001)*lv
+        (get(buttonNumClicks)['perfect']*0.0075 + get(buttonNumClicks)['incredible']*0.000075)*lv
     ),
     unlockAt: () => (true),
     isPercent: false,
@@ -225,9 +225,9 @@ export const buttonUpgrades = array([
 {
     index: 6,
     name: 'Everlasting',
-    description: 'Fame multiplier on relocate slowly increases over time.',
+    description: 'Fame multiplier on relocate slowly increases over time. [CURRENTLY DISABLED]',
     cost: {
-        crystals: 2e6,
+        crystals: 2e200,
     },
     ratio: 4,
     formula: (lv: any) => lv,

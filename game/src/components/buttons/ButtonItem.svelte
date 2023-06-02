@@ -83,7 +83,6 @@ const BUTTON_SIZE= 100;
     
     let rewardAmount = 0;
 
-    console.log(absDist);
 
     $buttonStats['totalClicks']++;
     $buttonStats['totalClicksToday']++;
@@ -97,8 +96,8 @@ const BUTTON_SIZE= 100;
         $wallet['fame'] += 1000;
     }
     console.log(absDist)
-    if (absDist < 0.25) {
-        rewardAmount = 400;
+    if (absDist < 1) {
+        rewardAmount = 100;
         rewardDescriptionText = 'PERFECT! +';
         rewardStyle = 'text-large text-amber-500 border-amber-500 font-bold'
         $buttonNumClicks['perfect']++;

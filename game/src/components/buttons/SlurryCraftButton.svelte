@@ -8,7 +8,7 @@
         {affordable && craftFinishTime <= ct
         ? 'game-btn text-indigo-300' : 'game-btn-noafford text-indigo-300'}
         py-2 pr-2 items-center text-center border-solid mr-3 col-span-12
-        select-none col-span-4'> 
+        select-none'> 
         {#key craftFinishTime}
         {#if craftFinishTime > ct}
             Crafting... {f(progressBarWidth,2)}%

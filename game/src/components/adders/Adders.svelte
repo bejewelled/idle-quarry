@@ -111,17 +111,18 @@ function updateMiningLevel() {
     if ($mineLevel['xp'] >= $mineLevel['xpNextReq']) {
         $mineLevel['xp'] -= $mineLevel['xpNextReq'];
         $mineLevel['level']++;
-        $mineLevel['xpNextReq'] = ($mineLevel['xpNextReq'] + 1500) * 1.1;
+        $mineLevel['xpNextReq'] = ($mineLevel['xpNextReq'] + 1100) * 1.12;
     }
 }
 
 const PROGRESS_BASE = 1;
-
+let progressBonusMulti = 1
 function updateprogressThisTick(delta) {
     const progGems = PROGRESS_BASE
     * $miningUpgrades[0]['formula']($miningUpgradeLevels[0])
     * (Math.max(1,$beaconBonuses[1]))
-    * $buttonUpgrades[3]['formula']($buttonUpgradeLevels[3]);
+    * $buttonUpgrades[3]['formula']($buttonUpgradeLevels[3])
+    * progressBonusMulti;
     $progressAverage['gems'] = progGems;
     $progressThisTick['gems'] = progGems * delta;
 
@@ -339,7 +340,7 @@ function addBeaconProgress(delta, isOffFocus = false) {
 
             // EDIT WITH CAUTION!! Do not cause an overflow (>1e308) at high levels
             const EXP_MULTI = 1.0005; 
-            $beaconNextReqs[i] = ($beaconNums[i][0] * $beaconLevels[i]) * Math.pow(EXP_MULTI, $beaconLevels[i]);
+            $beaconNextReqs[i] = (($beaconNums[i][0]+1) * $beaconLevels[i]) * Math.pow(EXP_MULTI, $beaconLevels[i]);
             if (Date.now() - lastDropTableUpdate > 1000) {
                 lastDropTableUpdate = Date.now();
                 miningDropTable.updateTable();
@@ -389,7 +390,23 @@ function procEnchants(n, tier) {
                     $wallet['orbs'] += val
                     addToActivityLog('[Orb Rush] +' + f(val) + ' orbs', 'text-violet-300');
                     break;
-
+                case 4: // lightning blast
+                    progressBonusMulti += Math.sqrt($enchantUpgradeLevels[0]['formula']($enchantUpgradeLevels[0]));
+                    addToActivityLog('[Lightning Blast] ' + f(Math.sqrt($enchantUpgradeLevels[0]['formula']($enchantUpgradeLevels[0]))) + 'x mining speed for 3 seconds!', 'text-violet-300');
+                    break;
+                case 5: // scavenger
+                    const allowedUpgrades = [0, 1, 2, 3, 4, 7, 8]
+                    let done = false;
+                    while (!done) {
+                        const rand = Math.floor(Math.random() * allowedUpgrades.length);
+                        if ($miningUpgradeLevels[rand] < $miningUpgrades[rand]['maxLevel']) {
+                            $miningUpgradeLevels[rand]++;
+                            done = true;
+                        }
+                    }
+                    addToActivityLog('[Scavenger] Added 1 level of ' + $miningUpgrades[rand]['name'] + '!', 'text-violet-300');
+                    break;
+ 
             }
         }
     }

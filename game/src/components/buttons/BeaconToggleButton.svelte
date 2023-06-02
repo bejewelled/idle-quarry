@@ -50,13 +50,19 @@ import ref from '../../calcs/ref'
     }
 
     function add() {
+        if (isNaN($beaconSpendAmt) || $beaconSpendAmt < 0 || !$beaconSpendAmt) {
+            $beaconSpendAmt = 1;
+        }
         if (!$wallet['beacons'] || $wallet['beacons']===0) return;
         const amt = Math.min($wallet['beacons'], $beaconSpendAmt);
         $wallet['beacons'] -= amt;
         $beaconActivations[index] += amt;
     }
 
-    function sub() {
+    function sub() {        
+        if (isNaN($beaconSpendAmt) || $beaconSpendAmt < 0 || !$beaconSpendAmt) {
+            $beaconSpendAmt = 1;
+        }
         const amt = Math.min($beaconActivations[index], $beaconSpendAmt);
         $beaconActivations[index] -= amt;
         $wallet['beacons'] += amt;

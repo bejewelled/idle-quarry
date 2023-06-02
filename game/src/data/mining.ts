@@ -119,7 +119,7 @@ const floor = (n: number) => Math.floor(n);
 const ceil = (n: number) => Math.ceil(n);
 
 export const progressThreshold = object({
-    gems: 200,
+    gems: 167,
     key1: 2000,
     key2: 90000,
 })
@@ -168,13 +168,13 @@ export const miningUpgrades = array([{
 {
     index: 2,
     name: 'Fortune',
-    description: 'Improves mining droprates for common [I] items.',
+    description: 'Improves mining droprates for gold and [*] keys.',
     cost: {
         gold: 10
     },
-    ratio: 1.33,
+    ratio: 1.3,
     unlockAt: () => (get(wallet)['gems'] > 30 && get(wallet)['gold'] > 5),
-    formula: (lv: any) => 1 + lv*0.1,
+    formula: (lv: any) => 1 + lv*0.075,
     isPercent: true,
     prefix: '+',
     maxLevel: 300,
@@ -272,7 +272,7 @@ export const miningUpgrades = array([{
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10),
-    formula: (lv: any) => (1+Math.pow(lv,1.2)*0.1),
+    formula: (lv: any) => (1+lv*(0.25+0.002*lv)),
     isPercent: true,
     prefix: '+',
     suffix: ' gems',

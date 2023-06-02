@@ -125,7 +125,8 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1) $wallet[type] -= (val-0.003);
         }
-        $miningUpgradeLevels[index] += $settings['buyAmount'];
+        $miningUpgradeLevels[index] += Math.min($settings['buyAmount'],
+        $miningUpgrades[index]['maxLevel'] - $miningUpgradeLevels[index]);
         costs = getCosts();
         permUnlocked = true;
         miningDropTable.updateTable();

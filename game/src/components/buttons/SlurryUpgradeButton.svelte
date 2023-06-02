@@ -2,7 +2,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 {#key permUnlocked || affordable || $keyUpgradeLevels[index] > 0}
 {#if $keyUpgrades[index]['unlockAt']() || permUnlocked || $keyUpgradeLevels[index] > 0}
-<div on:click={() => buy(index)}
+<div on:click={() => buy()}
 class='has-tooltip tooltip-text 
 {(
 ($keyUpgradeLevels[index] >= $keyUpgrades[index]['maxLevel']) ?
@@ -122,7 +122,7 @@ select-none'>
     function buy() {
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
-            if ((val >=  1 && $wallet[type] < val) || !$wallet['type']) {
+            if ((val >=  1 && $wallet[type] < val) || !($wallet[type])) {
                 return;
             }
         }

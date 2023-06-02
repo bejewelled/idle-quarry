@@ -66,7 +66,7 @@
 
 <script lang='ts'>
  //@ts-nocheck
-import { onMount } from 'svelte';
+import { onMount, onDestroy } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
     settings, visibleTier, progressThisTick, progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources, 
@@ -97,7 +97,8 @@ onMount(() => {
     }, $settings['UPDATE_SPEED'])
 })
 
-
+onDestroy(() => {
+});
 
 const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
 

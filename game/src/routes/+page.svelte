@@ -85,7 +85,7 @@
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
-                <button class='text-xs text-gray-600'>v0.0.2A</button>  
+                <button class='text-xs text-gray-600'>v0.0.3A</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
                 {#key tabsUnlocked}
@@ -148,7 +148,7 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     automationItemsUnlocked, saveVersion} from '../data/player.js'
 import {key1DropTable, key2DropTable, key3DropTable, 
 key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
-import {beaconNextReqs, beaconSpendAmt} from '../data/beacons.ts'
+import {beaconNextReqs, beaconSpendAmt, beaconNums} from '../data/beacons.ts'
 import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
 import Mining from '../components/tabs/Mining.svelte';
@@ -270,6 +270,7 @@ const save = async (isExport = false) => {
     localStorage.setItem('settings', JSON.stringify($settings));
     localStorage.setItem('antiFlickerFlags', JSON.stringify($antiFlickerFlags));
     localStorage.setItem('saveVersion', JSON.stringify($saveVersion));
+    localStorage.setItem('automationItemsUnlocked', JSON.stringify($automationItemsUnlocked));
 
 
     saveConfirm = true;
@@ -372,6 +373,9 @@ const load = async (isImport = false) => {
     if (localStorage.getItem('beaconNextReqs')) {
         beaconNextReqs.set(JSON.parse(localStorage.getItem('beaconNextReqs')));
     }
+    for (let i = 0; i < $beaconNextReqs.length; i++) {
+        if ($beaconLevels[i] == 0) $beaconNextReqs[i] = $beaconNums[i][0];
+    }
     if (localStorage.getItem('beaconUpgradeLevels')) {
         beaconUpgradeLevels.set(JSON.parse(localStorage.getItem('beaconUpgradeLevels')));
     }
@@ -423,7 +427,9 @@ const load = async (isImport = false) => {
     if (localStorage.getItem('saveVersion')) {
         saveVersion.set(JSON.parse(localStorage.getItem('saveVersion')));
     }
-
+    if (localStorage.getItem('automationItemsUnlocked')) {
+        automationItemsUnlocked.set(JSON.parse(localStorage.getItem('automationItemsUnlocked')));
+    }
     // updates older save files to new format
     versionUpdater();
 
@@ -442,7 +448,7 @@ const load = async (isImport = false) => {
 
 function versionUpdater() {
     const ver = $saveVersion
-    const LATEST_VER = 1
+    const LATEST_VER = 2
     if (ver <= 0) {
         // fix "mysterious potion" error
         $keyUpgradeLevels[0] = 0;
@@ -452,6 +458,12 @@ function versionUpdater() {
 
         // fix NaN slurry error
         if (isNaN($wallet['slurry'])) $wallet['slurry'] = 0;
+    }
+    if (ver <= 1) {
+        if ($miningUpgradeLevels[6] > 1) $miningUpgradeLevels[6] = 1; // fix lootmaster multibuy
+        for (let b in $beaconActivations) {
+            if (isNaN($beaconActivations[b])) $beaconActivations[b] = 0;
+        }
     }
     $saveVersion = LATEST_VER;
     save();

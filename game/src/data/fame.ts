@@ -171,7 +171,7 @@ export const enchantUpgrades = array([{
     tier: 1,
     ratio: 1.25,
     formula: (lv: any) => 0.0005 * lv,
-    unlockAt: () => (get(wallet)['fame'] >= 1 || get(enchantUpgradeLevels)[0] > 0),
+    unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,
     suffix: ' chance',
     maxLevel: 400,
@@ -187,10 +187,40 @@ export const enchantUpgrades = array([{
     tier: 1,
     ratio: 1.25,
     formula: (lv: any) => 0.00375 * lv,
-    unlockAt: () => (get(wallet)['fame'] >= 1 || get(enchantUpgradeLevels)[0] > 0),
+    unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,
     suffix: '  chance',
     maxLevel: 400,
+    notes: ''
+},
+{
+    name: 'Lightning Blast',
+    description: 'Has a chance to dramatically increase mining speed for 3 seconds (speed based on mine size).',
+    cost: {
+        fame: 225,
+    },
+    tier: 1,
+    ratio: 1.25,
+    formula: (lv: any) => 0.0002 * lv,
+    unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
+    isPercent: true,
+    suffix: '  chance',
+    maxLevel: 200,
+    notes: ''
+},
+{
+    name: 'Scavenger',
+    description: 'Has a chance to increase a random mining upgrade level by 1.',
+    cost: {
+        fame: 900,
+    },
+    tier: 1,
+    ratio: 1.35,
+    formula: (lv: any) => 0.000075 * lv,
+    unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
+    isPercent: true,
+    suffix: '  chance',
+    maxLevel: 200,
     notes: ''
 },
 

@@ -199,7 +199,7 @@ function calcFameGain() {
 }
 
 // ONLY things in these arrays will be reset on relocate
-const walletResetItems = ['gems', 'gold', 'crystals', 'orbs', 'beacons', 'key1', 'key2']
+const walletResetItems = ['gems', 'gold', 'orbs', 'beacons', 'key1', 'key2']
 const resourceResetItems = ['beaconPower']
 function relocate() {
     if (calcFameGain() >= 10) {
@@ -212,10 +212,8 @@ function relocate() {
 
             // reset stuff
             $visibleTier = 1;
-            if (!$automationItemsUnlocked['omnipotent']) {
-                for (let i of walletResetItems) {
-                    $wallet[i] = 0;
-                }
+            for (let i of walletResetItems) {
+                $wallet[i] = 0;
             }
             for (let i of resourceResetItems) {
                 $resources[i] = 0;
@@ -230,18 +228,16 @@ function relocate() {
                 $beaconProgress[i] = 0;
                 $beaconActivations[i] = 0;
             }
-            console.log($progress)
-            console.log($progressAverage)
-            console.log($progressThisTick)
-            console.log($progressThreshold)
             for (let bR in $beaconNextReqs) {
-                $beaconNextReqs[bR] = $baseBeaconNextReqs[bR];
+                console.log($beaconLevels[bR])
+                $beaconNextReqs[bR] = ($beaconLevels[bR]+1) * $baseBeaconNextReqs[bR];
             }
             $keysOpened = Array($keysOpened.length).fill(0);
             $beaconBonuses = Array(30).fill(1)
-            for (let i in $miningUpgradeLevels) {
-                if (!$miningUpgrades[i]) continue;
-                if (!($miningUpgrades[i]['isFame'])) $miningUpgradeLevels[i] = 0;
+            if (!$automationItemsUnlocked['omnipotent']) {
+                for (let i in $miningUpgrades) {
+                    if (!($miningUpgrades[i]['isFame'])) $miningUpgradeLevels[i] = 0;
+                }
             }
             $beaconUpgradeLevels = Array($beaconUpgradeLevels.length).fill(0);
 
@@ -251,14 +247,13 @@ function relocate() {
             }
             if ($automationItemsUnlocked['deep pockets']) {
                 $miningUpgradeLevels[6] = 1;
-                $miningUpgradeLevels[8] = 1;
+                $miningUpgradeLevels[9] = 1;
                 $visibleTier = 3;
             }
 
             for (let k of Object.keys($keyCraftAmount)) {
                 $keyCraftAmount[k] = 0;
             }
-
         }
     }
 }
