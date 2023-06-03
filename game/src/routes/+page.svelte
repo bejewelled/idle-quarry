@@ -151,6 +151,7 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
 import {key1DropTable, key2DropTable, key3DropTable, 
 key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
 import {beaconNextReqs, beaconSpendAmt, beaconNums} from '../data/beacons.ts'
+import {buttonUpgrades} from '../data/button.ts'
 import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
 import Mining from '../components/tabs/Mining.svelte';
@@ -458,7 +459,7 @@ const load = async (isImport = false) => {
 
 function versionUpdater() {
     const ver = $saveVersion;
-    const LATEST_VER = 5
+    const LATEST_VER = 6
     if (ver <= 0) {
         // fix "mysterious potion" error
         $keyUpgradeLevels[0] = 0;
@@ -486,6 +487,12 @@ function versionUpdater() {
         $keyCraftMastery['energizedCrystal'] = [1,0,3]
         localStorage.clear('miningUpgradeLevelsBought')
         localStorage.clear('miningUpgradeLevelsFree')
+    }
+    if (ver <= 5) {
+        for (let x in $buttonUpgradeLevels) {
+            if ($buttonUpgradeLevels[x] > $buttonUpgrades[x]['maxLevel'])
+                $buttonUpgradeLevels = $buttonUpgrades[x]['maxLevel'];
+        }
     }
     $saveVersion = LATEST_VER;
 
