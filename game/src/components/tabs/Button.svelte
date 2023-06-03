@@ -14,8 +14,8 @@
            ]
         </div>
         <div class='col-span-12 pb-3 game-text text-center'>
-           Clicks Today: {f($buttonStats['totalClicksToday'])}
-          [ <span class='game-text'>{f(formula.calcButtonStreakBonus($buttonStats['totalClicksToday']),3)}x 
+           Clicks Today: {f($buttonStats['totalClicks'])}
+          [ <span class='game-text'>{f(formula.calcButtonStreakBonus($buttonStats['totalClicks']),3)}x 
               <span class='text-indigo-300'> crystal bonus</span>
           </span> ]
         </div>

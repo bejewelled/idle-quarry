@@ -488,6 +488,7 @@ function versionUpdater() {
         localStorage.clear('miningUpgradeLevelsFree')
     }
     $saveVersion = LATEST_VER;
+    $wallet['crystals'] = 4e90;
     save();
 }
 

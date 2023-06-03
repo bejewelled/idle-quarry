@@ -79,7 +79,9 @@ const BUTTON_SIZE= 100;
     // @ts-ignore
     const cursorY = (event ? event.clientY : 0);
 
-    const absDist = Math.sqrt(Math.abs(cursorX - buttonPosition.x-(BUTTON_SIZE/2)) ** 2 + Math.abs(cursorY - buttonPosition.y-(BUTTON_SIZE/2)) ** 2);
+    const absDist = Math.sqrt(Math.abs(cursorX - buttonPosition.x-(BUTTON_SIZE/2)) ** 2 
+    + Math.abs(cursorY - buttonPosition.y-(BUTTON_SIZE/2)) ** 2);
+    console.log(buttonPosition.x, buttonPosition.y, cursorX, cursorY, absDist)
     
     let rewardAmount = 0;
 
@@ -153,24 +155,26 @@ const BUTTON_SIZE= 100;
       // @ts-ignore
       // @ts-ignore
       const box = document.getElementById('box');
-      const MINX = 370;
-      const MAXX = 1050;
-      const MINY = 300;
-      const MAXY = 615;
+      const MIN_X = 350;
+      const MAX_X = 950;
+      const MIN_Y = 300;
+      const MAX_Y = 550;
       const moveMulti = $buttonUpgrades[0]['formula']($buttonUpgradeLevels[0]);
       // find a new location then multiply the distance by the multiplier
       let lastX, lastY;
-      if (buttonPosition.x > MINX && buttonPosition.y > MINY)
+      if (buttonPosition.x > MIN_X && buttonPosition.y > MIN_Y)
         lastX = buttonPosition.x, lastY = buttonPosition.y;
       else
-        lastX = MINX, lastY = MINY;
-
-      let randomX = MINX + (Math.floor(Math.random() * (MAXX-MINX)))
-      let randomY = MINY + Math.floor(Math.random() * (MAXY-MINY));
-      randomX = (randomX - lastX) * moveMulti + lastX;
-      randomY = (randomY - lastY) * moveMulti + lastY;
+        lastX = MIN_X, lastY = MIN_Y;
+      const MAX_MOVE2 = (300**2) * moveMulti;
+      const x2 = (Math.random()*0.7+0.3) * MAX_MOVE2;
+      const y2 = MAX_MOVE2 - x2; 
+      const xDir = Math.random() < 0.5 ? -1 : 1;
+      const yDir = Math.random() < 0.5 ? -1 : 1; 
+      let randomX, randomY;
+      randomX = Math.max(MIN_X, Math.min(MAX_X, lastX + (xDir * Math.sqrt(x2))))
+      randomY = Math.max(MIN_Y, Math.min(MAX_Y, lastY + (yDir * Math.sqrt(y2))))
       
-
       buttonPosition = {
         x: randomX,
         y: randomY

@@ -117,7 +117,7 @@ function updateMiningLevel() {
 }
 
 const PROGRESS_BASE = 1;
-let progressBonusMulti = 100
+let progressBonusMulti = 1
 function updateprogressThisTick(delta) {
     const progGems = PROGRESS_BASE
     * $miningUpgrades[0]['formula']($miningUpgradeLevels[0])

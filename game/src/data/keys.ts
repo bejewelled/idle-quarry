@@ -254,19 +254,19 @@ export const keyUpgrades = array([
 ])
 
 export const keyCrafts = array([
-    {
-        item: 'energizedCrystal',
-        name: 'Energized Crystal',
-        style: 'text-emerald-300',
-        stylebg: 'bg-emerald-300',
-        cost: {
-            crystals: 1e5
-        },
-        craftTime: 3600, // in seconds
-        baseAmount: 1,
-        ratio: 1.1,
-        unlockAt: () => (get(wallet)['crystals'] > 0),
-    },
+    // {
+    //     item: 'energizedCrystal',
+    //     name: 'Energized Crystal',
+    //     style: 'text-emerald-300',
+    //     stylebg: 'bg-emerald-300',
+    //     cost: {
+    //         crystals: 1e5
+    //     },
+    //     craftTime: 3600, // in seconds
+    //     baseAmount: 1,
+    //     ratio: 1.1,
+    //     unlockAt: () => (get(wallet)['crystals'] > 0),
+    // },
 
     {
         item: 'key3',
