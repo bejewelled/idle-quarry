@@ -12,8 +12,7 @@ export default class formula {
       // Apply the Box-Muller transform to generate two normally distributed random numbers
       const z1 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
 
-      // bias from this is approximately -0.06
-      const BIAS_FIX = 0.03;
+      const BIAS_FIX = 0.04;
       // Use one of the normally distributed random numbers to generate a random number on the interval [-3,3]
       return z1*2;
     }
