@@ -1,9 +1,14 @@
+<svelte:window on:keydown|preventDefault={keyDown} on:keyup={keyUp} />
+{#if enterKeyDown && true} <!-- will be bound to an upgrade-->
+<div class='game-text text-small text-center'>You have not unlocked key-bound button clicking yet; holding enter disables the button.</div>
+{/if}
 {#if showRewardDescription}
 <div class='absolute flex w-[350px] h-[35px] {rewardStyle} 
 text-center items-center justify-center'
 style = 'top: {textPosition.y}px; left: {textPosition.x}px;'>
 {rewardDescriptionText}</div>
 {/if}
+
 <button
     id="button"
     class="absolute w-[100px] h-[100px] border-4 border-white text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
@@ -24,7 +29,7 @@ style = 'top: {textPosition.y}px; left: {textPosition.x}px;'>
     class="absolute w-[4px] h-[4px] bg-red-400 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
     style="top: {buttonPosition.y+48}px; left: {buttonPosition.x+48}px;"
     on:click={handleClick}
-  > </button>
+  ></button>
 {/if}
 
 
@@ -64,9 +69,19 @@ const BUTTON_SIZE= 100;
         x: 0,
         y: 0,
     }
+
+    function keyDown(e) {
+      if (e.keyCode == 13) enterKeyDown = true;
+    }
+
+    function keyUp(e) {
+      if (e.keyCode == 13) enterKeyDown = false;
+    }
   
+    let enterKeyDown = false;
     // @ts-ignore
     const handleClick = (event) => {
+        if (enterKeyDown) return;
         textPosition = {
         x: buttonPosition.x - 100,
         y: buttonPosition.y - 18
