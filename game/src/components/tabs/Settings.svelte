@@ -31,7 +31,7 @@
     <div class='py-3'></div>
 
     <div class='text-large text-gray-300 text-left pb-2'>About</div>
-        <div class='text-small tooltip-text'>version 0.0.3 (alpha)</div>
+        <div class='text-small tooltip-text'>version 0.0.3-B (alpha)</div>
         <div class='text-small tooltip-text'>created by bejewelled, all rights reserved</div>
 </div>
 
