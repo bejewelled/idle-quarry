@@ -397,7 +397,7 @@ export const miningUpgrades = array([{
 {
     index: 15,
     name: 'Overload',
-    description: 'Drop chances above 100% increase the amount of drops. [Note - even if the button says [0/1], the upgrade should still work once purchased.]',
+    description: 'Drop chances above 100% increase the amount of drops.',
     cost: {
         fame: 500,
 
