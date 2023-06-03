@@ -116,7 +116,11 @@ function splitBeacons() {
         if ($mineLevel['level'] < $beaconMiningLevelReqs[i]) done = true;
         i++;
     }
-    if (i == 0) return;
+    if (i == 1) {
+        $beaconActivations[0] += $wallet['beacons'];
+        $wallet['beacons'] = 0;
+        return;
+    }
     // find total number of beacons
     for (let j in $beaconActivations) {
         $wallet['beacons'] += $beaconActivations[j];
@@ -125,7 +129,7 @@ function splitBeacons() {
     let totalUsed = 0;
     const totalBeacons = $wallet['beacons']
     for (let j = 0; j < i; j++) {
-        $beaconActivations[j] = Math.floor(totalBeacons / i);
+        $beaconActivations[j] = Math.floor(totalBeacons / (i-1));
         totalUsed += $beaconActivations[j];
         $wallet['beacons'] -= $beaconActivations[j];
     }

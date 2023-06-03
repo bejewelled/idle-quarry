@@ -124,7 +124,7 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
         console.log("D")
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
-            if (val >=  1 && ($wallet[type] < val-0.003 || !$wallet[type])) {
+            if (val >=  1 && (!$wallet[type] || $wallet[type] < val-0.003)) {
                 return;
             }
         }
