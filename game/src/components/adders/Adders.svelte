@@ -122,10 +122,12 @@ function updateprogressThisTick(delta) {
     const progGems = PROGRESS_BASE
     * $miningUpgrades[0]['formula']($miningUpgradeLevels[0])
     * (Math.max(1,$beaconBonuses[1]))
-    * $buttonUpgrades[3]['formula']($buttonUpgradeLevels[3])
+    //* $buttonUpgrades[3]['formula']($buttonUpgradeLevels[3])
     * progressBonusMulti;
     $progressAverage['gems'] = progGems;
     $progressThisTick['gems'] = progGems * delta;
+
+    console.log($buttonUpgradeLevels[3])
 
     
     const progKey1 = ($miningUpgradeLevels[3] > 0 ?

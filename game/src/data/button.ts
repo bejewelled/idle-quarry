@@ -184,7 +184,7 @@ export const buttonUpgrades = array([
     ratio: 4e150,
     formula: (lv: any) => 1 + 
     Math.min(4,
-        (get(buttonNumClicks)['perfect']*0.0075 + get(buttonNumClicks)['incredible']*0.000075)*lv
+        (get(buttonNumClicks)['perfect']*0.00075 + get(buttonNumClicks)['incredible']*0.000075)*lv
     ),
     unlockAt: () => (true),
     isPercent: false,
