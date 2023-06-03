@@ -128,8 +128,8 @@ select-none'>
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1) $wallet[type] -= val;
         }
-        $buttonUpgradeLevels[index] += $settings['buyAmount'];
-        costs = getCosts();
+        $buttonUpgradeLevels[index] += Math.min($settings['buyAmount'],
+        $buttonUpgrades[index]['maxLevel'] - $buttonUpgradeLevels[index]);
         permUnlocked = true;
     }
 
