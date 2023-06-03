@@ -185,7 +185,7 @@ export const key2DropTable = dropTable({
     beacons: [0.15, 5, 15],
     key2: [0.05, 1, 1],
     sigils: [0.01, 1, 2],
-    key3: [0.13, 1, 1]
+    key3: [0.00013, 1, 1]
 })
 
 export const key3DropTable = dropTable({
