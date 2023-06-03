@@ -151,7 +151,7 @@ export const buttonUpgrades = array([
 },
 {
     name: 'Hot Button',
-    description: 'Accumulate a multiplier to crystals as more clicks are made in the same day (max 10,000).',
+    description: 'Accumulate a multiplier to crystals as more clicks are made (max 10,000).',
     cost: {
         crystals: 750,
     },

@@ -19,7 +19,7 @@ import { onMount, onDestroy } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
     settings, visibleTier, progressThisTick, progressAverage,
     beaconActivations, beaconLevels} from '../../data/player';
-import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
+import {progressThreshold, progressPerTick, miningUpgrades,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import {beaconPower, beaconBonuses, beaconFormulas, 

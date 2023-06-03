@@ -5,19 +5,26 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class='wrapper bg-gray-700 my-1 border-2 border-gray-600 pb-1'>
         <div class='w-full text-left py-1 text-medium text-gray-400'>Anti-Flickering - Bar will appear as solid when enabled</div>
-            <div class='wrapper grid grid-cols-8'>
-                <div class='setting col-span-2 mx-1 px-1 py-1 text-center
-                {$antiFlickerFlags['gems'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                on:click={() => changeFlickerFlag('gems')}>Mining (gems)</div>
-                <div class='setting col-span-2 mx-1 px-1 py-1 text-center
-                {$antiFlickerFlags['keyfinder'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                on:click={() => changeFlickerFlag('keyfinder')}>Mining (key finder)</div>
-                <div class='setting col-span-2 mx-1 px-1 py-1 text-center
-                {$antiFlickerFlags['crafting'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                on:click={() => changeFlickerFlag('crafting')}>Crafting</div>
-                <div class='setting col-span-2 mx-1 px-1 py-1 text-center
-                {$antiFlickerFlags['beacons'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                on:click={() => changeFlickerFlag('beacons')}>Beacons</div>
+            <div class='wrapper grid grid-cols-1 py-1'>
+                <div class='wrapper col-span-1 grid grid-cols-8'>
+                    <div class='setting col-span-2 mx-1 px-1 py-1 text-center
+                    {$antiFlickerFlags['gems'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
+                    on:click={() => changeFlickerFlag('gems')}>Mining (gems)</div>
+                    <div class='setting col-span-2 mx-1 px-1 py-1 text-center
+                    {$antiFlickerFlags['keyfinder'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
+                    on:click={() => changeFlickerFlag('keyfinder')}>Mining (key finder)</div>
+                    <div class='setting col-span-2 mx-1 px-1 py-1 text-center
+                    {$antiFlickerFlags['crafting'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
+                    on:click={() => changeFlickerFlag('crafting')}>Crafting</div>
+                    <div class='setting col-span-2 mx-1 px-1 py-1 text-center
+                    {$antiFlickerFlags['beacons'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
+                    on:click={() => changeFlickerFlag('beacons')}>Beacons</div>
+                </div>
+                <div class='wrapper col-span-1 py-1 grid grid-cols-8'>
+                    <div class='setting col-span-2 mx-1 px-1 py-1 text-center
+                    {$antiFlickerFlags['enchants'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
+                    on:click={() => changeFlickerFlag('enchants')}>Enchants</div>
+                </div>
             </div>
     </div>
 

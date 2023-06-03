@@ -125,7 +125,7 @@ export const progressThreshold = object({
     key3: 390000,
 })
 
-// edit when changing the level of the haste upgrade
+// edit when changing the level of the hastpe upgrade
 export const progressPerTick = single(1);
 
 
@@ -190,7 +190,7 @@ export const miningUpgrades = array([{
         orbs: 15,
     },
     ratio: 1.5,
-    unlockAt: () => (get(wallet)['orbs'] >= 1),
+    unlockAt: () => (get(wallet)['key1'] >= 1),
     formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
     isPercent: false,
     suffix: 'x speed',
@@ -207,8 +207,7 @@ export const miningUpgrades = array([{
         beacons: 200
     },
     ratio: 1.5,
-    unlockAt: () => (get(wallet)['orbs'] >= 1000 && get(miningUpgradeLevels)[3] >= 1) 
-                    || get(wallet)['fame'] >= 10,
+    unlockAt: () => (get(wallet)['key2'] > 0),                 
     formula: (lv: any) => (1 + Math.pow(lv, 0.5)*0.15),
     isPercent: false,
     suffix: 'x speed',
@@ -470,15 +469,15 @@ export const miningUpgrades = array([{
     name: 'Legendary III',
     description: 'Increases fame gain on relocation.',
     cost: {
-        orbs: 1e6,
         sigils: 2500
     },
-    ratio: 1.5,
-    unlockAt: () => (get(wallet)['key3'] > 0),
-    formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
+    ratio: 2,
+    unlockAt: () => (get(wallet)['sigil'] > 25),
+    formula: (lv: any) => (1 + 0.1 * lv),
     isPercent: false,
-    suffix: 'x speed',
-    maxLevel: 100,
+    suffix: 'x fame gain',
+    style: 'game-btn-sigil',
+    maxLevel: 200,
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
 {
@@ -593,11 +592,7 @@ export const miningUpgrades = array([{
 
 ]);
 
-// if true, progress bars will be solid instead of flickering
-export const antiFlickerFlags = object({
-    gems: false,
-    key1: false,
-})
+
 
 // for flavor text on mining page
 export const gemGainFlavorText = single(0)

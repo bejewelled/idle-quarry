@@ -1,4 +1,4 @@
-<title>Into the Quarry</title>
+<!-- <title>Into the Quarry</title> -->
 {#if loadingFinished}
 <Adders />
 {/if}
@@ -146,7 +146,8 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     mineLevel, buttonNumClicks, buttonStats, buttonUpgradeLevels, 
     keyUpgradeLevels, keyCraftAmount, keyCraftMastery, 
     keyCraftTimes, startOfGame, antiFlickerFlags, 
-    automationItemsUnlocked, saveVersion} from '../data/player.js'
+    automationItemsUnlocked, saveVersion, miningUpgradeLevelsBought,
+    miningUpgradeLevelsFree} from '../data/player.js'
 import {key1DropTable, key2DropTable, key3DropTable, 
 key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
 import {beaconNextReqs, beaconSpendAmt, beaconNums} from '../data/beacons.ts'
@@ -238,6 +239,8 @@ const tabsUnlocked = {
 const save = async (isExport = false) => {
     localStorage.setItem('wallet', JSON.stringify($wallet));
     localStorage.setItem('miningUpgradeLevels', JSON.stringify($miningUpgradeLevels));
+    localStorage.setItem('miningUpgradeLevelsBought', JSON.stringify($miningUpgradeLevelsBought));
+    localStorage.setItem('miningUpgradeLevelsFree', JSON.stringify($miningUpgradeLevelsFree));
     localStorage.setItem('unlockedRes', JSON.stringify([...$unlockedRes]));
     let keyItems = {}
     for (let key of Object.keys($keyItemsUnlocked)) {
@@ -335,6 +338,12 @@ const load = async (isImport = false) => {
     }
     if ($miningUpgradeLevels.length < 100) {
         $miningUpgradeLevels = [...$miningUpgradeLevels, ...Array(100-$miningUpgradeLevels.length).fill(0)];
+    }
+    if (localStorage.getItem('miningUpgradeLevelsBought')) {
+        miningUpgradeLevelsBought.set((JSON.parse(localStorage.getItem('miningUpgradeLevelsBought'))));
+    }
+    if (localStorage.getItem('miningUpgradeLevelsFree')) {
+        miningUpgradeLevelsFree.set((JSON.parse(localStorage.getItem('miningUpgradeLevelsFree'))));
     }
     if (localStorage.getItem('progress'))
         unlockedRes.set(JSON.parse(localStorage.getItem('progress')))
@@ -437,7 +446,7 @@ const load = async (isImport = false) => {
    miningDropTable.updateTable();
 
     if ($resources['beaconPower'] < 0) $resources['beaconPower'] = 0;
-    if ($wallet['fame'] == null) $wallet['fame'] = 0;
+   
     key1DropTable.updateTable();
     key2DropTable.updateTable();
     key3DropTable.updateTable();
@@ -448,8 +457,8 @@ const load = async (isImport = false) => {
 }
 
 function versionUpdater() {
-    const ver = $saveVersion
-    const LATEST_VER = 2
+    const ver = $saveVersion;
+    const LATEST_VER = 5
     if (ver <= 0) {
         // fix "mysterious potion" error
         $keyUpgradeLevels[0] = 0;
@@ -465,6 +474,18 @@ function versionUpdater() {
         for (let b in $beaconActivations) {
             if (isNaN($beaconActivations[b])) $beaconActivations[b] = 0;
         }
+    }
+    if (ver <= 2) {
+        $keyCraftTimes['energizedCrystal'] = [-1,-1]
+    }
+    if (ver <= 3) {
+        $miningUpgradeLevelsBought = Array(200).fill(0);
+        $miningUpgradeLevelsFree = Array(200).fill(0);
+    }
+    if (ver <= 4) {
+        $keyCraftMastery['energizedCrystal'] = [1,0,3]
+        localStorage.clear('miningUpgradeLevelsBought')
+        localStorage.clear('miningUpgradeLevelsFree')
     }
     $saveVersion = LATEST_VER;
     save();
@@ -621,6 +642,25 @@ onMount(() => {
         color: #3c4262;
         cursor: pointer;
     }
+
+    :global(.game-btn-sigil) {
+        border: 1px solid #c026d3;
+        color: #c026d3;
+        cursor: pointer;
+    }
+    :global(.game-btn-sigil:hover) {
+        background-color: #d8b4fe;
+        cursor: pointer;
+    }
+    :global(.game-btn-sigil-noafford) {
+        border: 1px solid #5a044e;
+        color: #5a044e;
+        cursor: pointer;
+    }
+
+
+
+
 
     :global(.game-btn-automation-maxed) {
         border: 1px solid #ececec;

@@ -7,7 +7,7 @@
         class='has-tooltip tooltip-text 
         {affordable && craftFinishTime <= ct
         ? 'game-btn text-indigo-300' : 'game-btn-noafford text-indigo-300'}
-        py-2 pr-2 items-center text-center border-solid mr-3 col-span-12
+        py-2 pr-2 items-center text-center border-solid mr-3 col-span-4
         select-none'> 
         {#key craftFinishTime}
         {#if craftFinishTime > ct}
@@ -109,7 +109,7 @@
     let item = $keyCrafts[index]['item'];
     let craftStartTime = $keyCraftTimes[item][0];
     let craftFinishTime = $keyCraftTimes[item][1];
-    let masteryLevel = $keyCraftMastery[item][0]
+    let masteryLevel = $keyCraftMastery[item][0];
 
     let progressBarWidth = 0;
     let getProgressBarWidth = (ct) => 

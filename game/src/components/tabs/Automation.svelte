@@ -24,7 +24,7 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     beaconActivations, beaconLevels, beaconProgress, resources,
      keysOpened, unlockedRes, beaconUpgradeLevels, flags, enchantUpgradeLevels,
     automationItemsUnlocked, enchantProgress} from '../../data/player';
-import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
+import {progressThreshold, progressPerTick, miningUpgrades,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import {beaconPower, beaconBonuses,

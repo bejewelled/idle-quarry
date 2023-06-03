@@ -185,7 +185,7 @@ export const key2DropTable = dropTable({
     beacons: [0.15, 5, 15],
     key2: [0.05, 1, 1],
     sigils: [0.01, 1, 2],
-    key3: [0.00013, 1, 1]
+    key3: [0.13, 1, 1]
 })
 
 export const key3DropTable = dropTable({
@@ -244,7 +244,7 @@ export const keyUpgrades = array([
         },
         ratio: 1.3,
         formula: (lv: any) => 1 + 0.2 * lv,
-        unlockAt: () => (get(wallet)['sigils'] >= 100),
+        unlockAt: () => (get(wallet)['sigils'] >= 100 && get(wallet)['slurry'] > 0),
         isPercent: false,
         suffix: 'x slurry',
         maxLevel: 400,
@@ -254,6 +254,20 @@ export const keyUpgrades = array([
 ])
 
 export const keyCrafts = array([
+    {
+        item: 'energizedCrystal',
+        name: 'Energized Crystal',
+        style: 'text-emerald-300',
+        stylebg: 'bg-emerald-300',
+        cost: {
+            crystals: 1e5
+        },
+        craftTime: 3600, // in seconds
+        baseAmount: 1,
+        ratio: 1.1,
+        unlockAt: () => (get(wallet)['crystals'] > 0),
+    },
+
     {
         item: 'key3',
         name: '[***] Key',
@@ -314,7 +328,7 @@ export const keyCrafts = array([
     /* NOTE!!!
 
     When adding a new item here, MAKE SURE to update the following:
-    player.slurryCraftFinishTimes
+    player.keyCraftFinishTimes
     player.keyCraftMastery
 
     */

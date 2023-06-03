@@ -38,7 +38,7 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     settings, visibleTier, progressThisTick, progressAverage,
 buttonNumClicks, mineLevel, buttonStats, buttonUpgradeLevels} from '../../data/player';
 // @ts-ignore
-import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
+import {progressThreshold, progressPerTick, miningUpgrades,
 // @ts-ignore
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 // @ts-ignore
@@ -85,11 +85,6 @@ const BUTTON_SIZE= 100;
 
 
     $buttonStats['totalClicks']++;
-    $buttonStats['totalClicksToday']++;
-    if (Date.now() - $buttonStats['todayStartTime'] > 8.64e7) {
-        $buttonStats['totalClicksToday'] = 0;
-        $buttonStats['todayStartTime'] = Date.now();
-    }
     $buttonStats['clicksUntilFame']--;
     if ($buttonStats['clicksUntilFame'] <= 0) {
         $buttonStats['clicksUntilFame'] = $buttonUpgrades[0]['formula']($buttonUpgradeLevels[0])
@@ -135,7 +130,7 @@ const BUTTON_SIZE= 100;
     } 
 
     rewardAmount = rewardAmount 
-    * formula.calcButtonStreakBonus($buttonStats['totalClicksToday'])
+    * formula.calcButtonStreakBonus($buttonStats['totalClicks'])
     * $miningUpgrades[23]['formula']($miningUpgradeLevels[23])
     
     const isLucky = Math.random() < $buttonUpgrades[5]['formula']($buttonUpgradeLevels[5]);

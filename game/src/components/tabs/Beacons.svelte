@@ -8,9 +8,17 @@
 </div>
 <div class='py-2'></div>
 <div class='beacon-assign-grid grid grid-cols-12'>
-        <div class='p-1 m-1 col-span-12'>
+        <div class='p-1 col-span-2'>
             <input id='max' class="content-center w-20  bg-gray-700 text-white" placeholder='1' bind:value={$beaconSpendAmt}>
         </div>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class='game-btn m-1 text-med col-span-3' on:click={() => splitBeacons()}>
+            Split Beacons Evenly
+        </div>
+        <div class='game-btn m-1 text-med col-span-3' on:click={() => recallBeacons()}>
+            Recall Beacons
+        </div>
+        <div class='col-span-4'></div>
     {#each $beaconLevels as b, i}
     {#if $mineLevel['level'] >= $beaconMiningLevelReqs[i]}
     {#if i < 10}
@@ -80,6 +88,7 @@ beaconUpgrades, beaconNameText, beaconPowerFlavorText,
 beaconMaxLevels, beaconMiningLevelReqs} from '../../data/beacons';
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
+import formula from '../../calcs/formula';
 import BeaconToggleButton from '../buttons/BeaconToggleButton.svelte';
 import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte';
 
@@ -99,6 +108,37 @@ onMount(() => {
 
 onDestroy(() => {
 });
+
+function splitBeacons() {
+    let done = false, i = 0;
+    // find number of splits to make
+    while (!done && i < 10) {
+        if ($mineLevel['level'] < $beaconMiningLevelReqs[i]) done = true;
+        i++;
+    }
+    if (i == 0) return;
+    // find total number of beacons
+    for (let j in $beaconActivations) {
+        $wallet['beacons'] += $beaconActivations[j];
+        $beaconActivations[j] = 0;
+    }
+    let totalUsed = 0;
+    const totalBeacons = $wallet['beacons']
+    for (let j = 0; j < i; j++) {
+        $beaconActivations[j] = Math.floor(totalBeacons / i);
+        totalUsed += $beaconActivations[j];
+        $wallet['beacons'] -= $beaconActivations[j];
+    }
+    if (totalUsed < formula.sumArray($beaconActivations)) 
+        $wallet['beacons'] += Math.floor(formula.sumArray($beaconActivations) - totalUsed);
+}
+
+function recallBeacons() {
+    for (let i in $beaconActivations) {
+        $wallet['beacons'] += $beaconActivations[i];
+        $beaconActivations[i] = 0;
+    }
+}
 
 const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
 

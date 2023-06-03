@@ -5,6 +5,7 @@
 <div class='beacon-power-display text-center text-small game-text pb-1'>
     Multiplying global game speed by 1.000x
 </div>
+<div class='game-text text-center py-1'>THIS TAB IS NOT IMPLEMENTED YET</div>
 
 <div class='py-2'>
 </div>

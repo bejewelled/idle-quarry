@@ -73,9 +73,10 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     beaconActivations, beaconLevels, beaconProgress, resources,
      keysOpened, unlockedRes, beaconUpgradeLevels, flags, 
      enchantUpgradeLevels, enchantProgress, automationItemsUnlocked,
-    mineLevel, buttonUpgradeLevels, stats, keyCraftAmount} from '../../data/player';
+    mineLevel, buttonUpgradeLevels, stats, keyCraftAmount,
+miningUpgradeLevelsBought, miningUpgradeLevelsFree} from '../../data/player';
 import {buttonUpgrades} from '../../data/button';
-import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
+import {progressThreshold, progressPerTick, miningUpgrades,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import {beaconPower, beaconBonuses,
@@ -167,7 +168,8 @@ const fameGridInfo = [
     {
      name: 'Legendary Upgrades', 
      value: () => ($miningUpgrades[16]['formula']($miningUpgradeLevels[16]) 
-        * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])),
+        * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])
+        * $miningUpgrades[19]['formula']($miningUpgradeLevels[19])),
      colorRef: '',
      criteria: () => ($wallet['totalFame'] > 200)
     },
@@ -191,10 +193,11 @@ function calcFameGain() {
     * (($mineLevel['level']**1.5)*0.15 + 1)
     * fameMultiGems 
     * fameMultiBeaconLevels
-    * $miningUpgrades[16]['formula']($miningUpgradeLevels[16])
+    * $miningUpgrades[16]['formula']($miningUpgradeLevels[16]) // legendary i - iii 
     * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])
-    * $beaconFormulas[4]($beaconLevels[4])
-    * $miningUpgrades[25]['formula']($miningUpgradeLevels[25])
+    * $miningUpgrades[19]['formula']($miningUpgradeLevels[19])
+    * $beaconFormulas[4]($beaconLevels[4]) // beacon path
+    * $miningUpgrades[25]['formula']($miningUpgradeLevels[25]) // cavernous
     * formula.calcFameTimeMultiplier($stats['lastRelocate']);
 }
 
@@ -229,16 +232,23 @@ function relocate() {
                 $beaconActivations[i] = 0;
             }
             for (let bR in $beaconNextReqs) {
-                console.log($beaconLevels[bR])
                 $beaconNextReqs[bR] = ($beaconLevels[bR]+1) * $baseBeaconNextReqs[bR];
             }
             $keysOpened = Array($keysOpened.length).fill(0);
             $beaconBonuses = Array(30).fill(1)
-            if (!$automationItemsUnlocked['omnipotent']) {
+            
                 for (let i in $miningUpgrades) {
-                    if (!($miningUpgrades[i]['isFame'])) $miningUpgradeLevels[i] = 0;
+                    $miningUpgradeLevels[i] = $miningUpgradeLevelsBought[i];
+                    $miningUpgradeLevelsFree[i] = 0;
+                    if (!$automationItemsUnlocked['omnipotent']) {
+                        if (!($miningUpgrades[i]['isFame']))  {
+                            $miningUpgradeLevelsBought[i] = 0;
+                            $miningUpgradeLevels[i] = 0;
+                        }
+                    }
                 }
-            }
+            console.log($automationItemsUnlocked)
+                
             $beaconUpgradeLevels = Array($beaconUpgradeLevels.length).fill(0);
 
             if ($automationItemsUnlocked['jumpstart']) {
@@ -247,7 +257,9 @@ function relocate() {
             }
             if ($automationItemsUnlocked['deep pockets']) {
                 $miningUpgradeLevels[6] = 1;
+                $miningUpgradeLevelsBought[6] = 1;
                 $miningUpgradeLevels[9] = 1;
+                $miningUpgradeLevelsBought[9] = 1;
                 $visibleTier = 3;
             }
 

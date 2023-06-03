@@ -17,7 +17,8 @@ import {progress, miningUpgradeLevels, wallet, miningDropTable,
     beaconUpgradeLevels, enchantProgress, enchantUpgradeLevels, 
     automationItemsUnlocked, activityLog, mineLevel, 
     buttonStats, buttonUpgradeLevels, keyCraftMastery, 
-    keyCraftTimes, keyCraftAmount, antiFlickerFlags} from '../../data/player'
+    keyCraftTimes, keyCraftAmount, antiFlickerFlags, 
+    miningUpgradeLevelsBought, miningUpgradeLevelsFree} from '../../data/player'
 import {buttonUpgrades} from '../../data/button'
 import {beaconFormulas, beaconBonuses, beaconNextReqs, 
     beaconNums, beaconUpgrades, beaconPowerFlavorText, beaconNameText} from '../../data/beacons'
@@ -116,7 +117,7 @@ function updateMiningLevel() {
 }
 
 const PROGRESS_BASE = 1;
-let progressBonusMulti = 1
+let progressBonusMulti = 100
 function updateprogressThisTick(delta) {
     const progGems = PROGRESS_BASE
     * $miningUpgrades[0]['formula']($miningUpgradeLevels[0])
@@ -131,6 +132,7 @@ function updateprogressThisTick(delta) {
     PROGRESS_BASE * $miningUpgrades[3]['formula']($miningUpgradeLevels[3]) : 0)
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
+    * progressBonusMulti
     $progressAverage['key1'] = progKey1;
     $progressThisTick['key1'] = progKey1 * delta;
 
@@ -138,6 +140,7 @@ function updateprogressThisTick(delta) {
     PROGRESS_BASE * $miningUpgrades[4]['formula']($miningUpgradeLevels[4]) : 0)
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
+    * progressBonusMulti
 
     $progressAverage['key2'] = progKey2;
     $progressThisTick['key2'] = progKey2 * delta;
@@ -146,6 +149,7 @@ function updateprogressThisTick(delta) {
     PROGRESS_BASE * $miningUpgrades[4]['formula']($miningUpgradeLevels[4]) : 0)
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
+    * progressBonusMulti
 
     $progressAverage['key3'] = progKey3;
     $progressThisTick['key3'] = progKey3 * delta;
@@ -177,7 +181,7 @@ function addProgress(delta) {
         // increase fame thresholds 
         // TODO: implement enchant proc method
         for (let [k,v] of Object.entries($enchantProgress)) {
-            $enchantProgress[k] += 1;
+            $enchantProgress[k] += Math.floor($progress['gems']/gemAt);
             if ($enchantProgress[k] >= $enchantThreshold[k]) {
                 procEnchants(Math.floor($enchantProgress[k] / $enchantThreshold[k]), k)
                 $enchantProgress[k] %= $enchantThreshold[k];
@@ -198,7 +202,7 @@ function addProgress(delta) {
     if ($progress['key2'] >= keyAt[1]) {
        addKey2(Math.floor($progress['key2'] / keyAt[1]), keyAt);
     }
-    if ($progress['key2'] >= keyAt[2]) {
+    if ($progress['key3'] >= keyAt[2]) {
        addKey3(Math.floor($progress['key3'] / keyAt[2]), keyAt);
     }
 
@@ -390,13 +394,14 @@ function updateBeaconBonuses() {
     }
 }
 
+let lightningBlastLockout = false;
 function procEnchants(n, tier) { 
     const size = $enchantUpgrades[0]['formula']($enchantUpgradeLevels[0]);
     const quality = $enchantUpgrades[1]['formula']($enchantUpgradeLevels[1]);
     
     for (let [i,ench] of $enchantUpgrades.entries()) {
         const rand = Math.random() / n;
-        if (ench['tier'] > n) break;
+        
         if (rand < ench['formula']($enchantUpgradeLevels[i])) {
             switch(i) {
                 case 0:
@@ -408,25 +413,38 @@ function procEnchants(n, tier) {
                     addToActivityLog('[Burst] ' + f(size) + ' mining cycles', 'text-violet-300');
                     break;
                 case 3: // orb rush
-                    const val = (Math.random() + 0.3) * Math.pow(quality, 3);
+                    const val = (Math.random() + 0.3) * Math.pow(30 + Math.sqrt(quality), 3);
                     $wallet['orbs'] += val
                     addToActivityLog('[Orb Rush] +' + f(val) + ' orbs', 'text-violet-300');
                     break;
                 case 4: // lightning blast
-                    progressBonusMulti += Math.sqrt($enchantUpgradeLevels[0]['formula']($enchantUpgradeLevels[0]));
-                    addToActivityLog('[Lightning Blast] ' + f(Math.sqrt($enchantUpgradeLevels[0]['formula']($enchantUpgradeLevels[0]))) + 'x mining speed for 3 seconds!', 'text-violet-300');
+                    if (lightningBlastLockout) break;
+                    progressBonusMulti *= Math.sqrt($enchantUpgrades[0]['formula']($enchantUpgradeLevels[0]));
+                    lightningBlastLockout = true;
+                    setTimeout(() => {
+                        progressBonusMulti /= Math.sqrt($enchantUpgrades[0]['formula']($enchantUpgradeLevels[0]));
+                        if (Math.abs(progressBonusMulti - Math.round(progressBonusMulti)) < 0.1) 
+                            progressBonusMulti = Math.round(progressBonusMulti);
+                        lightningBlastLockout = false;
+                    }, 3000)
+                    addToActivityLog('[Lightning Blast] ' + f(Math.sqrt($enchantUpgrades[0]['formula']($enchantUpgradeLevels[0]))) + 'x mining speed for 3 seconds!', 'text-violet-300');
                     break;
                 case 5: // scavenger
                     const allowedUpgrades = [0, 1, 2, 3, 4, 7, 8]
                     let done = false;
                     while (!done) {
                         const rand = Math.floor(Math.random() * allowedUpgrades.length);
-                        if ($miningUpgradeLevels[rand] < $miningUpgrades[rand]['maxLevel']) {
-                            $miningUpgradeLevels[rand]++;
+                        const item = allowedUpgrades[rand];
+                        
+                        if ($miningUpgradeLevelsBought[item] < $miningUpgrades[item]['maxLevel']) {
+                            $miningUpgradeLevels[item]++;
+                            $miningUpgradeLevelsFree[item]++;
+                            
                             done = true;
+                            addToActivityLog('[Scavenger] Added 1 level of ' + $miningUpgrades[item]['name'] + '!', 'text-violet-300');
+
                         }
                     }
-                    addToActivityLog('[Scavenger] Added 1 level of ' + $miningUpgrades[rand]['name'] + '!', 'text-violet-300');
                     break;
  
             }

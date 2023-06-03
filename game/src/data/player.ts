@@ -212,9 +212,9 @@ export const progress = object({
 
 
 
-export const miningUpgradeLevelsBought = array(Array(20).fill(0));
-export const miningUpgradeLevelsFree = array(Array(20).fill(0));
-export const miningUpgradeLevels = array(Array(20).fill(0));
+export const miningUpgradeLevelsBought = array(Array(200).fill(0));
+export const miningUpgradeLevelsFree = array(Array(200).fill(0));
+export const miningUpgradeLevels = array(Array(200).fill(0));
 
 export const keyUpgradeLevels = array(Array(50).fill(0));
 
@@ -231,7 +231,7 @@ export const baseMiningDropTable = dropTable({
 export const miningDropTable = dropTable({
     gold: [0.20,1,3], // 10% chance to drop 1 gold
     key1: [0.025,1,1], 
-    orbs: [0.01,10,50],
+    orbs: [0.01,10,50000],
     beacons: [0.005,1,1],
     key2: [0.00075,1,1],
     key3: [1e-6,1,1],
@@ -317,6 +317,7 @@ export const stats = object({
 
 export const keyCraftTimes = object({
     // [start, finish]
+    energizedCrystal: [-1, -1], 
     key3: [-1, -1],
     key4: [-1, -1],
     key5: [-1, -1],
@@ -325,6 +326,7 @@ export const keyCraftTimes = object({
 
 export const keyCraftMastery = object({
     // [item]: [level, xp, xpNextReq]
+    energizedCrystal: [1,0,3],
     key3: [1, 0, 100],
     key4: [1, 0, 100],
     key5: [1, 0, 100],
@@ -332,6 +334,7 @@ export const keyCraftMastery = object({
 })
 
 export const keyCraftAmount = object({
+    energizedCrystal: 0,
     key3: 0,
     key4: 0,
     key5: 0,

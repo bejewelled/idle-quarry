@@ -85,7 +85,7 @@
             <div class='col-span-9'>
                 <div class='mine-bar-wrapper align-middle'>
                     <div class="w-full my-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                        <div class="bg-blue-400 h-2.5 rounded-full" 
+                        <div class="bg-pink-400 h-2.5 rounded-full" 
                         style="width: {$antiFlickerFlags['keyfinder'] ? '100%' : key3BarWidth}"></div>
                     </div>
                 </div>

@@ -5,10 +5,13 @@
 <div class='pt-1'></div>
 <div on:click={() => buy(index)}
 class='has-tooltip tooltip-text 
-{affordable && $miningUpgradeLevels[index] < $miningUpgrades[index]['maxLevel']
+{affordable && $miningUpgradeLevelsBought[index] < $miningUpgrades[index]['maxLevel']
  ? $miningUpgrades[index]['style'] || 'game-btn' : ($miningUpgrades[index]['style'] || 'game-btn')+'-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
-select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)} / {f($miningUpgrades[index]['maxLevel'],0)}]
+select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[index],0)} / {f($miningUpgrades[index]['maxLevel'],0)}
+{#if $miningUpgradeLevelsFree[index] > 0}
++ {f($miningUpgradeLevelsFree[index],0)}
+{/if}]
          <span class='px-2 mx-4 max-w-[275px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
@@ -60,7 +63,7 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
 
     import { onDestroy, onMount } from 'svelte';
     import { progress, wallet, miningUpgradeLevels, miningDropTable,
-         settings, visibleTier, unlockedRes} from '../../data/player';
+         settings, visibleTier, unlockedRes, miningUpgradeLevelsBought, miningUpgradeLevelsFree} from '../../data/player';
     import {progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
@@ -79,6 +82,7 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
     let affordInterval;
     
     onMount(() => {
+        
         setTimeout(() => {
             costs = getCosts();
             affordable = canAfford();
@@ -107,7 +111,7 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
 }
 
     function cost(start) {
-       const base = start * Math.pow($miningUpgrades[index]['ratio'], $miningUpgradeLevels[index]);  
+       const base = start * Math.pow($miningUpgrades[index]['ratio'], $miningUpgradeLevelsBought[index]);  
        const r =  $miningUpgrades[index]['ratio']
        const l = $settings['buyAmount']
 
@@ -115,10 +119,10 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
     }
 
     function buy() {
-        if ($miningUpgradeLevels[index] >= $miningUpgrades[index]['maxLevel']) return;
+        if ($miningUpgradeLevelsBought[index] >= $miningUpgrades[index]['maxLevel']) return;
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
-            if (val >=  1 && $wallet[type] < val-0.003) {
+            if ((val >=  1 && $wallet[type] < val-0.003) || !$wallet[type]) {
                 return;
             }
         }
@@ -126,6 +130,8 @@ select-none'>{$miningUpgrades[index]['name']} [{f($miningUpgradeLevels[index],0)
             if (val >= 1) $wallet[type] -= (val-0.003);
         }
         $miningUpgradeLevels[index] += Math.min($settings['buyAmount'],
+        $miningUpgrades[index]['maxLevel'] - $miningUpgradeLevels[index]);
+        $miningUpgradeLevelsBought[index] += Math.min($settings['buyAmount'],
         $miningUpgrades[index]['maxLevel'] - $miningUpgradeLevels[index]);
         costs = getCosts();
         permUnlocked = true;

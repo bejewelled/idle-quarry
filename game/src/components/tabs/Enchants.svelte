@@ -8,19 +8,21 @@
             {/if}
         {/each}
     </div>
-    <div class='text-[#989898] text-small pt-4'>enchant progress</div>
+    <div class='text-[#989898] text-small pt-4'>enchant progress
+        [ {f(0.01 * $progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'])} / sec ]
+    </div>
     <div class = 'grid grid-cols-12 pt-1'>
-    <div class='col-span-10'>
+    <div class='{$antiFlickerFlags['enchants'] ? 'col-span-12' :'col-span-10'}'>
         <div class='ench-t1-wrapper align-middle'>
             <div class="w-full my-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
                 <div class="bg-violet-300 h-2.5 rounded-full" 
-                style="width: {encht1BarWidth}"></div>
+                style="width: {$antiFlickerFlags['enchants'] ? '100%' : encht1BarWidth}"></div>
             </div>
         </div>
     </div>
-    <div class='col-span-2 pl-1 text-center align-text-middle'>
+    <div class='{$antiFlickerFlags['enchants'] ? '' :'col-span-2'} pl-1 text-center align-text-middle'>
         <div class='text-[#989898] text-small'> <strong>
-            Weak: {f($enchantProgress['t1'], 0)} / {f($enchantThreshold['t1'], 0)}
+            {!$antiFlickerFlags['enchants'] ? (f($enchantProgress['t1'], 0) +  ' / ' +  f($enchantThreshold['t1'], 0)) : ''}
         </strong>
 
         </div>
@@ -50,8 +52,8 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     settings, visibleTier, progressThisTick, progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources,
      keysOpened, unlockedRes, beaconUpgradeLevels, flags, 
-     enchantUpgradeLevels, enchantProgress} from '../../data/player';
-import {progressThreshold, progressPerTick, miningUpgrades, antiFlickerFlags,
+     enchantUpgradeLevels, enchantProgress, antiFlickerFlags} from '../../data/player';
+import {progressThreshold, progressPerTick, miningUpgrades,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import {beaconPower, beaconBonuses,
