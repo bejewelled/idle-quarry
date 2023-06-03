@@ -170,7 +170,7 @@ export const enchantUpgrades = array([{
     },
     tier: 1,
     ratio: 1.25,
-    formula: (lv: any) => 0.0005 * lv,
+    formula: (lv: any) => (0.04/400) * lv,
     unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,
     suffix: ' chance',
@@ -186,7 +186,7 @@ export const enchantUpgrades = array([{
     },
     tier: 1,
     ratio: 1.25,
-    formula: (lv: any) => 0.00375 * lv,
+    formula: (lv: any) => (0.05/400) * lv,
     unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,
     suffix: '  chance',
@@ -201,11 +201,11 @@ export const enchantUpgrades = array([{
     },
     tier: 1,
     ratio: 1.25,
-    formula: (lv: any) => 0.0002 * lv,
+    formula: (lv: any) => (0.01/400) * lv,
     unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,
     suffix: '  chance',
-    maxLevel: 200,
+    maxLevel: 400,
     notes: ''
 },
 {
@@ -216,11 +216,11 @@ export const enchantUpgrades = array([{
     },
     tier: 1,
     ratio: 1.35,
-    formula: (lv: any) => 0.000075 * lv,
+    formula: (lv: any) => Math.pow(lv/400, 2) * 0.05,
     unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,
     suffix: '  chance',
-    maxLevel: 200,
+    maxLevel: 400,
     notes: ''
 },
 
@@ -241,7 +241,7 @@ export const automationUpgrades = array([{
 },
 {
     name: 'Deep Pockets',
-    description: 'Permanently unlock Lootmaster I and II.',
+    description: 'Lootmaster I and II stay unlocked on relocate.',
     cost: {
         fame: 8000,
     },
@@ -261,7 +261,7 @@ export const automationUpgrades = array([{
 },
 {
     name: 'Game On',
-    description: 'Unlocks challenges 1 - 3.',
+    description: 'Unlocks challenges 1 - 3. [NOT IMPLEMENTED YET]',
     cost: {
         fame: 1e5,
     },
