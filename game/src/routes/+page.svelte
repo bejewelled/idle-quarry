@@ -459,7 +459,7 @@ const load = async (isImport = false) => {
 
 function versionUpdater() {
     const ver = $saveVersion;
-    const LATEST_VER = 9
+    const LATEST_VER = 11;
     if (ver <= 0) {
         // fix "mysterious potion" error
         $keyUpgradeLevels[0] = 0;
@@ -488,7 +488,7 @@ function versionUpdater() {
         localStorage.clear('miningUpgradeLevelsBought')
         localStorage.clear('miningUpgradeLevelsFree')
     }
-    if (ver <= 10) {
+    if (ver <= 9) {
         $buttonUpgradeLevels = Array(200).fill(0)
         for (let x in $buttonUpgradeLevels) {
             if ($buttonUpgrades[x]) {
@@ -497,6 +497,9 @@ function versionUpdater() {
                 if (!$buttonUpgradeLevels[x]) $buttonUpgradeLevels[x] = 0;
             }
         }
+    }
+    if (ver <= 10) {
+        if ($wallet['crystals'] > 1e25) $wallet['crystals'] = 1e6;
     }
     $saveVersion = LATEST_VER;
 
