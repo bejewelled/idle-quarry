@@ -158,8 +158,8 @@ function dropTable(context: any) {
             update((i: any) => {
                 for (let [item, val] of Object.entries(i)) {
                     i[item]= [
-                        Math.min(1,val[0]),
-                            //* get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])),
+                        Math.min(1,val[0])
+                         * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0]),
                         val[1], 
                         val[2]
                     ]
@@ -229,7 +229,7 @@ export const keyUpgrades = array([
             sigils: 1000,
         },
         ratio: 1.3,
-        formula: (lv: any) => 1 + 0.25*Math.pow(lv,1.33),
+        formula: (lv: any) => 1 + 0.25*(Math.pow(lv, 0.75)),
         unlockAt: () => (get(wallet)['slurry'] > 0),
         isPercent: false,
         suffix: 'x droprates',

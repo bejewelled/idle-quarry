@@ -121,7 +121,7 @@ const ceil = (n: number) => Math.ceil(n);
 export const progressThreshold = object({
     gems: 167,
     key1: 2000,
-    key2: 75000,
+    key2: 50000,
     key3: 390000,
 })
 
