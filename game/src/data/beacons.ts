@@ -183,7 +183,8 @@ export const beaconNameText = array([
     'Droprate Multiplier I',
     'Gem Bonus',
     'Fame Bonus',
-    'Key Finder Speed',]
+    'Key Finder Speed',
+    'Crafting Yield',]
     .concat(Array(26).fill(''))
 )
 export const beaconMiningLevelReqs = array([0,0,0,12,14,16,24,27,36,40])
