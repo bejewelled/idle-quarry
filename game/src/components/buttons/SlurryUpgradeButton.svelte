@@ -64,7 +64,8 @@ select-none'>
          buttonStats, buttonNumClicks, buttonUpgradeLevels,
         keyUpgradeLevels} from '../../data/player';
     import {progressThreshold, progressPerTick } from '../../data/mining';
-    import {keyUpgrades} from '../../data/keys';
+    import {keyUpgrades, key1DropTable, key2DropTable, 
+        key3DropTable, key4DropTable, key5DropTable} from '../../data/keys';
     import { enchantUpgrades } from '../../data/fame';
     import {buttonUpgrades} from '../../data/button';
     import ref from '../../calcs/ref'
@@ -132,6 +133,15 @@ select-none'>
         $keyUpgradeLevels[index] += $settings['buyAmount'];
         costs = getCosts();
         permUnlocked = true;
+        updateDropTables()
+    }
+
+    function updateDropTables() {
+        key1DropTable.updateTable()
+        key2DropTable.updateTable()
+        key3DropTable.updateTable()
+        key4DropTable.updateTable()
+        key5DropTable.updateTable()
     }
 
     function canAfford() {
