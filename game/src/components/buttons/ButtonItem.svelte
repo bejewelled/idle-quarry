@@ -96,7 +96,6 @@ const BUTTON_SIZE= 100;
 
     const absDist = Math.sqrt(Math.abs(cursorX - buttonPosition.x-(BUTTON_SIZE/2)) ** 2 
     + Math.abs(cursorY - buttonPosition.y-(BUTTON_SIZE/2)) ** 2);
-    console.log(buttonPosition.x, buttonPosition.y, cursorX, cursorY, absDist)
     
     let rewardAmount = 0;
 
@@ -107,7 +106,6 @@ const BUTTON_SIZE= 100;
         $buttonStats['clicksUntilFame'] = $buttonUpgrades[0]['formula']($buttonUpgradeLevels[0])
         $wallet['fame'] += 1000;
     }
-    console.log(absDist)
     if (absDist < 1) {
         rewardAmount = 100;
         rewardDescriptionText = 'PERFECT! +';
@@ -181,7 +179,7 @@ const BUTTON_SIZE= 100;
         lastX = buttonPosition.x, lastY = buttonPosition.y;
       else
         lastX = MIN_X, lastY = MIN_Y;
-      const MAX_MOVE2 = (300**2) * moveMulti;
+      const MAX_MOVE2 = (300*moveMulti)**2;
       const x2 = (Math.random()*0.7+0.3) * MAX_MOVE2;
       const y2 = MAX_MOVE2 - x2; 
       const xDir = Math.random() < 0.5 ? -1 : 1;

@@ -569,7 +569,7 @@ export const miningUpgrades = array([{
     formula: (lv: any) =>  1 + Math.pow(lv, 0.9)*0.75,
     isPercent: true,
     prefix: '+',
-    suffix: ' fame gain',
+    suffix: ' gem gain',
     style: 'game-btn-crystal',
     maxLevel: 100,
 },
