@@ -461,6 +461,7 @@ const load = async (isImport = false) => {
     key4DropTable.updateTable();
     key5DropTable.updateTable();
     loadingFinished = true;
+    console.log($activityLogShow);
     return true;
 }
 

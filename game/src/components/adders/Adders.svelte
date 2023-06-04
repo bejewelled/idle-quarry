@@ -60,7 +60,7 @@ const calcGameSpeed = () => {
 
 let i = 0;
 function addToActivityLog(text, color, showParam) {
-    if (!$activityLogShow['showParam']) return;
+    if (!$activityLogShow[showParam]) return;
     const item = [text, color]
     $activityLog = [...$activityLog, item]
     if ($activityLog.length > 100) $activityLog.shift();
