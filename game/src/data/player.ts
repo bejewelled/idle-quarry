@@ -353,3 +353,5 @@ export const antiFlickerFlags = object({
 export const saveVersion = single(0);
 
 export const startOfGame = single(Date.now());
+
+export const activityLogShow = object({})

@@ -18,7 +18,7 @@ import {progress, miningUpgradeLevels, wallet, miningDropTable,
     automationItemsUnlocked, activityLog, mineLevel, 
     buttonStats, buttonUpgradeLevels, keyCraftMastery, 
     keyCraftTimes, keyCraftAmount, antiFlickerFlags, 
-    miningUpgradeLevelsBought, miningUpgradeLevelsFree} from '../../data/player'
+    miningUpgradeLevelsBought, miningUpgradeLevelsFree, activityLogShow} from '../../data/player'
 import {buttonUpgrades} from '../../data/button'
 import {beaconFormulas, beaconBonuses, beaconNextReqs, 
     beaconNums, beaconUpgrades, beaconPowerFlavorText, beaconNameText} from '../../data/beacons'
@@ -59,7 +59,8 @@ const calcGameSpeed = () => {
 }
 
 let i = 0;
-function addToActivityLog(text, color) {
+function addToActivityLog(text, color, showParam) {
+    if (!$activityLogShow['showParam']) return;
     const item = [text, color]
     $activityLog = [...$activityLog, item]
     if ($activityLog.length > 100) $activityLog.shift();
@@ -232,7 +233,7 @@ function addGems(n, avgProgress) {
     // add chance to get fame
     if (Math.random() < ($miningUpgrades[13]['formula']($miningUpgradeLevels[13]) - 1)) {
         $wallet['fame'] = ($wallet['fame'] || 0) + 1;
-        addToActivityLog('[Mythical] +1 fame', 'text-orange-400')
+        addToActivityLog('[Mythical] +1 fame', 'text-orange-400', 'mythical')
     }
 
 }
@@ -322,10 +323,10 @@ function checkForKeyCraftCompletion() {
                 $keyCraftMastery[item][2] = Math.floor($keyCraftMastery[item][2]);
                 addToActivityLog('[Keys] Crafting Mastery for ' + item + 'increased! ('
                 +$keyCraftMastery[item][0] + ')', 
-                'text-amber-400')
+                'text-amber-400', 'crafting')
             }
         addToActivityLog('[Keys] Crafting complete: +' 
-        + f(calcKeyCraftAmountGained(i)) + ' ' + $keyCrafts[i]['name'], $keyCrafts[i]['style']||'text-white')
+        + f(calcKeyCraftAmountGained(i)) + ' ' + $keyCrafts[i]['name'], $keyCrafts[i]['style']||'text-white', 'crafting')
         }
         
     }
@@ -412,12 +413,12 @@ function procEnchants(n, tier) {
                     break;
                 case 2: // burst
                     addGems(size);
-                    addToActivityLog('[Burst] ' + f(size) + ' mining cycles', 'text-violet-300');
+                    addToActivityLog('[Burst] ' + f(size) + ' mining cycles', 'text-violet-300', 'burst');
                     break;
                 case 3: // orb rush
                     const val = (Math.random() + 0.3) * Math.pow(30 + Math.sqrt(quality), 3);
                     $wallet['orbs'] += val
-                    addToActivityLog('[Orb Rush] +' + f(val) + ' orbs', 'text-violet-300');
+                    addToActivityLog('[Orb Rush] +' + f(val) + ' orbs', 'text-violet-300', 'orb rush');
                     break;
                 case 4: // lightning blast
                     if (lightningBlastLockout) break;
@@ -429,7 +430,8 @@ function procEnchants(n, tier) {
                             progressBonusMulti = Math.round(progressBonusMulti);
                         lightningBlastLockout = false;
                     }, 3000)
-                    addToActivityLog('[Lightning Blast] ' + f(Math.sqrt($enchantUpgrades[0]['formula']($enchantUpgradeLevels[0]))) + 'x mining speed for 3 seconds!', 'text-violet-300');
+                    addToActivityLog('[Lightning Blast] ' + f(Math.sqrt($enchantUpgrades[0]['formula']($enchantUpgradeLevels[0]))) + 'x mining speed for 3 seconds!',
+                     'text-violet-300', 'lightning blast');
                     break;
                 case 5: // scavenger
                     const allowedUpgrades = [0, 1, 2, 3, 4, 7, 8]
@@ -443,7 +445,8 @@ function procEnchants(n, tier) {
                             $miningUpgradeLevelsFree[item]++;
                             
                             done = true;
-                            addToActivityLog('[Scavenger] Added 1 level of ' + $miningUpgrades[item]['name'] + '!', 'text-violet-300');
+                            addToActivityLog('[Scavenger] Added 1 level of ' + $miningUpgrades[item]['name'] + '!', 
+                            'text-violet-300', 'scavenger');
 
                         }
                     }

@@ -147,7 +147,7 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     keyUpgradeLevels, keyCraftAmount, keyCraftMastery, 
     keyCraftTimes, startOfGame, antiFlickerFlags, 
     automationItemsUnlocked, saveVersion, miningUpgradeLevelsBought,
-    miningUpgradeLevelsFree} from '../data/player.js'
+    miningUpgradeLevelsFree, activityLogShow} from '../data/player.js'
 import {key1DropTable, key2DropTable, key3DropTable, 
 key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
 import {beaconNextReqs, beaconSpendAmt, beaconNums} from '../data/beacons.ts'
@@ -275,7 +275,9 @@ const save = async (isExport = false) => {
     localStorage.setItem('settings', JSON.stringify($settings));
     localStorage.setItem('antiFlickerFlags', JSON.stringify($antiFlickerFlags));
     localStorage.setItem('saveVersion', JSON.stringify($saveVersion));
-    localStorage.setItem('automationItemsUnlocked', JSON.stringify($automationItemsUnlocked));
+    localStorage.setItem('automationItemsUnlocked', JSON.stringify($automationItemsUnlocked))
+    localStorage.setItem('activityLogShow', JSON.stringify($activityLogShow));
+
 
 
     saveConfirm = true;
@@ -440,6 +442,9 @@ const load = async (isImport = false) => {
     }
     if (localStorage.getItem('automationItemsUnlocked')) {
         automationItemsUnlocked.set(JSON.parse(localStorage.getItem('automationItemsUnlocked')));
+    }
+    if (localStorage.getItem('activityLogShow')) {
+        activityLogShow.set(JSON.parse(localStorage.getItem('activityLogShow')));
     }
     // updates older save files to new format
     versionUpdater();

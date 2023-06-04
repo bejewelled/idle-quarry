@@ -128,13 +128,15 @@ function splitBeacons() {
     }
     let totalUsed = 0;
     const totalBeacons = $wallet['beacons']
-    for (let j = 0; j < i; j++) {
+    for (let j = 0; j < i-1; j++) {
         $beaconActivations[j] = Math.floor(totalBeacons / (i-1));
         totalUsed += $beaconActivations[j];
-        $wallet['beacons'] -= $beaconActivations[j];
     }
+    $wallet['beacons'] -= totalUsed
     if (totalUsed < formula.sumArray($beaconActivations)) 
         $wallet['beacons'] += Math.floor(formula.sumArray($beaconActivations) - totalUsed);
+
+    console.log($wallet['beacons'])
 }
 
 function recallBeacons() {

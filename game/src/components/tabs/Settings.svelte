@@ -1,10 +1,9 @@
 <div class='wrapper pt-3'>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     
-    <div class='text-large text-gray-300 text-center pb-2'>Progress Bars</div>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class='wrapper bg-gray-700 my-1 border-2 border-gray-600 pb-1'>
-        <div class='w-full text-left py-1 text-medium text-gray-400'>Anti-Flickering - Bar will appear as solid when enabled</div>
+        <div class='w-full text-left py-1 pl-1 text-medium text-gray-400'>Anti-Flickering - Bar will appear as solid when enabled</div>
             <div class='wrapper grid grid-cols-1 py-1'>
                 <div class='wrapper col-span-1 grid grid-cols-8'>
                     <div class='setting col-span-2 mx-1 px-1 py-1 text-center
@@ -29,20 +28,54 @@
     </div>
 
     <div class='py-3'></div>
+    <div class='wrapper bg-gray-700 my-1 border-2 border-gray-600 pb-1'>
+        <div class='w-full text-left py-1 pl-1 text-medium text-gray-400'>Enable/disable activity log entries</div>
+           <div class='grid grid-cols-12 py-1'>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class='col-span-3 grid-cols-3 pt-1'>
+                    <div class='setting col-span-3 mx-1 px-1 py-1 text-center
+                    {$activityLogShow['crafting'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
+                    on:click={() => changeActivityLogShow('crafting')}>Crafting</div>
+                </div>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class='col-span-3 grid-cols-3 pt-1'>
+                    <div class='setting col-span-3 mx-1 px-1 py-1 text-center
+                    {$activityLogShow['mythical'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
+                    on:click={() => changeActivityLogShow('mythical')}>Mythical</div>
+                </div>
+                <div class='col-span-6 py-1'></div>
+                {#each $enchantUpgrades as e}
+                {#if !(e['name'] == 'Mine Size' || e['name'] == 'Mine Quality')}
+                <div class='col-span-3 grid-cols-3 pt-1'>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <div class='setting col-span-3 mx-1 px-1 py-1 text-center
+                    {$activityLogShow[e['name'].toLowerCase()] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
+                    on:click={() => changeActivityLogShow(e['name'].toLowerCase())}>{e['name']}</div>
+                </div>
+                {/if}
+                {/each}
+           </div>
+         </div>
+    </div>
 
     <div class='text-large text-gray-300 text-left pb-2'>About</div>
         <div class='text-small tooltip-text'>version 0.0.3-B (alpha)</div>
         <div class='text-small tooltip-text'>created by bejewelled, all rights reserved</div>
-</div>
+
 
 
 <script>
 // @ts-nocheck
 
-    import {settings, antiFlickerFlags} from '../../data/player'
+    import {settings, antiFlickerFlags, activityLogShow} from '../../data/player'
+    import {enchantUpgrades} from '../../data/fame'
 
     function changeFlickerFlag(item) {
         $antiFlickerFlags[item] = !$antiFlickerFlags[item]
+    }
+
+    function changeActivityLogShow(item) {
+        $activityLogShow[item] = !$activityLogShow[item]
     }
 
 </script>
