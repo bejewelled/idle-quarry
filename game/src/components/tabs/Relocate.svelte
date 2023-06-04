@@ -174,12 +174,6 @@ const fameGridInfo = [
      criteria: () => ($wallet['totalFame'] > 200)
     },
     {
-     name: 'Cavernous Upgrade', 
-     value: () => ($miningUpgrades[25]['formula']($miningUpgradeLevels[25])) ,
-     colorRef: 'crystals',
-     criteria: () => ($wallet['crystals'] > 0)
-    },
-    {
      name: 'Time Multiplier (Everlasting)', 
      value: () => (formula.calcFameTimeMultiplier($stats['lastRelocate'])),
      colorRef: 'crystals',
@@ -197,7 +191,6 @@ function calcFameGain() {
     * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])
     * $miningUpgrades[19]['formula']($miningUpgradeLevels[19])
     * $beaconFormulas[4]($beaconLevels[4]) // beacon path
-    * $miningUpgrades[25]['formula']($miningUpgradeLevels[25]) // cavernous
     * formula.calcFameTimeMultiplier($stats['lastRelocate']);
 }
 

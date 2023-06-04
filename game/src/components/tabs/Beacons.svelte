@@ -116,6 +116,7 @@ function splitBeacons() {
         if ($mineLevel['level'] < $beaconMiningLevelReqs[i]) done = true;
         i++;
     }
+    if (i == 10) i = 11;
     if (i == 1) {
         $beaconActivations[0] += $wallet['beacons'];
         $wallet['beacons'] = 0;

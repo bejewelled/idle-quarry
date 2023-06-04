@@ -1,6 +1,6 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-
+{#key $keyCraftMastery[item][1]}
 {#if $keyCrafts[index]['unlockAt']()}
 <div class='wrapper grid grid-cols-12 py-1'>
     <div on:click={() => buy(index)}
@@ -17,13 +17,16 @@
         <span class='{$keyCrafts[index]['style'] || 'text-white'}'>{$keyCrafts[index]['name']}</span>
         {/if}
         {/key}
-        <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
+        <span class='px-2 mx-4 {craftFinishTime > ct ? 'max-w-[90px]' : 'max-w-[300px]'}
+            tooltip tooltip-text shadow-lg p-1
         border-white border-double border bg-[#222529] ml-16
             pointer-events-none'>
             <div class='cost items-center text-center grid grid-cols-4'>
-                
+            {#if craftFinishTime > ct}
+                <div class='tooltip-text text-center'>Crafting...</div>
+            {:else}
                 {#each Object.entries(costs) as c}
-                    {#if c[1] >= 1}
+                    {#if c[1] >= 1} 
                         <div class='{ref.colors[c[0]] || ref.colors['default']} text-left pr-3 col-span-2'>{
                         $wallet[c[0]] || $unlockedRes.has(c[0]) ? 
                         (ref.displayNames[c[0]] ? ref.displayNames[c[0]] : c[0]) : "???"}</div>
@@ -35,6 +38,8 @@
                     <div class='col-span-2 text-xs text-left'>{f(
                         $keyCrafts[index]['craftTime'] * Math.pow(0.9, masteryLevel-1),0
                         )} seconds</div>
+
+                {/if}
             </div>
         </span>
     </div>
@@ -56,7 +61,12 @@
         <div class='row-span-1 grid grid-cols-9'>
             <div class='col-span-3 text-left text-small text-amber-400'>
                 Skill {f($keyCraftMastery[item][0])} 
-                [{f(1 / Math.pow(0.9, masteryLevel-1), 1)}x faster]</div>
+                {#if item == 'energizedCrystal'}
+                    [{f(Math.pow(1.1, masteryLevel-1), 1)}x craft yields]
+                {:else}
+                    [{f(1 / Math.pow(0.9, masteryLevel-1), 1)}x speed]
+                {/if}
+                </div>
             <div class='col-span-6 mine-bar-wrapper align-middle'>
                 <div class="has-tooltip w-full my-1 bg-gray-200 rounded-full h-1 dark:bg-gray-700">
                     <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
@@ -74,7 +84,7 @@
     </div>
 </div>
         {/if}
-
+{/key}
         
 
  <script>

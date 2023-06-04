@@ -194,25 +194,26 @@ export const beaconFormulas = array([
    /*droprate*/ function(lv: number) {return 1 + (Math.pow(lv,0.8) * 0.003)},
    /*gem bonus*/ function(lv: number) {return 1 + Math.pow(lv,0.9)*0.02},
     /* fame bonus */ function(lv: number) {return 1 + Math.pow(lv,0.5)*0.02},
-    /* key finder speed */ function(lv: number) {return 1 + Math.pow(lv, 0.5)*0.05}]
+    /* key finder speed */ function(lv: number) {return 1 + Math.pow(lv, 0.5)*0.05},
+    /* craft yield */ function(lv: number) {return 1 + (Math.pow(lv,1.2) * 0.000025)},]
     .concat(Array(25).fill(function(lv: number) {return 1}))
 )
 
 export const beaconNextReqs = array(Array(3).fill(700)
 .concat(Array(3).fill(5e7))
-.concat(Array(2).fill(1e14)
-.concat(Array(2).fill(1e23))))
+.concat(Array(2).fill(1e11)
+.concat(Array(2).fill(1e17))))
 
 export const baseBeaconNextReqs = array(Array(3).fill(700)
 .concat(Array(3).fill(5e7))
-.concat(Array(2).fill(1e14)
-.concat(Array(2).fill(1e23))))
+.concat(Array(2).fill(1e11)
+.concat(Array(2).fill(1e17))))
 
 export const beaconNums = array(
     Array(3).fill([700, 1.0005])
     .concat(Array(3).fill([5e7, 1.0005])
-    .concat(Array(2).fill([1e14, 1.0005])
-    .concat(Array(2).fill([1e23, 1.0005])))))
+    .concat(Array(2).fill([1e11, 1.0005])
+    .concat(Array(2).fill([1e17, 1.0005])))))
 
 export const beaconMaxLevels = array(Array(10).fill(1e6))
 

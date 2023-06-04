@@ -1,20 +1,17 @@
-import {buttonUpgradeLevels, miningUpgradeLevels, keyUpgradeLevels} from '../data/player';
-import {keyUpgrades} from '../data/keys'
+import {buttonUpgradeLevels, miningUpgradeLevels, keyUpgradeLevels,
+keyCraftAmount, keyCraftMastery, beaconLevels} from '../data/player';
+import { beaconBonuses } from '../data/beacons';
+import {keyUpgrades, keyCrafts} from '../data/keys'
 import { get } from 'svelte/store';
 export default class formula {
 
     // returns a normally random value
-    static rNorm() {
-      // Generate two random numbers between 0 and 1
-      const u1 = Math.random();
-      const u2 = Math.random();
-
-      // Apply the Box-Muller transform to generate two normally distributed random numbers
-      const z1 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-
-      const BIAS_FIX = 0.04;
-      // Use one of the normally distributed random numbers to generate a random number on the interval [-3,3]
-      return z1*2;
+    static rNorm(mean=0, stdev=1) {
+        const u = 1 - Math.random(); // Converting [0,1) to (0,1]
+        const v = Math.random();
+        const z = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+        // Transform to the desired mean and standard deviation:
+        return z * stdev + mean;
     }
 
     static rNormTest() {
@@ -129,4 +126,10 @@ export default class formula {
     }
     return amount * get(keyUpgrades)[1]['formula'](get(keyUpgradeLevels)[1]);
   }
+
+  static calcKeyCraftAmountGained(i: string) {
+    return get(keyCrafts)[i]['baseAmount']
+    * Math.pow(1.1, get(keyCraftMastery)['energizedCrystal'][0]-1)
+    * get(beaconBonuses)[6];
+}
 }

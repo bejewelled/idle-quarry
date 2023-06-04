@@ -77,11 +77,12 @@
         {/each}
     </div>
     <div class='reward-disp-wrapper items-center'>
-        {#if $keyRewardText != ''}
+        
         <div class='grid grid-cols-8'>
             <div class='col-span-8 game-text text-left'>
                 You received the following rewards:
             </div>
+        {#if Object.keys($keyRewardText).length > 0}
             {#each Object.entries($keyRewardText) as r}
                 {#if parseInt(r[1]) >= 0.99997}
                 <div class='col-span-3'></div>
@@ -94,8 +95,14 @@
                 <div class='col-span-3'></div>
                 {/if}
             {/each}
-        </div>
+        
+        {:else}
+            <div class='col-span-8 game-text text-center'>
+                Nothing :(
+            </div>        
+        
         {/if}
+    </div> 
 
     </div>
     <div class='pt-6'>

@@ -113,7 +113,7 @@ function updateMiningLevel() {
     if ($mineLevel['xp'] >= $mineLevel['xpNextReq']) {
         $mineLevel['xp'] -= $mineLevel['xpNextReq'];
         $mineLevel['level']++;
-        $mineLevel['xpNextReq'] = ($mineLevel['xpNextReq'] + 1100) * 1.12;
+        $mineLevel['xpNextReq'] = 500*$mineLevel['level'] * Math.pow(1.25, $mineLevel['level']);
     }
 }
 
@@ -128,7 +128,6 @@ function updateprogressThisTick(delta) {
     $progressAverage['gems'] = progGems;
     $progressThisTick['gems'] = progGems * delta;
 
-    console.log($buttonUpgradeLevels[3])
 
     
     const progKey1 = ($miningUpgradeLevels[3] > 0 ?
@@ -222,6 +221,7 @@ function addGems(n, avgProgress) {
     * (Math.max(1,$beaconBonuses[3]))
     * (Math.max(1,$miningUpgrades[10]['formula']($miningUpgradeLevels[10])))
     * (Math.max(1,$miningUpgrades[20]['formula']($miningUpgradeLevels[20])))
+    * (Math.max(1,$miningUpgrades[25]['formula']($miningUpgradeLevels[25])))
     * $buttonStats['hardenedBonus'];
     // update the flavor text if there is a minor change, otherwise don't
     if (Date.now() - lastGemGainTextUpdate > 1000) {
@@ -312,29 +312,31 @@ function checkForKeyCraftCompletion() {
         const finish = $keyCraftTimes[item][1];
         if (Date.now() > finish && finish != -1) {
             $keyCraftAmount[item]++;
-            $wallet[item] = ($wallet[item] || 0) + calcKeyCraftAmountGained(i);
+            $wallet[item] = ($wallet[item] || 0) + formula.calcKeyCraftAmountGained(i);
             $keyCraftTimes[item][1] = -1;
     
             $keyCraftMastery[item][1] = parseInt(($keyCraftMastery[item][1] || 0)) + 1;
-            if ($keyCraftMastery[item][1] > $keyCraftMastery[item][2]) {
+            if ($keyCraftMastery[item][1] >= $keyCraftMastery[item][2]) {
                 $keyCraftMastery[item][0]++;
                 $keyCraftMastery[item][1] = 0;
-                $keyCraftMastery[item][2] *= 1.15;
+
+                // formula
+                if (item == 'energizedCrystal') 
+                $keyCraftMastery[item][2] = (3 * $keyCraftMastery[item][0]) * Math.pow(1.24,$keyCraftMastery[item][0])
+                else $keyCraftMastery[item][2] = (25 * $keyCraftMastery[item][0]) * Math.pow(1.3,$keyCraftMastery[item][0])
                 $keyCraftMastery[item][2] = Math.floor($keyCraftMastery[item][2]);
                 addToActivityLog('[Keys] Crafting Mastery for ' + item + 'increased! ('
                 +$keyCraftMastery[item][0] + ')', 
                 'text-amber-400', 'crafting')
             }
         addToActivityLog('[Keys] Crafting complete: +' 
-        + f(calcKeyCraftAmountGained(i)) + ' ' + $keyCrafts[i]['name'], $keyCrafts[i]['style']||'text-white', 'crafting')
+        + f(formula.calcKeyCraftAmountGained(i)) + ' ' + $keyCrafts[i]['name'], $keyCrafts[i]['style']||'text-white', 'crafting')
         }
         
     }
 }
 
-function calcKeyCraftAmountGained(i) {
-    return $keyCrafts[i]['baseAmount'];
-}
+
 
 
 let locks = new Set(); // makes sure levelups don't repeat when leveling up from next function call
@@ -356,7 +358,7 @@ function addBeaconProgress(delta, isOffFocus = false) {
             
             // max 3 levels per tick (150 per second)
             const numLevels = 
-            Math.min(isOffFocus ? 30 : 3, Math.max(1,formula.maxNumGeom($beaconProgress[i], $beaconNextReqs[i], $beaconNums[i][1])));
+            Math.max(1,formula.maxNumGeom($beaconProgress[i], $beaconNextReqs[i], $beaconNums[i][1]));
             // subtract excess progress
             // console.log("PROG SUBTRACTED: " + formula.gSum($beaconNextReqs[i], $beaconNums[i][1], numLevels));
             $beaconProgress[i] -= Math.max($beaconNextReqs[i], 

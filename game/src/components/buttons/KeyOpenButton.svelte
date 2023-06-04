@@ -149,43 +149,31 @@ select-none'>
                 rewards[type] = (rewards[type] || 0) + rewardVal;
 
             } else {
+                // poisson approximation
                     if (parseInt(amt) === 1) {
                         rewards[type] = (Math.random() < vals[0] ? 
                         vals[1] + Math.random()*(vals[2] - vals[1]) : 0);
                         continue;
                     } else {
                     //console.log(amt);
-                    rewards[type] = 0;
-                    const div = Math.log10(amt);
-                   // console.log('div: ' + div)
-                    const nEff = (amt > 100 ? Math.round(amt / Math.pow(10, div)) : amt);
-                    const pEff = (amt > 100 ? vals[0] * Math.pow(10, div) : vals[0]);
-                   // console.log("neff: " + nEff + " peff: " + pEff);
-                    let done = false;
-                    let k = 1;
-                    let pK = combinations(nEff, k) * Math.pow(pEff, k) * Math.pow(1-pEff, nEff-k);
-
-                   // console.log(pK + " for k " + k + " and n " + nEff + " and p " + pEff)
-                    const rVal = Math.random();
-                    while (!done) {
-                        //console.log('rval: ' + rVal + ' for k = ' + k);
-                        if (rVal >= pK) {
-                            k -= 1;
-                            done = true;
-                        } else {                           
-                           // console.log(nEff);
-                            k++;
-                            if (nEff < k) {
-                                done = true;
-                                continue;
-                            }
-                            pK = combinations(nEff, k) * Math.pow(pEff, k) * Math.pow(1-pEff, nEff-k);
-                           // console.log(pK + " for k " + k + " and n " + nEff + " and p " + pEff)
+                        const n = amt;
+                        const p = vals[0];
+                        const rand = Math.random();
+                        let pFail = Math.exp(-1*n*p)
+                        let k = 0, done = false;
+                        const factorials = [0, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880]
+                        while (!done && k < 9) {
+                            if (rand < (1-pFail)) {
+                                k++;
+                                pFail += (Math.exp(-1*n*p) * Math.pow(n*p, k) / factorials[k]);
+                            } else done = true;
                         }
-                    }
-                    const stdev = Math.sqrt(nEff*pEff*(1-pEff));
-                    rewards[type] += 
-                    k * (vals[1] + Math.random()*(vals[2] - vals[1]) + formula.rNorm()*stdev);
+                        if (n * p > 0.97) {
+                            k += (amt - k) * ((1 - p**25) + (p**25 * Math.random()))
+                        }
+                        const stdev = Math.sqrt(n*p);
+                        rewards[type] += 
+                        k * (vals[1] + Math.random()*(vals[2] - vals[1]) + formula.rNorm()*stdev);
                 
                 }
             }  
@@ -206,6 +194,7 @@ select-none'>
     let rewardTextTimeout = undefined;
     function updateKeyRewardText(r) {
         $keyRewardText = r;
+        if (Object.keys(r).length === 0) $keyRewardText = {};
         if (rewardTextTimeout) clearTimeout(rewardTextTimeout);
         rewardTextTimeout = setTimeout(() => {
             $keyRewardText = '';

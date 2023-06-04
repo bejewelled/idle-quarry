@@ -15,6 +15,7 @@ export default class ref {
         crystals: 'text-indigo-300',
         sigils: 'text-fuchsia-600',
         slurry: 'text-teal-400',
+        artifacts: 'text-slate-200',
     }
 
     static displayNames = {
@@ -29,6 +30,7 @@ export default class ref {
     // stuff to not show on the sidebar
     static walletExclude = {
         totalFame: true,
+        energizedCrystal: true
     }
 
     static dropTiers = {
@@ -42,7 +44,8 @@ export default class ref {
         key3: 3,
         slurry: 3,
         sigils: 3,
-        fame: 3
+        fame: 3,
+        artifacts: 4
     }
     
     static keyMainNames = {
@@ -88,11 +91,11 @@ export default class ref {
         '[***] key finder': 9, 'lootmaster iii': 10,
         'key mastery': 11, 'legendary': 12, 
         'efficiency ii': 13, 'legendary ii': 14,
-         'legendary iii': 16,
-        'expansive': 15, 'clockwork': 16,
-        'reflectors': 17, 'mythical': 18,
-        'overload': 19, 'lockpicks': 20,
-        'hardened': 21, 'cavernous': 22,
+        'efficiency iii': 15, 'legendary iii': 16,
+        'expansive': 17, 'clockwork': 18,
+        'reflectors': 19, 'mythical': 20,
+        'overload': 21, 'lockpicks': 22,
+        'hardened': 23,
 
 
         'default': 1e300,

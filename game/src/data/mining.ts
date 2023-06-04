@@ -142,7 +142,8 @@ export const miningUpgrades = array([{
         gems: 5,
     },
     ratio: 1.15,
-    formula: (lv: any) => lv * 0.1 + 1,
+    formula: (lv: any) => (lv > 100 ? 11 + Math.pow((lv-100)*0.1, 0.75)
+    : lv * 0.1 + 1),
     unlockAt: () => (get(wallet)['gems'] >= 1),
     suffix: 'x speed',
     isPercent: false,
@@ -558,14 +559,14 @@ export const miningUpgrades = array([{
 },
 {
     index: 25,
-    name: 'Cavernous',
-    description: 'Increases fame gain on relocation.',
+    name: 'Efficiency III',
+    description: 'Increases gem gain again.',
     cost: {
         crystals: 1e6,
     },
-    ratio: 1.25,
+    ratio: 1.3,
     unlockAt: () => (get(wallet)['crystals'] > 0),
-    formula: (lv: any) =>  1 + lv * 0.13,
+    formula: (lv: any) =>  1 + Math.pow(lv, 0.9)*0.75,
     isPercent: true,
     prefix: '+',
     suffix: ' fame gain',

@@ -16,7 +16,8 @@ select-none'>
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
          <div class='title text-small-gray items-start text-center pb-1'>
-            {$keyUpgrades[index]['description']}
+           [{$keyUpgradeLevels[index]} / {$keyUpgrades[index]['maxLevel']}] 
+           {$keyUpgrades[index]['description']}
         </div>
         <div class='text-center effect-wrapper'>
             <div class='tooltip-text-xs text-[#cccccc]'>

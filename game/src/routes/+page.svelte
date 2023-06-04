@@ -9,7 +9,7 @@
         <div class='px-2 res-display col-span-3'>
             <div class='res-display-space py-2'></div>
             <div class='res-display-wrap grid grid-cols-12'>
-            {#each [1,2,3] as i}
+            {#each [1,2,3,4] as i}
                 {#each Object.entries($wallet) as res}
                     {#if $wallet[res[0]] && $wallet[res[0]] >= 1 && !res[0].includes('key') && !ref.walletExclude[res[0]]
                     && (ref.dropTiers[res[0]] || ref.dropTiers['default']) == i}   
@@ -452,6 +452,8 @@ const load = async (isImport = false) => {
    miningDropTable.updateTable();
 
     if ($resources['beaconPower'] < 0) $resources['beaconPower'] = 0;
+
+    console.log($key1DropTable);
    
     key1DropTable.updateTable();
     key2DropTable.updateTable();
@@ -464,7 +466,7 @@ const load = async (isImport = false) => {
 
 function versionUpdater() {
     const ver = $saveVersion;
-    const LATEST_VER = 11;
+    const LATEST_VER = 13;
     if (ver <= 0) {
         // fix "mysterious potion" error
         $keyUpgradeLevels[0] = 0;
@@ -505,6 +507,16 @@ function versionUpdater() {
     }
     if (ver <= 10) {
         if ($wallet['crystals'] > 1e25) $wallet['crystals'] = 1e6;
+    }
+    if (ver < 13) {
+    $keyCraftAmount['energizedCrystal'] = 0
+    $keyCraftMastery = {
+        energizedCrystal: [1,0,3],
+        key3: [1, 0, 10],
+        key4: [1, 0, 10],
+        key5: [1, 0, 10],
+        beacons: [1 ,0, 10],
+    }  
     }
     $saveVersion = LATEST_VER;
 

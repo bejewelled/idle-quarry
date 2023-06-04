@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class='col-span-3 pl-1 text-left align-text-middle'>
-                <div class='text-[#989898] text-small'>[*] <strong>{$keyGainFlavorText['key2'] > 1 ? f($keyGainFlavorText['key2'],0) : '???'}</strong>
+                <div class='text-[#989898] text-small'>[**] <strong>{$keyGainFlavorText['key2'] > 1 ? f($keyGainFlavorText['key2'],0) : '???'}</strong>
                     x {f($progressAverage['key2']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key2'], 3)} / sec
 
                 </div>
@@ -91,7 +91,7 @@
                 </div>
             </div>
             <div class='col-span-3 pl-1 text-left align-text-middle'>
-                <div class='text-[#989898] text-small'>[*] <strong>{$keyGainFlavorText['key3'] > 1 ? f($keyGainFlavorText['key3'],0) : '???'}</strong>
+                <div class='text-[#989898] text-small'>[***] <strong>{$keyGainFlavorText['key3'] > 1 ? f($keyGainFlavorText['key3'],0) : '???'}</strong>
                     x {f($progressAverage['key3']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key3'], 3)} / sec
 
                 </div>
