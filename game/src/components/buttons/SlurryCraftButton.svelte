@@ -119,7 +119,7 @@
     let item = $keyCrafts[index]['item'];
     let craftStartTime = $keyCraftTimes[item][0];
     let craftFinishTime = $keyCraftTimes[item][1];
-    let masteryLevel = $keyCraftMastery[item][0];
+    $: masteryLevel = $keyCraftMastery[item][0];
 
     let progressBarWidth = 0;
     let getProgressBarWidth = (ct) => 
