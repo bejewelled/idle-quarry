@@ -5,12 +5,14 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div on:click={() => open()}
 class='has-tooltip tooltip-text 
-{affordable && keyKnowledgeCriteria() ? 'game-btn' : 'game-btn-noafford'}
+{(affordable || amt === 'max') && keyKnowledgeCriteria() ? 'game-btn' : 'game-btn-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>
 {#if unlocked && keyKnowledgeCriteria()}
     {#if amt == 1}
     Use <span class='{ref.colors['key' + rarity]}'>{getKeyDisplayName()}</span> Key
+    {:else if amt == 'max'}
+    Open All
     {:else}
     x{f(parseInt(amt),0)}
     {/if}
@@ -76,7 +78,12 @@ select-none'>
 
 
     function open() {
-        if (keyKnowledgeCriteria() && $wallet['key'+rarity.toString()] >= amt) {
+        if (amt == 'max') {
+            const openAmount = $wallet['key'+rarity.toString()];
+            $wallet['key'+rarity.toString()] = 0;
+            openKeys(openAmount);
+        }
+        else if (keyKnowledgeCriteria() && $wallet['key'+rarity.toString()] >= amt) {
             $wallet['key'+rarity.toString()] -= parseInt(amt);
             $keysOpened['key'+(rarity-1)] += parseInt(amt);
             openKeys(amt);

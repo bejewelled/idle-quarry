@@ -158,8 +158,8 @@ function dropTable(context: any) {
             update((i: any) => {
                 for (let [item, val] of Object.entries(i)) {
                     i[item]= [
-                        Math.min(1,val[3]
-                         * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])),
+                        Math.min((item.toString().includes('key') ? 1 / val[2] : 1),
+                        val[3] * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])),
                         val[1], 
                         val[2],
                         val[3]
@@ -224,6 +224,7 @@ export const keyProgressFlavorNextUpdate = single(Date.now()+500)
 
 export const keyUpgrades = array([
     {
+        index: 0,
         name: 'Mysterious Potion',
         description: 'Concoct a potion that improves key rates for ALL keys.',
         cost: {
@@ -240,6 +241,7 @@ export const keyUpgrades = array([
         notes: ''
     },
     {
+        index: 1,
         name: 'Refinery',
         description: 'Increases slurry gain.',
         cost: {
@@ -254,10 +256,12 @@ export const keyUpgrades = array([
         notes: ''
     },
     {
+        index: 2,
         name: 'Rift Control',
-        description: '[NOT IMPLEMENTED] Decreases the cost ratio for energized crystals.',
+        description: 'Decreases the cost ratio for energized crystals.',
         cost: {
-            sigils: 5e7,
+            sigils: 5e5,
+            artifacts: 15
         },
         ratio: 1.3,
         formula: (lv: any) => 4 - 0.063*Math.pow(lv, 0.6),

@@ -10,8 +10,11 @@ class='has-tooltip tooltip-text
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[index],0)} / {f($miningUpgrades[index]['maxLevel'],0)}
 {#if $miningUpgradeLevelsFree[index] > 0}
-+ {f($miningUpgradeLevelsFree[index],0)}
-{/if}]
++ {f($miningUpgradeLevelsFree[index],0)} 
+{/if}] 
+{#if $settings['maxBuy'] && maxBuyCalcFinished && buyAmount >= 1}
+(+{buyAmount})
+{/if}
          <span class='px-2 mx-4 max-w-[275px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
@@ -30,8 +33,8 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
                  </span>
                  <span class='current text-[#999999]'>  => 
                     {$miningUpgrades[index]['prefix'] || ""}{$miningUpgrades[index]['isPercent'] ?
-                   fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+$settings['buyAmount']),3, true) :
-                   f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+$settings['buyAmount']),3)}{$miningUpgrades[index]['suffix'] || ""}
+                   fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+buyAmount),3, true) :
+                   f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+buyAmount),3)}{$miningUpgrades[index]['suffix'] || ""}
                  </span>
 
             </div>
@@ -72,7 +75,7 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
     let getCosts = () => {
         let c = {};
         for (let [type, base] of Object.entries($miningUpgrades[index]['cost'])) {
-            c[type] = cost(base);
+            c[type] = cost(base, type);
         }
         return c;
     }
@@ -80,6 +83,8 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
     let affordable, unlocked;
     let permUnlocked = ($miningUpgradeLevels[index] > 0)
     let affordInterval;
+    let maxBuyCalcFinished = false;
+    let buyAmount = $settings['buyAmount'];
     
     onMount(() => {
         
@@ -93,6 +98,12 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
             affordable = canAfford();
             unlocked = isUnlocked();
             if ($miningUpgrades[index]['unlockAt']()) permUnlocked = true;
+            if ($settings['maxBuy']) {
+                buyAmount = calcMaxBuyAmount();
+                costs = getCosts();
+            } else {
+                buyAmount = $settings['buyAmount'];
+            }
         }, 100 + (Math.random() * 20))
     })
 
@@ -113,15 +124,25 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
     function cost(start) {
        const base = start * Math.pow($miningUpgrades[index]['ratio'], $miningUpgradeLevelsBought[index]);  
        const r =  $miningUpgrades[index]['ratio']
-       const l = $settings['buyAmount']
+       const l = (Math.max(1, buyAmount));
 
        return formula.gSum(base,r,l)
     }
 
+    function calcMaxBuyAmount() {
+        maxBuyCalcFinished = false;
+        let maxBuy = 1e9; // or any large number
+        for (let [type, bCost] of Object.entries($miningUpgrades[index]['cost'])) {
+            const base = bCost * Math.pow($miningUpgrades[index]['ratio'], $miningUpgradeLevelsBought[index]); 
+            maxBuy = Math.min(maxBuy, 
+            formula.maxNumGeom($wallet[type], base, $miningUpgrades[index]['ratio']));
+        }
+        maxBuyCalcFinished = true;
+        return maxBuy;
+    }
+
     function buy() {
-        console.log($miningUpgradeLevelsBought[index])
         if ($miningUpgradeLevelsBought[index] >= $miningUpgrades[index]['maxLevel']) return;
-        console.log("D")
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
             if (val >=  1 && (!$wallet[type] || $wallet[type] < val-0.003)) {
@@ -131,9 +152,9 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1) $wallet[type] -= (val-0.003);
         }
-        $miningUpgradeLevels[index] += Math.min($settings['buyAmount'],
+        $miningUpgradeLevels[index] += Math.min(buyAmount,
         $miningUpgrades[index]['maxLevel'] - $miningUpgradeLevels[index]);
-        $miningUpgradeLevelsBought[index] += Math.min($settings['buyAmount'],
+        $miningUpgradeLevelsBought[index] += Math.min(buyAmount,
         $miningUpgrades[index]['maxLevel'] - $miningUpgradeLevelsBought[index]);
         costs = getCosts();
         permUnlocked = true;
@@ -144,6 +165,7 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
     }
 
     function canAfford() {
+        if ($settings['maxBuy'] && buyAmount == 0) return false;
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1 && $wallet[type] < val-0.003) {

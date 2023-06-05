@@ -105,7 +105,7 @@
 // @ts-nocheck
     export let index;
     let renderFlag = false, updateClock = false;
-    let getCosts = () => {
+    $: getCosts = () => {
         let c = {};
 
         for (let [type, base] of Object.entries($keyCrafts[index]['cost'])) {
@@ -113,7 +113,7 @@
         }
         return c;
     }
-    let costs = {};
+    $: costs = {};
     let affordable, unlocked;
     let affordInterval;
     let item = $keyCrafts[index]['item'];
@@ -130,7 +130,7 @@
     let masteryBarWidth = 0;
     const getMasteryBarWidth = () => (($keyCraftMastery[item][1] / $keyCraftMastery[item][2])*100)
 
-    let updateInterval;
+    let updateInterval, costUpdater;
     let ct = Date.now();
     onMount(() => {
         setTimeout(() => {
@@ -146,6 +146,9 @@
         
         craftStartTime = $keyCraftTimes[item][0];
         craftFinishTime = $keyCraftTimes[item][1];
+        costUpdater = setInterval(() => {
+            costs = getCosts();
+        }, 793)
         affordInterval = setInterval(() => {
             affordable = canAfford();
             unlocked = isUnlocked();
@@ -155,6 +158,7 @@
     onDestroy(() => {
         clearInterval(affordInterval);
         clearInterval(updateInterval);
+        clearInterval(costUpdater);
     })
     const f = (n, pl = 0) => {
         if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -168,8 +172,12 @@
 }
 
     function cost(start) {
-       const base = start * Math.pow($keyCrafts[index]['ratio'], $keyCraftAmount[item]);  
-       const r =  $keyCrafts[index]['ratio']
+       const base = start * Math.pow(
+        (item == 'energizedCrystal' ? $keyUpgrades[2]['formula']($keyUpgradeLevels[2]) 
+       : $keyCrafts[index]['ratio']), $keyCraftAmount[item]);  
+       const r =  (item == 'energizedCrystal' ? $keyUpgrades[2]['formula']($keyUpgradeLevels[2]) 
+       : $keyCrafts[index]['ratio'])
+       
        const l = 1; // number of items to buy
 
        return formula.gSum(base,r,l)

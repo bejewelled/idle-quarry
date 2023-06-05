@@ -325,7 +325,7 @@ function checkForKeyCraftCompletion() {
                 $keyCraftMastery[item][2] = (3 * $keyCraftMastery[item][0]) * Math.pow(1.24,$keyCraftMastery[item][0])
                 else $keyCraftMastery[item][2] = (25 * $keyCraftMastery[item][0]) * Math.pow(1.3,$keyCraftMastery[item][0])
                 $keyCraftMastery[item][2] = Math.floor($keyCraftMastery[item][2]);
-                addToActivityLog('[Keys] Crafting Mastery for ' + item + 'increased! ('
+                addToActivityLog('[Keys] Crafting Mastery for ' + val['name'] + 'increased! ('
                 +$keyCraftMastery[item][0] + ')', 
                 'text-amber-400', 'crafting')
             }

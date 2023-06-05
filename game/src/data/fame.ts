@@ -140,6 +140,7 @@ export const enchantUpgrades = array([{
     cost: {
         fame: 10,
     },
+    tier: 1,
     ratio: 1.25,
     formula: (lv: any) => pow(lv+5,2),
     unlockAt: () => (true),
@@ -154,6 +155,7 @@ export const enchantUpgrades = array([{
     cost: {
         fame: 10,
     },
+    tier: 1,
     ratio: 1.25,
     formula: (lv: any) => (lv*lv) + 10,
     unlockAt: () => (true),

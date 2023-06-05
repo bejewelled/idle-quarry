@@ -37,12 +37,19 @@ export default class formula {
       
         return sum;
       }
-    static maxNumGeom(x: number, b: number, r: number) {
-        const n = Math.floor(Math.log((x/b) * (r - 1) + 1) / Math.log(r));
-        const actualPrice = b * Math.pow(r, n);
-        return Math.min(n, Math.floor(x/actualPrice));
+    static maxNumGeom(amt: number, base: number, r: number) {
+        const n = Math.floor(Math.log((amt/base) * (r - 1) + 1) / Math.log(r));
+        const actualPrice = base * Math.pow(r, n);
+        return n;
       }
-
+    static calculateMaxBuy(initialPrice: number, incrementPercentage: number, totalMoney: number) {
+        const r = 1 + incrementPercentage / 100;
+      
+        // Calculate the maximum buy amount using the geometric sum formula
+        const maxBuy = initialPrice * (Math.pow(r, totalMoney / initialPrice) - 1) / (r - 1);
+      
+        return maxBuy.toFixed(2); // Round the result to 2 decimal places
+      }
     static sumArray(array: Array<number>) {
         return array.reduce((sum, value) => sum + value, 0);
       }

@@ -83,10 +83,15 @@
                 <button class='py-1 text-small save-btn control-btn' on:click={() => reset()}>Reset</button>
                 <button class='py-1 text-small save-btn control-btn' on:click={() => load(true)}>Import</button>
                 <button class='py-1 text-small save-btn control-btn {exportConfirm ? 'bg-green-400' : ''}' on:click={() => save(true)}>Export</button>
-                <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>   
+                <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>  
+                <button class='py-1 px-1 text-small save-btn has-tooltip {$settings['maxBuy'] ? 'game-btn-toggleon' : 'control-btn'}' on:click={() => toggleMaxBuy()}>Buy Max
+                    <span class='px-2 mx-4 tooltip tooltip-text shadow-lg p-1
+                    border-white border-double border bg-[#222529] ml-16
+                      pointer-events-none max-w-[300px] text-center weight-bold'>Buy Max only works on Mining and Enchant upgrades.</span>
+                </button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
-                <button class='text-xs text-gray-600'>v0.0.3A-13</button>  
+                <button class='text-xs text-gray-600'>v0.0.3A-14</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
                 {#key tabsUnlocked}
@@ -151,6 +156,7 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
 import {key1DropTable, key2DropTable, key3DropTable, 
 key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
 import {beaconNextReqs, beaconSpendAmt, beaconNums} from '../data/beacons.ts'
+import {enchantUpgrades} from '../data/fame.ts'
 import {buttonUpgrades} from '../data/button.ts'
 import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
@@ -201,6 +207,11 @@ const cycleBuyAmount = () => {
     else if (buyAmount === 100) buyAmount = 1;
 
     $settings['buyAmount'] = buyAmount;
+}
+
+const toggleMaxBuy = () => {
+    if (!$settings['maxBuy']) $settings['maxBuy'] = false;
+    $settings['maxBuy'] = !$settings['maxBuy'];
 }
 /**
  * number formatting
@@ -467,7 +478,7 @@ const load = async (isImport = false) => {
 
 function versionUpdater() {
     const ver = $saveVersion;
-    const LATEST_VER = 13;
+    const LATEST_VER = 14;
     if (ver <= 0) {
         // fix "mysterious potion" error
         $keyUpgradeLevels[0] = 0;
@@ -518,6 +529,13 @@ function versionUpdater() {
         key5: [1, 0, 10],
         beacons: [1 ,0, 10],
     }  
+    if (ver < 14) {
+        for (let i = 2; i < $enchantUpgrades.length; i++) {
+            $activityLogShow[$enchantUpgrades[i]['name'].toLowerCase()] = true;
+        }
+        $activityLogShow['crafting'] = true;
+        $activityLogShow['mythical'] = true;
+    }
     }
     $saveVersion = LATEST_VER;
 

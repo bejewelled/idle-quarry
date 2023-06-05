@@ -4,13 +4,14 @@
 {#if $enchantUpgrades[index]['unlockAt']() || permUnlocked || $enchantUpgradeLevels[index] > 0}
 <div on:click={() => buy(index)}
 class='has-tooltip tooltip-text 
-{index < 2 ? (affordable || 
-($enchantUpgradeLevels[index] < $enchantUpgrades[index]['maxLevel']) ?
- 'game-btn rainbow-effect' : 'game-btn-noafford rainbow-effect') :
- (affordable && ($enchantUpgradeLevels[index] < $enchantUpgrades[index]['maxLevel'])  ?
+{(affordable && maxBuyCalcFinished
+ && ($enchantUpgradeLevels[index] < $enchantUpgrades[index]['maxLevel'])  ?
  'game-btn-encht' + $enchantUpgrades[index]['tier'] : 'game-btn-encht' + $enchantUpgrades[index]['tier'] + '-noafford')}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
-select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],0)} / {f($enchantUpgrades[index]['maxLevel'],0)}]
+select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],0)} / {f($enchantUpgrades[index]['maxLevel'],0)}] 
+{#if $settings['maxBuy'] && maxBuyCalcFinished && buyAmount >= 1}
+(+{buyAmount})
+{/if}
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
@@ -26,8 +27,8 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
                  </span>
                  <span class='current text-[#999999]'>  => 
                     {$enchantUpgrades[index]['prefix'] || ""}{$enchantUpgrades[index]['isPercent'] ?
-                   fp($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]+$settings['buyAmount']),3, false) :
-                   f($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]+$settings['buyAmount']),3)}{$enchantUpgrades[index]['suffix'] || ""}
+                   fp($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]+buyAmount),3, false) :
+                   f($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]+buyAmount),3)}{$enchantUpgrades[index]['suffix'] || ""}
                  </span>
 
             </div>
@@ -77,6 +78,8 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
     let affordable, unlocked;
     let permUnlocked = ($enchantUpgradeLevels[index] > 0)
     let affordInterval;
+    let maxBuyCalcFinished = true;
+    let buyAmount = $settings['buyAmount']
     
     onMount(() => {
         setTimeout(() => {
@@ -89,6 +92,12 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
             affordable = canAfford();
             unlocked = isUnlocked();
             if ($enchantUpgrades[index]['unlockAt']()) permUnlocked = true;
+            if ($settings['maxBuy']) {
+                buyAmount = calcMaxBuyAmount();
+                costs = getCosts();
+            } else {
+                buyAmount = $settings['buyAmount'];
+            }
         }, 100 + (Math.random() * 20))
     })
 
@@ -109,7 +118,7 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
     function cost(start) {
        const base = start * Math.pow($enchantUpgrades[index]['ratio'], $enchantUpgradeLevels[index]);  
        const r =  $enchantUpgrades[index]['ratio']
-       const l = $settings['buyAmount']
+       const l = (Math.max(1, buyAmount));
 
        return formula.gSum(base,r,l)
     }
@@ -124,12 +133,25 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1) $wallet[type] -= val;
         }
-        $enchantUpgradeLevels[index] += $settings['buyAmount'];
+        $enchantUpgradeLevels[index] += buyAmount;
         costs = getCosts();
         permUnlocked = true;
     }
 
+    function calcMaxBuyAmount() {
+        maxBuyCalcFinished = false;
+        let maxBuy = 1e9; // or any large number
+        for (let [type, bCost] of Object.entries($enchantUpgrades[index]['cost'])) {
+            const base = bCost * Math.pow($enchantUpgrades[index]['ratio'], $enchantUpgradeLevels[index]); 
+            maxBuy = Math.min(maxBuy, 
+            formula.maxNumGeom($wallet[type], base, $enchantUpgrades[index]['ratio']));
+        }
+        maxBuyCalcFinished = true;
+        return maxBuy;
+    }
+
     function canAfford() {
+        if ($settings['maxBuy'] && buyAmount == 0) return false;
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1 && $wallet[type] < val) {
