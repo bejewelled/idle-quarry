@@ -478,7 +478,7 @@ const load = async (isImport = false) => {
 
 function versionUpdater() {
     const ver = $saveVersion;
-    const LATEST_VER = 14;
+    const LATEST_VER = 15;
     if (ver <= 0) {
         // fix "mysterious potion" error
         $keyUpgradeLevels[0] = 0;
@@ -535,6 +535,13 @@ function versionUpdater() {
         }
         $activityLogShow['crafting'] = true;
         $activityLogShow['mythical'] = true;
+    }
+    if (ver < 15) {
+        $miningUpgradeLevels[6] = 0;
+            $miningUpgradeLevelsBought[6] = 0;
+            $miningUpgradeLevels[9] = 0;
+            $miningUpgradeLevelsBought[9] = 0;
+            $visibleTier = 1; 
     }
     }
     $saveVersion = LATEST_VER;
