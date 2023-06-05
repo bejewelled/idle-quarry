@@ -207,7 +207,7 @@ function relocate() {
             $stats['lastRelocate'] = Date.now();
 
             // reset stuff
-            $visibleTier = 1;
+            
             for (let i of walletResetItems) {
                 $wallet[i] = 0;
             }
@@ -229,10 +229,18 @@ function relocate() {
             }
             $keysOpened = Array($keysOpened.length).fill(0);
             $beaconBonuses = Array(30).fill(1)
+
+            // reset lootmaster
+            $miningUpgradeLevels[6] = 0;
+            $miningUpgradeLevelsBought[6] = 0;
+            $miningUpgradeLevels[9] = 0;
+            $miningUpgradeLevelsBought[9] = 0;
+            $visibleTier = 1;
             
                 for (let i in $miningUpgrades) {
                     $miningUpgradeLevels[i] = $miningUpgradeLevelsBought[i];
                     $miningUpgradeLevelsFree[i] = 0;
+
                     if (!$automationItemsUnlocked['omnipotent']) {
                         if (!($miningUpgrades[i]['isFame']))  {
                             $miningUpgradeLevelsBought[i] = 0;

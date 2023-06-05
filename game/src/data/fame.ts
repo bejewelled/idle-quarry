@@ -253,7 +253,7 @@ export const automationUpgrades = array([{
 },
 {
     name: 'Omnipotent',
-    description: 'Mining upgrades are not reset on relocation',
+    description: 'Except for Lootmaster I and II, mining upgrades are not reset on relocation',
     cost: {
         fame: 50000,
     },

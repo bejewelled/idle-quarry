@@ -208,7 +208,7 @@ export const miningUpgrades = array([{
         beacons: 200
     },
     ratio: 1.5,
-    unlockAt: () => (get(wallet)['key2'] > 0),                 
+    unlockAt: () => (get(wallet)['key2'] >= 1),                 
     formula: (lv: any) => (1 + Math.pow(lv, 0.5)*0.15),
     isPercent: false,
     suffix: 'x speed',
