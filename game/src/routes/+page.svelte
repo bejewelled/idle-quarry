@@ -458,7 +458,7 @@ const load = async (isImport = false) => {
         activityLogShow.set(JSON.parse(localStorage.getItem('activityLogShow')));
     }
     // updates older save files to new format
-    versionUpdater();
+    await versionUpdater();
 
    miningDropTable.updateTable();
 
@@ -477,8 +477,9 @@ const load = async (isImport = false) => {
 }
 
 function versionUpdater() {
+    console.log($saveVersion)
     const ver = $saveVersion;
-    const LATEST_VER = 15;
+    const LATEST_VER = 16;
     if (ver <= 0) {
         // fix "mysterious potion" error
         $keyUpgradeLevels[0] = 0;
@@ -536,12 +537,15 @@ function versionUpdater() {
         $activityLogShow['crafting'] = true;
         $activityLogShow['mythical'] = true;
     }
-    if (ver < 15) {
+    if (ver < 16) {
         $miningUpgradeLevels[6] = 0;
             $miningUpgradeLevelsBought[6] = 0;
             $miningUpgradeLevels[9] = 0;
             $miningUpgradeLevelsBought[9] = 0;
             $visibleTier = 1; 
+
+            if ($miningUpgradeLevels[6] > 0) $visibleTier = 2;
+            if ($miningUpgradeLevels[9] > 0) $visibleTier = 3;
     }
     }
     $saveVersion = LATEST_VER;
