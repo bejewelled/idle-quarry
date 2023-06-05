@@ -119,6 +119,7 @@ select-none'>
                 break;
         }
         for (let [type, vals] of Object.entries(dropTable)) {
+            if (type == 'tier') continue;
             // if E[x] > 1, then we can calculate based on variance
             if (parseInt(amt)*vals[0] >= 1) {
                 // vals[0] is the probability of winning

@@ -147,8 +147,8 @@ function updateprogressThisTick(delta) {
     $progressAverage['key2'] = progKey2;
     $progressThisTick['key2'] = progKey2 * delta;
 
-    const progKey3 = ($miningUpgradeLevels[4] > 0 ?
-    PROGRESS_BASE * $miningUpgrades[4]['formula']($miningUpgradeLevels[4]) : 0)
+    const progKey3 = ($miningUpgradeLevels[18] > 0 ?
+    PROGRESS_BASE * $miningUpgrades[18]['formula']($miningUpgradeLevels[18]) : 0)
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
     * progressBonusMulti

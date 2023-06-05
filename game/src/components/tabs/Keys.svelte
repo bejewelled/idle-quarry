@@ -26,7 +26,7 @@
                         pointer-events-none'>
                         <!-- Drop Table Display -->
                         {#each Object.entries(dropTable[i-1]) as drop}
-                            {#if $keyItemsUnlocked['key'+i].has(drop[0])}
+                            {#if drop[0] != 'tier' && $keyItemsUnlocked['key'+i].has(drop[0])}
                             <div class='drop-table-disp grid grid-cols-10'>
                                 <div class='col-span-3 text-left pl-[8px] {ref.colors[drop[0]] || 'text-white'}'>
                                     {ref.displayNames[drop[0]] || drop[0]}

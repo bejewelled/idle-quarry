@@ -157,8 +157,9 @@ function dropTable(context: any) {
         updateTable() {
             update((i: any) => {
                 for (let [item, val] of Object.entries(i)) {
+                    if (item == 'tier') continue;
                     i[item]= [
-                        Math.min((item.toString().includes('key') ? 1 / val[2] : 1),
+                        Math.min((item.toString().includes('key'+i['tier']) ? 1 / val[2] : 1),
                         val[3] * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])),
                         val[1], 
                         val[2],
@@ -173,6 +174,7 @@ function dropTable(context: any) {
 
 
 export const key1DropTable = dropTable({
+    tier: 1,
     gems: [0.6, 10, 200, 0.6], // [chance, min, max, base]
     orbs: [0.4, 1, 5, 0.4], 
     key1: [0.1, 1, 3, 0.1],
@@ -180,6 +182,7 @@ export const key1DropTable = dropTable({
 });
 
 export const key2DropTable = dropTable({
+    tier: 2,
     gems: [0.25, 1e3, 1e4, 0.25], // [chance, min, max, base]
     orbs: [0.15, 150, 750, 0.15],
     key1: [0.15, 3, 10, 0.15],
@@ -190,6 +193,7 @@ export const key2DropTable = dropTable({
 })
 
 export const key3DropTable = dropTable({
+    tier: 3,
     // [chance (w/ multipliers), min, max, baseChance]
     gems: [0.125, 1e8, 1e9, 0.125], 
     gold: [0.075, 1e6, 5e6, 0.075],
