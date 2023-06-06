@@ -222,11 +222,8 @@ export const miningUpgrades = array([{
     description: 'Increases the number of keys found when a Key Finder of any rarity triggers.',
     cost: {
         orbs: 1000,
-        key1: 50,
-        key2: 0.25,
-        key3: 0.004
     },
-    ratio: 1.2,
+    ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[3] > 0),
     formula: (lv: any) => (1 + lv * 0.1),
     isPercent: false,
