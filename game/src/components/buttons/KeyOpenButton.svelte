@@ -138,7 +138,7 @@ select-none'>
                 const devFactor = formula.sumArray(Array.from({length: Math.floor(Math.sqrt(MAX_OPEN))}, 
                 () => formula.rNorm()).sort(() => 0.5 - Math.random()).slice(0, 3)) / 3;
 
-                const stdev = Math.sqrt(amt * vals[0] * (1-vals[0]));
+                const stdev = Math.sqrt(MAX_OPEN * vals[0] * (1-vals[0]));
                 // value should usually be between (-2*stdev, 2*stdev) with rare exceptions
                 // BIAS_FIX fixes any constant bias (currently calculated at -0.06, approximately)
                 const trueDev = stdev * devFactor;
@@ -146,18 +146,18 @@ select-none'>
                 //console.log(formula.rNormTest())
 
                 // now, calculate the expected value of the number of wins +/- the calculated deviation
-                const numWins = (vals[0])*amt + trueDev; // expected value + calcualted deviation
+                const numWins = (vals[0])*MAX_OPEN + trueDev; // expected value + calcualted deviation
 
                 // calculate reward value
                 // this includes "bad luck protection":
                 // you will always get at least the minimum value (vals[1]) per win,
                 // even if the deviation would lower the value below 1
                 let rewardVal = Math.max(numWins*vals[1], numWins * reward)
-
                 if (amt > MAX_OPEN) rewardVal *= (amt / MAX_OPEN);
-
-                if (type[3] == dropTable['tier'] && rewardVal > amt*0.33) {
-                    rewardVal = amt*0.33;
+                if (type.includes('key')) {
+                    if (type[3] == dropTable['tier'] && rewardVal > amt*0.33) {
+                        rewardVal = amt*0.33;                 
+                    }
                 }
                 rewards[type] = (rewards[type] || 0) + rewardVal;
 

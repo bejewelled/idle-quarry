@@ -91,7 +91,7 @@
                 </button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
-                <button class='text-xs text-gray-600'>v0.0.3A-15</button>  
+                <button class='text-xs text-gray-600'>v0.0.3A-17</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
                 {#key tabsUnlocked}
@@ -472,13 +472,7 @@ const load = async (isImport = false) => {
     key4DropTable.updateTable();
     key5DropTable.updateTable();
 
-    // REMOVE THIS TO TEST AND DEBUG
-    if (isNaN($wallet['key1'])) $wallet['key1'] = 0;
-    if (isNaN($wallet['key2'])) $wallet['key2'] = 0;
-    if (isNaN($wallet['key3'])) $wallet['key3'] = 0;
-    if (isNaN($wallet['key4'])) $wallet['key4'] = 0;
-    if (isNaN($wallet['key5'])) $wallet['key5'] = 0;
-    
+
     loadingFinished = true;
     console.log($activityLogShow);
     return true;
@@ -486,8 +480,8 @@ const load = async (isImport = false) => {
 
 function versionUpdater() {
     console.log($saveVersion)
-    const ver = $saveVersion;
-    const LATEST_VER = 16;
+    const ver = 16//$saveVersion;
+    const LATEST_VER = 17;
     if (ver <= 0) {
         // fix "mysterious potion" error
         $keyUpgradeLevels[0] = 0;
@@ -537,7 +531,8 @@ function versionUpdater() {
         key4: [1, 0, 10],
         key5: [1, 0, 10],
         beacons: [1 ,0, 10],
-    }  
+        } 
+    } 
     if (ver < 14) {
         for (let i = 2; i < $enchantUpgrades.length; i++) {
             $activityLogShow[$enchantUpgrades[i]['name'].toLowerCase()] = true;
@@ -555,11 +550,28 @@ function versionUpdater() {
             if ($miningUpgradeLevels[6] > 0) $visibleTier = 2;
             if ($miningUpgradeLevels[9] > 0) $visibleTier = 3;
     }
+    if (ver < 17) {
+        for (let i in $keysOpened) {
+        if ($keysOpened[i] == Infinity || isNaN($keysOpened[i])) $keysOpened[i] = 0;
+    }
+
+    // REMOVE THIS TO TEST AND DEBUG
+    if (isNaN($wallet['key1']) || $wallet['key1'] == Infinity) $wallet['key1'] = 0;
+    if (isNaN($wallet['key2']) || $wallet['key2'] == Infinity) $wallet['key2'] = 0;
+    if (isNaN($wallet['key3']) || $wallet['key3'] ==Infinity) $wallet['key3'] = 0;
+    if (isNaN($wallet['key4']) || $wallet['key4'] == Infinity) $wallet['key4'] = 0;
+    if (isNaN($wallet['key5']) || $wallet['key5'] == Infinity) $wallet['key5'] = 0;
+
+    for (let i = 0; i < 200; i++) {
+        if (!$miningUpgradeLevelsBought[i]) $miningUpgradeLevelsBought[i] = 0;
+        if (!$miningUpgradeLevels[i]) $miningUpgradeLevels[i] = 0;
+        }
     }
     $saveVersion = LATEST_VER;
 
     save();
 }
+
 
 const tabHelpText = {
     mining: "Each time the red progress bar fills up, gain gems and have a chance for additional drops. Use your currencies on upgrades to your mining rig.",

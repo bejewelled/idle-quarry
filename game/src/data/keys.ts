@@ -159,7 +159,8 @@ function dropTable(context: any) {
                 for (let [item, val] of Object.entries(i)) {
                     if (item == 'tier') continue;
                     i[item]= [
-                        Math.min((item.toString().includes('key'+i['tier']) ? 1 / val[2] : 1),
+                        Math.min((item.toString().includes('key'+i['tier']) ? 1 / val[2] : 
+                        (item.toString().includes('key') ? 0.33333333 : 1)),
                         val[3] * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])),
                         val[1], 
                         val[2],
