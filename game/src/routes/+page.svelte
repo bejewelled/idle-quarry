@@ -471,6 +471,14 @@ const load = async (isImport = false) => {
     key3DropTable.updateTable();
     key4DropTable.updateTable();
     key5DropTable.updateTable();
+
+    // REMOVE THIS TO TEST AND DEBUG
+    if (isNaN($wallet['key1'])) $wallet['key1'] = 0;
+    if (isNaN($wallet['key2'])) $wallet['key2'] = 0;
+    if (isNaN($wallet['key3'])) $wallet['key3'] = 0;
+    if (isNaN($wallet['key4'])) $wallet['key4'] = 0;
+    if (isNaN($wallet['key5'])) $wallet['key5'] = 0;
+    
     loadingFinished = true;
     console.log($activityLogShow);
     return true;
