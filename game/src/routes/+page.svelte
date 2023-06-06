@@ -91,7 +91,7 @@
                 </button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
-                <button class='text-xs text-gray-600'>v0.0.3A-14</button>  
+                <button class='text-xs text-gray-600'>v0.0.3A-15</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
                 {#key tabsUnlocked}
