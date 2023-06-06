@@ -97,9 +97,9 @@ select-none'>
      * @param amt
      */
     function openKeys(amt) {
-        amt = parseInt(amt);
+        amt = Number(amt);
         let rewards = {};
-        $keysOpened[(rarity-1)] += parseInt(amt);
+        $keysOpened[(rarity-1)] += Number(amt);
         let dropTable;
         switch(rarity) {
             case 1:
@@ -121,21 +121,21 @@ select-none'>
         for (let [type, vals] of Object.entries(dropTable)) {
             if (type == 'tier') continue;
             // if E[x] > 1, then we can calculate based on variance
-            if (parseInt(amt)*vals[0] >= 1) {
+            if (Number(amt)*vals[0] >= 1) {
                 // vals[0] is the probability of winning
 
                 // Array.from takes the {length: l} parameter and applies the function given, l times
                 // this produces an array with l elements, each of which is the result of the function
-
+                const MAX_OPEN = Math.min(amt, 4e7);
                 // chooses the amount of the drop to give per win
                 // generate sqrt(n) random numbers between vals[1] and vals[2]
                 // then, select 3 random values and average them
-                const reward = formula.sumArray(Array.from({length: Math.floor(Math.sqrt(amt))}, 
+                const reward = formula.sumArray(Array.from({length: Math.floor(Math.sqrt(MAX_OPEN))}, 
                 () => Math.floor(vals[1] + Math.random()*(vals[2]-vals[1])))
                 .sort(() => 0.5 - Math.random()).slice(0, 3)) / 3;
 
                 // now do the same thing to generate the deviation factor
-                const devFactor = formula.sumArray(Array.from({length: Math.floor(Math.sqrt(amt))}, 
+                const devFactor = formula.sumArray(Array.from({length: Math.floor(Math.sqrt(MAX_OPEN))}, 
                 () => formula.rNorm()).sort(() => 0.5 - Math.random()).slice(0, 3)) / 3;
 
                 const stdev = Math.sqrt(amt * vals[0] * (1-vals[0]));
@@ -152,13 +152,18 @@ select-none'>
                 // this includes "bad luck protection":
                 // you will always get at least the minimum value (vals[1]) per win,
                 // even if the deviation would lower the value below 1
-                const rewardVal = Math.max(numWins*vals[1], numWins * reward)
+                let rewardVal = Math.max(numWins*vals[1], numWins * reward)
 
+                if (amt > MAX_OPEN) rewardVal *= (amt / MAX_OPEN);
+
+                if (type[3] == dropTable['tier'] && rewardVal > amt*0.33) {
+                    rewardVal = amt*0.33;
+                }
                 rewards[type] = (rewards[type] || 0) + rewardVal;
 
             } else {
                 // poisson approximation
-                    if (parseInt(amt) === 1) {
+                    if (Number(amt) == 1) {
                         rewards[type] = (Math.random() < vals[0] ? 
                         vals[1] + Math.random()*(vals[2] - vals[1]) : 0);
                         continue;
@@ -252,6 +257,7 @@ select-none'>
                 return 'Requires 1 holy light';
         }
     }
+    
     
 
  </script>

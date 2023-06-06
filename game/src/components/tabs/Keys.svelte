@@ -1,11 +1,11 @@
 <div class='key-amount-wrapper items-center'>
     <div class='grid grid-cols-10'>
         <div class='col-span-10 pt-3 pb-2 tooltip-text text-center'>
-            Total Keys Opened: {f.f(formula.sumArray($keysOpened),0)}
+            Total Keys Opened: {formula.sumArray($keysOpened),0}
             [ 
                 {#each $keysOpened as k, i}
                     <span class='{ref.colors['key'+((i+1).toString())]}'>
-                        {" " + f.f(k,0)} </span> {#if i+1 < $keysOpened.length}+{/if} 
+                        {" " + f(k,0)} </span> {#if i+1 < $keysOpened.length}+{/if} 
                 {/each}
          ]
         </div>
@@ -14,7 +14,7 @@
                 {$wallet['key'+i] >= 1 || $visibleTier >= i ? ref.keyMainNames[i]: '?????'}
             </div>
                 <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
-                    {f.f(Math.floor($wallet['key' + i]))}
+                    {f(Math.floor($wallet['key' + i]))}
                 </div>
                 <div class='has-tooltip tooltip-text 
                     game-btn py-2 items-center text-center 
@@ -35,7 +35,7 @@
                                     {fp(drop[1][0],3)}
                                 </div>
                                 <div class='col-span-3 text-right pl-1'>
-                                [ {f.f(drop[1][1], 0)} - {f.f(drop[1][2], 0)} ]
+                                [ {f(drop[1][1], 0)} - {f(drop[1][2], 0)} ]
                                 </div>
                             </div>
                             {/if}
@@ -84,13 +84,13 @@
             </div>
         {#if Object.keys($keyRewardText).length > 0}
             {#each Object.entries($keyRewardText) as r}
-                {#if parseInt(r[1]) >= 0.99997}
+                {#if Number(r[1]) >= 0.99997}
                 <div class='col-span-3'></div>
                 <div class='col-span-1 text-left py-1 {ref.colors[r[0]] || 'text-white'}'>
                     {ref.displayNames[r[0]] ? ref.displayNames[r[0]] : r[0]}: 
                 </div>
                 <div class='col-span-1 py-1 text-left {ref.colors[r[0]] || 'text-white'}'>
-                    {f.f(parseInt(r[1]),0)}
+                    {f(Number(r[1]),0)}
                 </div>
                 <div class='col-span-3'></div>
                 {/if}
@@ -147,7 +147,6 @@ import { progressThreshold, progressPerTick, miningUpgrades } from '../../data/m
 import { miningUpgradeLevels } from '../../data/player';
 import { keyRewardText, key1DropTable, key2DropTable, key3DropTable,
      key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../../data/keys'
-import { f } from '../../data/format';
 import ref from '../../calcs/ref';
 import KeyOpenButton  from '../buttons/KeyOpenButton.svelte';
 import KeySlurryConvertButton from '../buttons/KeySlurryConvertButton.svelte';
@@ -169,6 +168,11 @@ onMount(() => {
 
 })
 
+const f = (n: number, pl = 0) => {
+        n = Number(n)
+        if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        else return n.toExponential(3).toString().replace('+', '');
+    }   
 
 const fp = (n: unknown, pl = 3, subOne = false) => {
     if (subOne) n -= 1;
@@ -181,6 +185,7 @@ const fpf = (n: unknown, subOne = false) => {
     if (n < 1e9) return (n*100).toFixed(3).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "%";
     else return (n*100).toExponential(3).toString().replace('+', '') + "%";
 }
+
 
 
 </script>
