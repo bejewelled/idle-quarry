@@ -3,6 +3,7 @@ keyCraftAmount, keyCraftMastery, beaconLevels} from '../data/player';
 import { beaconBonuses } from '../data/beacons';
 import {keyUpgrades, keyCrafts} from '../data/keys'
 import { get } from 'svelte/store';
+import ref from './ref';
 export default class formula {
 
     // returns a normally random value
@@ -139,4 +140,10 @@ export default class formula {
     * Math.pow(1.1, get(keyCraftMastery)['energizedCrystal'][0]-1)
     * get(beaconBonuses)[6];
 }
+  static calcChallengePointGain(n: number, type: string) {
+    //@ts-nocheck
+
+    const y = Math.log10(1 + n * ref.challengePointValues[type] || 0);
+    return y;
+  }
 }

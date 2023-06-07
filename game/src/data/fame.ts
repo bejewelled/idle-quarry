@@ -243,9 +243,19 @@ export const automationUpgrades = array([{
 },
 {
     name: 'Deep Pockets',
-    description: 'Lootmaster I and II stay unlocked on relocate.',
+    description: 'Lootmaster I and II are automatially unlocked and stay unlocked on relocate.',
     cost: {
         fame: 8000,
+    },
+    unlockAt: () => (get(wallet)['fame'] >= 1),
+    isPercent: true,
+    suffix: ' chance',
+},
+{
+    name: 'Beacon Tools',
+    description: 'Unlock the ability to split beacons evenly across all paths, and to recall all beacons at once.',
+    cost: {
+        fame: 25000,
     },
     unlockAt: () => (get(wallet)['fame'] >= 1),
     isPercent: true,
@@ -255,7 +265,7 @@ export const automationUpgrades = array([{
     name: 'Omnipotent',
     description: 'Except for Lootmaster I and II, mining upgrades are not reset on relocation',
     cost: {
-        fame: 50000,
+        fame: 100000,
     },
     unlockAt: () => (get(wallet)['fame'] >= 1),
     isPercent: true,
@@ -270,4 +280,26 @@ export const automationUpgrades = array([{
     unlockAt: () => (get(wallet)['fame'] >= 1),
     isPercent: true,
     suffix: ' chance',
-}]);
+},
+{
+    name: 'Another Button',
+    description: 'You can now hold enter to click the button really really fast (you will only get "okay" clicks).',
+    cost: {
+        fame: 1e6,
+        trophies: 1,
+    },
+    unlockAt: () => (get(wallet)['trophies'] >= 1),
+    isPercent: false,
+},
+{
+    name: 'Hellfire',
+    description: '[NOT IMPLEMENTED YET] Unlocks challenges 4 - 6.',
+    cost: {
+        trophies: 5,
+    },
+    unlockAt: () => (get(wallet)['fame'] >= 1),
+    isPercent: true,
+    suffix: ' chance',
+},
+
+]);

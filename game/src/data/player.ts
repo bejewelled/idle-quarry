@@ -355,3 +355,9 @@ export const saveVersion = single(0);
 export const startOfGame = single(Date.now());
 
 export const activityLogShow = object({})
+
+export const challengeActive = single(0);
+
+export const challengeProgress = single(0);
+
+export const challengesCompleted = array(Array(30).fill(0));

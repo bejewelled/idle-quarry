@@ -1,7 +1,7 @@
 
 import { writable, get } from 'svelte/store';
 import {wallet, miningUpgradeLevels, 
-    enchantUpgradeLevels,buttonNumClicks,buttonStats} from './player'
+    enchantUpgradeLevels,buttonNumClicks,buttonStats, challengesCompleted} from './player'
 import formula from '../calcs/formula';
 import Decimal  from 'break_infinity.js';
 
@@ -41,7 +41,7 @@ function single(context: any) {
 }
 function array(context: any) {
     // @ts-ignore
-    const {subscribe, set, update, get} = writable(context);
+    const {subscribe, set, update} = writable(context);
     return {
         subscribe,
         set(amt: any) {
@@ -71,11 +71,22 @@ function array(context: any) {
                 return i / amt;
             })
         },
+        updateChallengeReqs() {
+            update((i: any) => {
+                for (let k in i) {
+                    for (let [type, val] of Object.entries(i[k])) {
+                        i[k][type] = val 
+                        * Math.pow(get(challengeMultipliers)[k][type], get(challengesCompleted)[k]) 
+                    }
+                }
+                return i;
+            })
+        }
     }
 }
 function object(context: any) {
     // @ts-ignore
-    const {subscribe, set, update, get} = writable(context);
+    const {subscribe, set, update} = writable(context);
     return {
         subscribe,
         set(item: string | number, amt: any) {
@@ -108,7 +119,7 @@ function object(context: any) {
                 i[item] /= amt;
                 return i;
             })
-        }
+        },
     }
 }
 
@@ -123,25 +134,18 @@ export const challengeUnlockCriteria = array([
 ])
 
 export const challengeNames = array([
-    "Challenge 1: Rusty",
-    "Challenge 2: Clicker Hell"
+    "C1: Rusty",
+    "C2: Clicker Hell"
 ])
 
 export const challengeDescriptions = array([
-    "Each time your mine collects gems, your mine speed is decreased by 0.01% (multiplicatively).",
+    "Mining and key finder progress is drastically slowed.",
     "You start unable to buy upgrades. Every 20 button clicks allows you to buy 1 upgrade level.",
 ])
 
-export const challengeGoals = array([
-    {
-        gems: 1e7,
-    },
-    {
-        gems: 1e9,
-    }
-])
+export const challengeGoals = array([6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
 
-export const challengeActive = single(0);
+export const challengeMultipliers = array([1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1])
 
 export const currChallengeInfo = object({
 

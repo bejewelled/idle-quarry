@@ -11,14 +11,20 @@
         <div class='p-1 col-span-2'>
             <input id='max' class="content-center w-20  bg-gray-700 text-white" placeholder='1' bind:value={$beaconSpendAmt}>
         </div>
+        {#if $automationItemsUnlocked['beacon tools']}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class='game-btn m-1 text-med col-span-3' on:click={() => splitBeacons()}>
             Split Beacons Evenly
         </div>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class='game-btn m-1 text-med col-span-3' on:click={() => recallBeacons()}>
             Recall Beacons
         </div>
         <div class='col-span-4'></div>
+
+        {:else}
+        <div class='col-span-12'></div>
+        {/if}
     {#each $beaconLevels as b, i}
     {#if $mineLevel['level'] >= $beaconMiningLevelReqs[i]}
     {#if i < 10}
@@ -78,7 +84,7 @@ import { onMount, onDestroy } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
     settings, visibleTier, progressThisTick, progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources, 
-    mineLevel, antiFlickerFlags} from '../../data/player';
+    mineLevel, antiFlickerFlags, automationItemsUnlocked} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';

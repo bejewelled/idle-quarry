@@ -1,3 +1,4 @@
+{#if !ghost}
 <div class='wrapper pt-1'>
 <div class='grid grid-cols-12 game-text text-center'>
     <div class='col-span-12'>Relocate to a new mine and gain
@@ -59,7 +60,7 @@
     {/key}
     </div>
 </div>
-
+{/if}
     
 
 
@@ -100,6 +101,7 @@ $: fameMultiBeaconLevels = formula.calcFameBeaconMulti(formula.sumArray($beaconL
 let beaconDispBonus = $beaconBonuses;
 let reloadClock = true;
 let reloadNumbers;
+export let ghost;
 
 onMount(() => {
     const reloadFameGain = setTimeout(() => {
@@ -197,7 +199,7 @@ function calcFameGain() {
 // ONLY things in these arrays will be reset on relocate
 const walletResetItems = ['gems', 'gold', 'orbs', 'beacons', 'key1', 'key2']
 const resourceResetItems = ['beaconPower']
-function relocate() {
+export function relocate() {
     if (calcFameGain() >= 10) {
         if (confirm("Are you sure? Relocating will reset all previous progress.")) {
             $flags['relocateNavBack'] = true;

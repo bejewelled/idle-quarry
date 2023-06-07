@@ -130,6 +130,7 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
     }
 
     function calcMaxBuyAmount() {
+        const levelsRemaining = $miningUpgrades[index]['maxLevel'] - $miningUpgradeLevelsBought[index];
         maxBuyCalcFinished = false;
         let maxBuy = 1e9; // or any large number
         for (let [type, bCost] of Object.entries($miningUpgrades[index]['cost'])) {
@@ -138,7 +139,7 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
             formula.maxNumGeom($wallet[type], base, $miningUpgrades[index]['ratio']));
         }
         maxBuyCalcFinished = true;
-        return maxBuy;
+        return Math.min(levelsRemaining, maxBuy);
     }
 
     function buy() {

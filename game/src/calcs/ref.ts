@@ -16,6 +16,13 @@ export default class ref {
         sigils: 'text-fuchsia-600',
         slurry: 'text-teal-400',
         artifacts: 'text-slate-200',
+        challengePoints: 'text-amber-500',
+        warp: 'text-emerald-600'
+    }
+
+    static challengePointValues = {
+        default: 0,
+        gems: 1
     }
 
     static displayNames = {
@@ -30,7 +37,8 @@ export default class ref {
     // stuff to not show on the sidebar
     static walletExclude = {
         totalFame: true,
-        energizedCrystal: true
+        energizedCrystal: true,
+        challengePoints: true,
     }
 
     static dropTiers = {
@@ -45,7 +53,9 @@ export default class ref {
         slurry: 3,
         sigils: 3,
         fame: 3,
-        artifacts: 4
+        artifacts: 4,
+        warp: 4,
+        trophies: 4
     }
     
     static keyMainNames = {

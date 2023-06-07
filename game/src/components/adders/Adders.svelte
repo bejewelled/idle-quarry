@@ -18,10 +18,13 @@ import {progress, miningUpgradeLevels, wallet, miningDropTable,
     automationItemsUnlocked, activityLog, mineLevel, 
     buttonStats, buttonUpgradeLevels, keyCraftMastery, 
     keyCraftTimes, keyCraftAmount, antiFlickerFlags, 
-    miningUpgradeLevelsBought, miningUpgradeLevelsFree, activityLogShow} from '../../data/player'
+    miningUpgradeLevelsBought, miningUpgradeLevelsFree, 
+    activityLogShow, challengeActive,
+    challengesCompleted, challengeProgress} from '../../data/player'
 import {buttonUpgrades} from '../../data/button'
 import {beaconFormulas, beaconBonuses, beaconNextReqs, 
     beaconNums, beaconUpgrades, beaconPowerFlavorText, beaconNameText} from '../../data/beacons'
+import {challengeGoals} from '../../data/challenges'
 import {enchantUpgrades, enchantThreshold} from '../../data/fame'
 import ref from '../../calcs/ref'
 import formula from '../../calcs/formula'
@@ -80,6 +83,7 @@ onMount(() => {
         addProgress(dt);
         updateMiningLevel();
         checkForKeyCraftCompletion();
+        checkForChallengeCompletion();
         // out of focus - update more slowly to conserve resources
         if ($settings['activeTab'] !== 'beacons') {
             if (beaconUpdateCounter >= 10) {
@@ -119,39 +123,51 @@ function updateMiningLevel() {
 
 const PROGRESS_BASE = 1;
 let progressBonusMulti = 1
+
 function updateprogressThisTick(delta) {
-    const progGems = PROGRESS_BASE
+    let challengeMultiplier = 1;
+    let challengeExponent = 1;
+    if ($challengeActive === 1) {
+        challengeMultiplier = 1e-3;
+        challengeExponent = 0.33;
+    }
+
+    const progGems = Math.pow(PROGRESS_BASE
     * $miningUpgrades[0]['formula']($miningUpgradeLevels[0])
     * (Math.max(1,$beaconBonuses[1]))
     //* $buttonUpgrades[3]['formula']($buttonUpgradeLevels[3])
-    * progressBonusMulti;
+    * progressBonusMulti
+    * challengeMultiplier, challengeExponent);
     $progressAverage['gems'] = progGems;
     $progressThisTick['gems'] = progGems * delta;
 
 
     
-    const progKey1 = ($miningUpgradeLevels[3] > 0 ?
+    const progKey1 = Math.pow(($miningUpgradeLevels[3] > 0 ?
     PROGRESS_BASE * $miningUpgrades[3]['formula']($miningUpgradeLevels[3]) : 0)
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
     * progressBonusMulti
+    * challengeMultiplier, challengeExponent);
     $progressAverage['key1'] = progKey1;
     $progressThisTick['key1'] = progKey1 * delta;
 
-    const progKey2 = ($miningUpgradeLevels[4] > 0 ?
+    const progKey2 = Math.pow(($miningUpgradeLevels[4] > 0 ?
     PROGRESS_BASE * $miningUpgrades[4]['formula']($miningUpgradeLevels[4]) : 0)
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
     * progressBonusMulti
+    * challengeMultiplier, challengeExponent);
 
     $progressAverage['key2'] = progKey2;
     $progressThisTick['key2'] = progKey2 * delta;
 
-    const progKey3 = ($miningUpgradeLevels[18] > 0 ?
+    const progKey3 = Math.pow(($miningUpgradeLevels[18] > 0 ?
     PROGRESS_BASE * $miningUpgrades[18]['formula']($miningUpgradeLevels[18]) : 0)
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
     * progressBonusMulti
+    * challengeMultiplier, challengeExponent);
 
     $progressAverage['key3'] = progKey3;
     $progressThisTick['key3'] = progKey3 * delta;
@@ -208,6 +224,11 @@ function addProgress(delta) {
        addKey3(Math.floor($progress['key3'] / keyAt[2]), keyAt);
     }
 
+    // add warp for being in a challenge
+    if ($challengeActive !== 0) {
+        $wallet['warp'] = ($wallet['warp'] || 0) + Math.log($progress['gems'] + 1)*(UPDATE_SPEED/1000)
+    }
+
 }
 
 /** 
@@ -234,6 +255,11 @@ function addGems(n, avgProgress) {
     if (Math.random() < ($miningUpgrades[13]['formula']($miningUpgradeLevels[13]) - 1)) {
         $wallet['fame'] = ($wallet['fame'] || 0) + 1;
         addToActivityLog('[Mythical] +1 fame', 'text-orange-400', 'mythical')
+    }
+
+    if ($challengeActive !== 0) {
+        $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
+        + formula.calcChallengePointGain(gemGain*n, 'gems');
     }
 
 }
@@ -333,6 +359,15 @@ function checkForKeyCraftCompletion() {
         + f(formula.calcKeyCraftAmountGained(i)) + ' ' + $keyCrafts[i]['name'], $keyCrafts[i]['style']||'text-white', 'crafting')
         }
         
+    }
+}
+
+function checkForChallengeCompletion() {
+    if ($wallet['challengePoints'] > ($challengeGoals[$challengeActive-1] || 1e300)) {
+        $challengesCompleted[$challengeActive-1]++;
+        $challengeActive = 0;
+        $wallet['challengePoints'] = 0;
+        $wallet['trophies'] = ($wallet['trophies'] || 0) + 1;
     }
 }
 

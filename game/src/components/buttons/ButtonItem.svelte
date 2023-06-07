@@ -1,5 +1,5 @@
 <svelte:window on:keydown|preventDefault={keyDown} on:keyup={keyUp} />
-{#if enterKeyDown && true} <!-- will be bound to an upgrade-->
+{#if enterKeyDown && !$automationItemsUnlocked['another button']} <!-- will be bound to an upgrade-->
 <div class='game-text text-small text-center'>You have not unlocked key-bound button clicking yet; holding enter disables the button.</div>
 {/if}
 {#if showRewardDescription}
@@ -41,7 +41,8 @@ import { onMount } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
     // @ts-ignore
     settings, visibleTier, progressThisTick, progressAverage,
-buttonNumClicks, mineLevel, buttonStats, buttonUpgradeLevels} from '../../data/player';
+buttonNumClicks, mineLevel, buttonStats, buttonUpgradeLevels,
+automationItemsUnlocked} from '../../data/player';
 // @ts-ignore
 import {progressThreshold, progressPerTick, miningUpgrades,
 // @ts-ignore
@@ -81,7 +82,7 @@ const BUTTON_SIZE= 100;
     let enterKeyDown = false;
     // @ts-ignore
     const handleClick = (event) => {
-        if (enterKeyDown) return;
+        if (enterKeyDown && !$automationItemsUnlocked['another button']) return;
         textPosition = {
         x: buttonPosition.x - 100,
         y: buttonPosition.y - 18

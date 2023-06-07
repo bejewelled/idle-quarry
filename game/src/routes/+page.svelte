@@ -9,6 +9,25 @@
         <div class='px-2 res-display col-span-3'>
             <div class='res-display-space py-2'></div>
             <div class='res-display-wrap grid grid-cols-12'>
+            
+            {#if $challengeActive !== 0}
+            <div class='col-span-12 text-amber-500 
+            text-left text-small pb-1'>Challenge {$challengeActive} 
+            [ {f($wallet['challengePoints'], 0)} / {f($challengeGoals[$challengeActive-1])}
+            ]</div>
+            <div class='col-span-12'>
+                <div class='mine-bar-wrapper pb-2'>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                        <div class="bg-amber-500 h-2.5 rounded-full" 
+                        style="width: {Math.min(100,challengeBarWidth)}%">
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            {/if}
+
+
             {#each [1,2,3,4] as i}
                 {#each Object.entries($wallet) as res}
                     {#if $wallet[res[0]] && $wallet[res[0]] >= 1 && !res[0].includes('key') && !ref.walletExclude[res[0]]
@@ -80,7 +99,6 @@
         <div class='px-2 py-2 main-panel col-span-8 flexbox'>
             <div class='py-1 control-buttons resize-none'>
                 <button class='py-1 text-small save-btn control-btn {saveConfirm ? 'bg-green-400' : ''}' on:click={() => save()}>Save</button>
-                <button class='py-1 text-small save-btn control-btn' on:click={() => reset()}>Reset</button>
                 <button class='py-1 text-small save-btn control-btn' on:click={() => load(true)}>Import</button>
                 <button class='py-1 text-small save-btn control-btn {exportConfirm ? 'bg-green-400' : ''}' on:click={() => save(true)}>Export</button>
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button>  
@@ -91,6 +109,7 @@
                 </button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
+                <button class='py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950' on:click={() => reset()}>Reset</button>
                 <button class='text-xs text-gray-600'>v0.0.3A-17</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
@@ -152,12 +171,14 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     keyUpgradeLevels, keyCraftAmount, keyCraftMastery, 
     keyCraftTimes, startOfGame, antiFlickerFlags, 
     automationItemsUnlocked, saveVersion, miningUpgradeLevelsBought,
-    miningUpgradeLevelsFree, activityLogShow} from '../data/player.js'
+    miningUpgradeLevelsFree, activityLogShow, challengeActive,
+    challengesCompleted, challengeProgress} from '../data/player.js'
 import {key1DropTable, key2DropTable, key3DropTable, 
 key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
 import {beaconNextReqs, beaconSpendAmt, beaconNums} from '../data/beacons.ts'
 import {enchantUpgrades} from '../data/fame.ts'
 import {buttonUpgrades} from '../data/button.ts'
+import {challengeGoals, challengeMultipliers} from '../data/challenges.ts'
 import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
 import Mining from '../components/tabs/Mining.svelte';
@@ -184,7 +205,7 @@ let loadingFinished = false;
 let alogShow = true;
 const GAME_SPEED = 1 //only for balancing, doesn't actually change the game speed
 $: mineLevelBarWidth = $mineLevel['xp'] / $mineLevel['xpNextReq'] * 100;
-
+$: challengeBarWidth = $wallet['challengePoints'] / $challengeGoals[$challengeActive-1] * 100;
 let ct;
 
 const toggleAlog = () => {
@@ -288,7 +309,8 @@ const save = async (isExport = false) => {
     localStorage.setItem('saveVersion', JSON.stringify($saveVersion));
     localStorage.setItem('automationItemsUnlocked', JSON.stringify($automationItemsUnlocked))
     localStorage.setItem('activityLogShow', JSON.stringify($activityLogShow));
-
+    localStorage.setItem('challengeActive', JSON.stringify($challengeActive));
+    localStorage.setItem('challengesCompleted', JSON.stringify($challengesCompleted));
 
 
     saveConfirm = true;
@@ -457,6 +479,12 @@ const load = async (isImport = false) => {
     if (localStorage.getItem('activityLogShow')) {
         activityLogShow.set(JSON.parse(localStorage.getItem('activityLogShow')));
     }
+    if (localStorage.getItem('challengeActive')) {
+        challengeActive.set(JSON.parse(localStorage.getItem('challengeActive')));
+    }
+    if (localStorage.getItem('challengesCompleted')) {
+        challengesCompleted.set(JSON.parse(localStorage.getItem('challengesCompleted')));
+    }
     // updates older save files to new format
     await versionUpdater();
 
@@ -472,6 +500,7 @@ const load = async (isImport = false) => {
     key4DropTable.updateTable();
     key5DropTable.updateTable();
 
+    challengeGoals.updateChallengeReqs();
 
     loadingFinished = true;
     console.log($activityLogShow);
