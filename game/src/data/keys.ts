@@ -2,6 +2,7 @@
 import { writable, get } from 'svelte/store';
 import { miningUpgrades } from './mining';
 import { miningUpgradeLevels, keyUpgradeLevels, wallet, keysOpened} from './player';
+import {beaconBonuses} from './beacons'
 
 function single(context: any) {
     // @ts-ignore
@@ -161,7 +162,9 @@ function dropTable(context: any) {
                     i[item]= [
                         Math.min((item.toString().includes('key'+i['tier']) ? 1 / val[2] : 
                         (item.toString().includes('key') ? 0.33333333 : 1)),
-                        val[3] * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])),
+                        val[3] 
+                        * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0]
+                        * get(beaconBonuses)[7])),
                         val[1], 
                         val[2],
                         val[3]
@@ -177,20 +180,18 @@ function dropTable(context: any) {
 export const key1DropTable = dropTable({
     tier: 1,
     gems: [0.6, 10, 200, 0.6], // [chance, min, max, base]
-    orbs: [0.4, 1, 5, 0.4], 
-    key1: [0.1, 1, 3, 0.1],
-    key2: [0.001, 1, 1, 0.002],
-});
+    orbs: [0.3, 3, 10, 0.3], 
+    key2: [(1/2500), 1, 1, (1/2500)],
+})
 
 export const key2DropTable = dropTable({
     tier: 2,
     gems: [0.25, 1e3, 1e4, 0.25], // [chance, min, max, base]
-    orbs: [0.15, 150, 750, 0.15],
+    orbs: [0.15, 500, 2500, 0.15],
     key1: [0.15, 3, 10, 0.15],
     beacons: [0.15, 5, 15, 0.15],
-    key2: [0.02, 1, 1, 0.05],
     sigils: [0.01, 1, 2, 0.01],
-    key3: [(1/60000), 1, 1, (1/60000)],
+    key3: [(1/120000), 1, 1, (1/120000)],
 })
 
 export const key3DropTable = dropTable({
@@ -200,13 +201,12 @@ export const key3DropTable = dropTable({
     gold: [0.075, 1e6, 5e6, 0.075],
     crystals: [0.06, 1000, 10000, 0.06],
     orbs: [0.06, 1500, 4500, 0.06],
-    key1: [0.06, 150, 5000, 0.06],
     key2: [0.04, 1, 10, 0.04],
     beacons: [0.04, 1000, 3500, 0.04],
     sigils: [0.025, 10, 75, 0.025],
     key3: [0.001, 1, 1, 0.001],
     artifacts: [0.000011, 1, 1, 0.000011],
-    key4: [(1/4e6), 1, 1, (1/4e6)]
+    key4: [(1/5e7), 1, 1, (1/5e7)]
     
 })
 
@@ -233,11 +233,10 @@ export const keyUpgrades = array([
         name: 'Mysterious Potion',
         description: 'Concoct a potion that improves key rates for ALL keys.',
         cost: {
-            slurry: 1e5,
-            fame: 1e5,
+            slurry: 1000,
             sigils: 1000,
         },
-        ratio: 1.3,
+        ratio: 1.4,
         formula: (lv: any) => 1 + 0.25*Math.pow(lv, 0.9),
         unlockAt: () => (get(wallet)['slurry'] > 0),
         isPercent: false,
