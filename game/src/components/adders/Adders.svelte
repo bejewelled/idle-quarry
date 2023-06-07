@@ -128,8 +128,8 @@ function updateprogressThisTick(delta) {
     let challengeMultiplier = 1;
     let challengeExponent = 1;
     if ($challengeActive === 1) {
-        challengeMultiplier = 1e-3;
-        challengeExponent = 0.33;
+        challengeMultiplier = (5e-2 / (1+$challengesCompleted[0]));
+        challengeExponent = Math.max(0.15, 0.33-$challengesCompleted[0]);
     }
 
     const progGems = Math.pow(PROGRESS_BASE
@@ -140,7 +140,6 @@ function updateprogressThisTick(delta) {
     * challengeMultiplier, challengeExponent);
     $progressAverage['gems'] = progGems;
     $progressThisTick['gems'] = progGems * delta;
-
 
     
     const progKey1 = Math.pow(($miningUpgradeLevels[3] > 0 ?
@@ -219,9 +218,11 @@ function addProgress(delta) {
     }
     if ($progress['key2'] >= keyAt[1]) {
        addKey2(Math.floor($progress['key2'] / keyAt[1]), keyAt);
+
     }
     if ($progress['key3'] >= keyAt[2]) {
        addKey3(Math.floor($progress['key3'] / keyAt[2]), keyAt);
+
     }
 
     // add warp for being in a challenge
@@ -273,6 +274,10 @@ function addKey1(n, keyAt) {
         $wallet['key1'] = ($wallet['key1'] || 0) + key1Gain * n;
         $progress['key1'] %= keyAt[0];
         $keyGainFlavorText['key1'] = key1Gain;
+        if ($challengeActive !== 0) {
+            $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
+            + formula.calcChallengePointGain(key1Gain*n, 'key1');
+        }
 }
 
 function addKey2(n, keyAt) {
@@ -284,6 +289,10 @@ function addKey2(n, keyAt) {
         $wallet['key2'] = ($wallet['key2'] || 0) + key2Gain * n;
         $progress['key2'] %= keyAt[1];
         $keyGainFlavorText['key2'] = key2Gain;
+        if ($challengeActive !== 0) {
+            $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
+            + formula.calcChallengePointGain(key2Gain*n, 'key2');
+        }
 }
 
 function addKey3(n, keyAt) {
@@ -295,6 +304,10 @@ function addKey3(n, keyAt) {
         $wallet['key3'] = ($wallet['key3'] || 0) + key3Gain * n;
         $progress['key3'] %= keyAt[2];
         $keyGainFlavorText['key3'] = key3Gain;
+        if ($challengeActive !== 0) {
+            $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
+            + formula.calcChallengePointGain(key3Gain*n, 'key3');
+        }
 }
 
 function dropRoll(n) {
@@ -363,11 +376,14 @@ function checkForKeyCraftCompletion() {
 }
 
 function checkForChallengeCompletion() {
+    console.log($challengeActive)
     if ($wallet['challengePoints'] > ($challengeGoals[$challengeActive-1] || 1e300)) {
         $challengesCompleted[$challengeActive-1]++;
         $challengeActive = 0;
         $wallet['challengePoints'] = 0;
         $wallet['trophies'] = ($wallet['trophies'] || 0) + 1;
+        challengeGoals.updateChallengeReqs();
+
     }
 }
 
@@ -425,6 +441,10 @@ function addBeaconProgress(delta, isOffFocus = false) {
     $beaconLevels.reduce((s, c) => s+(c/50 * Math.max(0.2, Math.pow(c/maxLevel, 2)))), 0) * delta;
    
     $resources['beaconPower'] = ($resources['beaconPower'] || 0) + bpGain;
+    if (challengeActive !== 0) {
+        $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
+        + formula.calcChallengePointGain(bpGain, 'beaconPower');
+    }
     $beaconPowerFlavorText = bpGain;
 }
 
@@ -453,7 +473,7 @@ function procEnchants(n, tier) {
                     addToActivityLog('[Burst] ' + f(size) + ' mining cycles', 'text-violet-300', 'burst');
                     break;
                 case 3: // orb rush
-                    const val = (Math.random() + 0.3) * Math.pow(30 + Math.sqrt(quality), 3);
+                    const val = (Math.random() + 0.3) * Math.pow(1 + quality, 3);
                     $wallet['orbs'] += val
                     addToActivityLog('[Orb Rush] +' + f(val) + ' orbs', 'text-violet-300', 'orb rush');
                     break;

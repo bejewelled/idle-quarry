@@ -174,12 +174,12 @@ export const miningUpgrades = array([{
     cost: {
         gold: 10
     },
-    ratio: 1.3,
+    ratio: 1.275,
     unlockAt: () => (get(wallet)['gems'] > 30 && get(wallet)['gold'] > 5),
-    formula: (lv: any) => 1 + lv*0.075,
+    formula: (lv: any) => 1 + lv*0.09,
     isPercent: true,
     prefix: '+',
-    maxLevel: 300,
+    maxLevel: 1000,
     notes: '(1 + floor(level/10)) * level^0.6'  
 },
 {
@@ -188,14 +188,15 @@ export const miningUpgrades = array([{
     description: 'While mining, you will occasionally find a bundle of T1 [*] keys.' 
     + '\nUpgrades increase progress gained towards this milestone.',
     cost: {
-        orbs: 15,
+        orbs: 40,
+        key1: 10
     },
     ratio: 1.5,
     unlockAt: () => (get(wallet)['key1'] >= 1),
     formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
     isPercent: false,
     suffix: 'x speed',
-    maxLevel: 300,
+    maxLevel: 500,
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
 {
@@ -204,15 +205,15 @@ export const miningUpgrades = array([{
     description: 'While mining, you will occasionally find a bundle of T2 [**] keys.' 
     + '\nUpgrades increase progress gained towards this milestone.',
     cost: {
-        orbs: 30000,
-        beacons: 200
+        orbs: 1e6,
+        key2: 10,
     },
     ratio: 1.5,
     unlockAt: () => (get(wallet)['key2'] >= 1),                 
     formula: (lv: any) => (1 + Math.pow(lv, 0.5)*0.15),
     isPercent: false,
     suffix: 'x speed',
-    maxLevel: 300,
+    maxLevel: 500,
     notes: '' 
 },
 // i = 5
@@ -223,12 +224,12 @@ export const miningUpgrades = array([{
     cost: {
         orbs: 1000,
     },
-    ratio: 1.25,
+    ratio: 1.225,
     unlockAt: () => (get(miningUpgradeLevels)[3] > 0),
     formula: (lv: any) => (1 + lv * 0.1),
     isPercent: false,
     suffix: 'x keys',
-    maxLevel: 100,
+    maxLevel: 1000,
     notes: ''
 },
 {
@@ -257,7 +258,7 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (1 + lv*0.25),
     isPercent: false,
     suffix: 'x gold from drops',
-    maxLevel: 300,
+    maxLevel: 1000,
     notes: ''
 },
 // i = 8
@@ -274,7 +275,7 @@ export const miningUpgrades = array([{
     isPercent: true,
     prefix: '+',
     suffix: ' gems',
-    maxLevel: 300,
+    maxLevel: 500,
     notes: ''
 },
 {
@@ -346,7 +347,7 @@ export const miningUpgrades = array([{
     prefix: '+',
     suffix: ' beacon progress',
     isFame: true,
-    maxLevel: 100,
+    maxLevel: 1000,
     style: 'game-btn-fame',
     notes: 'index 10'
 },
@@ -397,7 +398,7 @@ export const miningUpgrades = array([{
     name: 'Overload',
     description: 'Drop chances above 100% increase the amount of drops.',
     cost: {
-        fame: 500,
+        fame: 1200,
 
     },
     ratio: 200,
@@ -423,7 +424,7 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (1 + (lv * 0.13)),
     isPercent: true,
     suffix: '  fame bonus',
-    maxLevel: 100,
+    maxLevel: 500,
     isFame: false,
     notes: 'index 16'
 },
@@ -441,7 +442,7 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (1 + (lv * 0.13)),
     isPercent: true,
     suffix: '  fame bonus',
-    maxLevel: 100,
+    maxLevel: 500,
     isFame: false,
     notes: 'index 16'
 },
@@ -451,15 +452,15 @@ export const miningUpgrades = array([{
     description: 'While mining, you will occasionally find a bundle of T3 [***] keys.' 
     + '\nUpgrades increase progress gained towards this milestone.',
     cost: {
-        orbs: 1e6,
-        sigils: 2500
+        orbs: 1e8,
+        key3: 10,
     },
     ratio: 1.5,
     unlockAt: () => (get(wallet)['key3'] > 0),
     formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
     isPercent: false,
     suffix: 'x speed',
-    maxLevel: 100,
+    maxLevel: 400,
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
 {
@@ -475,7 +476,7 @@ export const miningUpgrades = array([{
     isPercent: false,
     suffix: 'x fame gain',
     style: 'game-btn-sigil',
-    maxLevel: 200,
+    maxLevel: 300,
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
 {
@@ -490,7 +491,7 @@ export const miningUpgrades = array([{
     formula: (lv: any) =>  formula.dispCalcHardenedGemBonus(get(buttonNumClicks), lv),
     isPercent: true,
     suffix: ' gems',
-    maxLevel: 100,
+    maxLevel: 1000,
     style: 'game-btn-crystal',
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
@@ -515,14 +516,14 @@ export const miningUpgrades = array([{
     name: 'Fortune II',
     description: 'Increases all droprates.',
     cost: {
-        gems: 1e12,
+        gems: 1e11,
     },
-    ratio: 1.25,
+    ratio: 1.8,
     unlockAt: () => (get(wallet)['crystals'] > 0),
     formula: (lv: any) =>  1 + lv/10,
     isPercent: false,
     suffix: 'x droprates',
-    maxLevel: 100,
+    maxLevel: 400,
 },
 {
     index: 23,
@@ -531,13 +532,13 @@ export const miningUpgrades = array([{
     cost: {
         gems: 1e13,
     },
-    ratio: 1.25,
+    ratio: 1.8,
     unlockAt: () => (get(wallet)['crystals'] > 0),
     formula: (lv: any) =>  1 + lv/4,
     isPercent: true,
     prefix: '+',
     suffix: ' crystal gain',
-    maxLevel: 100,
+    maxLevel: 400,
 },
 {
     index: 24,
@@ -546,13 +547,13 @@ export const miningUpgrades = array([{
     cost: {
         gems: 1e14,
     },
-    ratio: 1.25,
+    ratio: 1.8,
     unlockAt: () => (get(wallet)['crystals'] > 0),
     formula: (lv: any) =>  1 + lv/4,
     isPercent: true,
     prefix: '+',
     suffix: ' beacon progress',
-    maxLevel: 100,
+    maxLevel: 400,
 },
 {
     index: 25,
@@ -568,22 +569,22 @@ export const miningUpgrades = array([{
     prefix: '+',
     suffix: ' gem gain',
     style: 'game-btn-crystal',
-    maxLevel: 100,
+    maxLevel: 500,
 },
 {
     index: 26,
     name: 'Lockpicks',
     description: 'Key Finder speed/amount is dramatically increased.',
     cost: {
-        fame: 500
+        fame: 2500
     },
-    ratio: 1.5,
+    ratio: 1.35,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => 1 + lv*1.5,
+    formula: (lv: any) => 1 + lv*0.75,
     isFame: true,
     isPercent: false,
     suffix: 'x speed/amount',
-    maxLevel: 25,
+    maxLevel: 250,
     style: 'game-btn-fame',
     notes: ''
 },

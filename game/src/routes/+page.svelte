@@ -349,7 +349,7 @@ const load = async (isImport = false) => {
         const saveFile = prompt("Paste your save here.");
         if (saveFile) {
             try {
-                const save = JSON.parse(atob(saveFile));
+                const save = JSON.parse(atob(saveFile))
                 const keys = Object.keys(save);
                 keys.forEach((key) => {
                     localStorage.setItem(key, save[key]);

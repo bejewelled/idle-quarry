@@ -123,11 +123,11 @@ export default class formula {
   }
 
   static calcKeySlurryGain(obj: { [x: string]: number; }) {
-    let amount = (obj['key1'] || 0)/800
-    + (obj['key2'] || 0)/200
-    + (obj['key3'] || 0)/50
-    + (obj['key4'] || 0)/12
-    + (obj['key5'] || 0)/3;
+    let amount = (Math.pow(obj['key1'], 0.6) || 0)/150
+    + (Math.pow(obj['key2'], 0.7) || 0)/15
+    + (Math.pow(obj['key3'], 0.8) || 0)*2
+    + (Math.pow(obj['key4'], 0.9) || 0)*35
+    + (Math.pow(obj['key5'], 0.95) || 0)*400;
     if (isNaN(amount)) {
       alert('note: this feature is bugged, please report this on Discord - reduced slurry gained (using "safe" formula)')
       return obj['key1'] / 800;
@@ -142,8 +142,9 @@ export default class formula {
 }
   static calcChallengePointGain(n: number, type: string) {
     //@ts-nocheck
+    const nEff = (type === 'gems'? Math.log10(n) : Math.pow(n, 0.5));
 
-    const y = Math.log10(1 + n * ref.challengePointValues[type] || 0);
+    const y = nEff * ref.challengePointValues[type] || 0;
     return y;
   }
 }

@@ -74,11 +74,10 @@ function array(context: any) {
         updateChallengeReqs() {
             update((i: any) => {
                 for (let k in i) {
-                    for (let [type, val] of Object.entries(i[k])) {
-                        i[k][type] = val 
-                        * Math.pow(get(challengeMultipliers)[k][type], get(challengesCompleted)[k]) 
+                        i[k] = get(baseChallengeGoals)[k] 
+                        * Math.pow(get(challengeMultipliers)[k], get(challengesCompleted)[k]) 
+                        console.log(get(baseChallengeGoals)[k] * Math.pow(get(challengeMultipliers)[k], get(challengesCompleted)[k])); 
                     }
-                }
                 return i;
             })
         }
@@ -139,11 +138,14 @@ export const challengeNames = array([
 ])
 
 export const challengeDescriptions = array([
-    "Mining and key finder progress is drastically slowed.",
-    "You start unable to buy upgrades. Every 20 button clicks allows you to buy 1 upgrade level.",
+    "Mining and key finder progress is drastically slowed. (It gets reduced more on each completion).",
+    "All mining upgrades are reset. You cannot buy mining upgrades.",
 ])
 
 export const challengeGoals = array([6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
+
+export const baseChallengeGoals = array([6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
+
 
 export const challengeMultipliers = array([1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1])
 

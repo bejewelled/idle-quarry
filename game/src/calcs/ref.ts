@@ -17,12 +17,17 @@ export default class ref {
         slurry: 'text-teal-400',
         artifacts: 'text-slate-200',
         challengePoints: 'text-amber-500',
-        warp: 'text-emerald-600'
+        warp: 'text-emerald-600',
+        trophies: 'text-amber-500'
     }
 
     static challengePointValues = {
         default: 0,
-        gems: 1
+        beaconPower: 0.025,
+        gems: 1,
+        key1: 1,
+        key2: 36,
+        key3: 850,
     }
 
     static displayNames = {
@@ -87,8 +92,8 @@ export default class ref {
         automation: "Relocate and gain at least 1 fame to unlock.",
         challenges: "Buy challenges with fame to unlock.",
         artifacts: "Find an artifact with a T3 [***] or higher key to unlock.",
-        mastery: "Reach level 10,000 on any mining upgrade to unlock.",
-        ascension: "Have at least 1e25 fame and 10,000 challenge points to unlock.",
+        mastery: "???",
+        ascension: "Gain a total of 25 trophies.",
         button: "Reach Mining Level 8 to unlock.",
 
     }

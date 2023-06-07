@@ -214,10 +214,10 @@ export const enchantUpgrades = array([{
     name: 'Scavenger',
     description: 'Has a chance to increase a random mining upgrade level by 1.',
     cost: {
-        fame: 900,
+        fame: 2500,
     },
     tier: 1,
-    ratio: 1.35,
+    ratio: 1.5,
     formula: (lv: any) => Math.pow(lv/400, 2) * 0.05,
     unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,

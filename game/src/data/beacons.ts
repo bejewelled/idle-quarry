@@ -184,7 +184,8 @@ export const beaconNameText = array([
     'Gem Bonus',
     'Fame Bonus',
     'Key Finder Speed',
-    'Crafting Yield',]
+    'Crafting Yield',
+    'Key Droprate',]
     .concat(Array(26).fill(''))
 )
 export const beaconMiningLevelReqs = array([0,0,0,12,14,16,24,27,36,40])
@@ -192,11 +193,12 @@ export const beaconMiningLevelReqs = array([0,0,0,12,14,16,24,27,36,40])
 export const beaconFormulas = array([
    /*beacon power*/ function(lv: number) {return 1 + (Math.pow(lv,0.65) * 0.01)},
    /*mining haste*/ function(lv: number) {return 1 + 3.125*(lv / (lv+40000))},
-   /*droprate*/ function(lv: number) {return 1 + (Math.pow(lv,0.8) * 0.003)},
+   /*droprate*/ function(lv: number) {return 1 + (Math.pow(lv,0.8) * 0.0035)},
    /*gem bonus*/ function(lv: number) {return 1 + Math.pow(lv,0.9)*0.02},
     /* fame bonus */ function(lv: number) {return 1 + Math.pow(lv,0.5)*0.02},
     /* key finder speed */ function(lv: number) {return 1 + Math.pow(lv, 0.5)*0.05},
-    /* craft yield */ function(lv: number) {return 1 + (Math.pow(lv,1.2) * 0.000025)},]
+    /* craft yield */ function(lv: number) {return 1 + (Math.pow(lv,1.2) * 0.000025)},
+    /* key droprate */ function(lv: number) {return 1 + (Math.pow(lv,0.6) * 0.003)},]
     .concat(Array(25).fill(function(lv: number) {return 1}))
 )
 
