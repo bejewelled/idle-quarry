@@ -32,7 +32,9 @@
                                     {ref.displayNames[drop[0]] || drop[0]}
                                 </div>
                                 <div class='col-span-3 text-left pl-1
-                                {drop[0].includes('key') && drop[1][0] >= 0.333 ? 'text-yellow-400':''}'>
+                                {(drop[0].includes('key') && drop[1][0] >= 0.333) 
+                                 || (drop[0].includes('key'+i) && drop[1][0] >= 1/drop[1][2])
+                                 ? 'text-yellow-400':''}'>
                                     {fp(drop[1][0],
                                     drop[1][0] < 1e-3 ? 5: 3)}
                                 </div>

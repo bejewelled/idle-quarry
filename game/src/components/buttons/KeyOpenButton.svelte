@@ -19,6 +19,8 @@ select-none'>
 {:else if keyKnowledgeCriteria()}
     {#if amt == 1}
         Find a key of this rarity to use it.
+    {:else if amt == 'max'}
+        Open All
     {:else}
         ---
     {/if}

@@ -66,7 +66,8 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
 
     import { onDestroy, onMount } from 'svelte';
     import { progress, wallet, miningUpgradeLevels, miningDropTable,
-         settings, visibleTier, unlockedRes, miningUpgradeLevelsBought, miningUpgradeLevelsFree} from '../../data/player';
+         settings, visibleTier, unlockedRes, miningUpgradeLevelsBought, 
+         miningUpgradeLevelsFree, challengeActive} from '../../data/player';
     import {progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
@@ -143,6 +144,7 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
     }
 
     function buy() {
+        if ($challengeActive === 2) return;
         if ($miningUpgradeLevelsBought[index] >= $miningUpgrades[index]['maxLevel']) return;
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
@@ -166,6 +168,7 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
     }
 
     function canAfford() {
+        if ($challengeActive === 2) return false;
         if ($settings['maxBuy'] && buyAmount == 0) return false;
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {

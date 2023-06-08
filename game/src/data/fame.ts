@@ -285,11 +285,20 @@ export const automationUpgrades = array([{
     name: 'Another Button',
     description: 'You can now hold enter to click the button really really fast (you will only get "okay" clicks).',
     cost: {
-        fame: 1e6,
         trophies: 1,
     },
     unlockAt: () => (get(wallet)['trophies'] >= 1),
     isPercent: false,
+},
+{
+    name: 'Beaconizer',
+    description: 'Start each relocation with 500 beacons.',
+    cost: {
+        trophies: 2,
+    },
+    unlockAt: () => (get(wallet)['fame'] >= 1),
+    isPercent: true,
+    suffix: ' chance',
 },
 {
     name: 'Hellfire',

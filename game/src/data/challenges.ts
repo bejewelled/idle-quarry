@@ -134,7 +134,7 @@ export const challengeUnlockCriteria = array([
 
 export const challengeNames = array([
     "C1: Rusty",
-    "C2: Clicker Hell"
+    "C2: Muted"
 ])
 
 export const challengeDescriptions = array([
@@ -142,12 +142,12 @@ export const challengeDescriptions = array([
     "All mining upgrades are reset. You cannot buy mining upgrades.",
 ])
 
-export const challengeGoals = array([6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
+export const challengeGoals = array([6000, 2400, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
 
-export const baseChallengeGoals = array([6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
+export const baseChallengeGoals = array([6000, 2400, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
 
 
-export const challengeMultipliers = array([1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1])
+export const challengeMultipliers = array([1.3, 1.5, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1])
 
 export const currChallengeInfo = object({
 

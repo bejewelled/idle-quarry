@@ -258,7 +258,7 @@ function addGems(n, avgProgress) {
         addToActivityLog('[Mythical] +1 fame', 'text-orange-400', 'mythical')
     }
 
-    if ($challengeActive !== 0) {
+    if ($challengeActive !== 0 && dt < 1000) {
         $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
         + formula.calcChallengePointGain(gemGain*n, 'gems');
     }
@@ -274,7 +274,7 @@ function addKey1(n, keyAt) {
         $wallet['key1'] = ($wallet['key1'] || 0) + key1Gain * n;
         $progress['key1'] %= keyAt[0];
         $keyGainFlavorText['key1'] = key1Gain;
-        if ($challengeActive !== 0) {
+        if ($challengeActive !== 0  && dt < 1000) {
             $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
             + formula.calcChallengePointGain(key1Gain*n, 'key1');
         }
@@ -289,7 +289,7 @@ function addKey2(n, keyAt) {
         $wallet['key2'] = ($wallet['key2'] || 0) + key2Gain * n;
         $progress['key2'] %= keyAt[1];
         $keyGainFlavorText['key2'] = key2Gain;
-        if ($challengeActive !== 0) {
+        if ($challengeActive !== 0  && dt < 1000) {
             $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
             + formula.calcChallengePointGain(key2Gain*n, 'key2');
         }
@@ -304,7 +304,7 @@ function addKey3(n, keyAt) {
         $wallet['key3'] = ($wallet['key3'] || 0) + key3Gain * n;
         $progress['key3'] %= keyAt[2];
         $keyGainFlavorText['key3'] = key3Gain;
-        if ($challengeActive !== 0) {
+        if ($challengeActive !== 0  && dt < 1000) {
             $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
             + formula.calcChallengePointGain(key3Gain*n, 'key3');
         }

@@ -13,7 +13,7 @@ style = 'top: {textPosition.y}px; left: {textPosition.x}px;'>
     id="button"
     class="absolute w-[100px] h-[100px] border-4 border-white text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
     style="top: {buttonPosition.y}px; left: {buttonPosition.x}px;"
-    on:click={handleClick}
+    on:click={handleClick} on:keydown={handleClick}
   ></button>
 {#if $buttonUpgradeLevels[2] > 0}
 <button
