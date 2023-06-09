@@ -265,7 +265,7 @@ export const keyUpgrades = array([
         description: 'Decreases the cost ratio for energized crystals.',
         cost: {
             sigils: 5e5,
-            artifacts: 15
+            warp: 2500,
         },
         ratio: 1.3,
         formula: (lv: any) => 4 - 0.063*Math.pow(lv, 0.6),

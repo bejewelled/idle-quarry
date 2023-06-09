@@ -296,9 +296,17 @@ export const automationUpgrades = array([{
     cost: {
         trophies: 2,
     },
-    unlockAt: () => (get(wallet)['fame'] >= 1),
+    unlockAt: () => (get(wallet)['trophies'] >= 1),
     isPercent: true,
-    suffix: ' chance',
+},
+{
+    name: 'Persistent Beacons',
+    description: 'Beacons are not reset when you relocate.',
+    cost: {
+        trophies: 5,
+    },
+    unlockAt: () => (get(wallet)['trophies'] >= 1),
+    isPercent: true,
 },
 {
     name: 'Hellfire',
@@ -306,9 +314,8 @@ export const automationUpgrades = array([{
     cost: {
         trophies: 5,
     },
-    unlockAt: () => (get(wallet)['fame'] >= 1),
+    unlockAt: () => (get(wallet)['trophies'] >= 1),
     isPercent: true,
-    suffix: ' chance',
 },
 
 ]);

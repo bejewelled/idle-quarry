@@ -80,7 +80,7 @@ export default class ref {
 
     static tabs = [
         'mining', 'keys', 'beacons', 'button', 'relocate',
-        'enchants', 'automation', 'challenges',
+        'enchants', 'automation', 'challenges', 'artifacts',
         'ascension', 'mastery'
     ]
 

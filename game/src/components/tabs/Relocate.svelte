@@ -221,10 +221,12 @@ export function relocate() {
                 $progressAverage[i[0]] = 0;
                 $progressThisTick[i[0]] = 0;
             }
-            for (let i in $beaconLevels) {
-                $beaconLevels[i] = 0;
-                $beaconProgress[i] = 0;
-                $beaconActivations[i] = 0;
+            if (!($automationItemsUnlocked['persistent beacons'])) {
+                for (let i in $beaconLevels) {
+                    $beaconLevels[i] = 0;
+                    $beaconProgress[i] = 0;
+                    $beaconActivations[i] = 0;
+                }
             }
             for (let bR in $beaconNextReqs) {
                 $beaconNextReqs[bR] = ($beaconLevels[bR]+1) * $baseBeaconNextReqs[bR];

@@ -26,6 +26,7 @@ import {beaconFormulas, beaconBonuses, beaconNextReqs,
     beaconNums, beaconUpgrades, beaconPowerFlavorText, beaconNameText} from '../../data/beacons'
 import {challengeGoals} from '../../data/challenges'
 import {enchantUpgrades, enchantThreshold} from '../../data/fame'
+import {allMultipliers} from '../../data/artifacts'
 import ref from '../../calcs/ref'
 import formula from '../../calcs/formula'
 
@@ -125,6 +126,8 @@ const PROGRESS_BASE = 1;
 let progressBonusMulti = 1
 
 function updateprogressThisTick(delta) {
+    let progressMultiAll = $allMultipliers['gems']['formula']($wallet['artifacts'])
+
     let challengeMultiplier = 1;
     let challengeExponent = 1;
     if ($challengeActive === 1) {
@@ -137,7 +140,9 @@ function updateprogressThisTick(delta) {
     * (Math.max(1,$beaconBonuses[1]))
     //* $buttonUpgrades[3]['formula']($buttonUpgradeLevels[3])
     * progressBonusMulti
-    * challengeMultiplier, challengeExponent);
+    * challengeMultiplier
+    * progressMultiAll
+    , challengeExponent);
     $progressAverage['gems'] = progGems;
     $progressThisTick['gems'] = progGems * delta;
 
@@ -147,6 +152,7 @@ function updateprogressThisTick(delta) {
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
     * progressBonusMulti
+    * progressMultiAll
     * challengeMultiplier, challengeExponent);
     $progressAverage['key1'] = progKey1;
     $progressThisTick['key1'] = progKey1 * delta;
@@ -156,6 +162,7 @@ function updateprogressThisTick(delta) {
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
     * progressBonusMulti
+    * progressMultiAll
     * challengeMultiplier, challengeExponent);
 
     $progressAverage['key2'] = progKey2;
@@ -166,6 +173,7 @@ function updateprogressThisTick(delta) {
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
     * progressBonusMulti
+    * progressMultiAll
     * challengeMultiplier, challengeExponent);
 
     $progressAverage['key3'] = progKey3;
@@ -244,6 +252,7 @@ function addGems(n, avgProgress) {
     * (Math.max(1,$miningUpgrades[10]['formula']($miningUpgradeLevels[10])))
     * (Math.max(1,$miningUpgrades[20]['formula']($miningUpgradeLevels[20])))
     * (Math.max(1,$miningUpgrades[25]['formula']($miningUpgradeLevels[25])))
+    * (Math.max(1,$allMultipliers['gems']['formula']($wallet['artifacts'])))
     * $buttonStats['hardenedBonus'];
     // update the flavor text if there is a minor change, otherwise don't
     if (Date.now() - lastGemGainTextUpdate > 1000) {
@@ -376,7 +385,6 @@ function checkForKeyCraftCompletion() {
 }
 
 function checkForChallengeCompletion() {
-    console.log($challengeActive)
     if ($wallet['challengePoints'] > ($challengeGoals[$challengeActive-1] || 1e300)) {
         $challengesCompleted[$challengeActive-1]++;
         $challengeActive = 0;

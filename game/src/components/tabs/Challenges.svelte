@@ -1,11 +1,4 @@
 <div class='wrapper py-2'>
-<div class='beacon-power-display text-center text-large game-text py-1'>
-    You have <span class='text-fuchsia-500 font-bold'>{f($resources['challengePoints'] || 0)}</span> challenge points
-</div>
-<div class='beacon-power-display text-center text-small game-text pb-1'>
-    Multiplying global game speed by 1.000x
-</div>
-<div class='game-text text-center py-1'>THIS TAB IS NOT IMPLEMENTED YET</div>
 
 <div class='py-2'>
 </div>

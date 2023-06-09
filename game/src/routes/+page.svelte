@@ -141,6 +141,8 @@
                     <Automation />
                 {:else if tab === 'challenges' && (tabUnlockCriteria['challenges']())}
                     <Challenges />
+                {:else if tab === 'artifacts' && (tabUnlockCriteria['challenges']())}
+                    <Artifacts />
                 {:else if tab === 'help'}
                     <Help />
                 {:else if tab === 'settings'}
@@ -190,6 +192,7 @@ import Button from '../components/tabs/Button.svelte';
 import Help from '../components/tabs/Help.svelte';
 import Settings from '../components/tabs/Settings.svelte';
 import Challenges from '../components/tabs/Challenges.svelte';
+import Artifacts from '../components/tabs/Artifacts.svelte';
 import MiningUpgradeButton from '../components/buttons/MiningUpgradeButton.svelte';
 import ref from '../calcs/ref.ts'
 
@@ -257,7 +260,8 @@ const tabUnlockCriteria = {
         default: () => false,
         help: () => true,
         settings: () => true,
-        challenges: () => $automationItemsUnlocked['game on']
+        challenges: () => $automationItemsUnlocked['game on'],
+        artifacts: () => $wallet['artifacts'] >= 1,
     }
 const tabsUnlocked = {
     mining: true,
