@@ -36,7 +36,7 @@
                                  || (drop[0].includes('key'+i) && drop[1][0] >= 1/drop[1][2])
                                  ? 'text-yellow-400':''}'>
                                     {fp(drop[1][0],
-                                    drop[1][0] < 1e-3 ? 5: 3)}
+                                    drop[1][0] < 1e-5 ? 5: 3)}
                                 </div>
                                 <div class='col-span-3 text-right pl-1'>
                                 [ {f(drop[1][1], 0)} - {f(drop[1][2], 0)} ]
@@ -45,7 +45,7 @@
                             {/if}
                             {/each}
                             {#if $keyItemsUnlocked['key'+i].size < 
-                            Object.entries(get(eval('key'+i+'DropTable'))).length}
+                            Object.entries(get(eval('key'+i+'DropTable'))).length - 1}
                             <div class='drop-table-disp grid grid-cols-10'>
                                 <div class='col-span-2 text-left pl-[8px] text-white'>
                                     ???
@@ -53,7 +53,7 @@
                                 <div class='col-span-7 text-center pl-1'>
                                     There are <span class='text-white font-bold'>
                                         {Object.entries(dropTable[i-1]).length
-                                        - $keyItemsUnlocked['key'+i].size} </span>
+                                        - $keyItemsUnlocked['key'+i].size - 1} </span>
                                     more items that can drop from this key. 
                                 </div>
                             </div>

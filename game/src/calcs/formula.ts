@@ -75,7 +75,7 @@ export default class formula {
     }
 
     static calcFameGemMulti(n: number) {
-      return (n > 1e20 ? 20 + Math.pow(Math.log10(n-50),2.5) : Math.log10(n+1))
+      return (Math.log10(n+1))
     }
 
     static calcFameBeaconMulti(n: number) {

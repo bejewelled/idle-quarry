@@ -222,9 +222,9 @@ export const miningUpgrades = array([{
     name: 'Key Mastery',
     description: 'Increases the number of keys found when a Key Finder of any rarity triggers.',
     cost: {
-        orbs: 1000,
+        orbs: 200,
     },
-    ratio: 1.225,
+    ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[3] > 0),
     formula: (lv: any) => (1 + lv * 0.1),
     isPercent: false,
@@ -237,7 +237,7 @@ export const miningUpgrades = array([{
     name: 'Lootmaster I',
     description: 'Unlocks a new tier of findable drops.',
     cost: {
-        gold: 400,
+        gold: 750,
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10),
@@ -287,7 +287,7 @@ export const miningUpgrades = array([{
         gold: 4e5
     },
     ratio: 1.25,
-    unlockAt: () => (get(wallet)['fame'] > 1 && get(miningUpgradeLevels)[6] >= 0.997),
+    unlockAt: () => (get(miningUpgradeLevels)[6] >= 0.997),
     formula: (lv: any) => (0),
     isPercent: false,
     suffix: ' (no bonus)',
@@ -318,7 +318,7 @@ export const miningUpgrades = array([{
 {
     index: 11,
     name: 'Clockwork',
-    description: 'Significantly improves drop amounts (mining only).',
+    description: 'Significantly improves mining drop quantity.',
     cost: {
         fame: 5
     },

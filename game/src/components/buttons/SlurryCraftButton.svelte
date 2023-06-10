@@ -62,7 +62,7 @@
             <div class='col-span-3 text-left text-small text-amber-400'>
                 Skill {f($keyCraftMastery[item][0])} 
                 {#if item == 'energizedCrystal'}
-                    [{f(Math.pow(1.1, masteryLevel-1), 1)}x craft yields]
+                    [{f(Math.pow(1.1, masteryLevel-1), 1)}x ALL craft yields]
                 {:else}
                     [{f(1 / Math.pow(0.9, masteryLevel-1), 1)}x speed]
                 {/if}

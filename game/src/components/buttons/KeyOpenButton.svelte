@@ -5,7 +5,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div on:click={() => open()}
 class='has-tooltip tooltip-text 
-{(affordable || amt === 'max') && keyKnowledgeCriteria() ? 'game-btn' : 'game-btn-noafford'}
+{affordable && keyKnowledgeCriteria() ? 'game-btn' : 'game-btn-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>
 {#if unlocked && keyKnowledgeCriteria()}
@@ -178,6 +178,7 @@ select-none'>
                         let k = 0, done = false;
                         const factorials = [0, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880]
                         while (!done && k < 9) {
+                            console.log(rand);
                             if (rand < (1-pFail)) {
                                 k++;
                                 pFail += (Math.exp(-1*n*p) * Math.pow(n*p, k) / factorials[k]);
@@ -186,9 +187,10 @@ select-none'>
                         if (n * p > 0.97) {
                             k += (amt - k) * ((1 - p**25) + (p**25 * Math.random()))
                         }
-                        const stdev = Math.sqrt(n*p);
-                        rewards[type] += 
-                        k * (vals[1] + Math.random()*(vals[2] - vals[1]) + formula.rNorm()*stdev);
+
+                        rewards[type] = (rewards[type] || 0) +
+                        (k * (vals[1] + Math.random()*(vals[2] - vals[1])));
+                        console.log(rewards[type])
                 
                 }
             }  
@@ -217,6 +219,7 @@ select-none'>
     }
 
     function canAfford() {
+        if (amt == 'max') return $wallet['key'+rarity.toString()] >= 1;
         return ($wallet['key'+rarity.toString()] >= amt);
     }
 

@@ -1,5 +1,5 @@
 <svelte:window on:keydown|preventDefault={keyDown} on:keyup={keyUp} />
-{#if enterKeyDown && !$automationItemsUnlocked['another button']} <!-- will be bound to an upgrade-->
+{#if badKeyDown && !$automationItemsUnlocked['another button']} <!-- will be bound to an upgrade-->
 <div class='game-text text-small text-center'>You have not unlocked key-bound button clicking yet; holding enter disables the button.</div>
 {/if}
 {#if showRewardDescription}
@@ -72,17 +72,17 @@ const BUTTON_SIZE= 100;
     }
 
     function keyDown(e) {
-      if (e.keyCode == 13) enterKeyDown = true;
+      if (e.keyCode > 0) badKeyDown = true;
     }
 
     function keyUp(e) {
-      if (e.keyCode == 13) enterKeyDown = false;
+      if (e.keyCode > 0) badKeyDown = false;
     }
   
-    let enterKeyDown = false;
+    let badKeyDown = false;
     // @ts-ignore
     const handleClick = (event) => {
-        if (enterKeyDown && !$automationItemsUnlocked['another button']) return;
+        if (badKeyDown && !$automationItemsUnlocked['another button']) return;
         textPosition = {
         x: buttonPosition.x - 100,
         y: buttonPosition.y - 18
@@ -148,6 +148,8 @@ const BUTTON_SIZE= 100;
     rewardAmount = rewardAmount 
     * formula.calcButtonStreakBonus($buttonStats['totalClicks'])
     * $miningUpgrades[23]['formula']($miningUpgradeLevels[23])
+    
+    if (isNaN($wallet['crystals'])) $wallet['crystals'] = 0;
     
     const isLucky = Math.random() < $buttonUpgrades[5]['formula']($buttonUpgradeLevels[5]);
     let mplr;

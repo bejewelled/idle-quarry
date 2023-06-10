@@ -223,7 +223,7 @@ export const baseMiningDropTable = dropTable({
     key1: [0.025,1,1], 
     orbs: [0.01,10,50],
     beacons: [0.005,1,1],
-    key2: [0.00075,1,1],
+    key2: [0.0001,1,1],
     key3: [1e-6,1,1],
     sigils: [0.0003,1,3]
 });
@@ -233,7 +233,7 @@ export const miningDropTable = dropTable({
     key1: [0.025,1,1], 
     orbs: [0.01,10,50000],
     beacons: [0.005,1,1],
-    key2: [0.00075,1,1],
+    key2: [0.0001,1,1],
     key3: [1e-6,1,1],
     sigils: [0.0003,1,3]
 });

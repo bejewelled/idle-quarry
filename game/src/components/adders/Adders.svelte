@@ -126,7 +126,7 @@ const PROGRESS_BASE = 1;
 let progressBonusMulti = 1
 
 function updateprogressThisTick(delta) {
-    let progressMultiAll = $allMultipliers['gems']['formula']($wallet['artifacts'])
+    let progressMultiAll = $allMultipliers['gems']['formula']($wallet['artifacts'] || 0)
 
     let challengeMultiplier = 1;
     let challengeExponent = 1;
@@ -138,7 +138,6 @@ function updateprogressThisTick(delta) {
     const progGems = Math.pow(PROGRESS_BASE
     * $miningUpgrades[0]['formula']($miningUpgradeLevels[0])
     * (Math.max(1,$beaconBonuses[1]))
-    //* $buttonUpgrades[3]['formula']($buttonUpgradeLevels[3])
     * progressBonusMulti
     * challengeMultiplier
     * progressMultiAll
@@ -252,7 +251,7 @@ function addGems(n, avgProgress) {
     * (Math.max(1,$miningUpgrades[10]['formula']($miningUpgradeLevels[10])))
     * (Math.max(1,$miningUpgrades[20]['formula']($miningUpgradeLevels[20])))
     * (Math.max(1,$miningUpgrades[25]['formula']($miningUpgradeLevels[25])))
-    * (Math.max(1,$allMultipliers['gems']['formula']($wallet['artifacts'])))
+    * (Math.max(1,$allMultipliers['gems']['formula']($wallet['artifacts'] || 0)))
     * $buttonStats['hardenedBonus'];
     // update the flavor text if there is a minor change, otherwise don't
     if (Date.now() - lastGemGainTextUpdate > 1000) {
@@ -275,7 +274,7 @@ function addGems(n, avgProgress) {
 }
 
 function addKey1(n, keyAt) {
-    const KEY1_BASE = 10;
+    const KEY1_BASE = 4;
         const key1Gain = KEY1_BASE 
         * $miningUpgrades[5]['formula']($miningUpgradeLevels[5])
         * $miningUpgrades[26]['formula']($miningUpgradeLevels[26]);
@@ -290,7 +289,7 @@ function addKey1(n, keyAt) {
 }
 
 function addKey2(n, keyAt) {
-    const KEY2_BASE = 3;
+    const KEY2_BASE = 1;
         const key2Gain = KEY2_BASE 
         * $miningUpgrades[5]['formula']($miningUpgradeLevels[5])
         * $miningUpgrades[26]['formula']($miningUpgradeLevels[26]);
@@ -305,7 +304,7 @@ function addKey2(n, keyAt) {
 }
 
 function addKey3(n, keyAt) {
-    const KEY3_BASE = 2;
+    const KEY3_BASE = 1;
         const key3Gain = KEY3_BASE 
         * $miningUpgrades[5]['formula']($miningUpgradeLevels[5])
         * $miningUpgrades[26]['formula']($miningUpgradeLevels[26]);
@@ -425,7 +424,8 @@ function addBeaconProgress(delta, isOffFocus = false) {
             // increase levels         
             $beaconLevels[i] += numLevels;
             // update formulas as needed
-            $beaconBonuses[i] = $beaconFormulas[i]($beaconLevels[i]);
+            const EXPONENT_MULTI = 1.0000025;
+            $beaconBonuses[i] = $beaconFormulas[i]($beaconLevels[i]) * Math.pow(EXPONENT_MULTI, $beaconLevels[i]);
             // update next reqs
 
             // EDIT WITH CAUTION!! Do not cause an overflow (>1e308) at high levels

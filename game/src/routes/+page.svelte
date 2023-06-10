@@ -245,12 +245,13 @@ const f = (n, pl = 3) => {
     else return n.toExponential(3).toString().replace('+', '');
 }
 
+// TAB_UNLOCK
 const tabUnlockCriteria = {
         mining: () => true,
         keys: () => true,
         beacons: () => (($wallet['beacons']) || formula.sumArray($beaconActivations)>0),
         sigils: () => ($wallet['sigils'] && $wallet['sigils'] > 0.02),
-        relocate: () => (formula.sumArray($keysOpened) > 1000 || $wallet['fame']),
+        relocate: () => (formula.sumArray($keysOpened) > 200 || $wallet['fame']),
         enchants: () => ($wallet['fame'] && $wallet['fame'] >= 100) 
                         || formula.sumArray($enchantUpgradeLevels) > 0,
         automation: () => ($wallet['fame'] && $wallet['fame'] >= 0.997)

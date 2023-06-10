@@ -180,7 +180,9 @@ function dropTable(context: any) {
 export const key1DropTable = dropTable({
     tier: 1,
     gems: [0.6, 10, 200, 0.6], // [chance, min, max, base]
-    orbs: [0.3, 3, 10, 0.3], 
+    orbs: [0.4, 3, 10, 0.4], 
+    gold: [0.2, 10, 20, 0.2],
+    beacons: [0.01, 1, 1, 0.01],
     key2: [(1/2500), 1, 1, (1/2500)],
 })
 

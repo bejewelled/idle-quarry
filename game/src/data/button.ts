@@ -139,9 +139,9 @@ export const buttonUpgrades = array([
     name: 'Stability',
     description: 'The button moves less after each click.',
     cost: {
-        crystals: 1000,
+        crystals: 500,
     },
-    ratio: 4,
+    ratio: 3.25,
     formula: (lv: any) => 1 - Math.pow(lv/10.25,0.45),
     unlockAt: () => (true),
     isPercent: false,
