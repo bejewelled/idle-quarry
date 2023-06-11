@@ -292,7 +292,7 @@ export const automationUpgrades = array([{
 },
 {
     name: 'Beaconizer',
-    description: 'Start each relocation with 500 beacons.',
+    description: 'Start each relocation with 50,000 beacons. Gain 50 beacons per second.',
     cost: {
         trophies: 2,
     },

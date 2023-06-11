@@ -135,8 +135,8 @@ function updateprogressThisTick(delta) {
     let challengeMultiplier = 1;
     let challengeExponent = 1;
     if ($challengeActive === 1) {
-        challengeMultiplier = (5e-2 / (1+$challengesCompleted[0]));
-        challengeExponent = Math.max(0.15, 0.33-$challengesCompleted[0]);
+        challengeMultiplier = (0.25 / (1+$challengesCompleted[0]));
+        challengeExponent = Math.max(0.15, 0.38-$challengesCompleted[0]);
     }
 
     const progGems = Math.pow(PROGRESS_BASE

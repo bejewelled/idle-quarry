@@ -261,7 +261,7 @@ export function relocate() {
                 $wallet['gold'] = 100;
             }
             if ($automationItemsUnlocked['beaconizer']) {
-                $wallet['beacons'] = 500;
+                $wallet['beacons'] = 50000;
             }
             if ($automationItemsUnlocked['deep pockets']) {
                 $miningUpgradeLevels[6] = 1;
