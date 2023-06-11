@@ -240,9 +240,9 @@ select-none'>
             case 2:
                 return ($wallet['beacons'] && $wallet['beacons'] >= 1) || formula.sumArray($beaconLevels) > 0;
             case 3:
-                return $wallet['sigils'] && $wallet['sigils'] >= 1;
+                return ($wallet['sigils'] && $wallet['sigils'] >= 1) || $keysOpened[2] >= 1 ;
             case 4:
-                return $wallet['artifactsTotal'] && $wallet['artifactsTotal'] >= 1;
+                return ($wallet['artifacts'] && $wallet['artifacts'] >= 1) || $keysOpened[3] >= 1;
             case 5:
                 return $wallet['holyLight'] && $wallet['holyLight'] >= 1;
         }

@@ -16,11 +16,19 @@
         <div class='game-btn m-1 text-med col-span-3' on:click={() => splitBeacons()}>
             Split Beacons Evenly
         </div>
+        {#if $automationItemsUnlocked['beacon tools ii']}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class='game-btn m-1 text-med col-span-3' on:click={() => smartSplitBeacons()}>
+            Smart Split Beacons
+        </div>
+        {:else}
+        <div class='col-span-3'></div>
+        {/if}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class='game-btn m-1 text-med col-span-3' on:click={() => recallBeacons()}>
             Recall Beacons
         </div>
-        <div class='col-span-4'></div>
+        <div class='col-span-1'></div>
 
         {:else}
         <div class='col-span-12'></div>
@@ -31,10 +39,10 @@
         <div class='col-span-1'>
             <BeaconToggleButton index={i} />
         </div>
-        <div class='col-span-1 my-1 text-center game-text'>
+        <div class='col-span-1 my-1 text-left pl-1 game-text'>
                 {f($beaconActivations[i],0)}
         </div>
-        <div class = 'col-span-3 grid grid-rows-2'>
+        <div class = 'col-span-2 grid grid-rows-2'>
             <div class='row-span-1 text-center game-text text-small'>
                 {f($beaconLevels[i],0)} / {fExp($beaconMaxLevels[i],
                 $beaconMaxLevels[i] > 1e6 ? 1 : 0)}
@@ -43,6 +51,20 @@
                 +{fp(Math.max(beaconDispBonus[i], 1), 3, true)}
             </div>
         </div>
+        {#if ($automationItemsUnlocked['beacon tools ii'])}
+            <div class='col-span-1 py-1 items-center px-1'>
+                <div class='input-wrapper'>
+                    <label>
+                    <input type='checkbox' bind:checked={$beaconSmartSplits[i]} 
+                    class='peer hidden input-checkbox h-8 w-8 bg-slate-500'/>
+                    <span class='game-text text-small border-2 p-2 border-white 
+                    peer-checked:bg-green-800'>Smart</span>
+                    </label>
+                </div>
+            </div>
+        {:else}
+        <div class='col-span-1'></div>
+        {/if}
         <div class='col-span-7 grid grid-rows-2'>
             <div class='row-span-1 grid grid-cols-5 tooltip-text'>
                 <div class='col-span-3 {getTextColor(i)} text-left'>
@@ -84,7 +106,8 @@ import { onMount, onDestroy } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
     settings, visibleTier, progressThisTick, progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources, 
-    mineLevel, antiFlickerFlags, automationItemsUnlocked} from '../../data/player';
+    mineLevel, antiFlickerFlags, automationItemsUnlocked,
+    beaconSmartSplits} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
@@ -101,6 +124,7 @@ import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte
 $: pbarWidths = Array(30).fill(0);
 $: beaconDispBonus = $beaconBonuses
 let beaconDispBonus = $beaconBonuses;
+
 
 onMount(() => {
     beaconDispBonus = $beaconBonuses;
@@ -138,6 +162,42 @@ function splitBeacons() {
     for (let j = 0; j < i-1; j++) {
         $beaconActivations[j] = Math.floor(totalBeacons / (i-1));
         totalUsed += $beaconActivations[j];
+    }
+    $wallet['beacons'] -= totalUsed
+    if (totalUsed < formula.sumArray($beaconActivations)) 
+        $wallet['beacons'] += Math.floor(formula.sumArray($beaconActivations) - totalUsed);
+
+    console.log($wallet['beacons'])
+}
+
+function smartSplitBeacons() {
+    console.log($beaconSmartSplits)
+    if (formula.sumArray($beaconSmartSplits) == 0) return;
+    let done = false, n = 0, i = 0;
+    // find number of splits to make
+    while (!done && i < 10) {
+        if ($mineLevel['level'] < $beaconMiningLevelReqs[i]) done = true;
+        if ($beaconSmartSplits[i]) n++;
+        i++;
+    }
+    if (n == 10) n = 11;
+    if (n == 1) {
+        $beaconActivations[0] += $wallet['beacons'];
+        $wallet['beacons'] = 0;
+        return;
+    }
+    // find total number of beacons
+    for (let j in $beaconActivations) {
+            $wallet['beacons'] += $beaconActivations[j];
+            $beaconActivations[j] = 0;
+    }
+    let totalUsed = 0;
+    const totalBeacons = $wallet['beacons']
+    for (let j = 0; j < i-1; j++) {
+        if ($beaconSmartSplits[j]) {
+            $beaconActivations[j] = Math.floor(totalBeacons / n);
+            totalUsed += $beaconActivations[j];
+        }
     }
     $wallet['beacons'] -= totalUsed
     if (totalUsed < formula.sumArray($beaconActivations)) 

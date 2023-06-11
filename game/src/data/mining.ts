@@ -354,17 +354,17 @@ export const miningUpgrades = array([{
 {
     index: 13,
     name: 'Mythical',
-    description: 'Gain a small chance to gain 1 fame per mining cycle.',
+    description: 'Increases key open droprates when using keys. Note that some drop chances are capped.',
     cost: {
         fame: 100
     },
     ratio: 1.3,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (lv == 0 ? 1 
-     : 1 + (lv**2)*1e-5),
-    isPercent: true,
+    formula: (lv: any) => 1 + 0.25*Math.pow(lv, 0.75),
+    isPercent: false,
     isFame: true,
-    suffix: ' chance for fame gain',
+    prefix: 'x',
+    suffix: ' key droprates',
     maxLevel: 100,
     style: 'game-btn-fame',
     notes: ''

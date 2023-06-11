@@ -20,7 +20,8 @@ import {progress, miningUpgradeLevels, wallet, miningDropTable,
     keyCraftTimes, keyCraftAmount, antiFlickerFlags, 
     miningUpgradeLevelsBought, miningUpgradeLevelsFree, 
     activityLogShow, challengeActive,
-    challengesCompleted, challengeProgress} from '../../data/player'
+    challengesCompleted, challengeProgress,
+    challenge3Multi} from '../../data/player'
 import {buttonUpgrades} from '../../data/button'
 import {beaconFormulas, beaconBonuses, beaconNextReqs, 
     beaconNums, beaconUpgrades, beaconPowerFlavorText, beaconNameText} from '../../data/beacons'
@@ -123,9 +124,12 @@ function updateMiningLevel() {
 }
 
 const PROGRESS_BASE = 1;
-let progressBonusMulti = 1
+let progressBonusMulti = 1;
+
 
 function updateprogressThisTick(delta) {
+    if (!($challengeActive === 3)) $challenge3Multi = 1;
+
     let progressMultiAll = $allMultipliers['gems']['formula']($wallet['artifacts'] || 0)
 
     let challengeMultiplier = 1;
@@ -139,6 +143,7 @@ function updateprogressThisTick(delta) {
     * $miningUpgrades[0]['formula']($miningUpgradeLevels[0])
     * (Math.max(1,$beaconBonuses[1]))
     * progressBonusMulti
+    * $challenge3Multi
     * challengeMultiplier
     * progressMultiAll
     , challengeExponent);
@@ -151,6 +156,7 @@ function updateprogressThisTick(delta) {
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
     * progressBonusMulti
+    * $challenge3Multi
     * progressMultiAll
     * challengeMultiplier, challengeExponent);
     $progressAverage['key1'] = progKey1;
@@ -161,6 +167,7 @@ function updateprogressThisTick(delta) {
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
     * progressBonusMulti
+    * $challenge3Multi
     * progressMultiAll
     * challengeMultiplier, challengeExponent);
 
@@ -172,6 +179,7 @@ function updateprogressThisTick(delta) {
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
     * progressBonusMulti
+    * $challenge3Multi
     * progressMultiAll
     * challengeMultiplier, challengeExponent);
 
@@ -244,6 +252,10 @@ function addProgress(delta) {
  */
 let lastGemGainTextUpdate = Date.now();
 function addGems(n, avgProgress) {
+    if ($challengeActive === 3) {
+        $challenge3Multi *= 0.999 - ($challengesCompleted[2]*0.001);
+    }
+
     const GEM_BASE = 1;
     const gemGain = (GEM_BASE + $miningUpgrades[1]['formula']($miningUpgradeLevels[1]))
     * ($miningUpgrades[8]['formula']($miningUpgradeLevels[8]))
@@ -261,10 +273,6 @@ function addGems(n, avgProgress) {
     $wallet['gems'] += gemGain * n;
 
     // add chance to get fame
-    if (Math.random() < ($miningUpgrades[13]['formula']($miningUpgradeLevels[13]) - 1)) {
-        $wallet['fame'] = ($wallet['fame'] || 0) + 1;
-        addToActivityLog('[Mythical] +1 fame', 'text-orange-400', 'mythical')
-    }
 
     if ($challengeActive !== 0 && dt < 1000) {
         $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 

@@ -300,10 +300,10 @@ export const automationUpgrades = array([{
     isPercent: true,
 },
 {
-    name: 'Persistent Beacons',
-    description: 'Beacons are not reset when you relocate.',
+    name: 'Beacon Tools II',
+    description: 'You can now "smart split" beacons among chosen paths.',
     cost: {
-        trophies: 5,
+        trophies: 2,
     },
     unlockAt: () => (get(wallet)['trophies'] >= 1),
     isPercent: true,

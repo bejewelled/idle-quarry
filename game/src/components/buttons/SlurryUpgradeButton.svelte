@@ -122,6 +122,7 @@ select-none'>
     }
 
     function buy() {
+        if ($keyUpgradeLevels[index] >= $keyUpgrades[index]['maxLevel']) return;
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
             if ((val >=  1 && $wallet[type] < val) || !($wallet[type])) {

@@ -134,20 +134,22 @@ export const challengeUnlockCriteria = array([
 
 export const challengeNames = array([
     "C1: Rusty",
-    "C2: Muted"
+    "C2: Muted",
+    "C3: Slowdown",
 ])
 
 export const challengeDescriptions = array([
     "Mining and key finder progress is drastically slowed. (It gets reduced more on each completion).",
     "All mining upgrades are reset. You cannot buy mining upgrades.",
+    "Every time a mining cycle completes, the next one takes slightly longer. (Each completion increases the slowdown)."
 ])
 
-export const challengeGoals = array([6000, 2400, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
+export const challengeGoals = array([6000, 2400, 15000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
 
-export const baseChallengeGoals = array([6000, 2400, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
+export const baseChallengeGoals = array([6000, 2400, 15000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
 
 
-export const challengeMultipliers = array([1.3, 1.5, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1])
+export const challengeMultipliers = array([1.3, 1.5, 1.25, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1])
 
 export const currChallengeInfo = object({
 

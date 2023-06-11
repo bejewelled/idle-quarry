@@ -174,7 +174,8 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     keyCraftTimes, startOfGame, antiFlickerFlags, 
     automationItemsUnlocked, saveVersion, miningUpgradeLevelsBought,
     miningUpgradeLevelsFree, activityLogShow, challengeActive,
-    challengesCompleted, challengeProgress} from '../data/player.js'
+    challengesCompleted, challengeProgress, beaconSmartSplits,
+    challenge3Multi} from '../data/player.js'
 import {key1DropTable, key2DropTable, key3DropTable, 
 key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
 import {beaconNextReqs, beaconSpendAmt, beaconNums} from '../data/beacons.ts'
@@ -316,7 +317,8 @@ const save = async (isExport = false) => {
     localStorage.setItem('activityLogShow', JSON.stringify($activityLogShow));
     localStorage.setItem('challengeActive', JSON.stringify($challengeActive));
     localStorage.setItem('challengesCompleted', JSON.stringify($challengesCompleted));
-
+    localStorage.setItem('beaconSmartSplits', JSON.stringify($beaconSmartSplits));
+    localStorage.setItem('challenge3Multi', JSON.stringify($challenge3Multi));
 
     saveConfirm = true;
     if (isExport) {
@@ -489,6 +491,12 @@ const load = async (isImport = false) => {
     }
     if (localStorage.getItem('challengesCompleted')) {
         challengesCompleted.set(JSON.parse(localStorage.getItem('challengesCompleted')));
+    }
+    if (localStorage.getItem('beaconSmartSplits')) {
+        beaconSmartSplits.set(JSON.parse(localStorage.getItem('beaconSmartSplits')));
+    }
+    if (localStorage.getItem('challenge3Multi')) {
+        challenge3Multi.set(JSON.parse(localStorage.getItem('challenge3Multi')));
     }
     // updates older save files to new format
     await versionUpdater();
@@ -690,7 +698,7 @@ onMount(() => {
     :global(.game-btn-toggleon) {
         border: 1px solid #d9d9d9;
         color: #d9d9d9;
-        background-color: #44c546;
+        background-color: #226323;
         cursor: pointer;
     }  
     :global(.game-btn-toggleoff) {

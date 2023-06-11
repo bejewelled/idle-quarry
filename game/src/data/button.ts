@@ -136,10 +136,11 @@ export const progressPerTick = single(1);
 */
 export const buttonUpgrades = array([
 {
+    index: 0,
     name: 'Stability',
     description: 'The button moves less after each click.',
     cost: {
-        crystals: 500,
+        crystals: 750,
     },
     ratio: 3.25,
     formula: (lv: any) => 1 - Math.pow(lv/10.25,0.45),
@@ -150,10 +151,11 @@ export const buttonUpgrades = array([
     notes: ''
 },
 {
+    index: 1,
     name: 'Hot Button',
     description: 'Accumulate a multiplier to crystals as more clicks are made (max 10,000).',
     cost: {
-        crystals: 750,
+        crystals: 1200,
     },
     ratio: 4e150,
     formula: (lv: any) => lv,
@@ -163,10 +165,11 @@ export const buttonUpgrades = array([
     notes: ''
 },
 {
+    index: 2,
     name: 'I\'m Feeling Nice',
     description: 'The center of the button is highlighted.',
     cost: {
-        crystals: 4500,
+        crystals: 8000,
     },
     ratio: 4e150,
     formula: (lv: any) => lv,
@@ -176,10 +179,11 @@ export const buttonUpgrades = array([
     notes: ''
 },
 {
+    index: 3,
     name: 'Insanity!',
     description: 'Your lifetime Incredible and Perfect clicks increase mining speed; Perfect clicks have a drastically higher impact.',
     cost: {
-        crystals: 12000,
+        crystals: 20000,
     },
     ratio: 4e150,
     formula: (lv: any) => 1 + 
@@ -193,6 +197,7 @@ export const buttonUpgrades = array([
     notes: ''
 },
 {
+    index: 4,
     name: 'Fractals',
     description: 'Button clicks give fame over time. [CURRENTLY DISABLED]',
     cost: {
@@ -212,7 +217,7 @@ export const buttonUpgrades = array([
     name: 'The Duck',
     description: 'Increases the chance you get "lucky" and multiply your crystals.',
     cost: {
-        crystals: 75000,
+        crystals: 100000,
     },
     ratio: 4,
     formula: (lv: any) => 0.025 + lv*0.025,
@@ -239,9 +244,9 @@ export const buttonUpgrades = array([
 {
     index: 7,
     name: 'Deadly Precision',
-    description: '[NOT IMPLEMENTED] The precision point of the button is highlighted red. Incredible clicks that are lucky become Perfect instead.',
+    description: 'The precision point of the button is highlighted red. Incredible clicks that are lucky become Perfect instead.',
     cost: {
-        crystals: 4e7,
+        crystals: 6e7,
     },
     ratio: 4,
     formula: (lv: any) => lv,

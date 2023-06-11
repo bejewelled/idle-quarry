@@ -1,6 +1,6 @@
 <svelte:window on:keydown|preventDefault={keyDown} on:keyup={keyUp} />
 {#if badKeyDown && !$automationItemsUnlocked['another button']} <!-- will be bound to an upgrade-->
-<div class='game-text text-small text-center'>You have not unlocked key-bound button clicking yet; holding enter disables the button.</div>
+<div class='game-text text-small text-center'>You have not unlocked key-bound button clicking yet; holding a key disables the button.</div>
 {/if}
 {#if showRewardDescription}
 <div class='absolute flex w-[350px] h-[35px] {rewardStyle} 
@@ -11,14 +11,14 @@ style = 'top: {textPosition.y}px; left: {textPosition.x}px;'>
 
 <button
     id="button"
-    class="absolute w-[100px] h-[100px] border-4 border-white text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
+    class="absolute w-[100px] h-[100px] border-4 border-white border-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
     style="top: {buttonPosition.y}px; left: {buttonPosition.x}px;"
     on:click={handleClick} on:keydown={handleClick}
   ></button>
 {#if $buttonUpgradeLevels[2] > 0}
 <button
     id="button"
-    class="absolute w-[20px] h-[20px] bg-gray-400 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
+    class="absolute w-[20px] h-[20px] bg-gray-400 bg-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
     style="top: {buttonPosition.y+40}px; left: {buttonPosition.x+40}px;"
     on:click={handleClick}
   > </button>
@@ -26,7 +26,7 @@ style = 'top: {textPosition.y}px; left: {textPosition.x}px;'>
 {#if $buttonUpgradeLevels[7] > 0}
 <button
     id="button"
-    class="absolute w-[4px] h-[4px] bg-red-400 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
+    class="absolute w-[4px] h-[4px] bg-red-400 bg-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
     style="top: {buttonPosition.y+48}px; left: {buttonPosition.x+48}px;"
     on:click={handleClick}
   ></button>
@@ -72,7 +72,7 @@ const BUTTON_SIZE= 100;
     }
 
     function keyDown(e) {
-      if (e.keyCode > 0) badKeyDown = true;
+        if (e.keyCode > 0) badKeyDown = true;
     }
 
     function keyUp(e) {
@@ -95,20 +95,20 @@ const BUTTON_SIZE= 100;
     // @ts-ignore
     const cursorY = (event ? event.clientY : 0);
 
-    const absDist = Math.sqrt(Math.abs(cursorX - buttonPosition.x-(BUTTON_SIZE/2)) ** 2 
+   let absDist = Math.sqrt(Math.abs(cursorX - buttonPosition.x-(BUTTON_SIZE/2)) ** 2 
     + Math.abs(cursorY - buttonPosition.y-(BUTTON_SIZE/2)) ** 2);
     
     let rewardAmount = 0;
 
 
     $buttonStats['totalClicks']++;
-    $buttonStats['clicksUntilFame']--;
-    if ($buttonStats['clicksUntilFame'] <= 0) {
-        $buttonStats['clicksUntilFame'] = $buttonUpgrades[0]['formula']($buttonUpgradeLevels[0])
-        $wallet['fame'] += 1000;
-    }
+
+    const isLucky = Math.random() < $buttonUpgrades[5]['formula']($buttonUpgradeLevels[5]);
+
+    if (isLucky && absDist > 1 && absDist <= 2) absDist = 0;
+
     if (absDist < 1) {
-        rewardAmount = 100;
+        rewardAmount = 150;
         rewardDescriptionText = 'PERFECT! +';
         rewardStyle = 'text-large text-amber-500 border-amber-500 font-bold'
         $buttonNumClicks['perfect']++;
@@ -120,19 +120,19 @@ const BUTTON_SIZE= 100;
         $buttonNumClicks['incredible']++;
         $mineLevel['xp'] += 3;
     } else if (absDist <= 4) {
-        rewardAmount = 4;
+        rewardAmount = 5;
         rewardDescriptionText = 'Excellent +';
         rewardStyle = 'text-med text-violet-500 border-violet-500'
         $buttonNumClicks['excellent']++;
         $mineLevel['xp'] += 2;
     } else if (absDist <= 7) {
-        rewardAmount = 3;
+        rewardAmount = 4;
         rewardDescriptionText = 'Great +';
         rewardStyle = 'text-med text-sky-500 border-sky-500'
         $buttonNumClicks['great']++;
         $mineLevel['xp'] += 1;
     } else if (absDist <= 10) {
-        rewardAmount = 2;
+        rewardAmount = 3;
         rewardDescriptionText = 'Good +';
         rewardStyle = 'text-med text-green-500 border-green-500'
         $buttonNumClicks['good']++;
@@ -151,7 +151,6 @@ const BUTTON_SIZE= 100;
     
     if (isNaN($wallet['crystals'])) $wallet['crystals'] = 0;
     
-    const isLucky = Math.random() < $buttonUpgrades[5]['formula']($buttonUpgradeLevels[5]);
     let mplr;
     if (isLucky) {
         mplr = 8 + Math.round(Math.random() * 12);

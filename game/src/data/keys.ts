@@ -160,9 +160,10 @@ function dropTable(context: any) {
                 for (let [item, val] of Object.entries(i)) {
                     if (item == 'tier') continue;
                     i[item]= [
-                        Math.min((item.toString().includes('key'+i['tier']) ? 1 / val[2] : 
+                        Math.min((item.toString().includes('key'+i['tier']) ? 0.25 / val[2] : 
                         (item.toString().includes('key') ? 0.33333333 : 1)),
                         val[3] 
+                        * get(miningUpgrades)[13]['formula'](get(miningUpgradeLevels)[13])
                         * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0]
                         * get(beaconBonuses)[7])),
                         val[1], 
@@ -199,11 +200,10 @@ export const key2DropTable = dropTable({
 export const key3DropTable = dropTable({
     tier: 3,
     // [chance (w/ multipliers), min, max, baseChance]
-    gems: [0.125, 1e8, 1e9, 0.125], 
-    gold: [0.075, 1e6, 5e6, 0.075],
-    crystals: [0.06, 1000, 10000, 0.06],
-    orbs: [0.06, 1500, 4500, 0.06],
-    key2: [0.04, 100, 900, 0.04],
+    gems: [0.25, 1e8, 1e9, 0.125], 
+    gold: [0.15, 1e6, 5e6, 0.075],
+    crystals: [0.11, 1000, 10000, 0.06],
+    orbs: [0.06, 25000, 2.5e5, 0.06],
     beacons: [0.04, 1000, 3500, 0.04],
     sigils: [0.025, 10, 75, 0.025],
     key3: [0.001, 1, 1, 0.001],
@@ -213,7 +213,16 @@ export const key3DropTable = dropTable({
 })
 
 export const key4DropTable = dropTable({
-    
+    tier: 4,
+    // [chance (w/ multipliers), min, max, baseChance]
+    gems: [0.03, 1e20, 1e21, 0.03], 
+    gold: [0.03, 1e11, 1e12, 0.03],
+    crystals: [0.02, 1000, 10000, 0.02],
+    orbs: [0.016, 5e7, 1e9, 0.016],
+    sigils: [0.016, 2500, 10000, 0.016],
+    artifacts: [0.00005, 15, 50, 0.00005],
+    key4: [(1/5e5), 1, 1, (1/5e5)],
+    key5: [(1/1e11), 1, 1, (1/1e11)]
 })
 
 export const key5DropTable = dropTable({

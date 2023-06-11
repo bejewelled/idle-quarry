@@ -168,7 +168,9 @@ function dropTable(context: any) {
                             : 1) 
                             * Math.max(1,get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6]))
                             * Math.max(1,get(miningUpgrades)[22]['formula'](get(miningUpgradeLevels)[22]))
-                            * Math.max(1,get(beaconBonuses)[2]),
+                            * Math.max(1,get(beaconBonuses)[2])
+                            * (item === 'beacons' ? get(beaconUpgrades)[1]['formula'](get(beaconUpgradeLevels)[1]) : 1),
+
                            
                         //@ts-ignore
                         (val[1])
@@ -273,6 +275,7 @@ export const beaconProgress = array(Array(30).fill(0))
 
 export const beaconUpgradeLevels = array(Array(20).fill(0))
 
+export const beaconSmartSplits = array(Array(10).fill(0));
 
 export const enchantUpgradeLevels = array(Array(20).fill(0))
 
@@ -359,5 +362,7 @@ export const activityLogShow = object({})
 export const challengeActive = single(0);
 
 export const challengeProgress = single(0);
+
+export const challenge3Multi = single(1);
 
 export const challengesCompleted = array(Array(30).fill(0));
