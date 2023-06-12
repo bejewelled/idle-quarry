@@ -13,7 +13,7 @@
             {#if $challengeActive !== 0}
             <div class='col-span-12 text-amber-500 
             text-left text-small pb-1'>Challenge {$challengeActive} 
-            [ {f($wallet['challengePoints'], 0)} / {f($challengeGoals[$challengeActive-1])}
+            [ {f($wallet['challengePoints'], 0)} / {f($challengeGoals[$challengeActive-1], 0)}
             ]</div>
             <div class='col-span-12'>
                 <div class='mine-bar-wrapper pb-2'>
@@ -586,6 +586,7 @@ function versionUpdater() {
         }
         $activityLogShow['crafting'] = true;
         $activityLogShow['mythical'] = true;
+        $activityLogShow['challenges'] = true;
     }
     if (ver < 16) {
         $miningUpgradeLevels[6] = 0;

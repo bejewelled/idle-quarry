@@ -1,7 +1,8 @@
 
 import { writable, get } from 'svelte/store';
-import {wallet, miningUpgradeLevels, enchantUpgradeLevels, automationItemsUnlocked} from './player'
+import {wallet, miningUpgradeLevels, enchantUpgradeLevels, automationItemsUnlocked, challengesCompleted} from './player'
 import Decimal  from 'break_infinity.js';
+import formula from '../calcs/formula';
 
 function single(context: any) {
     // @ts-ignore
@@ -329,7 +330,7 @@ export const automationUpgrades = array([{
     cost: {
         trophies: 1,
     },
-    unlockAt: () => (get(wallet)['trophies'] >= 1),
+    unlockAt: () => (get(wallet)['trophies'] >= 1 || formula.sumArray(get(challengesCompleted)) > 0),
     isPercent: false,
 },
 {
@@ -339,7 +340,7 @@ export const automationUpgrades = array([{
     cost: {
         trophies: 2,
     },
-    unlockAt: () => (get(wallet)['trophies'] >= 1),
+    unlockAt: () => (get(wallet)['trophies'] >= 1 || formula.sumArray(get(challengesCompleted)) > 0),
     isPercent: true,
 },
 {
@@ -349,31 +350,41 @@ export const automationUpgrades = array([{
     cost: {
         trophies: 2,
     },
-    unlockAt: () => (get(wallet)['trophies'] >= 1),
+    unlockAt: () => (get(wallet)['trophies'] >= 1 || formula.sumArray(get(challengesCompleted)) > 0),
     isPercent: true,
 },
 {
     index: 8,
+    name: 'Unlimited Power!',
+    description: 'Beacon power (and its upgrades) are not reset on relocation.',
+    cost: {
+        trophies: 2,
+    },
+    unlockAt: () => (get(wallet)['trophies'] >= 1 || formula.sumArray(get(challengesCompleted)) > 0),
+    isPercent: true,
+},
+{
+    index: 9,
     name: 'Spellcaster',
     description: 'You can trigger enchants 10% faster.',
     cost: {
         trophies: 3,
     },
-    unlockAt: () => (get(wallet)['trophies'] >= 1),
+    unlockAt: () => (get(wallet)['trophies'] >= 1 || formula.sumArray(get(challengesCompleted)) > 0),
     isPercent: true,
 },
 {
-    index: 9,
+    index: 10,
     name: 'Hellfire',
     description: '[NOT IMPLEMENTED YET] Unlocks challenges 4 - 6.',
     cost: {
         dust: 2000,
     },
-    unlockAt: () => (get(wallet)['trophies'] >= 1),
+    unlockAt: () => (get(wallet)['trophies'] >= 1 || formula.sumArray(get(challengesCompleted)) > 0),
     isPercent: true,
 },
 {
-    index: 10,
+    index: 11,
     name: 'Spellcaster II',
     description: 'You can trigger enchants an additional 10% faster.',
     cost: {
@@ -383,5 +394,6 @@ export const automationUpgrades = array([{
     unlockAt: () => (get(automationItemsUnlocked)['spellcaster'] !== undefined),
     isPercent: true,
 },
+
 
 ]);

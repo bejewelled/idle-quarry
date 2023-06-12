@@ -106,7 +106,7 @@ select-none'>{$automationUpgrades[index]['name']}
     function canAfford() {
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
-            if (val >= 1 && $wallet[type] < val) {
+            if ((val >= 1 && $wallet[type] < val) || !$wallet[type]) {
                 return false;
             }
         }  

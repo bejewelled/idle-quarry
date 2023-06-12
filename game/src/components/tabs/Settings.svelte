@@ -37,6 +37,12 @@
                     {$activityLogShow['crafting'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
                     on:click={() => changeActivityLogShow('crafting')}>Crafting</div>
                 </div>
+                <div class='col-span-3 grid-cols-3 pt-1'>
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <div class='setting col-span-3 mx-1 px-1 py-1 text-center
+                    {$activityLogShow['challenges'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
+                    on:click={() => changeActivityLogShow('challenges')}>Challenges</div>
+                </div>
                 <div class='col-span-9 py-1'></div>
                 {#each $enchantUpgrades as e}
                 {#if !(e['name'] == 'Mine Size' || e['name'] == 'Mine Quality')}

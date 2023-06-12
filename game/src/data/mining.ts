@@ -378,7 +378,7 @@ export const miningUpgrades = array([{
     cost: {
         crystals: 1e7,
         slurry: 1e6,
-        warp: 1e6,
+        warp: 1e4,
         sigils: 1e4,
         trophies: 3,
         artifacts: 1,

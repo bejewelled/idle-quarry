@@ -4,7 +4,7 @@
 
 </div> 
 <div class='beacon-power-tooltip text-center tooltip-text'>
-    +{f(200 * $beaconLevels.reduce((s, c) => s * (c > 10000 ? Math.log(c) - 4 : 1) , 1), 0)} 
+    +{f(200 * $beaconLevels.reduce((s, c) => s * (c > 10000 ? Math.log10(c) - 3 : 1) , 1), 0)} 
     / sec - multiplied for each beacon path above level 10,000
 </div>
 <div class='py-2'></div>

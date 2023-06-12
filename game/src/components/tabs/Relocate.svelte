@@ -214,6 +214,7 @@ export function relocate() {
                 $wallet[i] = 0;
             }
             for (let i of resourceResetItems) {
+                if ($automationItemsUnlocked['unlimited power!'] && i == 'beaconPower') continue;
                 $resources[i] = 0;
             }
             for (let i of Object.entries($progress)) {
@@ -254,6 +255,7 @@ export function relocate() {
                 }
             console.log($automationItemsUnlocked)
                 
+            if (!$automationItemsUnlocked['unlimited power!'])
             $beaconUpgradeLevels = Array($beaconUpgradeLevels.length).fill(0);
 
             if ($automationItemsUnlocked['jumpstart']) {

@@ -384,8 +384,8 @@ function checkForKeyCraftCompletion() {
 
                 // formula
                 if (item == 'energizedCrystal') 
-                $keyCraftMastery[item][2] = (3 * $keyCraftMastery[item][0]) * Math.pow(1.2,$keyCraftMastery[item][0])
-                else $keyCraftMastery[item][2] = (25 * $keyCraftMastery[item][0]) * Math.pow(1.25,$keyCraftMastery[item][0])
+                $keyCraftMastery[item][2] = (3 + $keyCraftMastery[item][0]) * Math.pow(1.06,$keyCraftMastery[item][0])
+                else $keyCraftMastery[item][2] = 10 + (15 * $keyCraftMastery[item][0]) * Math.pow(1.25,$keyCraftMastery[item][0])
                 $keyCraftMastery[item][2] = Math.floor($keyCraftMastery[item][2]);
                 addToActivityLog('[Keys] Crafting Mastery for ' + val['name'] + 'increased! ('
                 +$keyCraftMastery[item][0] + ')', 
@@ -405,6 +405,8 @@ function checkForChallengeCompletion() {
         $wallet['challengePoints'] = 0;
         $wallet['trophies'] = ($wallet['trophies'] || 0) + 1;
         challengeGoals.updateChallengeReqs();
+        addToActivityLog('[Challenges] Challenge ' + $challengeActive + 'completed! (Completion ' + $challengesCompleted[$challengeActive-1] + ')',
+        'text-amber-400', 'challenges')
 
     }
 }
@@ -459,8 +461,6 @@ function addBeaconProgress(delta, isOffFocus = false) {
                 miningDropTable.updateTable();
             }
 
-            $wallet['beacons'] = ($wallet['beacons'] || 0) + 
-                ($beaconUpgrades[1]['formula']($beaconUpgradeLevels[1]));
 
             locks.delete(i);
         }
@@ -471,7 +471,7 @@ function addBeaconProgress(delta, isOffFocus = false) {
 
     // NOTE!!!!! When you update this, make sure to update the display in Beacons.svelte line 7
     const bpGain = (200 * (UPDATE_SPEED / 1000)) 
-    $beaconLevels.reduce((s, c) => s * (c > 10000 ? Math.log(c) - 4 : 1) , 1) * delta;
+    $beaconLevels.reduce((s, c) => s * (c > 10000 ? Math.log10(c) - 3 : 1) , 1) * delta;
    
     $resources['beaconPower'] = ($resources['beaconPower'] || 0) + bpGain;
     if (challengeActive !== 0) {

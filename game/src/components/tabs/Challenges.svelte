@@ -90,7 +90,8 @@ function toggleChallenge(i) {
     } else {
         console.log(i);
         if (i == 2) {
-            if (confirm("Are you sure? ALL mining upgrades will be lost!")) {
+            let y = confirm("Are you sure? ALL mining upgrades will be lost!")
+            if (y) {
                 $wallet['challengePoints'] = 0;
                 $challengeActive = i;
                 for (let i in $miningUpgrades) {
@@ -100,21 +101,27 @@ function toggleChallenge(i) {
                         $miningUpgradeLevelsFree[i] = 0;
                     }
                 }
+                $wallet['challengePoints'] = 0;
+                $challengeActive = i;
             }
 
         } 
         else if (i == 4) {
-            if (confirm("Are you sure? ALL beacon path levels will be lost!")) {
+            let y = confirm("Are you sure? ALL beacon path levels will be lost!")
+            if (y) {
                 for (let i in $beaconLevels) {
                     $beaconLevels[i] = 0;   
                     $beaconProgress[i] = 0;
                     $beaconNextReqs[i] = $baseBeaconNextReqs[i];
                 }
             }
+            $wallet['challengePoints'] = 0;
+            $challengeActive = i;
 
+        } else {
+            $wallet['challengePoints'] = 0;
+            $challengeActive = i;
         }
-        $wallet['challengePoints'] = 0;
-        $challengeActive = i;
     }
 }
 

@@ -191,8 +191,8 @@ const BUTTON_SIZE= 100;
       randomY = Math.max(MIN_Y, Math.min(MAX_Y, lastY + (yDir * Math.sqrt(y2))))
       
       buttonPosition = {
-        x: randomX,
-        y: randomY
+        x: Math.min(Math.max(MIN_X,randomX), MAX_X),
+        y: Math.min(Math.max(MIN_Y,randomY), MAX_Y)
       };
 
 
