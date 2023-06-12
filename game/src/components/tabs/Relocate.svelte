@@ -246,7 +246,7 @@ export function relocate() {
                     $miningUpgradeLevelsFree[i] = 0;
 
                     if (!$automationItemsUnlocked['omnipotent']) {
-                        if (!($miningUpgrades[i]['isFame']))  {
+                        if (!($miningUpgrades[i]['noResetRelocate']))  {
                             $miningUpgradeLevelsBought[i] = 0;
                             $miningUpgradeLevels[i] = 0;
                         }
@@ -272,6 +272,7 @@ export function relocate() {
             }
 
             for (let k of Object.keys($keyCraftAmount)) {
+                if (k !== 'energizedCrystal')
                 $keyCraftAmount[k] = 0;
             }
         }

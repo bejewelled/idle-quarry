@@ -5,29 +5,32 @@
 
 <div class='grid grid-cols-12'>
     {#key $challengeActive}
-    {#each $challengeNames as c,i}
-        <div class='col-span-3 game-text text-large text-left'>{c} [{$challengesCompleted[i]}]</div>
-        <div class='col-span-5 align-middle tooltip-text text-xs'>{$challengeDescriptions[i]}</div>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class='col-span-2 tooltip-text text-xs'>
-            <div class='grid grid-cols-2'>
-                <div class='text-center 
-                text-amber-500'>points </div>
-                <div class='text-left col-span-1'>{f($challengeGoals[i])}</div>
-            </div>
-        </div>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class='col-span-2 ml-2 align-middle mb-5 text-center 
-        {$challengeActive == i+1 ? 'game-btn-toggleon' : 'game-btn'}'
-        on:click={() => toggleChallenge(i+1)}>
-            {#if $challengeActive == i+1}
-                Exit
-            {:else}
-                Start
+        {#each $challengeNames as c,i}
+            {#if $challengeUnlockCriteria[i]}
+                <div class='col-span-2 game-text text-left'>{c} [{$challengesCompleted[i]}]</div>
+                <div class='col-span-6 align-middle tooltip-text text-xs text-justify'>{$challengeDescriptions[i]}</div>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class='col-span-2 tooltip-text text-xs'>
+                    <div class='grid grid-cols-2'>
+                        <div class='text-center 
+                        text-amber-500'>points </div>
+                        <div class='text-left col-span-1'>{f($challengeGoals[i])}</div>
+                    </div>
+                </div>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class='col-span-2 ml-2 align-middle mb-5 text-center 
+                {$challengeActive == i+1 ? 'game-btn-toggleon' : 'game-btn'}'
+                on:click={() => toggleChallenge(i+1)}>
+                    {#if $challengeActive == i+1}
+                        Exit
+                    {:else}
+                        Start
+                    {/if}
+                </div>
+                <div class='col-span-12 py-1'></div>
             {/if}
-        </div>
-        <div class='col-span-12 py-1'></div>
-    {/each}
+        {/each}
+        
     {/key}
 
 </div>
@@ -45,7 +48,8 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     mineLevel, buttonUpgradeLevels, stats, keyCraftAmount,
 miningUpgradeLevelsBought, miningUpgradeLevelsFree,
 challengeActive, challengesCompleted} from '../../data/player';
-import {challengeNames, challengeDescriptions, challengeGoals} from '../../data/challenges';
+import {challengeNames, challengeDescriptions, challengeGoals,
+challengeUnlockCriteria} from '../../data/challenges';
 import {buttonUpgrades} from '../../data/button';
 import {progressThreshold, progressPerTick, miningUpgrades,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
@@ -77,28 +81,38 @@ const fpf = (n: unknown, subOne = false) => {
 
 function toggleChallenge(i) {
     challengeGoals.updateChallengeReqs();
-    console.log($challengeGoals);
     if ($challengeActive == i) {
         if (confirm("Are you sure? Challenge progress will be lost.")) {
             $challengeActive = 0;
             $wallet['challengePoints'] = 0;
         }
     } else {
+        console.log(i);
         if (i == 2) {
             if (confirm("Are you sure? ALL mining upgrades will be lost!")) {
                 $wallet['challengePoints'] = 0;
                 $challengeActive = i;
                 for (let i in $miningUpgradeLevels) {
-                    $miningUpgradeLevels[i] = 0;
-                    $miningUpgradeLevelsBought[i] = 0;
-                    $miningUpgradeLevelsFree[i] = 0;
+                    if (!$miningUpgrades[i]['noResetRelocate'])
+                        $miningUpgradeLevels[i] = 0;
+                        $miningUpgradeLevelsBought[i] = 0;
+                        $miningUpgradeLevelsFree[i] = 0;
                 }
             }
 
-        } else {
-            $wallet['challengePoints'] = 0;
-            $challengeActive = i;
+        } 
+        else if (i == 4) {
+            if (confirm("Are you sure? ALL beacon path levels will be lost!")) {
+                for (let i in $beaconLevels) {
+                    $beaconLevels[i] = 0;   
+                    $beaconProgress[i] = 0;
+                    $beaconNextReqs[i] = $baseBeaconNextReqs[i];
+                }
+            }
+
         }
+        $wallet['challengePoints'] = 0;
+        $challengeActive = i;
     }
 }
 

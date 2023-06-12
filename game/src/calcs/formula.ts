@@ -1,5 +1,5 @@
 import {buttonUpgradeLevels, miningUpgradeLevels, keyUpgradeLevels,
-keyCraftAmount, keyCraftMastery, beaconLevels} from '../data/player';
+keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive} from '../data/player';
 import { beaconBonuses } from '../data/beacons';
 import {keyUpgrades, keyCrafts} from '../data/keys'
 import { get } from 'svelte/store';
@@ -123,11 +123,11 @@ export default class formula {
   }
 
   static calcKeySlurryGain(obj: { [x: string]: number; }) {
-    let amount = (Math.pow(obj['key1'], 0.6) || 0)/150
-    + (Math.pow(obj['key2'], 0.7) || 0)/15
-    + (Math.pow(obj['key3'], 0.8) || 0)*2
-    + (Math.pow(obj['key4'], 0.9) || 0)*35
-    + (Math.pow(obj['key5'], 0.95) || 0)*400;
+    let amount = (Math.pow(obj['key1'], 0.7) || 0)*0.025
+    + (Math.pow(obj['key2'], 0.8) || 0)*0.2
+    + (Math.pow(obj['key3'], 0.9) || 0)*2
+    + (Math.pow(obj['key4'], 0.93) || 0)*35
+    + (Math.pow(obj['key5'], 0.97) || 0)*400;
     if (isNaN(amount)) {
       alert('note: this feature is bugged, please report this on Discord - reduced slurry gained (using "safe" formula)')
       return obj['key1'] / 800;
@@ -141,10 +141,12 @@ export default class formula {
     * get(beaconBonuses)[6];
 }
   static calcChallengePointGain(n: number, type: string) {
+    
     //@ts-nocheck
     const nEff = (type === 'gems'? Math.log10(n) : Math.pow(n, 0.5));
-
+    //@ts-nocheck
     const y = nEff * ref.challengePointValues[type] || 0;
-    return y;
+    if (get(challengeActive) == 4) return Math.pow(y/1000, 1.5)
+    else return y;
   }
 }

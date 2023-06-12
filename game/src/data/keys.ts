@@ -207,7 +207,7 @@ export const key3DropTable = dropTable({
     beacons: [0.04, 1000, 3500, 0.04],
     sigils: [0.025, 10, 75, 0.025],
     key3: [0.001, 1, 1, 0.001],
-    artifacts: [0.000011, 1, 1, 0.000011],
+    artifacts: [0.00025, 1, 1, 0.00025],
     key4: [(1/5e7), 1, 1, (1/5e7)]
     
 })
@@ -329,7 +329,7 @@ export const keyCrafts = array([
         craftTime: 240, // in seconds
         baseAmount: 1,
         ratio: 1.04,
-        unlockAt: () => (get(wallet)['key3'] > 0 || get(keysOpened)[2] > 0),
+        unlockAt: () => (get(wallet)['key3'] > 0 || get(keysOpened)[2] > 0 || get(keysOpened)[1] > 1e5),
     },
     {
         item: 'key4',
@@ -343,7 +343,7 @@ export const keyCrafts = array([
         craftTime: 7200, // in seconds
         baseAmount: 1,
         ratio: 1.05, 
-        unlockAt: () => (get(wallet)['key4'] > 0 || get(keysOpened)[3] > 0),
+        unlockAt: () => (get(wallet)['key4'] > 0 || get(keysOpened)[3] > 0 || get(keysOpened)[2] > 1e5),
     },
     {
         item: 'key5',
@@ -357,7 +357,21 @@ export const keyCrafts = array([
         craftTime: 86400, // in seconds
         baseAmount: 1,
         ratio: 1.06,
-        unlockAt: () => (get(wallet)['key5'] > 0 || get(keysOpened)[4] > 0),
+        unlockAt: () => (get(wallet)['key5'] > 0 || get(keysOpened)[4] > 0 || get(keysOpened)[3] > 1e5),
+    },
+    {
+        item: 'artifacts',
+        name: 'Artifacts',
+        style: 'text-slate-200',
+        stylebg: 'bg-slate-200',
+        cost: {
+            slurry: 1e11,
+            sigils: 1e5,
+        },
+        craftTime: 86400, // in seconds
+        baseAmount: 1,
+        ratio: 1.06,
+        unlockAt: () => (get(wallet)['artifacts'] > 0 || get(keysOpened)[2] > 2000),
     },
 
 

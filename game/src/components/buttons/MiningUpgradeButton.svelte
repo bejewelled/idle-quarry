@@ -49,7 +49,8 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
                     <div class='{ref.colors[c[0]] || ref.colors['default']} text-right pr-3 col-span-2'>{
                     $wallet[c[0]] || $unlockedRes.has(c[0]) ? 
                     (ref.displayNames[c[0]] ? ref.displayNames[c[0]] : c[0]) : "???"}</div>
-                    <div class='col-span-2 text-left'>{f(c[1])}</div>
+                    <div class='col-span-2 {!(thisTypeAffordable(c[0])) ?'text-red-600' : ''}
+                    text-left'>{f(c[1])}</div>
                 {/if}
             {/each}
             {/if}
@@ -128,6 +129,10 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
        const l = (Math.max(1, buyAmount));
 
        return formula.gSum(base,r,l)
+    }
+
+    function thisTypeAffordable(type) {
+        return ($wallet[type] >= costs[type]);
     }
 
     function calcMaxBuyAmount() {

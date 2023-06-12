@@ -1,6 +1,6 @@
 
 import { writable, get } from 'svelte/store';
-import {wallet, miningUpgradeLevels, enchantUpgradeLevels} from './player'
+import {wallet, miningUpgradeLevels, enchantUpgradeLevels, automationItemsUnlocked} from './player'
 import Decimal  from 'break_infinity.js';
 
 function single(context: any) {
@@ -165,6 +165,7 @@ export const enchantUpgrades = array([{
     notes: ''
 },
 {
+    index: 2,
     name: 'Burst',
     description: 'Has a chance to clear a mine level, instantly giving mining cycles (the number of mining cycles is equal to mine size).',
     cost: {
@@ -180,6 +181,7 @@ export const enchantUpgrades = array([{
     notes: ''
 },
 {
+    index: 3,
     name: 'Orb Rush',
     description: 'Has a chance to give orbs based on mine quality.',
     cost: {
@@ -196,13 +198,14 @@ export const enchantUpgrades = array([{
     notes: ''
 },
 {
+    index: 4,
     name: 'Lightning Blast',
     description: 'Has a chance to dramatically increase mining speed for 3 seconds (speed based on mine size).',
     cost: {
         fame: 225,
     },
     tier: 1,
-    ratio: 1.25,
+    ratio: 1.3,
     formula: (lv: any) => (0.013/400) * lv,
     unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,
@@ -211,14 +214,47 @@ export const enchantUpgrades = array([{
     notes: ''
 },
 {
+    index: 5,
     name: 'Scavenger',
     description: 'Has a chance to increase a random mining upgrade level by 1.',
     cost: {
         fame: 2500,
     },
     tier: 1,
-    ratio: 1.5,
+    ratio: 1.3,
     formula: (lv: any) => Math.pow(lv/400, 2) * 0.05,
+    unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
+    isPercent: true,
+    suffix: '  chance',
+    maxLevel: 400,
+    notes: ''
+},
+{
+    index: 6,
+    name: 'Key Boon',
+    description: 'Gives you keys. Mine size increases key amount, mine quality increases the chance for higher tier keys.',
+    cost: {
+        fame: 1e6,
+    },
+    tier: 1,
+    ratio: 1.32,
+    formula: (lv: any) => (lv/400) * 0.025,
+    unlockAt: () => (get(wallet)['fame'] >= 1e4 || get(enchantUpgradeLevels)[0] >= 25),
+    isPercent: true,
+    suffix: '  chance',
+    maxLevel: 400,
+    notes: ''
+},
+{
+    index: 7,
+    name: 'Clicker Hero',
+    description: '"Clicks" the button for you. Mine size increases crystal gain, Mine quality increases click quality.',
+    cost: {
+        fame: 1e6,
+    },
+    tier: 1,
+    ratio: 1.32,
+    formula: (lv: any) => (lv/400) * 0.5,
     unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,
     suffix: '  chance',
@@ -232,6 +268,7 @@ export const enchantUpgrades = array([{
 
 
 export const automationUpgrades = array([{
+    index: 0,
     name: 'Jumpstart',
     description: 'Start with 5000 gems and 100 gold.',
     cost: {
@@ -242,6 +279,7 @@ export const automationUpgrades = array([{
     suffix: ' chance',
 },
 {
+    index: 1,
     name: 'Deep Pockets',
     description: 'Lootmaster I and II are automatially unlocked and stay unlocked on relocate.',
     cost: {
@@ -252,6 +290,7 @@ export const automationUpgrades = array([{
     suffix: ' chance',
 },
 {
+    index: 2,
     name: 'Beacon Tools',
     description: 'Unlock the ability to split beacons evenly across all paths, and to recall all beacons at once.',
     cost: {
@@ -262,6 +301,7 @@ export const automationUpgrades = array([{
     suffix: ' chance',
 },
 {
+    index: 3,
     name: 'Omnipotent',
     description: 'Except for Lootmaster I and II, mining upgrades are not reset on relocation',
     cost: {
@@ -272,6 +312,7 @@ export const automationUpgrades = array([{
     suffix: ' chance',
 },
 {
+    index: 4,
     name: 'Game On',
     description: 'Unlocks challenges 1 - 3. [NOT IMPLEMENTED YET]',
     cost: {
@@ -282,6 +323,7 @@ export const automationUpgrades = array([{
     suffix: ' chance',
 },
 {
+    index: 5,
     name: 'Another Button',
     description: 'You can now hold enter to click the button really really fast (you will only get "okay" clicks).',
     cost: {
@@ -291,6 +333,7 @@ export const automationUpgrades = array([{
     isPercent: false,
 },
 {
+    index: 6,
     name: 'Beaconizer',
     description: 'Start each relocation with 50,000 beacons. Gain 50 beacons per second.',
     cost: {
@@ -300,6 +343,7 @@ export const automationUpgrades = array([{
     isPercent: true,
 },
 {
+    index: 7,
     name: 'Beacon Tools II',
     description: 'You can now "smart split" beacons among chosen paths.',
     cost: {
@@ -309,12 +353,34 @@ export const automationUpgrades = array([{
     isPercent: true,
 },
 {
+    index: 8,
+    name: 'Spellcaster',
+    description: 'You can trigger enchants 10% faster.',
+    cost: {
+        trophies: 3,
+    },
+    unlockAt: () => (get(wallet)['trophies'] >= 1),
+    isPercent: true,
+},
+{
+    index: 9,
     name: 'Hellfire',
     description: '[NOT IMPLEMENTED YET] Unlocks challenges 4 - 6.',
     cost: {
         trophies: 5,
     },
     unlockAt: () => (get(wallet)['trophies'] >= 1),
+    isPercent: true,
+},
+{
+    index: 10,
+    name: 'Spellcaster II',
+    description: 'You can trigger enchants an additional 10% faster.',
+    cost: {
+        dust: 1e6,
+        trophies: 3,
+    },
+    unlockAt: () => (get(automationItemsUnlocked)['spellcaster'] !== undefined),
     isPercent: true,
 },
 

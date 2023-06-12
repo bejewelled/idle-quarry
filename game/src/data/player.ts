@@ -237,7 +237,8 @@ export const miningDropTable = dropTable({
     beacons: [0.005,1,1],
     key2: [0.0001,1,1],
     key3: [1e-6,1,1],
-    sigils: [0.0003,1,3]
+    sigils: [0.0003,1,3],
+    artifacts: [3.3e-7, 1, 1]
 });
 
 
@@ -251,6 +252,7 @@ export const settings = object({
 
 export const flags = object({
     relocateNavBack: false,
+    pressButton: false,
 })
 
 export const keyItemsUnlocked = object({

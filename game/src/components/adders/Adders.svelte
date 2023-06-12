@@ -97,7 +97,7 @@ onMount(() => {
             beaconUpdateCounter++;
         }
         if ($automationItemsUnlocked['beaconizer']) 
-            $wallet['beacons'] = ($wallet['beacons'] || 0) + (1000/UPDATE_SPEED*dt);
+            $wallet['beacons'] = ($wallet['beacons'] || 0) + 50*(UPDATE_SPEED*dt / 1000);
         
         
         
@@ -241,7 +241,7 @@ function addProgress(delta) {
     }
 
     // add warp for being in a challenge
-    if ($challengeActive !== 0) {
+    if ($challengeActive !== 0 && $challengeActive !== 4) {
         $wallet['warp'] = ($wallet['warp'] || 0) + Math.log($progress['gems'] + 1)*(UPDATE_SPEED/1000)
     }
 
@@ -364,6 +364,12 @@ function dropRoll(n) {
 function checkForKeyCraftCompletion() {
     for (let [i, val] of $keyCrafts.entries()) {
         const item = val['item'];
+        if (!$keyCraftTimes[item]) {
+            $keyCraftTimes[item] = [-1, -1]; 
+            $keyCraftAmount[item] = 0
+            $keyCraftMastery[item] = [1,0,10]
+            continue;
+        }
         const finish = $keyCraftTimes[item][1];
         if (Date.now() > finish && finish != -1) {
             $keyCraftAmount[item]++;
@@ -377,8 +383,8 @@ function checkForKeyCraftCompletion() {
 
                 // formula
                 if (item == 'energizedCrystal') 
-                $keyCraftMastery[item][2] = (3 * $keyCraftMastery[item][0]) * Math.pow(1.24,$keyCraftMastery[item][0])
-                else $keyCraftMastery[item][2] = (25 * $keyCraftMastery[item][0]) * Math.pow(1.3,$keyCraftMastery[item][0])
+                $keyCraftMastery[item][2] = (3 * $keyCraftMastery[item][0]) * Math.pow(1.2,$keyCraftMastery[item][0])
+                else $keyCraftMastery[item][2] = (25 * $keyCraftMastery[item][0]) * Math.pow(1.25,$keyCraftMastery[item][0])
                 $keyCraftMastery[item][2] = Math.floor($keyCraftMastery[item][2]);
                 addToActivityLog('[Keys] Crafting Mastery for ' + val['name'] + 'increased! ('
                 +$keyCraftMastery[item][0] + ')', 
@@ -414,17 +420,25 @@ function addBeaconProgress(delta, isOffFocus = false) {
     * Math.max(1,$miningUpgrades[12]['formula']($miningUpgradeLevels[12]))
     * Math.max(1,$miningUpgrades[24]['formula']($miningUpgradeLevels[24])));
     // adds progressGains to progress
-    $beaconProgress = $beaconProgress.map((e, i) => e + progressGains[i]);
+    const challenge4Multi = ($challengeActive == 4 ? 
+    Math.max(1e-18, 1e-2 / (Math.pow(10, $challengesCompleted[3] || 0))) : 1);
+    $beaconProgress = $beaconProgress.map((e, i) => e + Math.pow(progressGains[i],
+    $challengeActive == 4 ? 
+    Math.max(0.05, 0.9 - $challengesCompleted[3]*0.05) : 1) * challenge4Multi);
     // check for levelups
-    for (let i = 0; i < $beaconProgress.length; i++) {
+    for (let i = 0; i < 10; i++) {
         if (isNaN($beaconProgress[i])) $beaconProgress[i] = 0;
         if ($beaconProgress[i] >= $beaconNextReqs[i] && !locks.has(i)) {
             // console.log('LEVELUP!!!')
             locks.add(i);
             
-            // max 3 levels per tick (150 per second)
             const numLevels = 
             Math.max(1,formula.maxNumGeom($beaconProgress[i], $beaconNextReqs[i], $beaconNums[i][1]));
+
+            if ($challengeActive === 4) {
+                $wallet['challengePoints'] += numLevels * ref.challengePointValues['beaconLevels'];
+            }
+
             // subtract excess progress
             // console.log("PROG SUBTRACTED: " + formula.gSum($beaconNextReqs[i], $beaconNums[i][1], numLevels));
             $beaconProgress[i] -= Math.max($beaconNextReqs[i], 
@@ -453,8 +467,10 @@ function addBeaconProgress(delta, isOffFocus = false) {
     const maxLevel = Math.max(...$beaconLevels);
     // add beacon power, gain more power if all levels are nearly equal
     // will always give at least 20% of potential gain
-    const bpGain = Math.log10(1 + 
-    $beaconLevels.reduce((s, c) => s+(c/50 * Math.max(0.2, Math.pow(c/maxLevel, 2)))), 0) * delta;
+
+    // NOTE!!!!! When you update this, make sure to update the display in Beacons.svelte line 7
+    const bpGain = (200 * (UPDATE_SPEED / 1000)) 
+    $beaconLevels.reduce((s, c) => s * (c > 10000 ? Math.log(c) - 4 : 1) , 1) * delta;
    
     $resources['beaconPower'] = ($resources['beaconPower'] || 0) + bpGain;
     if (challengeActive !== 0) {
@@ -524,7 +540,73 @@ function procEnchants(n, tier) {
                         }
                     }
                     break;
- 
+                case 6: // key boon
+                    const keyRand = Math.random() + (0.2 * (quality/1e6));
+                    const BASE_KEYGAIN = size;
+                    let tier, amtDivider;
+                    if (keyRand > 1.18) {
+                        tier = 5;
+                        amtDivider = 250000; 
+                        addToActivityLog('[KEY BOON] INCREDIBLE! +' + reward + ' [*****] keys!', 
+                    'text-amber-400', 'key boon');
+                    } else if (keyRand > 1.15) {
+                        tier = 4;
+                        amtDivider = 10000;
+                        addToActivityLog('[Key Boon] Excellent! +' + reward + ' [****] keys', 
+                            'text-violet-400', 'key boon');
+                    } else if (keyRand > 0.9975) {
+                        tier = 3;
+                        amtDivider = 1000;
+                        addToActivityLog('[Key Boon] Great! +' + reward + ' [***] keys', 
+                            'text-pink-300', 'key boon');                              
+                    } else if (keyRand > 0.925) {
+                        tier = 2;
+                        amtDivider = 10;
+                        addToActivityLog('[Key Boon] Great! +' + reward + ' [**] keys', 
+                            'text-blue-300', 'key boon'); 
+                    } else {
+                        tier = 1;
+                        amtDivider = 0.1;
+                        addToActivityLog('[Key Boon] +' + reward + ' [*] keys', 
+                            'text-green-300', 'key boon'); 
+                    }
+                    const randFactor = Math.random() * 0.2 + 0.9;
+                    const reward = (1 + Math.floor(randFactor * BASE_KEYGAIN / amtDivider));
+                    $wallet['key'+tier] += reward;
+                    break;  
+                case 7: //clicker hero
+                    const BASE_REWARD = size / 10;
+                    const absDist = Math.random() * (400 - (quality / 2550));
+                    let rewardAmount, rewardDescriptionText, rewardStyle;
+                    if (absDist < 1) {
+                        rewardAmount = 150;
+                        rewardDescriptionText = 'PERFECT! +';
+                        rewardStyle = 'text-amber-500'
+                    } else if (absDist <= 2) {
+                        rewardAmount = 12;
+                        rewardDescriptionText = 'INCREDIBLE +';
+                        rewardStyle = 'text-pink-500'
+                    } else if (absDist <= 4) {
+                        rewardAmount = 5;
+                        rewardDescriptionText = 'Excellent +';
+                        rewardStyle = 'text-violet-500'
+                    } else if (absDist <= 7) {
+                        rewardAmount = 4;
+                        rewardDescriptionText = 'Great +';
+                        rewardStyle = 'text-sky-500'
+                    } else if (absDist <= 10) {
+                        rewardAmount = 3;
+                        rewardDescriptionText = 'Good +';
+                        rewardStyle = 'text-green-500'
+                    } else {  
+                        rewardAmount = 1;
+                        rewardDescriptionText = 'Okay +';
+                        rewardStyle = 'text-gray-500';
+                    } 
+                    rewardAmount = Math.floor(rewardAmount * BASE_REWARD);
+                    addToActivityLog('[Clicker Hero] Result: ' + rewardDescriptionText + rewardAmount + ' crystals', 
+                        rewardStyle, 'clicker hero');
+                    break;           
             }
         }
     }

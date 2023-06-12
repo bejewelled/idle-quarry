@@ -1,7 +1,8 @@
 
 import { writable, get } from 'svelte/store';
 import {wallet, miningUpgradeLevels, 
-    enchantUpgradeLevels,buttonNumClicks,buttonStats, challengesCompleted} from './player'
+    enchantUpgradeLevels,buttonNumClicks,buttonStats, 
+    challengesCompleted, automationItemsUnlocked} from './player'
 import formula from '../calcs/formula';
 import Decimal  from 'break_infinity.js';
 
@@ -129,27 +130,33 @@ const floor = (n: number) => Math.floor(n);
 const ceil = (n: number) => Math.ceil(n);
 
 export const challengeUnlockCriteria = array([
-    Array(10).fill(() => true)
-])
+    () => (get(automationItemsUnlocked)['game on']),
+    () => (get(automationItemsUnlocked)['game on']),
+    () => (get(automationItemsUnlocked)['game on'])]
+    .concat(Array(3).fill(get(automationItemsUnlocked)['hellfire']))
+    .concat(Array(12).fill(false))
+)
 
 export const challengeNames = array([
     "C1: Rusty",
     "C2: Muted",
     "C3: Slowdown",
+    "C4: Dark",
 ])
 
 export const challengeDescriptions = array([
     "Mining and key finder progress is drastically slowed. (It gets reduced more on each completion).",
-    "All mining upgrades are reset. You cannot buy mining upgrades.",
-    "Every time a mining cycle completes, the next one takes slightly longer. (Each completion increases the slowdown)."
+    "All non-fame mining upgrades are reset. You cannot buy mining upgrades.",
+    "Every time a mining cycle completes, the next one takes slightly longer. (Each completion increases the slowdown).",
+    "All beacon path levels are reset. Beacon path progress is drastically slowed, but each level gives challenge points. All sources of challenge points other than beacon levels are heavily slowed. (Slowdown increases each completion until completion 18.)",
 ])
 
-export const challengeGoals = array([6000, 2400, 15000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
+export const challengeGoals = array([2000, 2400, 10000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
 
-export const baseChallengeGoals = array([6000, 2400, 15000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
+export const baseChallengeGoals = array([2000, 2400, 10000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
 
 
-export const challengeMultipliers = array([1.3, 1.5, 1.25, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1])
+export const challengeMultipliers = array([1.2, 1.2, 1.2, 1.2, 1.2, 1.2, 1.1, 1.1, 1.1, 1.1])
 
 export const currChallengeInfo = object({
 

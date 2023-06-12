@@ -18,7 +18,8 @@ export default class ref {
         artifacts: 'text-slate-200',
         challengePoints: 'text-amber-500',
         warp: 'text-emerald-600',
-        trophies: 'text-amber-500'
+        trophies: 'text-amber-500',
+        dust: 'text-indigo-600',
     }
 
     static challengePointValues = {
@@ -28,6 +29,8 @@ export default class ref {
         key1: 1,
         key2: 36,
         key3: 850,
+
+        beaconLevels: 10,
     }
 
     static displayNames = {
@@ -53,14 +56,15 @@ export default class ref {
         key1: 1,
         orbs: 2,
         beacons: 2,
+        fame: 2,
         key2: 3,
         key3: 3,
         slurry: 3,
         sigils: 3,
-        fame: 3,
         artifacts: 4,
         warp: 4,
-        trophies: 4
+        trophies: 4,
+        dust: 4
     }
     
     static keyMainNames = {
@@ -75,7 +79,8 @@ export default class ref {
         0: 'text-white',
         1: 'text-white',
         2: 'text-green-200',
-        3: 'text-blue-300'
+        3: 'text-blue-300',
+        4: 'text-purple-300',
     }
 
     static tabs = [

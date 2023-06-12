@@ -237,6 +237,7 @@ export const miningUpgrades = array([{
     name: 'Lootmaster I',
     description: 'Unlocks a new tier of findable drops.',
     cost: {
+        gems: 1e5,
         gold: 750,
     },
     ratio: 1.25,
@@ -283,8 +284,8 @@ export const miningUpgrades = array([{
     name: 'Lootmaster II',
     description: 'Unlocks a new tier of findable drops.',
     cost: {
-        gems: 2e7,
-        gold: 4e5
+        orbs: 1e5,
+        beacons: 100,
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[6] >= 0.997),
@@ -302,14 +303,14 @@ export const miningUpgrades = array([{
     cost: {
         fame: 5
     },
-    ratio: 1.5,
+    ratio: 1.4,
     unlockAt: () => (get(wallet)['fame'] > 0),
     formula: (lv: any) => (lv > 100 ? 
         151 + (lv-100)*6 :
         1 + lv*1.5),
     isPercent: true,
     prefix: '+',
-    isFame: true,
+    noResetRelocate: true,
     suffix: ' gem bonus',
     maxLevel: 1000,
     style: 'game-btn-fame',
@@ -322,11 +323,11 @@ export const miningUpgrades = array([{
     cost: {
         fame: 5
     },
-    ratio: 1.5,
+    ratio: 1.4,
     unlockAt: () => (get(wallet)['fame'] > 0),
     formula: (lv: any) => (1 + lv * 0.3),
     isPercent: false,
-    isFame: true,
+    noResetRelocate: true,
     suffix: 'x amount from drops',
     maxLevel: 1000,
     style: 'game-btn-fame',
@@ -340,13 +341,13 @@ export const miningUpgrades = array([{
     cost: {
         fame: 10
     },
-    ratio: 1.5,
+    ratio: 1.4,
     unlockAt: () => (get(wallet)['fame'] > 0),
     formula: (lv: any) => (1 + lv),
     isPercent: true,
     prefix: '+',
     suffix: ' beacon progress',
-    isFame: true,
+    noResetRelocate: true,
     maxLevel: 1000,
     style: 'game-btn-fame',
     notes: 'index 10'
@@ -358,11 +359,11 @@ export const miningUpgrades = array([{
     cost: {
         fame: 100
     },
-    ratio: 1.3,
+    ratio: 1.4,
     unlockAt: () => (get(wallet)['fame'] > 0),
     formula: (lv: any) => 1 + 0.25*Math.pow(lv, 0.75),
     isPercent: false,
-    isFame: true,
+    noResetRelocate: true,
     prefix: 'x',
     suffix: ' key droprates',
     maxLevel: 100,
@@ -374,19 +375,19 @@ export const miningUpgrades = array([{
     name: 'Lootmaster III',
     description: 'Unlocks a new tier of findable drops.',
     cost: {
-        gems: 1e19,
-        gold: 1e11,
         crystals: 1e7,
-        fame: 1e7,
-        beacons: 1e6,
-        sigils: 10000,
-        key3: 100
+        slurry: 1e6,
+        warp: 1e6,
+        sigils: 1e4,
+        trophies: 3,
+        artifacts: 1,
+
     },
     ratio: 1e90,
     unlockAt: () => (get(wallet)['fame'] > 0 && get(miningUpgradeLevels)[9] > 0.003),
     formula: (lv: any) => (0),
     isPercent: true,
-    isFame: true,
+    noResetRelocate: true,
     suffix: ' (no bonus)',
     maxLevel: 1,
     style: 'game-btn-fame',
@@ -404,7 +405,7 @@ export const miningUpgrades = array([{
     ratio: 200,
     unlockAt: () => (get(wallet)['totalFame'] > 200),
     formula: (lv: any) => (0),
-    isFame: true,
+    noResetRelocate: true,
     isPercent: true,
     suffix: '  (N/A)',
     maxLevel: 1,
@@ -425,7 +426,7 @@ export const miningUpgrades = array([{
     isPercent: true,
     suffix: '  fame bonus',
     maxLevel: 500,
-    isFame: false,
+    noResetRelocate: false,
     notes: 'index 16'
 },
 // i = 17
@@ -443,7 +444,7 @@ export const miningUpgrades = array([{
     isPercent: true,
     suffix: '  fame bonus',
     maxLevel: 500,
-    isFame: false,
+    noResetRelocate: false,
     notes: 'index 16'
 },
 {
@@ -578,10 +579,10 @@ export const miningUpgrades = array([{
     cost: {
         fame: 2500
     },
-    ratio: 1.35,
+    ratio: 1.4,
     unlockAt: () => (get(wallet)['fame'] > 0),
     formula: (lv: any) => 1 + lv*0.75,
-    isFame: true,
+    noResetRelocate: true,
     isPercent: false,
     suffix: 'x speed/amount',
     maxLevel: 250,

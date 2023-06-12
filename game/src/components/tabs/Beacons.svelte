@@ -4,7 +4,8 @@
 
 </div> 
 <div class='beacon-power-tooltip text-center tooltip-text'>
-    Earn more beacon power by leveling your beacon paths.
+    +{f(200 * $beaconLevels.reduce((s, c) => s * (c > 10000 ? Math.log(c) - 4 : 1) , 1), 0)} 
+    / sec - multiplied for each beacon path above level 10,000
 </div>
 <div class='py-2'></div>
 <div class='beacon-assign-grid grid grid-cols-12'>
@@ -33,6 +34,7 @@
         {:else}
         <div class='col-span-12'></div>
         {/if}
+    {#key $beaconLevels}
     {#each $beaconLevels as b, i}
     {#if $mineLevel['level'] >= $beaconMiningLevelReqs[i]}
     {#if i < 10}
@@ -89,6 +91,7 @@
             Unlock at mining level {$beaconMiningLevelReqs[i]}</div>
     {/if}
     {/each}
+    {/key}
     <div class='py-2'></div>
     {#each $beaconUpgrades as b,i}
     <div class='pt-1'></div>
@@ -127,6 +130,7 @@ let beaconDispBonus = $beaconBonuses;
 
 
 onMount(() => {
+    console.log($beaconLevels);
     beaconDispBonus = $beaconBonuses;
     const pbarUpdater = setInterval(() => {
         for (let i = 0; i < 30; i++) {
@@ -181,11 +185,7 @@ function smartSplitBeacons() {
         i++;
     }
     if (n == 10) n = 11;
-    if (n == 1) {
-        $beaconActivations[0] += $wallet['beacons'];
-        $wallet['beacons'] = 0;
-        return;
-    }
+    if (n == 0) n = 1;
     // find total number of beacons
     for (let j in $beaconActivations) {
             $wallet['beacons'] += $beaconActivations[j];

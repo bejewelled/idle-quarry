@@ -117,8 +117,10 @@
     let affordable, unlocked;
     let affordInterval;
     let item = $keyCrafts[index]['item'];
+    console.log(item);
     let craftStartTime = $keyCraftTimes[item][0];
     let craftFinishTime = $keyCraftTimes[item][1];
+    if (!$keyCraftMastery[item]) $keyCraftMastery[item] = [1,0,10];
     $: masteryLevel = $keyCraftMastery[item][0];
 
     let progressBarWidth = 0;

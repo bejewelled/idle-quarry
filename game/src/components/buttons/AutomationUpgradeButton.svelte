@@ -44,7 +44,7 @@ select-none'>{$automationUpgrades[index]['name']}
     import { progress, wallet, enchantUpgradeLevels, miningDropTable,
          settings, visibleTier, unlockedRes, automationItemsUnlocked} from '../../data/player';
     import {progressThreshold, progressPerTick } from '../../data/mining';
-    import { enchantUpgrades, automationUpgrades } from '../../data/fame';
+    import { enchantUpgrades, automationUpgrades, enchantThreshold } from '../../data/fame';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
 // @ts-nocheck
@@ -58,20 +58,16 @@ select-none'>{$automationUpgrades[index]['name']}
     }
     let costs = {};
     let affordable, unlocked;
-    let permUnlocked = ($enchantUpgradeLevels[index] > 0)
+    let permUnlocked = false;
     let affordInterval;
     
     onMount(() => {
         setTimeout(() => {
             costs = getCosts();
             affordable = canAfford();
-            if ($enchantUpgrades[index]['unlockAt']()) permUnlocked = true;
-            permUnlocked = ($enchantUpgradeLevels[index] > 0)
         }, 50)
         affordInterval = setInterval(() => {
             affordable = canAfford();
-            unlocked = isUnlocked();
-            if ($enchantUpgrades[index]['unlockAt']()) permUnlocked = true;
         }, 100 + (Math.random() * 20))
     })
 
@@ -101,6 +97,10 @@ select-none'>{$automationUpgrades[index]['name']}
             if (val >= 1) $wallet[type] -= val;
         }
         $automationItemsUnlocked[$automationUpgrades[index]['name'].toLowerCase()] = true;
+
+        // special cases
+        if ($automationItemsUnlocked['spellcaster ii']) $enchantThreshold['t1'] = 81;
+        else if ($automationItemsUnlocked['spellcaster']) $enchantThreshold['t1'] = 90;
     }
 
     function canAfford() {
@@ -113,14 +113,7 @@ select-none'>{$automationUpgrades[index]['name']}
         return true;
     }
 
-    function isUnlocked() {
-        for (let [type, val] of Object.entries($enchantUpgrades[index]['unlockAt'])) {
-            if ($wallet[type] < val) {
-                return false;
-            }
-        }  
-        return true;
-    }
+
 
  </script>
 <style>

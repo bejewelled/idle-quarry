@@ -141,7 +141,7 @@
                     <Automation />
                 {:else if tab === 'challenges' && (tabUnlockCriteria['challenges']())}
                     <Challenges />
-                {:else if tab === 'artifacts' && (tabUnlockCriteria['challenges']())}
+                {:else if tab === 'artifacts' && (tabUnlockCriteria['artifacts']())}
                     <Artifacts />
                 {:else if tab === 'help'}
                     <Help />
@@ -178,8 +178,8 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     challenge3Multi} from '../data/player.js'
 import {key1DropTable, key2DropTable, key3DropTable, 
 key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
-import {beaconNextReqs, beaconSpendAmt, beaconNums} from '../data/beacons.ts'
-import {enchantUpgrades} from '../data/fame.ts'
+import {beaconNextReqs, beaconSpendAmt, beaconNums, baseBeaconNextReqs} from '../data/beacons.ts'
+import {enchantUpgrades, enchantThreshold} from '../data/fame.ts'
 import {buttonUpgrades} from '../data/button.ts'
 import {challengeGoals, challengeMultipliers} from '../data/challenges.ts'
 import Beacons from '../components/tabs/Beacons.svelte';
@@ -263,7 +263,7 @@ const tabUnlockCriteria = {
         help: () => true,
         settings: () => true,
         challenges: () => $automationItemsUnlocked['game on'],
-        artifacts: () => $wallet['artifacts'] >= 1,
+        artifacts: () => ($wallet['artifacts'] && $wallet['artifacts'] >= 1),
     }
 const tabsUnlocked = {
     mining: true,
@@ -426,9 +426,6 @@ const load = async (isImport = false) => {
     if (localStorage.getItem('beaconNextReqs')) {
         beaconNextReqs.set(JSON.parse(localStorage.getItem('beaconNextReqs')));
     }
-    for (let i = 0; i < $beaconNextReqs.length; i++) {
-        if ($beaconLevels[i] == 0) $beaconNextReqs[i] = $beaconNums[i][0];
-    }
     if (localStorage.getItem('beaconUpgradeLevels')) {
         beaconUpgradeLevels.set(JSON.parse(localStorage.getItem('beaconUpgradeLevels')));
     }
@@ -483,6 +480,13 @@ const load = async (isImport = false) => {
     if (localStorage.getItem('automationItemsUnlocked')) {
         automationItemsUnlocked.set(JSON.parse(localStorage.getItem('automationItemsUnlocked')));
     }
+    if ($automationItemsUnlocked['spellcaster']) {
+        $enchantThreshold['t1'] = 90;
+    }
+    if ($automationItemsUnlocked['spellcaster ii']) {
+        $enchantThreshold['t1'] = 81;
+    }
+
     if (localStorage.getItem('activityLogShow')) {
         activityLogShow.set(JSON.parse(localStorage.getItem('activityLogShow')));
     }
@@ -498,6 +502,7 @@ const load = async (isImport = false) => {
     if (localStorage.getItem('challenge3Multi')) {
         challenge3Multi.set(JSON.parse(localStorage.getItem('challenge3Multi')));
     }
+
     // updates older save files to new format
     await versionUpdater();
 
@@ -522,8 +527,8 @@ const load = async (isImport = false) => {
 
 function versionUpdater() {
     console.log($saveVersion)
-    const ver = 16//$saveVersion;
-    const LATEST_VER = 17;
+    const ver = $saveVersion;
+    const LATEST_VER = 19;
     if (ver <= 0) {
         // fix "mysterious potion" error
         $keyUpgradeLevels[0] = 0;
@@ -609,6 +614,9 @@ function versionUpdater() {
         if (!$miningUpgradeLevels[i]) $miningUpgradeLevels[i] = 0;
         }
     }
+
+
+
     $saveVersion = LATEST_VER;
 
     save();

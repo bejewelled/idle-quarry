@@ -59,7 +59,7 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
           key5: $wallet['key5'],
         }
         reloadClock = !reloadClock;
-      }, 503)
+      }, 217)
     })
 
     onDestroy(() => {
