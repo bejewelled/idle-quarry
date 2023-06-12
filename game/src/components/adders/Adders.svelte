@@ -77,11 +77,12 @@ let lastDropTableUpdate = Date.now();
 const UPDATE_SPEED = $settings['UPDATE_SPEED']; // ms per tick
 let last, dt;
 let beaconUpdateCounter = 0;
+const TEST_SERVER_SPEEDUP = 25;
 onMount(() => {
     updateBeaconBonuses();
     last = Date.now();
     const mainLoop = setInterval(() => {
-        dt = (Date.now() - last) / UPDATE_SPEED;
+        dt = TEST_SERVER_SPEEDUP * (Date.now() - last) / UPDATE_SPEED;
         addProgress(dt);
         updateMiningLevel();
         checkForKeyCraftCompletion();

@@ -132,8 +132,11 @@ const ceil = (n: number) => Math.ceil(n);
 export const challengeUnlockCriteria = array([
     () => (get(automationItemsUnlocked)['game on']),
     () => (get(automationItemsUnlocked)['game on']),
-    () => (get(automationItemsUnlocked)['game on'])]
-    .concat(Array(3).fill(get(automationItemsUnlocked)['hellfire']))
+    () => (get(automationItemsUnlocked)['game on']),
+    () => get(automationItemsUnlocked)['hellfire'],
+    () => get(automationItemsUnlocked)['hellfire'],
+    () => get(automationItemsUnlocked)['hellfire']]
+    .concat(Array(3).fill(get(automationItemsUnlocked)['???notimplemented2221391']))
     .concat(Array(12).fill(false))
 )
 
