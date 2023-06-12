@@ -149,7 +149,7 @@ export const challengeNames = array([
 
 export const challengeDescriptions = array([
     "Mining and key finder progress is drastically slowed. (It gets reduced more on each completion).",
-    "All non-fame mining upgrades are reset. You cannot buy mining upgrades.",
+    "All non-fame mining upgrades except Lootmaster are reset. You cannot buy mining upgrades.",
     "Every time a mining cycle completes, the next one takes slightly longer. (Each completion increases the slowdown).",
     "All beacon path levels are reset. Beacon path progress is drastically slowed, but each level gives challenge points. All sources of challenge points other than beacon levels are heavily slowed. (Slowdown increases each completion until completion 18.)",
 ])

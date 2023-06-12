@@ -77,7 +77,7 @@ let lastDropTableUpdate = Date.now();
 const UPDATE_SPEED = $settings['UPDATE_SPEED']; // ms per tick
 let last, dt;
 let beaconUpdateCounter = 0;
-const TEST_SERVER_SPEEDUP = 25
+const TEST_SERVER_SPEEDUP = 1
 onMount(() => {
     updateBeaconBonuses();
     last = Date.now();

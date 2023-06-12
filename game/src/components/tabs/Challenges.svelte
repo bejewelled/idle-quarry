@@ -6,7 +6,7 @@
 <div class='grid grid-cols-12'>
     {#key $challengeActive}
         {#each $challengeNames as c,i}
-            {#if $challengeUnlockCriteria[i]}
+            {#if $challengeUnlockCriteria[i]()}
                 <div class='col-span-2 game-text text-left'>{c} [{$challengesCompleted[i]}]</div>
                 <div class='col-span-6 align-middle tooltip-text text-xs text-justify'>{$challengeDescriptions[i]}</div>
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -62,6 +62,7 @@ import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
 import formula from '../../calcs/formula';
 
+
 const f = (n: number, pl = 0) => {
         if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         else return n.toExponential(3).toString().replace('+', '');
@@ -92,11 +93,12 @@ function toggleChallenge(i) {
             if (confirm("Are you sure? ALL mining upgrades will be lost!")) {
                 $wallet['challengePoints'] = 0;
                 $challengeActive = i;
-                for (let i in $miningUpgradeLevels) {
-                    if (!$miningUpgrades[i]['noResetRelocate'])
+                for (let i in $miningUpgrades) {
+                    if (!$miningUpgrades[i]['noResetRelocate'] && !($miningUpgrades[i]['name'].includes('Lootmaster'))) {
                         $miningUpgradeLevels[i] = 0;
                         $miningUpgradeLevelsBought[i] = 0;
                         $miningUpgradeLevelsFree[i] = 0;
+                    }
                 }
             }
 

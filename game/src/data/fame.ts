@@ -367,7 +367,7 @@ export const automationUpgrades = array([{
     name: 'Hellfire',
     description: '[NOT IMPLEMENTED YET] Unlocks challenges 4 - 6.',
     cost: {
-        trophies: 5,
+        dust: 2000,
     },
     unlockAt: () => (get(wallet)['trophies'] >= 1),
     isPercent: true,

@@ -241,7 +241,8 @@ export const miningUpgrades = array([{
         gold: 750,
     },
     ratio: 1.25,
-    unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10),
+    unlockAt: () => ((get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10)
+    || get(miningUpgradeLevels)[6] > 0),
     formula: (lv: any) => lv,
     isPercent: false,
     maxLevel: 1,
@@ -288,7 +289,7 @@ export const miningUpgrades = array([{
         beacons: 100,
     },
     ratio: 1.25,
-    unlockAt: () => (get(miningUpgradeLevels)[6] >= 0.997),
+    unlockAt: () => (get(miningUpgradeLevels)[6] >= 0.997 || get(miningUpgradeLevels)[9] > 0),
     formula: (lv: any) => (0),
     isPercent: false,
     suffix: ' (no bonus)',
@@ -384,7 +385,8 @@ export const miningUpgrades = array([{
 
     },
     ratio: 1e90,
-    unlockAt: () => (get(wallet)['fame'] > 0 && get(miningUpgradeLevels)[9] > 0.003),
+    unlockAt: () => ((get(wallet)['fame'] > 0 && get(miningUpgradeLevels)[9] > 0.003)
+    || get(miningUpgradeLevels)[14] > 0),
     formula: (lv: any) => (0),
     isPercent: true,
     noResetRelocate: true,

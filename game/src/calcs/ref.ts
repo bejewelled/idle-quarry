@@ -58,10 +58,10 @@ export default class ref {
         beacons: 2,
         fame: 2,
         key2: 3,
-        key3: 3,
         slurry: 3,
         sigils: 3,
         artifacts: 4,
+        key3: 4,
         warp: 4,
         trophies: 4,
         dust: 4
