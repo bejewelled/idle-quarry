@@ -110,7 +110,7 @@
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
                 <button class='py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950' on:click={() => reset()}>Reset</button>
-                <button class='text-xs text-gray-600'>v0.0.3A-17</button>  
+                <button class='text-xs text-gray-600'>v0.0.4-TEST</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
                 {#key tabsUnlocked}
