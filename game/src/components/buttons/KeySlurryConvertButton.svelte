@@ -5,7 +5,11 @@
 <div on:click={() => buy()}
 class='has-tooltip tooltip-text game-btn text-teal-400 
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
-    Convert Keys Into Slurry <span class='text-teal-400'>[ +{f(Math.floor(slurryGain))} ]</span>
+    Convert Keys Into Slurry 
+    <span class='text-teal-400'>[ +{f(Math.floor(slurryGain))} ]</span>
+    {#if sigilGain > 1}
+    <span class='text-fuchsia-600'>[ +{f(Math.floor(sigilGain))} ]</span>
+    {/if}
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
@@ -47,6 +51,7 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
       key5: $wallet['key5'],
     }
     $: slurryGain = formula.calcKeySlurryGain(keysInWallet);
+    $: sigilGain = formula.calcKeySigilGain(slurryGain);
 
     onMount(() => {
       reloadClock = false;
@@ -82,6 +87,7 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
       console.log($wallet['slurry'])
       console.log(slurryGain)
         $wallet['slurry'] += slurryGain;
+        if (sigilGain >= 1) $wallet['sigils'] += sigilGain;
         for (let k of Object.keys($wallet))
           if (k.includes('key')) $wallet[k] = 0;  
     }

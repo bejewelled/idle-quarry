@@ -32,6 +32,21 @@
         </span>
     </div>
     {/key}
+
+    <!-- reg / dust upgrade selector -->
+    {#if $wallet['dust']}
+        <div class='grid-cols-6'>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div class='col-span-3 game-btn' on:click={() => changeUpgradeType('regular')}>
+                Mining Upgrades
+            </div>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div class='col-span-3 game-btn' on:click={() => changeUpgradeType('dust')}>
+                Dust Upgrades
+            </div>
+        </div>
+    {/if}
+
     <!-- progress bar (gems) -->
     <div class='text-[#989898] text-small pt-4'>gem progress [ 
         <strong>
@@ -100,10 +115,17 @@
     </div>
     <div class='mine-upgrade-wrapper grid grid-cols-2'>
         {#each upgradeOrder as i}
-            <div class='col-span-1 mine-upgrade-button-wrapper'>
-                <MiningUpgradeButton index={i}/>
-            </div>
+            {#if upgradeTab == 'regular' && !$miningUpgrades[i]['isDust']}
+                <div class='col-span-1 mine-upgrade-button-wrapper'>
+                    <MiningUpgradeButton index={i}/>
+                </div>
+            {:else if upgradeTab == 'dust' && $miningUpgrades[i]['isDust']}
+                <div class='col-span-1 mine-upgrade-button-wrapper'>
+                    <MiningUpgradeButton index={i}/>
+                </div>
+            {/if}
         {/each}
+        <div class='col-span-2 py-7'></div>
     </div>
 </div>
 
@@ -129,6 +151,8 @@ $: mDropTable = Object.entries($miningDropTable)
 $: upgradeOrder = $miningUpgrades.map((_,i) => i).sort((a,b) => miningSort([a,$miningUpgrades[a]], [b,$miningUpgrades[b]]))
 // for triggering #key
 let clockr = false;
+
+let upgradeTab = 'regular';
 
 onMount(() => {
     const clock = setInterval(() => {

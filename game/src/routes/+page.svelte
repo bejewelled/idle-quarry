@@ -48,13 +48,16 @@
             <!-- mining level bar -->
             <div class='col-span-12 has-tooltip'>
                 <div class='text-[#989898] text-small pt-4 pb-1'>Mining Level 
-                    <span class='font-bold text-cyan-400'>{$mineLevel['level']}</span>
+                    <span class='font-bold 
+                    {$mineLevel['level'] > 69 ? 'text-red-500' : 'text-cyan-400'}'>
+                    {$mineLevel['level']}</span>
                 </div>
                 <span class='px-2 mx-4 tooltip tooltip-text shadow-lg p-1
                 border-white border-double border bg-[#222529] ml-16
                   pointer-events-none max-w-[300px] text-center weight-bold'>
                     <div class='grid grid-cols-3'>
-                        <div class='col-span-3 text-center text-cyan-500'>
+                        <div class='col-span-3 text-center
+                        {$mineLevel['level'] > 69 ? 'text-red-500' : 'text-cyan-500'}'>
                             [ {f($mineLevel['xp'],0)} / {f($mineLevel['xpNextReq'], 0)} ]
                         </div>
                         <div class='col-span-3 text-center'>
@@ -70,7 +73,8 @@
             <div class='col-span-12'>
                 <div class='mine-bar-wrapper pb-2'>
                     <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                        <div class="bg-cyan-500 h-2.5 rounded-full" 
+                        <div class="{$mineLevel['level'] > 69 ? 'text-red-500' : 'text-cyan-500'} 
+                        h-2.5 rounded-full" 
                         style="width: {mineLevelBarWidth}%"></div>
                     </div>
                 </div>
@@ -782,7 +786,7 @@ onMount(() => {
         cursor: pointer;
     }
     :global(.game-btn-sigil:hover) {
-        background-color: #d8b4fe;
+        background-color: #1d0b30;
         cursor: pointer;
     }
     :global(.game-btn-sigil-noafford) {
@@ -791,6 +795,23 @@ onMount(() => {
         cursor: pointer;
     }
 
+    :global(.game-btn-dust) {
+        border: 3px solid #7173ea;
+        color: #7173ea;
+        text-shadow:8 8 6px #b2afe8;
+        cursor: pointer;
+    }
+    :global(.game-btn-dust:hover) {
+        background-color: #0d086a;
+        cursor: pointer;
+    }
+    :global(.game-btn-dust-noafford) {
+        border: 2px solid #413acd;
+        color: #413acd;
+        text-shadow: 8 8 3px #b2afe8;
+        background-color: none;
+        cursor: pointer;
+    }
 
 
 

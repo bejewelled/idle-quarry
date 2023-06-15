@@ -81,33 +81,28 @@
         {/each}
     </div>
     <div class='reward-disp-wrapper items-center'>
-        
-        <div class='grid grid-cols-8'>
-            <div class='col-span-8 game-text text-left'>
-                You received the following rewards:
-            </div>
+
         {#if Object.keys($keyRewardText).length > 0}
+        <div class='grid grid-cols-8'>
+            <div class='col-span-8 game-text text-center pt-1'>
+                You received the following rewards:       
+            </div>
+        
             {#each Object.entries($keyRewardText) as r}
                 {#if Number(r[1]) >= 0.99997}
                 <div class='col-span-3'></div>
-                <div class='col-span-1 text-left py-1 {ref.colors[r[0]] || 'text-white'}'>
+                <div class='col-span-1 text-med text-left pt-1 {ref.colors[r[0]] || 'text-white'}'>
                     {ref.displayNames[r[0]] ? ref.displayNames[r[0]] : r[0]}: 
                 </div>
-                <div class='col-span-1 py-1 text-left {ref.colors[r[0]] || 'text-white'}'>
+                <div class='col-span-1 text-med pt-1 text-left {ref.colors[r[0]] || 'text-white'}'>
                     {f(Number(r[1]),0)}
                 </div>
                 <div class='col-span-3'></div>
                 {/if}
             {/each}
-        
-        {:else}
-            <div class='col-span-8 game-text text-center'>
-                Nothing :(
-            </div>        
-        
-        {/if}
-    </div> 
+        </div> 
 
+    {/if}
     </div>
     <div class='pt-6'>
         <div class='wrapper'>

@@ -120,7 +120,12 @@ function updateMiningLevel() {
     if ($mineLevel['xp'] >= $mineLevel['xpNextReq']) {
         $mineLevel['xp'] -= $mineLevel['xpNextReq'];
         $mineLevel['level']++;
-        $mineLevel['xpNextReq'] = 500*$mineLevel['level'] * Math.pow(1.25, $mineLevel['level']);
+       // 100 * (A73^3) * ((1.01+((A73^2)*$D$2))^A73) * (2+Max(0, A73-69)*0.3)^Max(0, A73)
+        const lv = $mineLevel['level'];
+        const BASE = 0.00015;
+        $mineLevel['xpNextReq'] = 
+        100 * (lv**3) * Math.pow((1.01+((lv**2)*BASE)),lv)
+        * Math.pow(2+Math.max(0, lv-69)*0.3, (lv > 69 ? lv : 0));
     }
 }
 
@@ -136,8 +141,8 @@ function updateprogressThisTick(delta) {
     let challengeMultiplier = 1;
     let challengeExponent = 1;
     if ($challengeActive === 1) {
-        challengeMultiplier = (0.25 / (1+$challengesCompleted[0]));
-        challengeExponent = Math.max(0.15, 0.38-$challengesCompleted[0]);
+        challengeMultiplier = (0.5 / (1+$challengesCompleted[0]));
+        challengeExponent = Math.max(0.15, 0.54-$challengesCompleted[0]*0.03);
     }
 
     const progGems = Math.pow(PROGRESS_BASE
@@ -245,6 +250,10 @@ function addProgress(delta) {
     if ($challengeActive !== 0 && $challengeActive !== 4) {
         $wallet['warp'] = ($wallet['warp'] || 0) + Math.log($progress['gems'] + 1)*(UPDATE_SPEED/1000)
     }
+
+    // glorious space turtles upgrade
+    $wallet['fame'] = ($wallet['fame'] || 0) 
+    + $miningUpgrades[28]['formula']($miningUpgradeLevels[28]) * (UPDATE_SPEED/1000);
 
 }
 
@@ -471,7 +480,9 @@ function addBeaconProgress(delta, isOffFocus = false) {
 
     // NOTE!!!!! When you update this, make sure to update the display in Beacons.svelte line 7
     const bpGain = (200 * (UPDATE_SPEED / 1000)) 
-    $beaconLevels.reduce((s, c) => s * (c > 10000 ? Math.log10(c) - 3 : 1) , 1) * delta;
+    $beaconLevels.reduce((s, c) => s * (c > 10000 ? Math.log10(c) - 3 : 1) , 1)
+    * $beaconUpgrades[0]['formula']($beaconUpgradeLevels[0])
+    * delta;
    
     $resources['beaconPower'] = ($resources['beaconPower'] || 0) + bpGain;
     if (challengeActive !== 0) {

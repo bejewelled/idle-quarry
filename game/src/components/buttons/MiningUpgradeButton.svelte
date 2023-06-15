@@ -167,6 +167,19 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
         $miningUpgrades[index]['maxLevel'] - $miningUpgradeLevelsBought[index]);
         costs = getCosts();
         permUnlocked = true;
+
+        if (index == 27) {
+            const levels = Math.min(buyAmount,
+                $miningUpgrades[27]['maxLevel'] - $miningUpgradeLevelsFree[27]);
+            $miningUpgradeLevelsFree[0] += levels;
+            $miningUpgradeLevelsFree[1] += levels;
+            $miningUpgradeLevelsFree[2] += levels;
+            $miningUpgradeLevelsFree[7] += levels;
+            $miningUpgradeLevels = $miningUpgradeLevels.map(
+                (x,i) => $miningUpgradeLevelsBought[i] + $miningUpgradeLevelsFree[i])
+
+        } 
+
         miningDropTable.updateTable();
         if (($miningUpgrades[index]['name'] || '') == 'Lootmaster I') $visibleTier = 2;
         if (($miningUpgrades[index]['name'] || '') == 'Lootmaster II') $visibleTier = 3;
@@ -178,7 +191,7 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
         if ($settings['maxBuy'] && buyAmount == 0) return false;
         costs = getCosts();
         for (let [type, val] of Object.entries(costs)) {
-            if (val >= 1 && $wallet[type] < val-0.003) {
+            if ((val >= 1 && $wallet[type] < val-0.003) || !$wallet[type]) {
                 return false;
             }
         }  

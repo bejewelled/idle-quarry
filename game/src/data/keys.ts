@@ -264,7 +264,7 @@ export const keyUpgrades = array([
         },
         ratio: 1.3,
         formula: (lv: any) => 1 + 0.2 * lv,
-        unlockAt: () => (get(wallet)['sigils'] >= 100 && get(wallet)['slurry'] > 0),
+        unlockAt: () => (get(wallet)['slurry'] > 0),
         isPercent: false,
         suffix: 'x slurry',
         maxLevel: 400,
@@ -280,12 +280,27 @@ export const keyUpgrades = array([
         },
         ratio: 1.3,
         formula: (lv: any) => 4 - 0.063*Math.pow(lv, 0.6),
-        unlockAt: () => (get(wallet)['sigils'] >= 1e4),
+        unlockAt: () => (get(wallet)['sigils'] >= 1e4 || get(keyUpgradeLevels)[1] > 0),
         isPercent: false,
         suffix: ' cost ratio',
         maxLevel: 100,
         notes: ''
-    }
+    },
+    {
+        index: 3,
+        name: 'Special Slurry',
+        description: 'Converting a high amount of keys into slurry will also give sigils. Increase the amount by 20% per level.',
+        cost: {
+            warp: 3000,
+        },
+        ratio: 1.3,
+        formula: (lv: any) => 0.8 + 0.2 * lv,
+        unlockAt: () => (get(wallet)['sigils'] >= 1e4 || get(keyUpgradeLevels)[1] > 0),
+        isPercent: true,
+        suffix: ' convert sigils',
+        maxLevel: 100,
+        notes: ''
+    },
     
 ])
 
@@ -313,7 +328,7 @@ export const keyCrafts = array([
             sigils: 1,
         },
         craftTime: 60, // in seconds
-        baseAmount: 100,
+        baseAmount: 1000,
         ratio: 1.025,
         unlockAt: () => (get(wallet)['beacons'] > 0),
     },

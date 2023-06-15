@@ -130,9 +130,14 @@ export default class formula {
     + (Math.pow(obj['key5'], 0.97) || 0)*400;
     if (isNaN(amount)) {
       alert('note: this feature is bugged, please report this on Discord - reduced slurry gained (using "safe" formula)')
-      return obj['key1'] / 800;
+      return obj['key1'] / 8e5;
     }
     return amount * get(keyUpgrades)[1]['formula'](get(keyUpgradeLevels)[1]);
+  }
+  
+  static calcKeySigilGain(sl: number) {
+    if (sl < 1000 || get(keyUpgradeLevels)[3] == 0) return 0;
+    else return Math.pow((sl**2 / 1000**2), 0.55)
   }
 
   static calcKeyCraftAmountGained(i: string) {

@@ -474,7 +474,7 @@ export const miningUpgrades = array([{
         sigils: 2500
     },
     ratio: 2,
-    unlockAt: () => (get(wallet)['sigil'] > 25),
+    unlockAt: () => (get(wallet)['sigils'] > 25),
     formula: (lv: any) => (1 + 0.1 * lv),
     isPercent: false,
     suffix: 'x fame gain',
@@ -589,6 +589,42 @@ export const miningUpgrades = array([{
     suffix: 'x speed/amount',
     maxLevel: 250,
     style: 'game-btn-fame',
+    notes: ''
+},
+{
+    index: 27,
+    name: 'Cosmic Brilliance',
+    description: 'The first four mining upgrades gain 50 free levels.',
+    cost: {
+        dust: 10000,
+    },
+    ratio: 1.25,
+    unlockAt: () => (get(wallet)['dust'] > 0),
+    formula: (lv: any) => 50 * lv,
+    noResetRelocate: true,
+    isDust: true,
+    isPercent: false,
+    suffix: ' free levels',
+    maxLevel: 200,
+    style: 'game-btn-dust',
+    notes: ''
+},
+{
+    index: 28,
+    name: 'Glorious Space Turtles',
+    description: 'Gain fame per second.',
+    cost: {
+        dust: 100000,
+    },
+    ratio: 1.5,
+    unlockAt: () => (get(wallet)['dust'] > 0),
+    formula: (lv: any) => 1000 * Math.pow(lv, 1.5),
+    noResetRelocate: true,
+    isDust: true,
+    isPercent: false,
+    suffix: ' fame / sec',
+    maxLevel: 250,
+    style: 'game-btn-dust',
     notes: ''
 },
 

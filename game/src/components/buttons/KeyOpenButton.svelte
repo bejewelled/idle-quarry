@@ -215,7 +215,7 @@ select-none'>
         if (rewardTextTimeout) clearTimeout(rewardTextTimeout);
         rewardTextTimeout = setTimeout(() => {
             $keyRewardText = '';
-        }, 5000)
+        }, 30000)
     }
 
     function canAfford() {

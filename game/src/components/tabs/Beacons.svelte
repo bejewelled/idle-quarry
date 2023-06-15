@@ -4,7 +4,8 @@
 
 </div> 
 <div class='beacon-power-tooltip text-center tooltip-text'>
-    +{f(200 * $beaconLevels.reduce((s, c) => s * (c > 10000 ? Math.log10(c) - 3 : 1) , 1), 0)} 
+    +{f(200 * $beaconLevels.reduce((s, c) => s * (c > 10000 ? Math.log10(c) - 3 : 1) , 1)
+    * $beaconUpgrades[0]['formula']($beaconUpgradeLevels[0]), 0)} 
     / sec - multiplied for each beacon path above level 10,000
 </div>
 <div class='py-2'></div>
@@ -55,13 +56,11 @@
         </div>
         {#if ($automationItemsUnlocked['beacon tools ii'])}
             <div class='col-span-1 py-1 items-center px-1'>
-                <div class='input-wrapper'>
-                    <label>
-                    <input type='checkbox' bind:checked={$beaconSmartSplits[i]} 
-                    class='peer hidden input-checkbox h-8 w-8 bg-slate-500'/>
-                    <span class='game-text text-small border-2 p-2 border-white 
-                    peer-checked:bg-green-800'>Smart</span>
-                    </label>
+                <div class='input-wrapper mr-3'>
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <div on:click={() => changeSmartSplits(i)} 
+                    class='game-text text-small border-2 py-1 text-center border-white  
+                    {$beaconSmartSplits[i] ? 'bg-green-800' : ''} select-none cursor-pointer'>Smart</div>
                 </div>
             </div>
         {:else}
@@ -110,7 +109,7 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     settings, visibleTier, progressThisTick, progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources, 
     mineLevel, antiFlickerFlags, automationItemsUnlocked,
-    beaconSmartSplits} from '../../data/player';
+    beaconSmartSplits, beaconUpgradeLevels} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
@@ -130,7 +129,6 @@ let beaconDispBonus = $beaconBonuses;
 
 
 onMount(() => {
-    console.log($beaconLevels);
     beaconDispBonus = $beaconBonuses;
     const pbarUpdater = setInterval(() => {
         for (let i = 0; i < 30; i++) {
@@ -171,11 +169,9 @@ function splitBeacons() {
     if (totalUsed < formula.sumArray($beaconActivations)) 
         $wallet['beacons'] += Math.floor(formula.sumArray($beaconActivations) - totalUsed);
 
-    console.log($wallet['beacons'])
 }
 
 function smartSplitBeacons() {
-    console.log($beaconSmartSplits)
     if (formula.sumArray($beaconSmartSplits) == 0) return;
     let done = false, n = 0, i = 0;
     // find number of splits to make
@@ -202,8 +198,13 @@ function smartSplitBeacons() {
     $wallet['beacons'] -= totalUsed
     if (totalUsed < formula.sumArray($beaconActivations)) 
         $wallet['beacons'] += Math.floor(formula.sumArray($beaconActivations) - totalUsed);
+    
+     console.log($beaconSmartSplits)
 
-    console.log($wallet['beacons'])
+}
+
+function changeSmartSplits(i) {
+    $beaconSmartSplits[i] = !$beaconSmartSplits[i];
 }
 
 function recallBeacons() {
