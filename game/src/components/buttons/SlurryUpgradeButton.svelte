@@ -44,7 +44,7 @@ select-none'>
                     <div class='{ref.colors[c[0]] || ref.colors['default']} text-right pr-3 col-span-2'>{
                     $wallet[c[0]] || $unlockedRes.has(c[0]) ? 
                     (ref.displayNames[c[0]] ? ref.displayNames[c[0]] : c[0]) : "???"}</div>
-                    <div class='col-span-2 text-left'>{f(c[1])}</div>
+                    <div class='col-span-2 text-left {!(thisTypeAffordable(c[0])) ?'text-red-600' : ''}'>{f(c[1])}</div>
                 {/if}
             {/each}
             {/if}
@@ -136,6 +136,10 @@ select-none'>
         costs = getCosts();
         permUnlocked = true;
         updateDropTables()
+    }
+
+    function thisTypeAffordable(type) {
+        return ($wallet[type] >= costs[type]);
     }
 
     function updateDropTables() {

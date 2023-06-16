@@ -142,10 +142,10 @@ import {keyGainFlavorText} from '../../data/keys';
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
 
-$: mineBarWidth = `${$progress['gems'] / $progressThreshold['gems'] * 100}%`;
-$: key1BarWidth = `${$progress['key1'] / $progressThreshold['key1'] * 100}%`;
-$: key2BarWidth = `${$progress['key2'] / $progressThreshold['key2'] * 100}%`;
-$: key3BarWidth = `${$progress['key3'] / $progressThreshold['key3'] * 100}%`;
+$: mineBarWidth = `${Math.min(1,$progress['gems'] / $progressThreshold['gems']) * 100}%`;
+$: key1BarWidth = `${Math.min(1,$progress['key1'] / $progressThreshold['key1']) * 100}%`;
+$: key2BarWidth = `${Math.min(1,$progress['key2'] / $progressThreshold['key2']) * 100}%`;
+$: key3BarWidth = `${Math.min(1,$progress['key3'] / $progressThreshold['key3']) * 100}%`;
 $: mDropTable = Object.entries($miningDropTable)
 
 $: upgradeOrder = $miningUpgrades.map((_,i) => i).sort((a,b) => miningSort([a,$miningUpgrades[a]], [b,$miningUpgrades[b]]))

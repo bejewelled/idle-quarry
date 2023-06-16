@@ -171,13 +171,14 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
         if (index == 27) {
             const levels = Math.min(buyAmount,
                 $miningUpgrades[27]['maxLevel'] - $miningUpgradeLevelsFree[27]);
-            $miningUpgradeLevelsFree[0] += levels;
-            $miningUpgradeLevelsFree[1] += levels;
-            $miningUpgradeLevelsFree[2] += levels;
-            $miningUpgradeLevelsFree[7] += levels;
+            $miningUpgradeLevelsFree[0] += 50;
+            $miningUpgradeLevelsFree[1] += 50;
+            $miningUpgradeLevelsFree[2] += 50;
+            $miningUpgradeLevelsFree[7] += 50;
+            console.log($miningUpgradeLevelsFree[0] + " " + $miningUpgradeLevels[0])
             $miningUpgradeLevels = $miningUpgradeLevels.map(
                 (x,i) => $miningUpgradeLevelsBought[i] + $miningUpgradeLevelsFree[i])
-
+                console.log($miningUpgradeLevelsFree[0] + " " + $miningUpgradeLevels[0])
         } 
 
         miningDropTable.updateTable();

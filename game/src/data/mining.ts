@@ -599,7 +599,7 @@ export const miningUpgrades = array([{
     name: 'Cosmic Brilliance',
     description: 'The first four mining upgrades gain 50 free levels.',
     cost: {
-        dust: 10000,
+        dust: 100,
     },
     ratio: 1.25,
     unlockAt: () => (get(wallet)['dust'] > 0),
