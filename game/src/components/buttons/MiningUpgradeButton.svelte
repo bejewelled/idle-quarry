@@ -33,15 +33,15 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
                  </span>
                  <span class='current text-[#999999]'>  => 
                     {$miningUpgrades[index]['prefix'] || ""}{$miningUpgrades[index]['isPercent'] ?
-                   fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+buyAmount),3, true) :
-                   f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+buyAmount),3)}{$miningUpgrades[index]['suffix'] || ""}
+                   fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+Math.max(1,buyAmount)),3, true) :
+                   f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+Math.max(1,buyAmount)),3)}{$miningUpgrades[index]['suffix'] || ""}
                  </span>
 
             </div>
         </div>
         <hr />
         <div class='pt-1 cost items-start text-center grid grid-cols-4'>
-            {#if $miningUpgradeLevels[index] >= $miningUpgrades[index]['maxLevel']}
+            {#if $miningUpgradeLevelsBought[index] >= $miningUpgrades[index]['maxLevel']}
                 <div class='col-span-4 text-[#999999]'>This upgrade is at max level.</div>
             {:else}
             {#each Object.entries(costs) as c}

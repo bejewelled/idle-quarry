@@ -397,7 +397,7 @@ export const automationUpgrades = array([{
 {
     index: 12,
     name: 'Notorious',
-    description: 'Gain 1    2,% of the fame you would get on relocate per second.',
+    description: 'Gain 1% of the fame you would get on relocate per second.',
     cost: {
         dust: 1e6,
         trophies: 3,

@@ -35,13 +35,13 @@
 
     <!-- reg / dust upgrade selector -->
     {#if $wallet['dust']}
-        <div class='grid-cols-6'>
+        <div class='pt-2 grid grid-cols-6'>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class='col-span-3 game-btn' on:click={() => changeUpgradeType('regular')}>
+            <div class='mx-1 p-1 col-span-3 game-btn text-med' on:click={() => changeUpgradeType('regular')}>
                 Mining Upgrades
             </div>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class='col-span-3 game-btn' on:click={() => changeUpgradeType('dust')}>
+            <div class='mx-1 p-1 col-span-3 game-btn text-med' on:click={() => changeUpgradeType('dust')}>
                 Dust Upgrades
             </div>
         </div>
@@ -162,6 +162,10 @@ onMount(() => {
         mDropTable = Object.entries($miningDropTable).sort((a,b) => b[1][0] - a[1][0]);
     }, 5000)
 })
+
+function changeUpgradeType(type) {
+    upgradeTab = type;
+}
 
 const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
 
