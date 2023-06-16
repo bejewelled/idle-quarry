@@ -624,7 +624,7 @@ function procEnchants(n, tier) {
                         rewardStyle = 'text-gray-500';
                     } 
                     rewardAmount = Math.floor(rewardAmount * BASE_REWARD);
-                    addToActivityLog('[Clicker Hero] Result: ' + rewardDescriptionText + rewardAmount + ' crystals', 
+                    addToActivityLog('[Clicker Hero] Result: ' + rewardDescriptionText + f(rewardAmount) + ' crystals', 
                         rewardStyle, 'clicker hero');
                     break;           
             }

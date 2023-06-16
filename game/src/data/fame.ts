@@ -394,17 +394,7 @@ export const automationUpgrades = array([{
     unlockAt: () => (get(automationItemsUnlocked)['spellcaster'] !== undefined),
     isPercent: true,
 },
-{
-    index: 12,
-    name: 'Notorious',
-    description: 'Gain 1% of the fame you would get on relocate per second.',
-    cost: {
-        dust: 1e6,
-        trophies: 3,
-    },
-    unlockAt: () => (get(automationItemsUnlocked)['spellcaster'] !== undefined),
-    isPercent: true,
-},
+
 
 
 ]);
