@@ -417,6 +417,7 @@ const load = async (isImport = false) => {
     // increase mining drop tier if needed
     if ($miningUpgradeLevels[6] > 0) $visibleTier = 2;
     if ($miningUpgradeLevels[9] > 0) $visibleTier = 3;
+    if ($miningUpgradeLevels[14] > 0) $visibleTier = 4;
     if (localStorage.getItem('settings')) {
         settings.set(JSON.parse(localStorage.getItem('settings')));
         buyAmount = $settings['buyAmount'];
