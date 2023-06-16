@@ -115,7 +115,7 @@ export default class ref {
         'expansive': 17, 'clockwork': 18,
         'reflectors': 19, 'mythical': 20,
         'overload': 21, 'lockpicks': 22,
-        'hardened': 23,
+        'hardened': 23, 'excavator': 24,
 
 
         'default': 1e300,

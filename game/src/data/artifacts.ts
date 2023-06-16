@@ -121,14 +121,21 @@ export const allMultipliers = object({
         description: 'Multiplying gem gain by',
         prefix: 'x',
         unlockAt: 1,
-        formula: (amt: number) => 1 + 0.75 * Math.pow(amt, 0.96),
+        formula: (amt: number) => 1 + 0.35 * Math.pow(amt, 0.96),
         colorStyle: 'gems'
     },
     mineSpeed: {
         description: 'Multiplying mining speed by',
         prefix: 'x',
         unlockAt: 1,
-        formula: (amt: number) => 1 + 0.2 * Math.pow(amt, 0.325),
+        formula: (amt: number) => 1 + Math.pow(Math.log(amt/1000+1), 0.75),
         colorStyle: 'gold'
+    },
+    artifacts: {
+        description: 'Multiplying artifact drop chance by',
+        prefix: 'x',
+        unlockAt: 100,
+        formula: (amt: number) => 1 + Math.pow(Math.log10(amt/10000+1), 0.33),
+        colorStyle: 'crystals'
     }
 })

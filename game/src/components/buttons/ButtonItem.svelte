@@ -1,7 +1,6 @@
-<svelte:window on:keydown|preventDefault={keyDown} on:keyup={keyUp} />
-{#if badKeyDown && !$automationItemsUnlocked['another button']} <!-- will be bound to an upgrade-->
-<div class='game-text text-small text-center'>You have not unlocked key-bound button clicking yet; holding a key disables the button.</div>
-{/if}
+<svelte:window on:keydown|preventDefault={keyDown} on:keyup={keyUp} /> <!-- will be bound to an upgrade-->
+<div class='game-text text-small text-center'>Click the outer area of the button once to enable key-clicking.</div>
+
 {#if showRewardDescription}
 <div class='absolute flex w-[350px] h-[35px] {rewardStyle} 
 text-center items-center justify-center'

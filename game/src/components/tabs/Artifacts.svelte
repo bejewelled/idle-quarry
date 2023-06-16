@@ -1,7 +1,7 @@
 <div class='wrapper py-2'>
     <div class='grid grid-cols-12 artifact-page'>
-        <div class='col-span-12 pb-1 artifact-display text-center game-text-large'>
-            You have <span class='text-slate-200'>{$wallet['artifacts']}</span> artifacts
+        <div class='col-span-12 pb-1 artifact-display text-center game-text'>
+            You have <span class='text-slate-200'>{f($wallet['artifacts'])}</span> artifacts.
         </div>
         <div class ='col-span-12 divider py-3'></div>
         {#each Object.entries($allMultipliers) as multi}
@@ -13,10 +13,16 @@
                     {multi[1]['prefix']}{f(multi[1]['formula']($wallet['artifacts']),3)}
                     </div>
                     <div class='col-span-6'></div>
-                {:else}
-                    <div class='text-slate-200'>Unlocks at {f(multi[1]['unlockAt'])} artifacts</div>
                 {/if}
-            {/each}
+        {/each}
+
+        {#if getNextArtifactUnlock() > 0}
+        <div class='col-span-4 pb-1 artifact-display text-right game-text'>
+           [ Next bonus at <span class='text-slate-200'>{f(getNextArtifactUnlock())}</span> artifacts ]
+        </div>
+        <div class='col-span-8'></div>
+        {/if}
+
             </div>
 </div>
     
@@ -68,6 +74,23 @@ const fpf = (n: unknown, subOne = false) => {
     if (subOne) n -= 1;
     if (n < 1e9) return (n*100).toFixed(3).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "%";
     else return (n*100).toExponential(3).toString().replace('+', '') + "%";
+}
+
+function getNextArtifactUnlock() {
+    const a = Array(Object.keys($allMultipliers).length).fill(0);
+    let i = 0;
+    for (let m of Object.entries($allMultipliers)) {
+        a[i] = m[1]['unlockAt']
+        i++;
+    }
+    i = 0;
+    const v = $wallet['artifacts'];
+    for (let lv in a) 
+    {
+        if (a[lv] > v) return a[lv];
+    }
+    return -1;
+
 }
 
 const fameGridInfo = [

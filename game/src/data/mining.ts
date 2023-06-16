@@ -500,19 +500,22 @@ export const miningUpgrades = array([{
 },
 {
     index: 21,
-    name: 'PLACEHOLDER',
-    description: '---',
+    name: 'Excavator',
+    description: 'Artifact droprate from keys is improved.',
     cost: {
-        crystals: 1e299,
+        sigils: 42500,
+        warp: 12500,
     },
     ratio: 1.33,
-    unlockAt: () => (get(wallet)['crystals'] > 1e299),
-    formula: (lv: any) =>  formula.dispCalcHardenedGemBonus(get(buttonNumClicks), lv),
+    unlockAt: () => (get(wallet)['artifacts'] || 
+    (get(wallet)['sigils'] > 25000 && get(wallet)['warp'] > 10000)),
+    formula: (lv: any) => 1 + lv * 0.15,
+    noResetRelocate: true,
     isPercent: true,
-    suffix: ' gems',
-    maxLevel: 100,
-    style: 'game-btn-crystal',
-    notes: '(1 + floor(level/10)) * level^0.6' 
+    suffix: ' droprate bonus',
+    maxLevel: 250,
+    style: 'game-btn-sigil',
+    notes: ''
 },
 {
     index: 22,

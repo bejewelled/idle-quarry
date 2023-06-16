@@ -164,8 +164,9 @@ function dropTable(context: any) {
                         (item.toString().includes('key') ? 0.33333333 : 1)),
                         val[3] 
                         * get(miningUpgrades)[13]['formula'](get(miningUpgradeLevels)[13])
-                        * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0]
-                        * get(beaconBonuses)[7])),
+                        * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])
+                        * (item === 'artifacts' ? get(miningUpgrades)[21]['formula'](get(miningUpgradeLevels)[21]) : 1)
+                        * get(beaconBonuses)[7]),
                         val[1], 
                         val[2],
                         val[3]
@@ -205,9 +206,9 @@ export const key3DropTable = dropTable({
     crystals: [0.11, 1000, 10000, 0.06],
     orbs: [0.06, 25000, 2.5e5, 0.06],
     beacons: [0.04, 1000, 3500, 0.04],
-    sigils: [0.025, 10, 75, 0.025],
+    sigils: [0.025, 45, 200, 0.025],
     key3: [0.001, 1, 1, 0.001],
-    artifacts: [0.00025, 1, 1, 0.00025],
+    artifacts: [0.0004, 1, 1, 0.0004],
     key4: [(1/5e7), 1, 1, (1/5e7)]
     
 })
