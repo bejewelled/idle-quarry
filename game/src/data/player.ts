@@ -171,7 +171,7 @@ function dropTable(context: any) {
                             * Math.max(1,get(miningUpgrades)[22]['formula'](get(miningUpgradeLevels)[22]))
                             * Math.max(1,get(beaconBonuses)[2])
                             * (item === 'beacons' ? get(beaconUpgrades)[1]['formula'](get(beaconUpgradeLevels)[1]) : 1)
-                            * (item === 'artifacts' ? get(allMultipliers)['formula'](get(wallet)['artifacts']) : 1),
+                            * (item === 'artifacts' ? get(allMultipliers)['artifacts']['formula'](get(wallet)['artifacts']) : 1),
                             
                            
                         //@ts-ignore
