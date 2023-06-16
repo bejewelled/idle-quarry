@@ -3,6 +3,7 @@ import { writable, get } from 'svelte/store';
 import ref from '../calcs/ref'
 import { miningUpgrades } from './mining';
 import { beaconUpgrades, beaconBonuses } from './beacons';
+import { allMultipliers } from './artifacts';
 
 function single(context: any) {
     // @ts-ignore
@@ -169,8 +170,9 @@ function dropTable(context: any) {
                             * Math.max(1,get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6]))
                             * Math.max(1,get(miningUpgrades)[22]['formula'](get(miningUpgradeLevels)[22]))
                             * Math.max(1,get(beaconBonuses)[2])
-                            * (item === 'beacons' ? get(beaconUpgrades)[1]['formula'](get(beaconUpgradeLevels)[1]) : 1),
-
+                            * (item === 'beacons' ? get(beaconUpgrades)[1]['formula'](get(beaconUpgradeLevels)[1]) : 1)
+                            * (item === 'artifacts' ? get(allMultipliers)['formula'](get(wallet)['artifacts']) : 1),
+                            
                            
                         //@ts-ignore
                         (val[1])
