@@ -243,13 +243,19 @@ export function relocate() {
             $visibleTier = 1;
             
                 for (let i in $miningUpgrades) {
+                    //remove all free levels
                     $miningUpgradeLevels[i] = $miningUpgradeLevelsBought[i];
-                    $miningUpgradeLevelsFree[i] = 0;
+
+                    // if cosmic brilliance unlocked, use that formula
+                    $miningUpgradeLevelsFree[i] = 
+                    (i == 0 || i == 1 || i == 2 || i == 7
+                    ? $miningUpgrades[27]['formula']($miningUpgradeLevels[27]): 0 );
 
                     if (!$automationItemsUnlocked['omnipotent']) {
                         if (!($miningUpgrades[i]['noResetRelocate']))  {
                             $miningUpgradeLevelsBought[i] = 0;
-                            $miningUpgradeLevels[i] = 0;
+                            $miningUpgradeLevels[i] = $miningUpgradeLevelsBought[i]
+                            + $miningUpgradeLevelsFree[i];
                         }
                     }
                 }
