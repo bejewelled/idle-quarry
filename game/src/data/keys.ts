@@ -342,8 +342,8 @@ export const keyCrafts = array([
             slurry: 1e4,
             sigils: 10,
         },
-        craftTime: 240, // in seconds
-        baseAmount: 1,
+        craftTime: 860, // in seconds
+        baseAmount: 16,
         ratio: 1.04,
         unlockAt: () => (get(wallet)['key3'] > 0 || get(keysOpened)[2] > 0 || get(keysOpened)[1] > 1e5),
     },
