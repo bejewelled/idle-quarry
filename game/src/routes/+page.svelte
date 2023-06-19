@@ -114,7 +114,7 @@
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
                 <button class='py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950' on:click={() => reset()}>Reset</button>
-                <button class='text-xs text-gray-600'>v0.0.4</button>  
+                <button class='text-xs text-gray-600'>v0.0.4a-1</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
                 {#key tabsUnlocked}
@@ -177,7 +177,9 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     keyUpgradeLevels, keyCraftAmount, keyCraftMastery, 
     keyCraftTimes, startOfGame, antiFlickerFlags, 
     automationItemsUnlocked, saveVersion, miningUpgradeLevelsBought,
-    miningUpgradeLevelsFree, activityLogShow, challengeActive,
+    miningUpgradeLevelsFree, miningUpgradeLevelsBoughtTemp,
+    miningUpgradeLevelsFreeTemp, miningUpgradeLevelsTemp,
+    activityLogShow, challengeActive,
     challengesCompleted, challengeProgress, beaconSmartSplits,
     challenge3Multi} from '../data/player.js'
 import {key1DropTable, key2DropTable, key3DropTable, 
@@ -284,6 +286,9 @@ const save = async (isExport = false) => {
     localStorage.setItem('miningUpgradeLevels', JSON.stringify($miningUpgradeLevels));
     localStorage.setItem('miningUpgradeLevelsBought', JSON.stringify($miningUpgradeLevelsBought));
     localStorage.setItem('miningUpgradeLevelsFree', JSON.stringify($miningUpgradeLevelsFree));
+    localStorage.setItem('miningUpgradeLevelsTemp', JSON.stringify($miningUpgradeLevelsTemp));
+    localStorage.setItem('miningUpgradeLevelsBoughtTemp', JSON.stringify($miningUpgradeLevelsBoughtTemp));
+    localStorage.setItem('miningUpgradeLevelsFreeTemp', JSON.stringify($miningUpgradeLevelsFreeTemp));
     localStorage.setItem('unlockedRes', JSON.stringify([...$unlockedRes]));
     let keyItems = {}
     for (let key of Object.keys($keyItemsUnlocked)) {
@@ -383,6 +388,9 @@ const load = async (isImport = false) => {
     if (localStorage.getItem('miningUpgradeLevels')) {
         miningUpgradeLevels.set((JSON.parse(localStorage.getItem('miningUpgradeLevels'))));
     }
+    if (localStorage.getItem('miningUpgradeLevelsTemp')) {
+        miningUpgradeLevelsTemp.set((JSON.parse(localStorage.getItem('miningUpgradeLevelsTemp'))));
+    }
     if ($miningUpgradeLevels.length < 100) {
         $miningUpgradeLevels = [...$miningUpgradeLevels, ...Array(100-$miningUpgradeLevels.length).fill(0)];
     }
@@ -391,6 +399,12 @@ const load = async (isImport = false) => {
     }
     if (localStorage.getItem('miningUpgradeLevelsFree')) {
         miningUpgradeLevelsFree.set((JSON.parse(localStorage.getItem('miningUpgradeLevelsFree'))));
+    }
+    if (localStorage.getItem('miningUpgradeLevelsBoughtTemp')) {
+        miningUpgradeLevelsBoughtTemp.set((JSON.parse(localStorage.getItem('miningUpgradeLevelsBought'))));
+    }
+    if (localStorage.getItem('miningUpgradeLevelsFreeTemp')) {
+        miningUpgradeLevelsFreeTemp.set((JSON.parse(localStorage.getItem('miningUpgradeLevelsFreeTemp'))));
     }
     if (localStorage.getItem('progress'))
         unlockedRes.set(JSON.parse(localStorage.getItem('progress')))

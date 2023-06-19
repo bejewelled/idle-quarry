@@ -161,7 +161,7 @@ select-none'>
                         rewardVal = amt*0.33;                 
                     }
                 }
-                rewards[type] = (rewards[type] || 0) + rewardVal;
+                rewards[type] = (rewards[type] || 0) + Math.floor(rewardVal);
 
             } else {
                 // poisson approximation

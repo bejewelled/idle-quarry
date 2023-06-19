@@ -1,8 +1,19 @@
 <div class='wrapper py-2'>
     <div class='py-2'>
         <div class='fame-upgrade-wrapper grid grid-cols-2 pt-2'>
+            <div class='col-span-2 p-1 content-center items-center'>
+                <label class='items-center col-span-2'>
+                    <input hidden type='checkbox' class='form-checkbox display-none'
+                     bind:checked={showBought}/>
+                     <span class='p-1 
+                     col-span-2 items-center game-text {showBought ? 'game-btn-toggleon' : 'game-btn'}'>
+                        Show purchased upgrades
+                     </span>
+                </label>
+            </div>
             {#each Object.entries($automationUpgrades) as upgrade,i}
-                {#if $automationUpgrades[i]['unlockAt']()}
+                {#if ($automationUpgrades[i]['unlockAt']()) &&
+                (showBought || !$automationItemsUnlocked[upgrade[1]['name'].toLowerCase()])}
                 <div class='py-1 col-span-1 mine-upgrade-button-wrapper'>
                      <AutomationUpgradeButton index={i}/>
                 </div>
@@ -49,6 +60,7 @@ $: fameMultiBeaconLevels = formula.calcFameBeaconMulti(formula.sumArray($beaconL
 let beaconDispBonus = $beaconBonuses;
 let reloadClock = true;
 let reloadNumbers;
+let showBought = false;
 
 onMount(() => {
     const reloadFameGain = setTimeout(() => {

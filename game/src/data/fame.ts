@@ -315,7 +315,7 @@ export const automationUpgrades = array([{
 {
     index: 4,
     name: 'Game On',
-    description: 'Unlocks challenges 1 - 3. [NOT IMPLEMENTED YET]',
+    description: 'Unlocks challenges 1 - 3.',
     cost: {
         fame: 1e5,
     },
@@ -378,7 +378,7 @@ export const automationUpgrades = array([{
     name: 'Hellfire',
     description: '[NOT IMPLEMENTED YET] Unlocks challenges 4 - 6.',
     cost: {
-        dust: 2000,
+        dust: 1e207,
     },
     unlockAt: () => (get(wallet)['trophies'] >= 1 || formula.sumArray(get(challengesCompleted)) > 0),
     isPercent: true,

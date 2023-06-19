@@ -219,6 +219,9 @@ export const progress = object({
 export const miningUpgradeLevelsBought = array(Array(200).fill(0));
 export const miningUpgradeLevelsFree = array(Array(200).fill(0));
 export const miningUpgradeLevels = array(Array(200).fill(0));
+export const miningUpgradeLevelsBoughtTemp = array(Array(200).fill(0));
+export const miningUpgradeLevelsFreeTemp = array(Array(200).fill(0));
+export const miningUpgradeLevelsTemp = array(Array(200).fill(0));
 
 export const keyUpgradeLevels = array(Array(50).fill(0));
 
@@ -232,9 +235,9 @@ export const baseMiningDropTable = dropTable({
     sigils: [0.0003,1,3],
     key2: [0.0001,1,1],
     //lm3
-    dust: [0.0001, 0.24, 0.72],
-    key3: [1e-6,0.2,0.2],
-    artifacts: [3.3e-7, 1, 1],
+    dust: [7e-6, 0.06, 0.28],
+    key3: [1e-6,0.1,0.3],
+    artifacts: [3.3e-7, 0.04, 0.05],
 
 });
 

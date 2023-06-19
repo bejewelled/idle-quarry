@@ -47,7 +47,8 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
      enchantUpgradeLevels, enchantProgress, automationItemsUnlocked,
     mineLevel, buttonUpgradeLevels, stats, keyCraftAmount,
 miningUpgradeLevelsBought, miningUpgradeLevelsFree,
-challengeActive, challengesCompleted} from '../../data/player';
+challengeActive, challengesCompleted, miningUpgradeLevelsBoughtTemp,
+miningUpgradeLevelsFreeTemp, miningUpgradeLevelsTemp} from '../../data/player';
 import {challengeNames, challengeDescriptions, challengeGoals,
 challengeUnlockCriteria} from '../../data/challenges';
 import {buttonUpgrades} from '../../data/button';
@@ -96,6 +97,10 @@ function toggleChallenge(i) {
                 $challengeActive = i;
                 for (let i in $miningUpgrades) {
                     if (!$miningUpgrades[i]['noResetRelocate'] && !($miningUpgrades[i]['name'].includes('Lootmaster'))) {
+                        console.log($miningUpgrades[i]['name'])
+                        $miningUpgradeLevelsTemp[i] = $miningUpgradeLevels[i];
+                        $miningUpgradeLevelsBoughtTemp[i] = $miningUpgradeLevelsBought[i];
+                        $miningUpgradeLevelsFreeTemp[i] = $miningUpgradeLevelsFree[i];
                         $miningUpgradeLevels[i] = 0;
                         $miningUpgradeLevelsBought[i] = 0;
                         $miningUpgradeLevelsFree[i] = 0;

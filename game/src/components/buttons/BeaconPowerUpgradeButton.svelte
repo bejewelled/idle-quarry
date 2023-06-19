@@ -4,7 +4,7 @@
 class='has-tooltip tooltip-text py-1
 {affordable ? 'game-btn' : 'game-btn-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
-select-none'>{$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index],0)} / {f($beaconUpgrades[index]['maxLevel'],0)}]
+select-none'>{$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index],0)}]
         {#key $resources['beaconPower']} 
         <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
@@ -29,9 +29,6 @@ select-none'>{$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index],0)
         </div>
         <hr />
         <div class='pt-1 cost items-start text-center grid grid-cols-5'>
-            {#if $beaconUpgradeLevels[index] >= $beaconUpgrades[index]['maxLevel']}
-                <div class='col-span-4 text-[#999999]'>This upgrade is at max level.</div>
-            {:else}
             {#each Object.entries(costs) as c}
                 {#if c[1] >= 1}
                     <div class='{ref.colors[c[0]] || ref.colors['default']} col-span-3'>
@@ -39,7 +36,6 @@ select-none'>{$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index],0)
                     <div class='col-span-2 text-left'>{f(c[1])}</div>
                 {/if}
             {/each}
-            {/if}
         </div>
          </span>
         {/key}

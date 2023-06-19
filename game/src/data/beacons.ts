@@ -233,7 +233,9 @@ export const beaconUpgrades = array([{
         beaconPower: 5000,
     },
     ratio: 1.33,
-    formula: (lv: any) => 1 + 0.25*lv,
+    formula: (lv: any) => (lv > 100 ? 
+        26 + Math.pow((lv-100), 0.6)*0.2 :
+        1 + 0.25*lv),
     mineLevelReq: 0,
     isPercent: true,
     prefix: '+',
@@ -246,7 +248,7 @@ export const beaconUpgrades = array([{
     cost: {
         beaconPower: 100000,
     },
-    ratio: 2.5,
+    ratio: 1.33,
     formula: (lv: any) => 1 + 0.05*lv,
     mineLevelReq: 6,
     isPercent: false,

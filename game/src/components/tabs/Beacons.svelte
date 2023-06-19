@@ -56,12 +56,7 @@
         </div>
         {#if ($automationItemsUnlocked['beacon tools ii'])}
             <div class='col-span-1 py-1 items-center px-1'>
-                <div class='input-wrapper mr-3'>
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <div on:click={() => changeSmartSplits(i)} 
-                    class='game-text text-small border-2 py-1 text-center border-white  
-                    {$beaconSmartSplits[i] ? 'bg-green-800' : ''} select-none cursor-pointer'>Smart</div>
-                </div>
+                <BeaconSmartSplitChecks index={i} />
             </div>
         {:else}
         <div class='col-span-1'></div>
@@ -122,6 +117,7 @@ import ref from '../../calcs/ref'
 import formula from '../../calcs/formula';
 import BeaconToggleButton from '../buttons/BeaconToggleButton.svelte';
 import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte';
+import BeaconSmartSplitChecks from '../buttons/BeaconSmartSplitChecks.svelte';
 
 $: pbarWidths = Array(30).fill(0);
 $: beaconDispBonus = $beaconBonuses

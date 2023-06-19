@@ -159,7 +159,8 @@ export const miningUpgrades = array([{
     },
     ratio: 1.15,
     unlockAt: () => (get(wallet)['gems'] >= 3 && get(miningUpgradeLevels)[0] >= 1),
-    formula: (lv: any) => lv * (1 + 0.01*lv) * (lv > 100 ? 1+0.03*(lv-100) : 1),
+    formula: (lv: any) => (lv > 10000 ? 1010297 + Math.pow((lv-10000), 0.6)*0.1 
+        : lv * (1 + 0.01*lv) * (lv > 100 ? 1+0.03*(lv-100) : 1)),
     isPercent: false,
     prefix: '+',
     suffix: ' gems',
@@ -176,7 +177,7 @@ export const miningUpgrades = array([{
     },
     ratio: 1.275,
     unlockAt: () => (get(wallet)['gems'] > 30 && get(wallet)['gold'] > 5),
-    formula: (lv: any) => 1 + lv*0.09,
+    formula: (lv: any) => (lv > 10000 ? 901 + Math.pow((lv-10000), 0.6)*0.08 : 1 + lv*0.09),
     isPercent: true,
     prefix: '+',
     maxLevel: 1000,
@@ -226,7 +227,8 @@ export const miningUpgrades = array([{
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[3] > 0),
-    formula: (lv: any) => (1 + lv * 0.1),
+    formula: (lv: any) => (lv > 1000 ? 101 + Math.pow((lv-1000), 0.2)*0.06
+    :(1 + lv * 0.1)),
     isPercent: false,
     suffix: 'x keys',
     maxLevel: 1000,
@@ -257,7 +259,8 @@ export const miningUpgrades = array([{
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10),
-    formula: (lv: any) => (1 + lv*0.25),
+    formula: (lv: any) => (lv > 10000 ? 2501+Math.pow((lv-10000), 0.7)*0.25 
+    :(1 + lv*0.25)),
     isPercent: false,
     suffix: 'x gold from drops',
     maxLevel: 1000,
@@ -273,7 +276,7 @@ export const miningUpgrades = array([{
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10),
-    formula: (lv: any) => (1+lv*(0.25+0.002*lv)),
+    formula: (lv: any) => (1+Math.pow(lv, 0.7)*0.5),
     isPercent: true,
     prefix: '+',
     suffix: ' gems',
@@ -378,8 +381,8 @@ export const miningUpgrades = array([{
     cost: {
         crystals: 1e7,
         slurry: 1e6,
-        warp: 1e4,
         sigils: 1e4,
+        warp: 4000,
         trophies: 3,
         artifacts: 1,
 

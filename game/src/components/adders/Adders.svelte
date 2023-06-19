@@ -21,7 +21,8 @@ import {progress, miningUpgradeLevels, wallet, miningDropTable,
     miningUpgradeLevelsBought, miningUpgradeLevelsFree, 
     activityLogShow, challengeActive,
     challengesCompleted, challengeProgress,
-    challenge3Multi} from '../../data/player'
+    challenge3Multi, miningUpgradeLevelsTemp,
+    miningUpgradeLevelsBoughtTemp, miningUpgradeLevelsFreeTemp} from '../../data/player'
 import {buttonUpgrades} from '../../data/button'
 import {beaconFormulas, beaconBonuses, beaconNextReqs, 
     beaconNums, beaconUpgrades, beaconPowerFlavorText, beaconNameText} from '../../data/beacons'
@@ -255,7 +256,9 @@ function addProgress(delta) {
 
     // add warp for being in a challenge
     if ($challengeActive !== 0 && $challengeActive !== 4) {
-        $wallet['warp'] = ($wallet['warp'] || 0) + Math.log($progress['gems'] + 1)*(UPDATE_SPEED/1000)
+        $wallet['warp'] = ($wallet['warp'] || 0) + 
+        Math.log($progress['gems'] + 1)*(UPDATE_SPEED/1000) 
+        * (1 + $challengesCompleted[$challengeActive-1]*0.33);
     }
 
     // glorious space turtles upgrade
@@ -330,7 +333,7 @@ function addKey2(n, keyAt) {
 }
 
 function addKey3(n, keyAt) {
-    const KEY3_BASE = 1;
+    const KEY3_BASE = 0.075;
         const key3Gain = KEY3_BASE 
         * $miningUpgrades[5]['formula']($miningUpgradeLevels[5])
         * $miningUpgrades[26]['formula']($miningUpgradeLevels[26]);
@@ -418,13 +421,30 @@ function checkForKeyCraftCompletion() {
 function checkForChallengeCompletion() {
     if ($wallet['challengePoints'] > ($challengeGoals[$challengeActive-1] || 1e300)) {
         $challengesCompleted[$challengeActive-1]++;
-        $challengeActive = 0;
+        
         $wallet['challengePoints'] = 0;
         $wallet['trophies'] = ($wallet['trophies'] || 0) + 1;
         challengeGoals.updateChallengeReqs();
         addToActivityLog('[Challenges] Challenge ' + $challengeActive + 'completed! (Completion ' + $challengesCompleted[$challengeActive-1] + ')',
         'text-amber-400', 'challenges')
+        if ($challengeActive === 2) {
+            $challengeActive = 0;
+            console.log($miningUpgradeLevelsBoughtTemp)
+            for (let i in $miningUpgradeLevels) {
+            if (!$miningUpgrades[i]['noResetRelocate'] && !($miningUpgrades[i]['name'].includes('Lootmaster'))) {
+                    $miningUpgradeLevels[i] = $miningUpgradeLevelsTemp[i];
+                    $miningUpgradeLevelsBought[i] = $miningUpgradeLevelsBoughtTemp[i];
+                    $miningUpgradeLevelsFree[i] = $miningUpgradeLevelsFreeTemp[i];
+                    $miningUpgradeLevelsTemp[i] = 0;
+                    $miningUpgradeLevelsBoughtTemp[i] = 0;
+                    $miningUpgradeLevelsFreeTemp[i] = 0;
+                }
+            }
+            console.log($miningUpgradeLevels)
+            console.log($miningUpgradeLevelsBought)
+        }
 
+        $challengeActive = 0;
     }
 }
 
@@ -453,7 +473,9 @@ function addBeaconProgress(delta, isOffFocus = false) {
             locks.add(i);
             
             const numLevels = 
-            Math.max(1,formula.maxNumGeom($beaconProgress[i], $beaconNextReqs[i], $beaconNums[i][1]));
+            Math.min(
+            Math.max(1,formula.maxNumGeom($beaconProgress[i], $beaconNextReqs[i], $beaconNums[i][1])), 
+            2);
 
             if ($challengeActive === 4) {
                 $wallet['challengePoints'] += numLevels * ref.challengePointValues['beaconLevels'];

@@ -18,7 +18,7 @@
                 </div>
                 <div class='has-tooltip tooltip-text 
                     game-btn py-2 items-center text-center 
-                    border-solid m-1 ml-1 mr-1 col-span-1 select-none'>
+                    border-solid m-1 col-span-1 select-none'>
                     [drops]
                     {#key $keysOpened}
                         <span class='px-2 mx-4 tooltip tooltip-text shadow-lg p-1
