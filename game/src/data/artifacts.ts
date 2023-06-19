@@ -134,8 +134,15 @@ export const allMultipliers = object({
     artifacts: {
         description: 'Multiplying artifact drop chance by',
         prefix: 'x',
-        unlockAt: 100,
+        unlockAt: 10000,
         formula: (amt: number) => 1 + Math.pow(Math.log10(amt/10000+1), 0.33),
-        colorStyle: 'crystals'
-    }
+        colorStyle: 'artifacts'
+    },
+    dust: {
+        description: 'Multiplying artifact drop chance by',
+        prefix: 'x',
+        unlockAt: 10000,
+        formula: (amt: number) => 1 + Math.pow(Math.log10(amt/10000+1), 0.33),
+        colorStyle: 'artifacts'
+    },
 })
