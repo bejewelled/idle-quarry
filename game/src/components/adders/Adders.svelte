@@ -210,6 +210,7 @@ function updateprogressThisTick(delta) {
 
 let progressGain = 0;
 function addProgress(delta) {
+
     const gemAt = $progressThreshold['gems'];
     const keyAt = [
     $progressThreshold['key1'], 
@@ -218,6 +219,25 @@ function addProgress(delta) {
     $progressThreshold['key4'],
     $progressThreshold['key5']
     ];
+
+    // disable offline progress if chosen
+    if (delta > (1000 / UPDATE_SPEED * 120) && !$settings['offlineProgress'])
+        return;
+
+    // optimize out of focus
+    if (delta > 16 || !document.hasFocus()) {
+        addGems($progressThisTick['gems'] / $progressThreshold['gems']);
+        dropRoll($progressThisTick['gems'] / $progressThreshold['gems']);
+        addKey1($progressThisTick['key1'] / $progressThreshold['key1'], keyAt);
+        addKey2($progressThisTick['key2'] / $progressThreshold['key2'], keyAt);
+        addKey3($progressThisTick['key3'] / $progressThreshold['key3'], keyAt);
+        $enchantProgress['t1'] += ($progressThisTick['gems'] / $progressThreshold['gems']);
+        if ($enchantProgress['t1'] > $enchantThreshold['t1']) {
+            procEnchants(Math.floor($enchantProgress['t1'] / $enchantThreshold['t1']), 't1')
+            $enchantProgress['t1'] %= $enchantThreshold['t1'];
+        }
+        return;
+    }
 
     for (let [k,v] of Object.entries($progressThisTick)) {
         if (isNaN($progress[k])) $progress[k] = 0;
@@ -310,7 +330,6 @@ function addKey1(n, keyAt) {
         const key1Gain = KEY1_BASE 
         * $miningUpgrades[5]['formula']($miningUpgradeLevels[5])
         * $miningUpgrades[26]['formula']($miningUpgradeLevels[26]);
-        
         $wallet['key1'] = ($wallet['key1'] || 0) + key1Gain * n;
         $progress['key1'] %= keyAt[0];
         $keyGainFlavorText['key1'] = key1Gain;
@@ -590,6 +609,8 @@ function procEnchants(n, tier) {
                     const keyRand = Math.random() + (0.2 * (quality/1e6));
                     const BASE_KEYGAIN = size;
                     let tier, amtDivider;
+                    const randFactor = Math.random() * 0.2 + 0.9;
+                    const reward = (1 + Math.floor(randFactor * BASE_KEYGAIN / amtDivider));
                     if (keyRand > 1.18) {
                         tier = 5;
                         amtDivider = 250000; 
@@ -616,8 +637,6 @@ function procEnchants(n, tier) {
                         addToActivityLog('[Key Boon] +' + reward + ' [*] keys', 
                             'text-green-300', 'key boon'); 
                     }
-                    const randFactor = Math.random() * 0.2 + 0.9;
-                    const reward = (1 + Math.floor(randFactor * BASE_KEYGAIN / amtDivider));
                     $wallet['key'+tier] += reward;
                     break;  
                 case 7: //clicker hero

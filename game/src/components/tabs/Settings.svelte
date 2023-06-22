@@ -58,6 +58,20 @@
          </div>
     </div>
 
+    <div class='py-3'></div>
+    <div class='wrapper bg-gray-700 my-1 border-2 border-gray-600 pb-1'>
+        <div class='w-full text-left py-1 pl-1 text-medium text-gray-400'>Progression</div>
+           <div class='grid grid-cols-12 py-1'>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class='col-span-3 grid-cols-3 pt-1'>
+                    <div class='setting col-span-3 mx-1 px-1 py-1 text-center
+                    {$settings['offlineProgress'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
+                    on:click={() => changeOfflineProgress()}>Offline Progress</div>
+                </div>
+
+           </div>
+    </div>
+
     <div class='text-large text-gray-300 text-left pb-2'>About</div>
         <div class='text-small tooltip-text'>version 0.0.4 (alpha)</div>
         <div class='text-small tooltip-text'>created by bejewelled, all rights reserved</div>
@@ -76,6 +90,9 @@
 
     function changeActivityLogShow(item) {
         $activityLogShow[item] = !$activityLogShow[item]
+    }
+    function changeOfflineProgress() {
+        $settings['offlineProgress'] = !$settings['offlineProgress']
     }
 
 </script>
