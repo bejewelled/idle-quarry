@@ -149,6 +149,7 @@ function updateprogressThisTick(delta) {
     let progGems = Math.pow(PROGRESS_BASE
     * $miningUpgrades[0]['formula']($miningUpgradeLevels[0])
     * (Math.max(1,$beaconBonuses[1]))
+    * $buttonUpgrades[3]['formula']($buttonUpgradeLevels[3])
     * progressBonusMulti
     * $challenge3Multi
     * challengeMultiplier
@@ -238,7 +239,9 @@ function addProgress(delta) {
         addGems($progress['gems'] / gemAt, $progressAverage['gems']);
         dropRoll(Math.floor($progress['gems'] / gemAt));
 
-        $mineLevel['xp'] += $progress['gems'] / gemAt, $progressAverage['gems'];
+        $mineLevel['xp'] += ($progress['gems'] / gemAt)
+        * $allMultipliers['mineXP']['formula']($wallet['artifacts'] || 0);
+
         $progress['gems'] = 0;
     }
     // add keys
@@ -425,7 +428,7 @@ function checkForChallengeCompletion() {
         $wallet['challengePoints'] = 0;
         $wallet['trophies'] = ($wallet['trophies'] || 0) + 1;
         challengeGoals.updateChallengeReqs();
-        addToActivityLog('[Challenges] Challenge ' + $challengeActive + 'completed! (Completion ' + $challengesCompleted[$challengeActive-1] + ')',
+        addToActivityLog('[Challenges] Challenge ' + $challengeActive + ' completed! (Completion ' + $challengesCompleted[$challengeActive-1] + ')',
         'text-amber-400', 'challenges')
         if ($challengeActive === 2) {
             $challengeActive = 0;
@@ -530,6 +533,7 @@ function updateBeaconBonuses() {
 
 let lightningBlastLockout = false;
 function procEnchants(n, tier) { 
+    if (n > 100) return;
     const size = $enchantUpgrades[0]['formula']($enchantUpgradeLevels[0]);
     const quality = $enchantUpgrades[1]['formula']($enchantUpgradeLevels[1]);
     
@@ -553,15 +557,15 @@ function procEnchants(n, tier) {
                     break;
                 case 4: // lightning blast
                     if (lightningBlastLockout) break;
-                    progressBonusMulti *= Math.sqrt($enchantUpgrades[0]['formula']($enchantUpgradeLevels[0]));
+                    progressBonusMulti *= Math.pow(size, 0.25 );
                     lightningBlastLockout = true;
                     setTimeout(() => {
-                        progressBonusMulti /= Math.sqrt($enchantUpgrades[0]['formula']($enchantUpgradeLevels[0]));
+                        progressBonusMulti /= Math.pow(size, 0.25);
                         if (Math.abs(progressBonusMulti - Math.round(progressBonusMulti)) < 0.1) 
                             progressBonusMulti = Math.round(progressBonusMulti);
                         lightningBlastLockout = false;
                     }, 3000)
-                    addToActivityLog('[Lightning Blast] ' + f(Math.sqrt($enchantUpgrades[0]['formula']($enchantUpgradeLevels[0]))) + 'x mining speed for 3 seconds!',
+                    addToActivityLog('[Lightning Blast] ' + f(Math.pow(size, 0.25)) + 'x mining speed for 3 seconds!',
                      'text-violet-300', 'lightning blast');
                     break;
                 case 5: // scavenger
