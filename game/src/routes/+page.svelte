@@ -67,7 +67,7 @@
                             [ {f($mineLevel['xp'],0)} / {f($mineLevel['xpNextReq'], 0)} ]
                         </div>
                         <div class='col-span-3 text-center'>
-                            Each mine operation gives 1 xp.
+                            Each mine operation gives <strong>{f(1*$allMultipliers['mineXP']['formula']($wallet['artifacts'] || 0), 2)}</strong> xp.
                         </div>
                         <div class='col-span-3 text-center'>
                             Button hits give xp based on quality.
@@ -194,6 +194,7 @@ import {beaconNextReqs, beaconSpendAmt, beaconNums, baseBeaconNextReqs} from '..
 import {enchantUpgrades, enchantThreshold} from '../data/fame.ts'
 import {buttonUpgrades} from '../data/button.ts'
 import {challengeGoals, challengeMultipliers} from '../data/challenges.ts'
+import {allMultipliers} from '../data/artifacts.ts'
 import Beacons from '../components/tabs/Beacons.svelte';
 import Adders from '../components/adders/Adders.svelte';
 import Mining from '../components/tabs/Mining.svelte';
