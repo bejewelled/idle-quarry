@@ -131,6 +131,13 @@ export const allMultipliers = object({
         formula: (amt: number) => 1 + Math.pow(Math.log(amt/1000+1), 0.75),
         colorStyle: 'gold'
     },
+    mineXP: {
+        description: 'Multiplying mining experience by',
+        prefix: 'x',
+        unlockAt: 100,
+        formula: (amt: number) => 1 + Math.log10(amt/60+1),
+        colorStyle: 'artifacts'
+    },
     artifacts: {
         description: 'Multiplying artifact drop chance by',
         prefix: 'x',
@@ -138,11 +145,5 @@ export const allMultipliers = object({
         formula: (amt: number) => 1 + Math.pow(Math.log10(amt/10000+1), 0.33),
         colorStyle: 'artifacts'
     },
-    dust: {
-        description: 'Multiplying artifact drop chance by',
-        prefix: 'x',
-        unlockAt: 10000,
-        formula: (amt: number) => 1 + Math.pow(Math.log10(amt/10000+1), 0.33),
-        colorStyle: 'artifacts'
-    },
+
 })

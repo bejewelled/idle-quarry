@@ -41,7 +41,7 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     // @ts-ignore
     settings, visibleTier, progressThisTick, progressAverage,
 buttonNumClicks, mineLevel, buttonStats, buttonUpgradeLevels,
-automationItemsUnlocked} from '../../data/player';
+automationItemsUnlocked, flags} from '../../data/player';
 // @ts-ignore
 import {progressThreshold, progressPerTick, miningUpgrades,
 // @ts-ignore
@@ -49,6 +49,7 @@ gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 // @ts-ignore
 import {keyGainFlavorText} from '../../data/keys';
 import {buttonUpgrades} from '../../data/button';
+import {allMultipliers} from '../../data/artifacts'
 // @ts-ignore
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 // @ts-ignore
@@ -106,43 +107,46 @@ const BUTTON_SIZE= 100;
 
     if (isLucky && absDist > 1 && absDist <= 2) absDist = 0;
 
+    let xpGain = 0;
     if (absDist < 1) {
         rewardAmount = 150;
         rewardDescriptionText = 'PERFECT! +';
         rewardStyle = 'text-large text-amber-500 border-amber-500 font-bold'
         $buttonNumClicks['perfect']++;
-        $mineLevel['xp'] += 3;
+        xpGain = 3 * $buttonUpgrades[4]['formula']($buttonUpgradeLevels[4]);
     } else if (absDist <= 2) {
         rewardAmount = 12;
         rewardDescriptionText = 'INCREDIBLE +';
         rewardStyle = 'text-large text-pink-500 border-pink-500 font-bold'
         $buttonNumClicks['incredible']++;
-        $mineLevel['xp'] += 3;
+        xpGain = 3 * $buttonUpgrades[4]['formula']($buttonUpgradeLevels[4]);
     } else if (absDist <= 4) {
         rewardAmount = 5;
         rewardDescriptionText = 'Excellent +';
         rewardStyle = 'text-med text-violet-500 border-violet-500'
         $buttonNumClicks['excellent']++;
-        $mineLevel['xp'] += 2;
+        xpGain = 2 * $buttonUpgrades[4]['formula']($buttonUpgradeLevels[4]);
     } else if (absDist <= 7) {
         rewardAmount = 4;
         rewardDescriptionText = 'Great +';
         rewardStyle = 'text-med text-sky-500 border-sky-500'
         $buttonNumClicks['great']++;
-        $mineLevel['xp'] += 1;
+        xpGain = 1;
     } else if (absDist <= 10) {
         rewardAmount = 3;
         rewardDescriptionText = 'Good +';
         rewardStyle = 'text-med text-green-500 border-green-500'
         $buttonNumClicks['good']++;
-        $mineLevel['xp'] += 1;
+        xpGain = 1;
     } else {  
         rewardAmount = 1;
         rewardDescriptionText = 'Okay +';
         rewardStyle = 'text-small text-gray-500 border-gray-500';
         $buttonNumClicks['okay']++;
-        $mineLevel['xp'] += 1;
+        xpGain = 1;
     } 
+
+    $mineLevel['xp'] += xpGain;
 
     rewardAmount = rewardAmount 
     * formula.calcButtonStreakBonus($buttonStats['totalClicks'])
@@ -193,6 +197,11 @@ const BUTTON_SIZE= 100;
         x: Math.min(Math.max(MIN_X,randomX), MAX_X),
         y: Math.min(Math.max(MIN_Y,randomY), MAX_Y)
       };
+
+      $flags['showMineXPGain'] = xpGain;
+      setTimeout(() => {
+        $flags['showMineXPGain'] = -1;
+      }, 700)
 
 
       showRewardDescriptionTimeout(isLucky);

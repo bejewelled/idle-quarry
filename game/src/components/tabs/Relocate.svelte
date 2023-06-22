@@ -279,6 +279,15 @@ export function relocate() {
                 $visibleTier = 3;
             }
 
+            if ($automationItemsUnlocked['money piles']) {
+                $miningUpgradeLevels[14] = 1;
+                $miningUpgradeLevelsBought[14] = 1;
+                $visibleTier = 4;
+            } else {
+                $miningUpgradeLevels[14] = 0;
+                $miningUpgradeLevelsBought[14] = 0;
+            }
+
             for (let k of Object.keys($keyCraftAmount)) {
                 if (k !== 'energizedCrystal')
                 $keyCraftAmount[k] = 0;

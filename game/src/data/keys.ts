@@ -208,7 +208,7 @@ export const key3DropTable = dropTable({
     beacons: [0.04, 1000, 3500, 0.04],
     sigils: [0.025, 45, 200, 0.025],
     key3: [0.001, 1, 1, 0.001],
-    artifacts: [0.0004, 1, 1, 0.0004],
+    artifacts: [4.2e-6, 1, 1, 4.2e-6],
     key4: [(1/5e7), 1, 1, (1/5e7)]
     
 })

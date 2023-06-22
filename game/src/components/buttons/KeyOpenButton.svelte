@@ -158,7 +158,7 @@ select-none'>
                 if (amt > MAX_OPEN) rewardVal *= (amt / MAX_OPEN);
                 if (type.includes('key')) {
                     if (type[3] == dropTable['tier'] && rewardVal > amt*0.33) {
-                        rewardVal = amt*0.33;                 
+                        rewardVal = Math.min(rewardVal, amt*vals[0]*0.33);                 
                     }
                 }
                 rewards[type] = (rewards[type] || 0) + Math.floor(rewardVal);

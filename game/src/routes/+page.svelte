@@ -46,12 +46,18 @@
                 {/if}
             {/each}
             <!-- mining level bar -->
-            <div class='col-span-12 has-tooltip'>
-                <div class='text-[#989898] text-small pt-4 pb-1'>Mining Level 
+            <div class='col-span-12 grid grid-cols-7 has-tooltip'>
+                <div class='text-[#989898] text-small col-span-2 text-left pt-4 pb-1'>Mining Level 
                     <span class='font-bold 
                     {$mineLevel['level'] > 69 ? 'text-red-500' : 'text-cyan-400'}'>
                     {$mineLevel['level']}</span>
                 </div>
+                {#if $flags['showMineXPGain'] >= 0}
+                <div class='text-small {$mineLevel['level'] > 69 ? 'text-red-500' : 'text-cyan-400'}
+                    col-span-5 text-left pt-4 pb-1 px-1'> 
+                + {f($flags['showMineXPGain'], 0)}
+                </div>
+                {/if}
                 <span class='px-2 mx-4 tooltip tooltip-text shadow-lg p-1
                 border-white border-double border bg-[#222529] ml-16
                   pointer-events-none max-w-[300px] text-center weight-bold'>
@@ -64,7 +70,7 @@
                             Each mine operation gives 1 xp.
                         </div>
                         <div class='col-span-3 text-center'>
-                            Each button hit gives 1 - 3 xp.
+                            Button hits give xp based on quality.
                         </div>
                     </div>
                 </span>
@@ -73,7 +79,7 @@
             <div class='col-span-12'>
                 <div class='mine-bar-wrapper pb-2'>
                     <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                        <div class="{$mineLevel['level'] > 69 ? 'text-red-500' : 'text-cyan-500'} 
+                        <div class="{$mineLevel['level'] > 69 ? 'bg-red-500' : 'bg-cyan-500'} 
                         h-2.5 rounded-full" 
                         style="width: {mineLevelBarWidth}%"></div>
                     </div>
@@ -114,7 +120,7 @@
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
                 <button class='py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950' on:click={() => reset()}>Reset</button>
-                <button class='text-xs text-gray-600'>v0.0.4a-1</button>  
+                <button class='text-xs text-gray-600'>v0.0.4a-2</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
                 {#key tabsUnlocked}
@@ -214,7 +220,7 @@ let buyAmount = 1;
 let loadingFinished = false;
 let alogShow = true;
 const GAME_SPEED = 1 //only for balancing, doesn't actually change the game speed
-$: mineLevelBarWidth = $mineLevel['xp'] / $mineLevel['xpNextReq'] * 100;
+$: mineLevelBarWidth = Math.min(1, $mineLevel['xp'] / $mineLevel['xpNextReq']) * 100;
 $: challengeBarWidth = $wallet['challengePoints'] / $challengeGoals[$challengeActive-1] * 100;
 let ct;
 
@@ -347,7 +353,7 @@ const save = async (isExport = false) => {
         saveConfirm = false;
         exportConfirm = false;
     }, 1000);
-
+    console.log($mineLevel)
 
 }
 

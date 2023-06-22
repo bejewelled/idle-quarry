@@ -199,17 +199,16 @@ export const buttonUpgrades = array([
 {
     index: 4,
     name: 'Fractals',
-    description: 'Button clicks give fame over time. [CURRENTLY DISABLED]',
+    description: 'Increases mining experience gained from excellent+ button clicks.',
     cost: {
-        crystals: 1e200,
+        crystals: 100000
     },
-    ratio: 4,
-    formula: (lv: any) => lv===0 ? 1e308 :(11-lv)**3,
+    ratio: 1.75,
+    formula: (lv: any) => 1 + Math.pow(lv, 1.4)*1.35,
     unlockAt: () => (get(wallet)['crystals'] > 1000),
     isPercent: false,
-    prefix: '1,000 fame every ',
-    suffix: ' clicks',
-    maxLevel: 10,
+    suffix: 'x multiplier',
+    maxLevel: 65,
     notes: ''
 },
 {
@@ -217,7 +216,7 @@ export const buttonUpgrades = array([
     name: 'The Duck',
     description: 'Increases the chance you get "lucky" and multiply your crystals.',
     cost: {
-        crystals: 100000,
+        crystals: 900000,
     },
     ratio: 4,
     formula: (lv: any) => 0.025 + lv*0.025,

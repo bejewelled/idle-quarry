@@ -304,7 +304,7 @@ export const automationUpgrades = array([{
 {
     index: 3,
     name: 'Omnipotent',
-    description: 'Except for Lootmaster I and II, mining upgrades are not reset on relocation',
+    description: 'Except for Lootmaster upgrades, mining upgrades are not reset on relocation.',
     cost: {
         fame: 100000,
     },
@@ -392,6 +392,16 @@ export const automationUpgrades = array([{
         trophies: 3,
     },
     unlockAt: () => (get(automationItemsUnlocked)['spellcaster'] !== undefined),
+    isPercent: true,
+},
+{
+    index: 12,
+    name: 'Money Piles',
+    description: 'Lootmaster III stays unlocked on relocation.',
+    cost: {
+        trophies: 3,
+    },
+    unlockAt: () => (get(automationItemsUnlocked)['deep pockets'] && get(wallet)['trophies'] >= 1),
     isPercent: true,
 },
 

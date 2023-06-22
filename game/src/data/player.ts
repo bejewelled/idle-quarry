@@ -269,6 +269,7 @@ export const settings = object({
 export const flags = object({
     relocateNavBack: false,
     pressButton: false,
+    showMineXPGain: -1,
 })
 
 export const keyItemsUnlocked = object({
