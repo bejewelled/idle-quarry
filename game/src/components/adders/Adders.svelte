@@ -226,11 +226,11 @@ function addProgress(delta) {
 
     // optimize out of focus
     if (delta > 16 || !document.hasFocus()) {
-        addGems($progressThisTick['gems'] / $progressThreshold['gems']);
-        dropRoll($progressThisTick['gems'] / $progressThreshold['gems']);
-        addKey1($progressThisTick['key1'] / $progressThreshold['key1'], keyAt);
-        addKey2($progressThisTick['key2'] / $progressThreshold['key2'], keyAt);
-        addKey3($progressThisTick['key3'] / $progressThreshold['key3'], keyAt);
+        addGems($progressThisTick['gems'] / $progressThreshold['gems'] * 0.9);
+        dropRoll($progressThisTick['gems'] / $progressThreshold['gems'] * 0.9);
+        addKey1($progressThisTick['key1'] / $progressThreshold['key1'] * 0.9, keyAt);
+        addKey2($progressThisTick['key2'] / $progressThreshold['key2'] * 0.9, keyAt);
+        addKey3($progressThisTick['key3'] / $progressThreshold['key3'] * 0.9, keyAt);
         $enchantProgress['t1'] += ($progressThisTick['gems'] / $progressThreshold['gems']);
         if ($enchantProgress['t1'] > $enchantThreshold['t1']) {
             procEnchants(Math.floor($enchantProgress['t1'] / $enchantThreshold['t1']), 't1')

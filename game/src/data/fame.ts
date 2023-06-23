@@ -397,11 +397,11 @@ export const automationUpgrades = array([{
 {
     index: 12,
     name: 'Money Piles',
-    description: 'Lootmaster III stays unlocked on relocation.',
+    description: 'Lootmaster III stays unlocked on ascension.',
     cost: {
-        trophies: 3,
+        trophies: 20,
     },
-    unlockAt: () => (get(automationItemsUnlocked)['deep pockets'] && get(wallet)['trophies'] >= 1),
+    unlockAt: () => (get(wallet)['trophies'] >= 1 && get(miningUpgradeLevels)[14] > 0),
     isPercent: true,
 },
 
