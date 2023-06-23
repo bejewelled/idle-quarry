@@ -169,6 +169,7 @@ function dropTable(context: any) {
                             : 1) 
                             * Math.max(1,get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6]))
                             * Math.max(1,get(miningUpgrades)[22]['formula'](get(miningUpgradeLevels)[22]))
+                            * Math.max(1,get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11]))
                             * Math.max(1,get(beaconBonuses)[2])
                             * (item === 'beacons' ? get(beaconUpgrades)[1]['formula'](get(beaconUpgradeLevels)[1]) : 1)
                             * (item === 'artifacts' ? get(allMultipliers)['artifacts']['formula'](get(wallet)['artifacts']) : 1),
@@ -177,11 +178,13 @@ function dropTable(context: any) {
                         //@ts-ignore
                         (val[1])
                         * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11])
-                        * (item === 'gold' ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1),
+                        * ((item === 'gold' || item === 'orbs')
+                          ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1),
                         //@ts-ignore
                         (val[2])
                         * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11])
-                        * (item === 'gold' ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1),
+                        * ((item === 'gold' || item === 'orbs')
+                        ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1),
                     ]
                     i[item][1] += Math.max(0,(i[item][0]-1)*i[item][1])
                     i[item][2] += Math.max(0,(i[item][0]-1)*i[item][1])

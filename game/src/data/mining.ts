@@ -175,7 +175,7 @@ export const miningUpgrades = array([{
     cost: {
         gold: 10
     },
-    ratio: 1.275,
+    ratio: 1.24,
     unlockAt: () => (get(wallet)['gems'] > 30 && get(wallet)['gold'] > 5),
     formula: (lv: any) => (lv > 10000 ? 901 + Math.pow((lv-10000), 0.6)*0.08 : 1 + lv*0.09),
     isPercent: true,
@@ -303,37 +303,35 @@ export const miningUpgrades = array([{
 {
     index: 10,
     name: 'Expansive',
-    description: 'Significantly improves gem gains. Improved after level 100.',
+    description: 'Significantly improves gem gains.',
     cost: {
         fame: 5
     },
     ratio: 1.4,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (lv > 100 ? 
-        151 + (lv-100)*6 :
-        1 + lv*1.5),
-    isPercent: true,
-    prefix: '+',
+    formula: (lv: any) => (1 + lv*1.5),
+    isPercent: false,
+    prefix: 'x',
     noResetRelocate: true,
     suffix: ' gem bonus',
-    maxLevel: 1000,
+    maxLevel: 100,
     style: 'game-btn-fame',
     notes: 'index 10'
 },
 {
     index: 11,
     name: 'Clockwork',
-    description: 'Significantly improves mining drop quantity.',
+    description: 'Significantly improves mining drop rate and drop quantity.',
     cost: {
         fame: 5
     },
     ratio: 1.4,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + lv * 0.3),
+    formula: (lv: any) => (1 + lv * 0.25),
     isPercent: false,
     noResetRelocate: true,
-    suffix: 'x amount from drops',
-    maxLevel: 1000,
+    suffix: 'x drop rate/quanity',
+    maxLevel: 100,
     style: 'game-btn-fame',
     notes: ''
 },
@@ -343,16 +341,16 @@ export const miningUpgrades = array([{
     name: 'Reflectors',
     description: 'Significantly improves beacon path progress.',
     cost: {
-        fame: 10
+        fame: 5
     },
     ratio: 1.4,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + lv),
-    isPercent: true,
-    prefix: '+',
+    formula: (lv: any) => (1 + 0.75*lv),
+    isPercent: false,
+    prefix: 'x',
     suffix: ' beacon progress',
     noResetRelocate: true,
-    maxLevel: 1000,
+    maxLevel: 100,
     style: 'game-btn-fame',
     notes: 'index 10'
 },
@@ -361,11 +359,11 @@ export const miningUpgrades = array([{
     name: 'Mythical',
     description: 'Increases key open droprates when using keys. Note that some drop chances are capped.',
     cost: {
-        fame: 100
+        fame: 5
     },
     ratio: 1.4,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => 1 + 0.25*Math.pow(lv, 0.75),
+    formula: (lv: any) => 1 + 0.15*Math.sqrt(lv),
     isPercent: false,
     noResetRelocate: true,
     prefix: 'x',
@@ -583,17 +581,17 @@ export const miningUpgrades = array([{
 {
     index: 26,
     name: 'Lockpicks',
-    description: 'Key Finder speed/amount is dramatically increased.',
+    description: 'Significantly increases the speed and yield of Key Master.',
     cost: {
         fame: 2500
     },
     ratio: 1.4,
-    unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => 1 + lv*0.75,
+    unlockAt: () => (get(wallet)['totalFame'] > 200),
+    formula: (lv: any) => 1 + lv*0.45,
     noResetRelocate: true,
     isPercent: false,
     suffix: 'x speed/amount',
-    maxLevel: 250,
+    maxLevel: 25,
     style: 'game-btn-fame',
     notes: ''
 },

@@ -184,16 +184,17 @@ export const key1DropTable = dropTable({
     gems: [0.6, 10, 200, 0.6], // [chance, min, max, base]
     orbs: [0.4, 3, 10, 0.4], 
     gold: [0.2, 10, 20, 0.2],
-    beacons: [0.01, 1, 1, 0.01],
+    beacons: [0.025, 1, 1, 0.025],
     key2: [(1/2500), 1, 1, (1/2500)],
 })
 
 export const key2DropTable = dropTable({
     tier: 2,
-    gems: [0.25, 1e3, 1e4, 0.25], // [chance, min, max, base]
-    orbs: [0.15, 500, 2500, 0.15],
-    beacons: [0.15, 25, 100, 0.15],
-    sigils: [0.01, 1, 2, 0.01],
+    gems: [0.25, 1e6, 1e7, 0.25], // [chance, min, max, base]
+    gold: [0.15, 1e4, 1e5, 0.15],
+    orbs: [0.15, 12000, 90000, 0.15],
+    beacons: [0.06, 250, 1000, 0.06],
+    sigils: [0.01, 1, 1, 0.01],
     fame: [0.00025, 1, 10, 0.00025],
     key3: [(1/120000), 1, 1, (1/120000)],
 })
@@ -201,10 +202,10 @@ export const key2DropTable = dropTable({
 export const key3DropTable = dropTable({
     tier: 3,
     // [chance (w/ multipliers), min, max, baseChance]
-    gems: [0.25, 1e8, 1e9, 0.125], 
-    gold: [0.15, 1e6, 5e6, 0.075],
+    gems: [0.25, 1e14, 1e15, 0.25], 
+    gold: [0.15, 1e8, 5e8, 0.075],
     crystals: [0.11, 1000, 10000, 0.06],
-    orbs: [0.06, 25000, 2.5e5, 0.06],
+    orbs: [0.06, 2.2e6, 1.1e7, 0.06],
     beacons: [0.04, 1000, 3500, 0.04],
     sigils: [0.025, 45, 200, 0.025],
     artifacts: [4.2e-6, 1, 1, 4.2e-6],

@@ -64,7 +64,7 @@
                     <div class='grid grid-cols-3'>
                         <div class='col-span-3 text-center
                         {$mineLevel['level'] > 69 ? 'text-red-500' : 'text-cyan-500'}'>
-                            [ {f($mineLevel['xp'],0)} / {f($mineLevel['xpNextReq'], 0)} ]
+                            [ {f(($mineLevel['xp'] || 0), 0)} / {f($mineLevel['xpNextReq'], 0)} ]
                         </div>
                         <div class='col-span-3 text-center'>
                             Each mine operation gives <strong>{f(1*$allMultipliers['mineXP']['formula']($wallet['artifacts'] || 0), 2)}</strong> xp.

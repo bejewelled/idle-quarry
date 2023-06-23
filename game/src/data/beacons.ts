@@ -246,10 +246,10 @@ export const beaconUpgrades = array([{
     name: 'Shining Light',
     description: 'Increases the droprate for beacons (mining only).',
     cost: {
-        beaconPower: 100000,
+        beaconPower: 10000,
     },
-    ratio: 1.33,
-    formula: (lv: any) => 1 + 0.05*lv,
+    ratio: 2,
+    formula: (lv: any) => 1 + 0.1*lv,
     mineLevelReq: 6,
     isPercent: false,
     prefix: 'x',
