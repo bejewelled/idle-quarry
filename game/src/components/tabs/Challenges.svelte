@@ -85,6 +85,18 @@ function toggleChallenge(i) {
     challengeGoals.updateChallengeReqs();
     if ($challengeActive == i) {
         if (confirm("Are you sure? Challenge progress will be lost.")) {
+            if ($challengeActive === 2) {
+                for (let i in $miningUpgradeLevels) {
+                    if (!$miningUpgrades[i]['noResetRelocate'] && !($miningUpgrades[i]['name'].includes('Lootmaster'))) {
+                            $miningUpgradeLevels[i] = $miningUpgradeLevelsTemp[i];
+                            $miningUpgradeLevelsBought[i] = $miningUpgradeLevelsBoughtTemp[i];
+                            $miningUpgradeLevelsFree[i] = $miningUpgradeLevelsFreeTemp[i];
+                            $miningUpgradeLevelsTemp[i] = 0;
+                            $miningUpgradeLevelsBoughtTemp[i] = 0;
+                            $miningUpgradeLevelsFreeTemp[i] = 0;
+                        }
+                    }
+            }
             $challengeActive = 0;
             $wallet['challengePoints'] = 0;
         }
