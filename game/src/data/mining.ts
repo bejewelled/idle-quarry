@@ -171,7 +171,7 @@ export const miningUpgrades = array([{
 {
     index: 2,
     name: 'Fortune',
-    description: 'Improves mining droprates for gold and [*] keys.',
+    description: 'Improves mining droprates for tier I drops.',
     cost: {
         gold: 10
     },
