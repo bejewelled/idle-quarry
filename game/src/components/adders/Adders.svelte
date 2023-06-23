@@ -609,35 +609,35 @@ function procEnchants(n, tier) {
                         }
                     }
                     break;
-                case 6: // key boon
+                    case 6: // key boon
                     const keyRand = Math.random() + (0.2 * (quality/1e6));
                     const BASE_KEYGAIN = size;
                     let tier, amtDivider;
                     const randFactor = Math.random() * 0.2 + 0.9;
-                    const reward = (1 + Math.floor(randFactor * BASE_KEYGAIN / amtDivider));
+                    let reward = (1 + Math.floor(randFactor * BASE_KEYGAIN));
                     if (keyRand > 1.18) {
                         tier = 5;
-                        amtDivider = 250000; 
+                        reward = (reward/250000) + 1;
                         addToActivityLog('[KEY BOON] INCREDIBLE! +' + reward + ' [*****] keys!', 
                     'text-amber-400', 'key boon');
                     } else if (keyRand > 1.15) {
                         tier = 4;
-                        amtDivider = 10000;
+                        reward = (reward/10000) + 1;
                         addToActivityLog('[Key Boon] Excellent! +' + reward + ' [****] keys', 
                             'text-violet-400', 'key boon');
                     } else if (keyRand > 0.9975) {
                         tier = 3;
-                        amtDivider = 1000;
+                        reward = (reward/1000) + 1;
                         addToActivityLog('[Key Boon] Great! +' + reward + ' [***] keys', 
                             'text-pink-300', 'key boon');                              
                     } else if (keyRand > 0.925) {
                         tier = 2;
-                        amtDivider = 10;
+                        reward = (reward/10) + 1;
                         addToActivityLog('[Key Boon] Great! +' + reward + ' [**] keys', 
                             'text-blue-300', 'key boon'); 
                     } else {
                         tier = 1;
-                        amtDivider = 0.1;
+                        reward = (reward*10) + 1;
                         addToActivityLog('[Key Boon] +' + reward + ' [*] keys', 
                             'text-green-300', 'key boon'); 
                     }
