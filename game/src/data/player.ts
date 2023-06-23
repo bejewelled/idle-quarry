@@ -228,8 +228,8 @@ export const keyUpgradeLevels = array(Array(50).fill(0));
 export const baseMiningDropTable = dropTable({
     gold: [0.20,1,3], // 20% chance to drop 1 - 3 gold
     key1: [0.025,1,1], 
+    orbs: [0.007,1,1],
     //lm1
-    orbs: [0.01,10,50000],
     beacons: [0.005,1,1],
     //lm2
     sigils: [0.0003,1,3],
@@ -244,8 +244,8 @@ export const baseMiningDropTable = dropTable({
 export const miningDropTable = dropTable({
     gold: [0.20,1,3], // 20% chance to drop 1 - 3 gold
     key1: [0.025,1,1], 
+    orbs: [0.007,1,1],
     //lm1
-    orbs: [0.01,10,50000],
     beacons: [0.005,1,1],
     //lm2
     sigils: [0.0003,1,3],

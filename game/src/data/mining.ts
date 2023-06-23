@@ -189,10 +189,10 @@ export const miningUpgrades = array([{
     description: 'While mining, you will occasionally find a bundle of T1 [*] keys.' 
     + '\nUpgrades increase progress gained towards this milestone.',
     cost: {
-        orbs: 40,
+        orbs: 55,
         key1: 10
     },
-    ratio: 1.5,
+    ratio: 1.3,
     unlockAt: () => (get(wallet)['key1'] >= 1),
     formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
     isPercent: false,
@@ -253,16 +253,16 @@ export const miningUpgrades = array([{
 {
     index: 7,
     name: 'Shiny',
-    description: 'Gold drops are significantly improved.',
+    description: 'Increases the amount of gold and orbs found from mining.',
     cost: {
-        gems: 1000,
+        gems: 1150,
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10),
-    formula: (lv: any) => (lv > 10000 ? 2501+Math.pow((lv-10000), 0.7)*0.25 
-    :(1 + lv*0.25)),
+    formula: (lv: any) => (lv > 10000 ? 1501+Math.pow((lv-10000), 0.7)*0.15 
+    :(1 + lv*0.15)),
     isPercent: false,
-    suffix: 'x gold from drops',
+    suffix: 'x gold/orb drops',
     maxLevel: 1000,
     notes: ''
 },
