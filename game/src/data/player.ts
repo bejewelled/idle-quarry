@@ -169,6 +169,7 @@ function dropTable(context: any) {
                             : 1) 
                             * Math.max(1,get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6]))
                             * Math.max(1,get(miningUpgrades)[22]['formula'](get(miningUpgradeLevels)[22]))
+                            * Math.max(1,get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11]))
                             * Math.max(1,get(beaconBonuses)[2])
                             * (item === 'beacons' ? get(beaconUpgrades)[1]['formula'](get(beaconUpgradeLevels)[1]) : 1)
                             * (item === 'artifacts' ? get(allMultipliers)['artifacts']['formula'](get(wallet)['artifacts']) : 1),
@@ -177,11 +178,13 @@ function dropTable(context: any) {
                         //@ts-ignore
                         (val[1])
                         * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11])
-                        * (item === 'gold' ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1),
+                        * ((item === 'gold' || item === 'orbs')
+                          ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1),
                         //@ts-ignore
                         (val[2])
                         * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11])
-                        * (item === 'gold' ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1),
+                        * ((item === 'gold' || item === 'orbs')
+                        ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1),
                     ]
                     i[item][1] += Math.max(0,(i[item][0]-1)*i[item][1])
                     i[item][2] += Math.max(0,(i[item][0]-1)*i[item][1])
@@ -228,9 +231,10 @@ export const keyUpgradeLevels = array(Array(50).fill(0));
 export const baseMiningDropTable = dropTable({
     gold: [0.20,1,3], // 20% chance to drop 1 - 3 gold
     key1: [0.025,1,1], 
+    orbs: [0.007,1,1],
     //lm1
-    orbs: [0.01,10,50000],
     beacons: [0.005,1,1],
+    crystals: [0.00026, 0.33, 0.75],
     //lm2
     sigils: [0.0003,1,3],
     key2: [0.0001,1,1],
@@ -244,17 +248,17 @@ export const baseMiningDropTable = dropTable({
 export const miningDropTable = dropTable({
     gold: [0.20,1,3], // 20% chance to drop 1 - 3 gold
     key1: [0.025,1,1], 
+    orbs: [0.007,1,1],
     //lm1
-    orbs: [0.01,10,50000],
     beacons: [0.005,1,1],
+    crystals: [0.00026, 0.33, 0.75],
     //lm2
     sigils: [0.0003,1,3],
     key2: [0.0001,1,1],
     //lm3
-    dust: [0.0001, 0.24, 0.72],
-    key3: [1e-6,0.2,0.2],
-    artifacts: [3.3e-7, 1, 1],
-    
+    dust: [7e-6, 0.06, 0.28],
+    key3: [1e-6,0.1,0.3],
+    artifacts: [3.3e-7, 0.04, 0.05],
 });
 
 

@@ -64,13 +64,13 @@
                     <div class='grid grid-cols-3'>
                         <div class='col-span-3 text-center
                         {$mineLevel['level'] > 69 ? 'text-red-500' : 'text-cyan-500'}'>
-                            [ {f($mineLevel['xp'],0)} / {f($mineLevel['xpNextReq'], 0)} ]
+                            [ {f(($mineLevel['xp']), 0)} / {f($mineLevel['xpNextReq'], 0)} ]
                         </div>
                         <div class='col-span-3 text-center'>
-                            Each mine operation gives <strong>{f(1*$allMultipliers['mineXP']['formula']($wallet['artifacts'] || 0), 2)}</strong> xp.
+                            Each mine operation gives <strong>{f(formula.getMineXPPerCycle(), 2)}</strong> xp.
                         </div>
                         <div class='col-span-3 text-center'>
-                            Button hits give xp based on quality.
+                            This value increases based on the total amount of fame gained across all reset tiers.
                         </div>
                     </div>
                 </span>
@@ -255,6 +255,7 @@ const toggleMaxBuy = () => {
  * number formatting
  */
 const f = (n, pl = 3) => {
+    if (!n || isNaN(n) || n === null) return 'NaN'
     if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
     else return n.toExponential(3).toString().replace('+', '');
 }

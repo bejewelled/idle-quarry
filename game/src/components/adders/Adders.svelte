@@ -225,11 +225,11 @@ function addProgress(delta) {
         return;
 
     // optimize out of focus
-    if (delta > 16 || !document.hasFocus()) {
+    if (delta > 16 || document.hidden) {
         addGems($progressThisTick['gems'] / $progressThreshold['gems'] * 0.9);
 
         $mineLevel['xp'] += ($progressThisTick['gems'] / $progressThreshold['gems'])
-        * $allMultipliers['mineXP']['formula']($wallet['artifacts'] || 0);
+        * formula.getMineXPPerCycle();
 
         dropRoll($progressThisTick['gems'] / $progressThreshold['gems'] * 0.9);
         addKey1($progressThisTick['key1'] / $progressThreshold['key1'] * 0.9, keyAt);
@@ -264,7 +264,7 @@ function addProgress(delta) {
         dropRoll(Math.floor($progress['gems'] / gemAt));
 
         $mineLevel['xp'] += ($progress['gems'] / gemAt)
-        * $allMultipliers['mineXP']['formula']($wallet['artifacts'] || 0);
+        * formula.getMineXPPerCycle();
 
         $progress['gems'] = 0;
     }
@@ -299,6 +299,9 @@ function addProgress(delta) {
  */
 let lastGemGainTextUpdate = Date.now();
 function addGems(n, avgProgress) {
+    if (isNaN(n)) {
+        n = 1;
+    }
     if ($challengeActive === 3) {
         $challenge3Multi *= 0.999 - ($challengesCompleted[2]*0.001);
     }
@@ -514,13 +517,13 @@ function addBeaconProgress(delta, isOffFocus = false) {
             // increase levels         
             $beaconLevels[i] += numLevels;
             // update formulas as needed
-            const EXPONENT_MULTI = 1.0000025;
-            $beaconBonuses[i] = $beaconFormulas[i]($beaconLevels[i]) * Math.pow(EXPONENT_MULTI, $beaconLevels[i]);
+            const BONUS_EXPONENT = 1.0000025;
+            $beaconBonuses[i] = $beaconFormulas[i]($beaconLevels[i]) * Math.pow(BONUS_EXPONENT, $beaconLevels[i]);
             // update next reqs
 
             // EDIT WITH CAUTION!! Do not cause an overflow (>1e308) at high levels
-            const EXP_MULTI = 1.0005; 
-            $beaconNextReqs[i] = (($beaconNums[i][0]+1) * $beaconLevels[i]) * Math.pow(EXP_MULTI, $beaconLevels[i]);
+            const REQ_EXPONENT = 1.0005; 
+            $beaconNextReqs[i] = (($beaconNums[i][0]+1) * $beaconLevels[i]) * Math.pow(REQ_EXPONENT, $beaconLevels[i]);
             if (Date.now() - lastDropTableUpdate > 1000) {
                 lastDropTableUpdate = Date.now();
                 miningDropTable.updateTable();
@@ -530,14 +533,11 @@ function addBeaconProgress(delta, isOffFocus = false) {
             locks.delete(i);
         }
     }
-    const maxLevel = Math.max(...$beaconLevels);
-    // add beacon power, gain more power if all levels are nearly equal
-    // will always give at least 20% of potential gain
 
     // NOTE!!!!! When you update this, make sure to update the display in Beacons.svelte line 7
-    const bpGain = (200 * (UPDATE_SPEED / 1000)) 
+    const bpGain = (25 * (UPDATE_SPEED / 1000)) 
     * $beaconLevels.reduce((s, c) => s * (c > 10000 ? Math.log10(c) - 3 : 1) , 1)
-    * $beaconUpgrades[0]['formula']($beaconUpgradeLevels[0])
+    * $beaconBonuses[0]
     * delta;
    
     $resources['beaconPower'] = ($resources['beaconPower'] || 0) + bpGain;

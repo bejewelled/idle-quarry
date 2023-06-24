@@ -54,7 +54,8 @@ export default class ref {
         gems: 0,
         gold: 1,
         key1: 1,
-        orbs: 2,
+        orbs: 1,
+        crystals: 2,
         beacons: 2,
         fame: 2,
         key2: 3,
@@ -114,7 +115,7 @@ export default class ref {
         'efficiency iii': 15, 'legendary iii': 16,
         'expansive': 17, 'clockwork': 18,
         'reflectors': 19, 'mythical': 20,
-        'overload': 21, 'lockpicks': 22,
+        'lockpicks': 21, 'overload': 22, 
         'hardened': 23, 'excavator': 24,
 
 

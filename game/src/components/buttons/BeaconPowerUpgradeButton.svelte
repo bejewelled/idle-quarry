@@ -33,7 +33,8 @@ select-none'>{$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index],0)
                 {#if c[1] >= 1}
                     <div class='{ref.colors[c[0]] || ref.colors['default']} col-span-3'>
                     {(ref.displayNames[c[0]] ? ref.displayNames[c[0]] : c[0])}</div>
-                    <div class='col-span-2 text-left'>{f(c[1])}</div>
+                    <div class='col-span-2 {($resources['beaconPower'] < c[1]) ?'text-red-600' : ''}
+                    text-left'>{f(c[1])}</div>
                 {/if}
             {/each}
         </div>
