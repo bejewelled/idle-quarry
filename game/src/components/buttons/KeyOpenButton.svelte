@@ -195,7 +195,7 @@ select-none'>
                 }
             }  
         }
-
+    if (isNaN($wallet['key'+rarity])) $wallet['key'+rarity] = 0;
     const dispRewards = {};
     for (let [type, amt] of Object.entries(rewards)) {
         rewards[type] = Math.floor(amt);

@@ -202,18 +202,18 @@ export const beaconFormulas = array([
     .concat(Array(25).fill(function(lv: number) {return 1}))
 )
 
-export const beaconNextReqs = array(Array(3).fill(700)
+export const beaconNextReqs = array(Array(3).fill(250)
 .concat(Array(3).fill(5e7))
 .concat(Array(2).fill(1e11)
 .concat(Array(2).fill(1e17))))
 
-export const baseBeaconNextReqs = array(Array(3).fill(700)
+export const baseBeaconNextReqs = array(Array(3).fill(250)
 .concat(Array(3).fill(5e7))
 .concat(Array(2).fill(1e11)
 .concat(Array(2).fill(1e17))))
 
 export const beaconNums = array(
-    Array(3).fill([700, 1.0005])
+    Array(3).fill([250, 1.0005])
     .concat(Array(3).fill([5e7, 1.0005])
     .concat(Array(2).fill([1e11, 1.0005])
     .concat(Array(2).fill([1e17, 1.0005])))))

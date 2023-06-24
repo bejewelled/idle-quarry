@@ -159,8 +159,11 @@ export default class formula {
   static getMineXPPerCycle() {
     if (isNaN(get(allMultipliers)['mineXP']['formula'](get(wallet)['artifacts'] || 0)))
       return 1;
-    else return 1 
+    const y = 1 
     * get(allMultipliers)['mineXP']['formula'](get(wallet)['artifacts'] || 0)
     * Math.max(1, Math.log((get(wallet)['totalFame'] || 0) / 20 + 1))
+    
+    if (isNaN(y)) return 1;
+    else return y;
   }
 }

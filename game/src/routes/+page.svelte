@@ -255,7 +255,7 @@ const toggleMaxBuy = () => {
  * number formatting
  */
 const f = (n, pl = 3) => {
-    if (!n || isNaN(n) || n === null) return 'NaN'
+    if (isNaN(n) || n === null) return 'NaN'
     if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
     else return n.toExponential(3).toString().replace('+', '');
 }
