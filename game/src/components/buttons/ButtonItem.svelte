@@ -109,31 +109,31 @@ const BUTTON_SIZE= 100;
 
     let xpGain = 0;
     if (absDist < 1) {
-        rewardAmount = 150;
+        rewardAmount = 100;
         rewardDescriptionText = 'PERFECT! +';
         rewardStyle = 'text-large text-amber-500 border-amber-500 font-bold'
         $buttonNumClicks['perfect']++;
         xpGain = 3 * $buttonUpgrades[4]['formula']($buttonUpgradeLevels[4]);
     } else if (absDist <= 2) {
-        rewardAmount = 12;
+        rewardAmount = 6;
         rewardDescriptionText = 'INCREDIBLE +';
         rewardStyle = 'text-large text-pink-500 border-pink-500 font-bold'
         $buttonNumClicks['incredible']++;
         xpGain = 3 * $buttonUpgrades[4]['formula']($buttonUpgradeLevels[4]);
     } else if (absDist <= 4) {
-        rewardAmount = 5;
+        rewardAmount = 4;
         rewardDescriptionText = 'Excellent +';
         rewardStyle = 'text-med text-violet-500 border-violet-500'
         $buttonNumClicks['excellent']++;
         xpGain = 2 * $buttonUpgrades[4]['formula']($buttonUpgradeLevels[4]);
     } else if (absDist <= 7) {
-        rewardAmount = 4;
+        rewardAmount = 3;
         rewardDescriptionText = 'Great +';
         rewardStyle = 'text-med text-sky-500 border-sky-500'
         $buttonNumClicks['great']++;
         xpGain = 1;
     } else if (absDist <= 10) {
-        rewardAmount = 3;
+        rewardAmount = 2;
         rewardDescriptionText = 'Good +';
         rewardStyle = 'text-med text-green-500 border-green-500'
         $buttonNumClicks['good']++;

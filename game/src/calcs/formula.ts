@@ -1,9 +1,10 @@
 import {buttonUpgradeLevels, miningUpgradeLevels, keyUpgradeLevels,
-keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive} from '../data/player';
+keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet} from '../data/player';
 import { beaconBonuses } from '../data/beacons';
 import {keyUpgrades, keyCrafts} from '../data/keys'
 import { get } from 'svelte/store';
 import ref from './ref';
+import { allMultipliers } from '../data/artifacts';
 export default class formula {
 
     // returns a normally random value
@@ -153,5 +154,13 @@ export default class formula {
     const y = nEff * ref.challengePointValues[type] || 0;
     if (get(challengeActive) == 4) return Math.pow(y/1000, 1.5)
     else return y;
+  }
+
+  static getMineXPPerCycle() {
+    if (isNaN(get(allMultipliers)['mineXP']['formula'](get(wallet)['artifacts'] || 0)))
+      return 1;
+    else return 1 
+    * get(allMultipliers)['mineXP']['formula'](get(wallet)['artifacts'] || 0)
+    * Math.max(1, Math.log((get(wallet)['totalFame'] || 0) / 20 + 1))
   }
 }

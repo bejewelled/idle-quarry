@@ -229,7 +229,7 @@ function addProgress(delta) {
         addGems($progressThisTick['gems'] / $progressThreshold['gems'] * 0.9);
 
         $mineLevel['xp'] += ($progressThisTick['gems'] / $progressThreshold['gems'])
-        * $allMultipliers['mineXP']['formula']($wallet['artifacts'] || 0);
+        * formula.getMineXPPerCycle();
 
         dropRoll($progressThisTick['gems'] / $progressThreshold['gems'] * 0.9);
         addKey1($progressThisTick['key1'] / $progressThreshold['key1'] * 0.9, keyAt);
@@ -264,7 +264,7 @@ function addProgress(delta) {
         dropRoll(Math.floor($progress['gems'] / gemAt));
 
         $mineLevel['xp'] += ($progress['gems'] / gemAt)
-        * $allMultipliers['mineXP']['formula']($wallet['artifacts'] || 0);
+        * formula.getMineXPPerCycle();
 
         $progress['gems'] = 0;
     }

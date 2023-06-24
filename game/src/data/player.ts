@@ -234,6 +234,7 @@ export const baseMiningDropTable = dropTable({
     orbs: [0.007,1,1],
     //lm1
     beacons: [0.005,1,1],
+    crystals: [0.00026, 0.33, 0.75],
     //lm2
     sigils: [0.0003,1,3],
     key2: [0.0001,1,1],
@@ -250,14 +251,14 @@ export const miningDropTable = dropTable({
     orbs: [0.007,1,1],
     //lm1
     beacons: [0.005,1,1],
+    crystals: [0.00026, 0.33, 0.75],
     //lm2
     sigils: [0.0003,1,3],
     key2: [0.0001,1,1],
     //lm3
-    dust: [0.0001, 0.24, 0.72],
-    key3: [1e-6,0.2,0.2],
-    artifacts: [3.3e-7, 1, 1],
-    
+    dust: [7e-6, 0.06, 0.28],
+    key3: [1e-6,0.1,0.3],
+    artifacts: [3.3e-7, 0.04, 0.05],
 });
 
 

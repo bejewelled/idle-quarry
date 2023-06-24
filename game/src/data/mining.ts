@@ -175,7 +175,7 @@ export const miningUpgrades = array([{
     cost: {
         gold: 10
     },
-    ratio: 1.24,
+    ratio: 1.2,
     unlockAt: () => (get(wallet)['gems'] > 30 && get(wallet)['gold'] > 5),
     formula: (lv: any) => (lv > 10000 ? 901 + Math.pow((lv-10000), 0.6)*0.08 : 1 + lv*0.09),
     isPercent: true,
@@ -239,8 +239,9 @@ export const miningUpgrades = array([{
     name: 'Lootmaster I',
     description: 'Unlocks a new tier of findable drops.',
     cost: {
-        gems: 1e5,
+        gems: 4e4,
         gold: 750,
+        key1: 25,
     },
     ratio: 1.25,
     unlockAt: () => ((get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10)
@@ -272,11 +273,11 @@ export const miningUpgrades = array([{
     name: 'Efficiency II',
     description: 'Increases gem yield again.',
     cost: {
-        gems: 2500,
+        gems: 10000,
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10),
-    formula: (lv: any) => (1+Math.pow(lv, 0.7)*0.5),
+    formula: (lv: any) => (1+Math.pow(lv, 0.96)*0.15),
     isPercent: true,
     prefix: '+',
     suffix: ' gems',
@@ -288,8 +289,10 @@ export const miningUpgrades = array([{
     name: 'Lootmaster II',
     description: 'Unlocks a new tier of findable drops.',
     cost: {
-        orbs: 1e5,
-        beacons: 100,
+        orbs: 75000,
+        crystals: 10000,
+        beacons: 2500,
+        key2: 150,
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[6] >= 0.997 || get(miningUpgradeLevels)[9] > 0),
@@ -302,7 +305,7 @@ export const miningUpgrades = array([{
 // i = 10
 {
     index: 10,
-    name: 'Expansive',
+    name: 'Hoarder',
     description: 'Significantly improves gem gains.',
     cost: {
         fame: 5
@@ -320,14 +323,15 @@ export const miningUpgrades = array([{
 },
 {
     index: 11,
-    name: 'Clockwork',
-    description: 'Significantly improves mining drop rate and drop quantity.',
+    name: 'Spelunker',
+    description: 'Significantly improves mining drop rate and drop quantity. Diminishing returns after level 10.',
     cost: {
         fame: 5
     },
     ratio: 1.4,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + lv * 0.25),
+    formula: (lv: any) => (lv > 10 ? 2.8 + Math.pow(lv-10, 0.7) :
+    (1 + lv * 0.18)),
     isPercent: false,
     noResetRelocate: true,
     suffix: 'x drop rate/quanity',
@@ -338,7 +342,7 @@ export const miningUpgrades = array([{
 // i = 12
 {
     index: 12,
-    name: 'Reflectors',
+    name: 'Paladin',
     description: 'Significantly improves beacon path progress.',
     cost: {
         fame: 5
@@ -356,7 +360,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 13,
-    name: 'Mythical',
+    name: 'Gambler',
     description: 'Increases key open droprates when using keys. Note that some drop chances are capped.',
     cost: {
         fame: 5
@@ -377,10 +381,10 @@ export const miningUpgrades = array([{
     name: 'Lootmaster III',
     description: 'Unlocks a new tier of findable drops.',
     cost: {
-        crystals: 1e7,
         slurry: 1e6,
         sigils: 1e4,
         warp: 4000,
+        key3: 1000,
         trophies: 3,
         artifacts: 1,
 
@@ -403,7 +407,6 @@ export const miningUpgrades = array([{
     description: 'Drop chances above 100% increase the amount of drops.',
     cost: {
         fame: 1200,
-
     },
     ratio: 200,
     unlockAt: () => (get(wallet)['totalFame'] > 200),
@@ -583,11 +586,11 @@ export const miningUpgrades = array([{
     name: 'Lockpicks',
     description: 'Significantly increases the speed and yield of Key Master.',
     cost: {
-        fame: 2500
+        fame: 30
     },
     ratio: 1.4,
     unlockAt: () => (get(wallet)['totalFame'] > 200),
-    formula: (lv: any) => 1 + lv*0.45,
+    formula: (lv: any) => 1 + lv*0.2,
     noResetRelocate: true,
     isPercent: false,
     suffix: 'x speed/amount',
