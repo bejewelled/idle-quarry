@@ -273,7 +273,7 @@ export const automationUpgrades = array([{
     name: 'Jumpstart',
     description: 'Start with 5000 gems and 100 gold.',
     cost: {
-        fame: 1600,
+        fame: 100,
     },
     unlockAt: () => (get(wallet)['fame'] >= 1),
     isPercent: true,
@@ -284,7 +284,7 @@ export const automationUpgrades = array([{
     name: 'Deep Pockets',
     description: 'Lootmaster I and II are automatially unlocked and stay unlocked on relocate.',
     cost: {
-        fame: 8000,
+        fame: 1850,
     },
     unlockAt: () => (get(wallet)['fame'] >= 1),
     isPercent: true,
@@ -295,7 +295,7 @@ export const automationUpgrades = array([{
     name: 'Beacon Tools',
     description: 'Unlock the ability to split beacons evenly across all paths, and to recall all beacons at once.',
     cost: {
-        fame: 25000,
+        fame: 2500,
     },
     unlockAt: () => (get(wallet)['fame'] >= 1),
     isPercent: true,
@@ -306,7 +306,7 @@ export const automationUpgrades = array([{
     name: 'Omnipotent',
     description: 'Except for Lootmaster upgrades, mining upgrades are not reset on relocation.',
     cost: {
-        fame: 100000,
+        fame: 25000,
     },
     unlockAt: () => (get(wallet)['fame'] >= 1),
     isPercent: true,
@@ -317,7 +317,7 @@ export const automationUpgrades = array([{
     name: 'Game On',
     description: 'Unlocks challenges 1 - 3.',
     cost: {
-        fame: 1e5,
+        fame: 100000,
     },
     unlockAt: () => (get(wallet)['fame'] >= 1),
     isPercent: true,

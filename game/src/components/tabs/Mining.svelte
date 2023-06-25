@@ -229,7 +229,6 @@ const setRenderedUpgrades = () => {
 const upgradeSortShow = (i) => {
     for (let sort of ($miningUpgrades[i]['sortType'])) {
         if ($upgradeSorting[sort]['on']) {
-            console.log(renderedUpgrades);
             return true;
         }
     }

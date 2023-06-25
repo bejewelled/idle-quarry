@@ -151,6 +151,10 @@ export const upgradeSorting = object({
         on: true,
         unlockAt: () => (get(wallet)['sigils'] > 0),
     },
+    dust: {
+        on: true,
+        unlockAt: () => (get(wallet)['dust'] > 0),
+    },
 })
 
 // edit when changing the level of the hastpe upgrade
@@ -469,15 +473,15 @@ export const miningUpgrades = array([{
     name: 'Legendary',
     description: 'Increases fame gain on relocation.',
     cost: {
-        gems: 1e7,
-
+        gems: 3e5,
+        gold: 1e4,
     },
-    ratio: 1.5,
-    unlockAt: () => (get(wallet)['totalFame'] > 200),
-    formula: (lv: any) => (1 + (lv * 0.13)),
+    ratio: 1.25,
+    unlockAt: () => (get(wallet)['totalFame'] > 60),
+    formula: (lv: any) => (1 + (lv * 0.15)),
     isPercent: true,
     suffix: '  fame bonus',
-    maxLevel: 500,
+    maxLevel: 200,
     noResetRelocate: false,
     notes: 'index 16'
 },
@@ -488,15 +492,16 @@ export const miningUpgrades = array([{
     name: 'Legendary II',
     description: 'Increases fame gain on relocation.',
     cost: {
-        gold: 1e6,
+        orbs: 1e4,
+        crystals: 750,
 
     },
-    ratio: 1.5,
-    unlockAt: () => (get(wallet)['totalFame'] > 200),
-    formula: (lv: any) => (1 + (lv * 0.13)),
+    ratio: 1.25,
+    unlockAt: () => (get(wallet)['totalFame'] > 15000),
+    formula: (lv: any) => (1 + (lv * 0.15)),
     isPercent: true,
     suffix: '  fame bonus',
-    maxLevel: 500,
+    maxLevel: 150,
     noResetRelocate: false,
     notes: 'index 16'
 },

@@ -138,7 +138,7 @@
                 <button class='text-xs text-gray-600'>v0.0.4a-6</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
-                
+                {#key clockTabs}
                 {#each ref.tabs as t}
                     <button class='px-1 py-1 text-small 
                     {!tabUnlockCriteria[t] ? 'control-btn-nounlock' : 
@@ -146,6 +146,7 @@
                     (t === tab ? 'control-btn-selected' : 'control-btn') : 'control-btn-nounlock')}' 
                     on:click={() => changeTab(t)}>{t}</button>
                 {/each}
+                {/key}
                 
             </div>
             <div class='row-span-10 main-panel-display'>
@@ -284,7 +285,7 @@ const tabUnlockCriteria = {
         beacons: () => (($wallet['beacons']) || formula.sumArray($beaconActivations)>0),
         sigils: () => ($wallet['sigils'] && $wallet['sigils'] > 0.02),
         relocate: () => (formula.sumArray($keysOpened) > 200 || $wallet['fame']),
-        enchants: () => ($wallet['fame'] && $wallet['fame'] >= 100) 
+        enchants: () => ($wallet['fame'] && $wallet['totalFame'] >= 100) 
                         || formula.sumArray($enchantUpgradeLevels) > 0,
         automation: () => ($wallet['fame'] && $wallet['fame'] >= 0.997)
                         || formula.sumArray($enchantUpgradeLevels) > 0
@@ -689,7 +690,7 @@ async function loadFunc() {
         miningDropTable.updateTable();
     },250)
 }
-
+let clockTabs;
 onMount(() => {
     loadFunc();
     setInterval(() => {
@@ -711,6 +712,7 @@ onMount(() => {
             tab = 'mining';
             $flags['relocateNavBack'] = false;
         }
+        clockTabs = !clockTabs;
     }, 1163); // prime number to avoid sync with other intervals
 })
 
