@@ -192,9 +192,9 @@ export const key2DropTable = dropTable({
     tier: 2,
     gems: [0.25, 1e6, 1e7, 0.25], // [chance, min, max, base]
     gold: [0.15, 1e4, 1e5, 0.15],
-    orbs: [0.15, 12000, 90000, 0.15],
+    orbs: [0.15, 3200, 18000, 0.15],
+    sigils: [0.11, 1, 1, 0.11],
     beacons: [0.06, 250, 1000, 0.06],
-    sigils: [0.01, 1, 1, 0.01],
     fame: [0.00025, 1, 10, 0.00025],
     key3: [(1/120000), 1, 1, (1/120000)],
 })
@@ -332,6 +332,20 @@ export const keyCrafts = array([
         baseAmount: 1000,
         ratio: 1.025,
         unlockAt: () => (get(wallet)['beacons'] > 0),
+    },
+    {
+        item: 'key2',
+        name: '[**] Key',
+        style: 'text-blue-400',
+        stylebg: 'bg-blue-400',
+        cost: {
+            slurry: 250,
+            sigils: 1,
+        },
+        craftTime: 860, // in seconds
+        baseAmount: 2,
+        ratio: 1.04,
+        unlockAt: () => (get(wallet)['key3'] > 0 || get(keysOpened)[2] > 0 || get(keysOpened)[1] > 1e5),
     },
     {
         item: 'key3',

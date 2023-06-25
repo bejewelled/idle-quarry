@@ -106,10 +106,10 @@
     </div>
     <div class='pt-6'>
         <div class='wrapper'>
-            {#if $wallet['gold'] > 1e6 || $wallet['slurry'] > 0}
+            {#if $wallet['gold'] > 3e4 || $wallet['slurry'] > 0}
             <KeySlurryConvertButton />
             {:else}
-            <div class='game-btn-noafford text-center py-2'>Unlock a new feature at 1,000,000 gold</div>
+            <div class='game-btn-noafford text-center py-2'>Unlock a new feature at 30,000 gold</div>
             {/if}
         </div>
     </div>

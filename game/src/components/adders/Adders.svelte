@@ -266,6 +266,7 @@ function addProgress(delta) {
         $mineLevel['xp'] += ($progress['gems'] / gemAt)
         * formula.getMineXPPerCycle();
 
+
         $progress['gems'] = 0;
     }
     // add keys

@@ -6,7 +6,7 @@
     </div>
     <div class='col-span-12'>Relocating resets all previous resources and upgrades.
     </div>
-    <div class='col-span-12'>High-tier keys are not reset.</div>
+    <div class='col-span-12'>Tier 1 and 2 keys will be reset.</div>
     <div class='col-span-12 py-1'>You will gain 
         <span class='text-orange-400 font-bold'>{f(Math.floor(calcFameGain()),0)}</span> fame by relocating.</div>
     <div class='col-span-12 py-1'><hr /></div> 
@@ -175,12 +175,6 @@ const fameGridInfo = [
      colorRef: '',
      criteria: () => ($wallet['totalFame'] > 200)
     },
-    {
-     name: 'Time Multiplier (Everlasting)', 
-     value: () => (formula.calcFameTimeMultiplier($stats['lastRelocate'])),
-     colorRef: 'crystals',
-     criteria: () => ($wallet['crystals'] > 1e5)
-    },
 ]
 
 // make sure to update the description when updating this!
@@ -193,7 +187,6 @@ function calcFameGain() {
     * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])
     * $miningUpgrades[19]['formula']($miningUpgradeLevels[19])
     * $beaconFormulas[4]($beaconLevels[4]) // beacon path
-    * formula.calcFameTimeMultiplier($stats['lastRelocate']);
 }
 
 // ONLY things in these arrays will be reset on relocate

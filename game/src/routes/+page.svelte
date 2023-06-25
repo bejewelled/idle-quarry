@@ -67,7 +67,7 @@
                             [ {f(($mineLevel['xp']), 0)} / {f($mineLevel['xpNextReq'], 0)} ]
                         </div>
                         <div class='col-span-3 text-center'>
-                            Each mine operation gives <strong>{f(formula.getMineXPPerCycle(), 2)}</strong> xp.
+                            Each mine operation gives <strong>{f(xpPerCycle, 2)}</strong> xp.
                         </div>
                         <div class='col-span-3 text-center'>
                             This value increases based on the total amount of fame gained across all reset tiers.
@@ -120,7 +120,7 @@
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
                 <button class='py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950' on:click={() => reset()}>Reset</button>
-                <button class='text-xs text-gray-600'>v0.0.4a-4</button>  
+                <button class='text-xs text-gray-600'>v0.0.4a-5</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
                 {#key tabsUnlocked}
@@ -223,6 +223,7 @@ let alogShow = true;
 const GAME_SPEED = 1 //only for balancing, doesn't actually change the game speed
 $: mineLevelBarWidth = Math.min(1, $mineLevel['xp'] / $mineLevel['xpNextReq']) * 100;
 $: challengeBarWidth = $wallet['challengePoints'] / $challengeGoals[$challengeActive-1] * 100;
+$: xpPerCycle = formula.getMineXPPerCycle();
 let ct;
 
 const toggleAlog = () => {
@@ -356,6 +357,7 @@ const save = async (isExport = false) => {
         exportConfirm = false;
     }, 1000);
     console.log($mineLevel)
+    
 
 }
 
@@ -681,7 +683,8 @@ onMount(() => {
     }, AUTOSAVE_INTERVAL);
     setInterval(() => {
         ct = Date.now();
-    }, 1000)
+        xpPerCycle = formula.getMineXPPerCycle();
+    }, 1063)
 
     // use for visual refreshing or testing, not for any game-related logic
     setInterval(() => {
