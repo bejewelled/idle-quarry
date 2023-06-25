@@ -376,7 +376,7 @@ export const keyCrafts = array([
     },
     {
         item: 'key5',
-        name: '[*****] Key',
+        name: '[*****] Key [NOT IMPLEMENTED]',
         style: 'text-amber-400',
         stylebg: 'bg-amber-400',
         cost: {
