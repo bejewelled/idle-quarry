@@ -32,7 +32,14 @@
                 {#each Object.entries($wallet) as res}
                     {#if $wallet[res[0]] && $wallet[res[0]] >= 1 && !res[0].includes('key') && !ref.walletExclude[res[0]]
                     && (ref.dropTiers[res[0]] || ref.dropTiers['default']) == i}   
-                        <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
+                        <div class='{ref.colors[res[0]]} res-name 
+                        has-tooltip col-span-7'>{ref.displayNames[res[0]] || res[0]}
+                            {#if $settings['tutorialMode']}
+                            <span class='tooltip tooltip-style'>
+                                {ref.tutorialModeDescriptions[res[0]]}
+                            </span>
+                            {/if}
+                        </div>
                         <div class='game-text res-amount col-span-5'>{f(Math.floor(res[1]),0)}</div>
                     {/if}
                 {/each}
@@ -41,7 +48,15 @@
             <!-- keys -->
             {#each Object.entries($wallet) as res}
                 {#if ($wallet[res[0]] || $unlockedRes.has(res[0])) && res[0].includes('key') }   
-                    <div class='{ref.colors[res[0]]} res-name col-span-7'>{ref.displayNames[res[0]] || res[0]}</div>
+                        <div class='{ref.colors[res[0]]} res-name
+                        has-tooltip col-span-7'>{ref.displayNames[res[0]] || res[0]}
+                            {#if $settings['tutorialMode']}
+                            <span class='tooltip tooltip-style'>
+                                {ref.tutorialModeDescriptions[res[0]]}
+                            </span>
+                            {/if}
+                        </div>
+ 
                     <div class='game-text res-amount col-span-5'>{f(Math.floor(res[1]),0)}</div>
                 {/if}
             {/each}
@@ -120,10 +135,10 @@
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
                 <button class='py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950' on:click={() => reset()}>Reset</button>
-                <button class='text-xs text-gray-600'>v0.0.4a-5</button>  
+                <button class='text-xs text-gray-600'>v0.0.4a-6</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
-                {#key tabsUnlocked}
+                
                 {#each ref.tabs as t}
                     <button class='px-1 py-1 text-small 
                     {!tabUnlockCriteria[t] ? 'control-btn-nounlock' : 
@@ -131,7 +146,7 @@
                     (t === tab ? 'control-btn-selected' : 'control-btn') : 'control-btn-nounlock')}' 
                     on:click={() => changeTab(t)}>{t}</button>
                 {/each}
-                {/key}
+                
             </div>
             <div class='row-span-10 main-panel-display'>
                 {#if tab === 'mining' && (tabUnlockCriteria['mining']())}
@@ -188,6 +203,7 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     activityLogShow, challengeActive,
     challengesCompleted, challengeProgress, beaconSmartSplits,
     challenge3Multi} from '../data/player.js'
+import {upgradeSorting} from '../data/mining.ts'
 import {key1DropTable, key2DropTable, key3DropTable, 
 key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
 import {beaconNextReqs, beaconSpendAmt, beaconNums, baseBeaconNextReqs} from '../data/beacons.ts'
@@ -744,23 +760,41 @@ onMount(() => {
         color: #d9d9d9;
         background-color: #226323;
         cursor: pointer;
-    }  
+        user-select: none;
+    } 
+    :global(.game-btn-toggleon:hover) {
+        border: 1px solid #d9d9d9;
+        color: #d9d9d9;
+        background-color: #519952;
+        cursor: pointer;    
+        user-select: none;    
+    }   
     :global(.game-btn-toggleoff) {
         border: 1px solid #d9d9d9;
         color: #d9d9d9;
         background-color: #b23939;
         cursor: pointer;
+        user-select: none;
+    }  
+    :global(.game-btn-toggleoff:hover) {
+        border: 1px solid #d9d9d9;
+        color: #d9d9d9;
+        background-color: #cf7171;
+        cursor: pointer;
+        user-select: none;
     }  
     :global(.game-btn) {
         border: 1px solid #d9d9d9;
         color: #d9d9d9;
         text-align: center;
         cursor: pointer;
+        user-select: none;
     }
     :global(.game-btn:hover) {
         border: 1px solid #ffffff;
         color: #ffffff;
         background-color: #3a3a3a;
+        user-select: none;
     }
     :global(.game-btn-noafford) {
         border: 1px solid #888888;
@@ -873,6 +907,27 @@ onMount(() => {
         color: #555555;
         cursor: pointer;
     }
+
+    :global(.control-btn-toggleon) {
+        border: 1px solid #969696;
+        color: #969696;
+        background-color: #226323;
+        cursor: pointer;
+    }
+
+    :global(.control-btn-toggleon:hover) {
+        border: 1px solid #969696;
+        color: #969696;
+        background-color: #519952;
+        cursor: pointer;
+    }
+
+    :global(.tooltip-style) {
+        @apply px-2 mx-4 max-w-[275px] tooltip tooltip-text shadow-lg p-1
+                        border-white border-double border bg-[#222529] ml-16
+                        pointer-events-none;
+    }
+
     :global(.tooltip) {
       @apply invisible absolute;
       display: none;

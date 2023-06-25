@@ -125,6 +125,34 @@ export const progressThreshold = object({
     key3: 390000,
 })
 
+export const upgradeSorting = object({
+    base: {
+        on: true,
+        unlockAt: () => (true),
+    },
+    lootmaster: {
+        on: true,
+        unlockAt: () => ((get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10)
+        || get(miningUpgradeLevels)[6] > 0),
+    },
+    keys: {
+        on: true,
+        unlockAt: () => (true),
+    },
+    fame: {
+        on: true,
+        unlockAt: () => (get(wallet)['totalFame'] > 0),
+    },
+    crystals: {
+        on: true,
+        unlockAt: () => (get(wallet)['crystals'] > 0 || get(miningUpgradeLevels)[20] > 0),
+    },
+    sigils: {
+        on: true,
+        unlockAt: () => (get(wallet)['sigils'] > 0),
+    },
+})
+
 // edit when changing the level of the hastpe upgrade
 export const progressPerTick = single(1);
 
@@ -136,6 +164,7 @@ export const progressPerTick = single(1);
 */
 export const miningUpgrades = array([{
     index: 0,
+    sortType: ['base'],
     name: 'Haste',
     description: 'Increases base mining speed.',
     cost: {
@@ -152,6 +181,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 1,
+    sortType: ['base'],
     name: 'Efficiency',
     description: 'Increases gem yield. Improved after level 100.',
     cost: {
@@ -170,6 +200,7 @@ export const miningUpgrades = array([{
 // i = 2
 {
     index: 2,
+    sortType: ['base'],
     name: 'Fortune',
     description: 'Improves mining droprates for tier I drops.',
     cost: {
@@ -185,6 +216,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 3,
+    sortType: ['keys', 'base'],
     name: '[*] Key Finder',
     description: 'While mining, you will occasionally find a bundle of T1 [*] keys.' 
     + '\nUpgrades increase progress gained towards this milestone.',
@@ -202,6 +234,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 4,
+    sortType: ['keys'],
     name: '[**] Key Finder',
     description: 'While mining, you will occasionally find a bundle of T2 [**] keys.' 
     + '\nUpgrades increase progress gained towards this milestone.',
@@ -220,6 +253,7 @@ export const miningUpgrades = array([{
 // i = 5
 {
     index: 5,
+    sortType: ['keys', 'base'],
     name: 'Key Mastery',
     description: 'Increases the number of keys found when a Key Finder of any rarity triggers.',
     cost: {
@@ -236,6 +270,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 6,
+    sortType: ['lootmaster', 'base'],
     name: 'Lootmaster I',
     description: 'Unlocks a new tier of findable drops.',
     cost: {
@@ -253,6 +288,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 7,
+    sortType: ['base'],
     name: 'Shiny',
     description: 'Increases the amount of gold and orbs found from mining.',
     cost: {
@@ -270,6 +306,7 @@ export const miningUpgrades = array([{
 // i = 8
 {
     index: 8,
+    sortType: ['crystals'],
     name: 'Efficiency II',
     description: 'Increases gem yield again.',
     cost: {
@@ -287,6 +324,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 9,
+    sortType: ['lootmaster'],
     name: 'Lootmaster II',
     description: 'Unlocks a new tier of findable drops.',
     cost: {
@@ -306,6 +344,7 @@ export const miningUpgrades = array([{
 // i = 10
 {
     index: 10,
+    sortType: ['fame'],
     name: 'Hoarder',
     description: 'Significantly improves gem gains.',
     cost: {
@@ -324,6 +363,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 11,
+    sortType: ['fame'],
     name: 'Spelunker',
     description: 'Significantly improves mining drop rate and drop quantity. Diminishing returns after level 10.',
     cost: {
@@ -343,6 +383,7 @@ export const miningUpgrades = array([{
 // i = 12
 {
     index: 12,
+    sortType: ['fame'],
     name: 'Paladin',
     description: 'Significantly improves beacon path progress.',
     cost: {
@@ -361,6 +402,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 13,
+    sortType: ['fame', 'keys'],
     name: 'Gambler',
     description: 'Increases key open droprates when using keys. Note that some drop chances are capped.',
     cost: {
@@ -368,7 +410,7 @@ export const miningUpgrades = array([{
     },
     ratio: 1.4,
     unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => 1 + 0.15*Math.sqrt(lv),
+    formula: (lv: any) => 1 + 0.17*Math.pow(lv, 0.9),
     isPercent: false,
     noResetRelocate: true,
     prefix: 'x',
@@ -379,6 +421,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 14,
+    sortType: ['lootmaster'],
     name: 'Lootmaster III',
     description: 'Unlocks a new tier of findable drops.',
     cost: {
@@ -404,6 +447,7 @@ export const miningUpgrades = array([{
 // i = 15
 {
     index: 15,
+    sortType: ['fame'],
     name: 'Overload',
     description: 'Drop chances above 100% increase the amount of drops.',
     cost: {
@@ -421,6 +465,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 16,
+    sortType: ['base'],
     name: 'Legendary',
     description: 'Increases fame gain on relocation.',
     cost: {
@@ -439,6 +484,7 @@ export const miningUpgrades = array([{
 // i = 17
 {
     index: 17,
+    sortType: ['base'],
     name: 'Legendary II',
     description: 'Increases fame gain on relocation.',
     cost: {
@@ -456,6 +502,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 18,
+    sortType: ['keys'],
     name: '[***] Key Finder',
     description: 'While mining, you will occasionally find a bundle of T3 [***] keys.' 
     + '\nUpgrades increase progress gained towards this milestone.',
@@ -473,6 +520,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 19,
+    sortType: ['sigils'],
     name: 'Legendary III',
     description: 'Increases fame gain on relocation.',
     cost: {
@@ -489,6 +537,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 20,
+    sortType: ['crystals'],
     name: 'Hardened',
     description: 'Your lifetime number of quality button clicks increase gem gain.',
     cost: {
@@ -505,6 +554,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 21,
+    sortType: ['sigils'],
     name: 'Excavator',
     description: 'Artifact droprate from keys is improved.',
     cost: {
@@ -524,6 +574,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 22,
+    sortType: ['base'],
     name: 'Fortune II',
     description: 'Increases all droprates.',
     cost: {
@@ -538,6 +589,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 23,
+    sortType: ['base'],
     name: 'Geodes',
     description: 'Increases crystal gain from the button.',
     cost: {
@@ -553,6 +605,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 24,
+    sortType: ['base'],
     name: 'Blinding Lights',
     description: 'Increases beacon path progress.',
     cost: {
@@ -568,10 +621,11 @@ export const miningUpgrades = array([{
 },
 {
     index: 25,
+    sortType: ['sigils'],
     name: 'Efficiency III',
     description: 'Increases gem gain again.',
     cost: {
-        sigils: 225,
+        sigils: 25,
     },
     ratio: 1.3,
     unlockAt: () => (get(wallet)['sigils'] > 0),
@@ -580,10 +634,11 @@ export const miningUpgrades = array([{
     prefix: '+',
     suffix: ' gem gain',
     style: 'game-btn-sigil',
-    maxLevel: 500,
+    maxLevel: 200,
 },
 {
     index: 26,
+    sortType: ['fame', 'keys'],
     name: 'Lockpicks',
     description: 'Significantly increases the speed and yield of Key Master.',
     cost: {
@@ -601,6 +656,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 27,
+    sortType: ['dust'],
     name: 'Cosmic Brilliance',
     description: 'The first four mining upgrades gain 50 free levels.',
     cost: {
@@ -619,6 +675,7 @@ export const miningUpgrades = array([{
 },
 {
     index: 28,
+    sortType: ['dust'],
     name: 'Glorious Space Turtles',
     description: 'Gain fame per second.',
     cost: {

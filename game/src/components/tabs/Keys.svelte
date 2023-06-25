@@ -1,7 +1,7 @@
 <div class='key-amount-wrapper items-center'>
     <div class='grid grid-cols-10'>
         <div class='col-span-10 pt-3 pb-2 tooltip-text text-center'>
-            Total Keys Opened: {formula.sumArray($keysOpened),0}
+            Total Keys Opened: {f(formula.sumArray($keysOpened))}
             [ 
                 {#each $keysOpened as k, i}
                     <span class='{ref.colors['key'+((i+1).toString())]}'>
@@ -133,6 +133,7 @@
         {/each}
     </div>
     {/if}
+    <div class='pb-16'></div>
 
 
 </div>

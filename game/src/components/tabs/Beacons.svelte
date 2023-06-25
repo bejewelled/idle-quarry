@@ -35,7 +35,7 @@
         {:else}
         <div class='col-span-12'></div>
         {/if}
-    {#key $beaconLevels}
+
     {#each $beaconLevels as b, i}
     {#if $mineLevel['level'] >= $beaconMiningLevelReqs[i]}
     {#if i < 10}
@@ -85,7 +85,7 @@
             Unlock at mining level {$beaconMiningLevelReqs[i]}</div>
     {/if}
     {/each}
-    {/key}
+
     <div class='py-2'></div>
     {#each $beaconUpgrades as b,i}
     <div class='pt-1'></div>

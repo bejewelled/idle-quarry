@@ -1,7 +1,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 {#key reloadClock}
-{#if $wallet['gold'] > 1e6 || $wallet['slurry'] > 0}
+{#if $wallet['gold'] > 3e4 || $wallet['slurry'] > 0}
 <div on:click={() => buy()}
 class='has-tooltip tooltip-text game-btn text-teal-400 
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>

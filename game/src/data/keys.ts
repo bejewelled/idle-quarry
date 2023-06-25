@@ -339,13 +339,12 @@ export const keyCrafts = array([
         style: 'text-blue-400',
         stylebg: 'bg-blue-400',
         cost: {
-            slurry: 250,
-            sigils: 1,
+            slurry: 100,
         },
-        craftTime: 860, // in seconds
+        craftTime: 100, // in seconds
         baseAmount: 2,
         ratio: 1.04,
-        unlockAt: () => (get(wallet)['key3'] > 0 || get(keysOpened)[2] > 0 || get(keysOpened)[1] > 1e5),
+        unlockAt: () => (get(wallet)['key2'] > 0 || get(keysOpened)[1] > 0 || get(keysOpened)[0] > 1e4),
     },
     {
         item: 'key3',

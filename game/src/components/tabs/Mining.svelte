@@ -47,6 +47,24 @@
         </div>
     {/if}
 
+    <!-- upgrade sorting -->
+    {#if upgradeTab === 'regular'}
+        <div class='pt-2 grid grid-cols-8'>
+            {#each Object.entries($upgradeSorting) as u}
+                {#if u[1] !== undefined}
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <div class='m-1 text-center 
+                    {$upgradeSorting[u[0]]['on'] ? 'control-btn-toggleon' : 'control-btn'}
+                    col-span-1 tooltip-text select-none' 
+                    on:click={() => changeUpgradeSorting(u[0])}>
+                        {u[0]}
+                    </div>
+                {/if}
+            {/each}          
+        </div>
+    {/if}
+
+
     <!-- progress bar (gems) -->
     <div class='text-[#989898] text-small pt-4'>gem progress [ 
         <strong>
@@ -113,20 +131,21 @@
             </div>
         {/if}
     </div>
-    <div class='mine-upgrade-wrapper grid grid-cols-2'>
+    {#key $upgradeSorting }
+    <div class='mine-upgrade-wrapper flex flex-wrap'>
         {#each upgradeOrder as i}
-            {#if upgradeTab == 'regular' && !$miningUpgrades[i]['isDust']}
-                <div class='col-span-1 mine-upgrade-button-wrapper'>
+            {#if ((upgradeTab == 'regular' && !$miningUpgrades[i]['isDust'])
+            || (upgradeTab == 'dust' && $miningUpgrades[i]['isDust']))
+            && upgradeSortShow(i)}
+                <div class='w-1/2 mine-upgrade-button-wrapper'>
                     <MiningUpgradeButton index={i}/>
                 </div>
-            {:else if upgradeTab == 'dust' && $miningUpgrades[i]['isDust']}
-                <div class='col-span-1 mine-upgrade-button-wrapper'>
-                    <MiningUpgradeButton index={i}/>
-                </div>
+            {:else}
             {/if}
         {/each}
         <div class='col-span-2 py-7'></div>
     </div>
+    {/key}
 </div>
 
 
@@ -137,7 +156,7 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     settings, visibleTier, progressThisTick, antiFlickerFlags,
     progressAverage} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades, 
-gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
+gemGainFlavorText, gemProgressFlavorText, upgradeSorting } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
@@ -147,11 +166,10 @@ $: key1BarWidth = `${Math.min(1,$progress['key1'] / $progressThreshold['key1']) 
 $: key2BarWidth = `${Math.min(1,$progress['key2'] / $progressThreshold['key2']) * 100}%`;
 $: key3BarWidth = `${Math.min(1,$progress['key3'] / $progressThreshold['key3']) * 100}%`;
 $: mDropTable = Object.entries($miningDropTable)
-
-$: upgradeOrder = $miningUpgrades.map((_,i) => i).sort((a,b) => miningSort([a,$miningUpgrades[a]], [b,$miningUpgrades[b]]))
+$: upgradeOrder = renderedUpgrades.map((_,i) => i).sort((a,b) => miningSort([a,renderedUpgrades[a]], [b,renderedUpgrades[b]]))
 // for triggering #key
 let clockr = false;
-
+let renderedUpgrades = $miningUpgrades;
 let upgradeTab = 'regular';
 
 onMount(() => {
@@ -165,6 +183,17 @@ onMount(() => {
 
 function changeUpgradeType(type) {
     upgradeTab = type;
+}
+
+function changeUpgradeSorting(type) {
+    if ($upgradeSorting[type] !== undefined) 
+        $upgradeSorting[type]['on'] = !$upgradeSorting[type]['on'];
+        if ($settings['exclusiveSort'] && $upgradeSorting[type]['on']) {
+            for (let o of Object.keys($upgradeSorting)) {
+                if ($upgradeSorting[o] !== undefined && o !== type) 
+                    $upgradeSorting[o]['on'] = false;
+            }
+        }
 }
 
 const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
@@ -190,6 +219,21 @@ const miningSort = (a,b) => {
     const ca = ref.miningUpgradeSortOrder[(a[1]['name'] || 'default').toLowerCase()] || ref.miningUpgradeSortOrder['default']
     const cb = ref.miningUpgradeSortOrder[(b[1]['name'] || 'default').toLowerCase()] || ref.miningUpgradeSortOrder['default']
     return ca - cb;
+}
+
+const setRenderedUpgrades = () => {
+    renderedUpgrades = $miningUpgrades.filter((_,i) => upgradeSortShow(i));
+}
+
+
+const upgradeSortShow = (i) => {
+    for (let sort of ($miningUpgrades[i]['sortType'])) {
+        if ($upgradeSorting[sort]['on']) {
+            console.log(renderedUpgrades);
+            return true;
+        }
+    }
+    return false;
 }
 
 </script>

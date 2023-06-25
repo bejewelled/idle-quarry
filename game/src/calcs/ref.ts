@@ -65,7 +65,8 @@ export default class ref {
         key3: 4,
         warp: 4,
         trophies: 4,
-        dust: 4
+        dust: 4,
+        key4: 4,
     }
     
     static keyMainNames = {
@@ -121,7 +122,27 @@ export default class ref {
 
         'default': 1e300,
 
+    }
 
+    static tutorialModeDescriptions = {
+        default: '[not yet implemented]',
+        gems: 'Gain gems on each mining cycle and from keys.',
+        gold: 'Gain gold from random drops while mining and from keys.',
+        key1: 'Gain keys from random drops while mining, and the Key Finder upgrade.',
+        key2: 'Gain keys from random drops while mining, and the Key Finder upgrade.',
+        key3: 'Gain keys from random drops while mining, and the Key Finder upgrade.',
+        key4: 'Gain keys from random drops while mining, and the Key Finder upgrade.',
+        key5: 'Gain keys from random drops while mining, and the Key Finder upgrade.',
+        orbs: 'Gain orbs from random drops while mining and from keys.',
+        crystals: 'Gain crystals from random drops while mining, from keys, and from the button.',
+        beacons: 'Gain beacons from random drops while mining and from keys.',
+        fame: 'Gain fame from relocating, and rarely from keys.',
+        slurry: 'Gain slurry from breaking down keys.',
+        sigils: 'Gain sigils from random drops while mining and from keys.',
+        artifacts: 'Very rarely gain artifacts from keys, the button, and random drops while mining.',
+        warp: 'Gain warp while in a challenge. Gain more warp at higher challenge levels.',
+        trophies: 'Gain trophies from completing challenges.',
+        dust: 'Gain dust from ascension, and very rarely while mining.'
     }
 
 }

@@ -11,7 +11,7 @@ class='has-tooltip tooltip-text
 )}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>
-{$keyUpgrades[index]['name']}
+{$keyUpgrades[index]['name']} [{$keyUpgradeLevels[index]} / {$keyUpgrades[index]['maxLevel']}]
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>

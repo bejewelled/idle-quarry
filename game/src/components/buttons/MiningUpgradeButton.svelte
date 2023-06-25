@@ -15,9 +15,7 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
 {#if $settings['maxBuy'] && maxBuyCalcFinished && buyAmount >= 1}
 (+{buyAmount})
 {/if}
-         <span class='px-2 mx-4 max-w-[275px] tooltip tooltip-text shadow-lg p-1
-       border-white border-double border bg-[#222529] ml-16
-         pointer-events-none'>
+         <span class='tooltip tooltip-style'>
          <div class='title text-small-gray items-start text-center pb-1'>
             {$miningUpgrades[index]['description']}
             {#if $miningUpgrades[index]['name'] == 'Expansive'}
@@ -175,11 +173,10 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
             $miningUpgradeLevelsFree[1] += 50*levels;
             $miningUpgradeLevelsFree[2] += 50*levels;
             $miningUpgradeLevelsFree[7] += 50*levels;
-            console.log($miningUpgradeLevelsFree[0] + " " + $miningUpgradeLevels[0])
-            $miningUpgradeLevels = $miningUpgradeLevels.map(
+        }
+        
+        $miningUpgradeLevels = $miningUpgradeLevels.map(
                 (x,i) => $miningUpgradeLevelsBought[i] + $miningUpgradeLevelsFree[i])
-                console.log($miningUpgradeLevelsFree[0] + " " + $miningUpgradeLevels[0])
-        } 
 
         miningDropTable.updateTable();
         if (($miningUpgrades[index]['name'] || '') == 'Lootmaster I') $visibleTier = 2;
