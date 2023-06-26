@@ -712,7 +712,7 @@ export const miningUpgrades = array([{
     noResetRelocate: true,
     isDust: true,
     isPercent: false,
-    suffix: ' fame / sec',
+    suffix: ' crystal gain',
     maxLevel: 100,
     style: 'game-btn-fame',
     notes: ''
