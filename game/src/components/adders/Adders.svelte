@@ -209,6 +209,7 @@ function updateprogressThisTick(delta) {
 
 let progressGain = 0;
 let mineXpBackup = 0;
+let enchProgressBackup = 0;
 function addProgress(delta) {
 
     const gemAt = $progressThreshold['gems'];
@@ -243,10 +244,15 @@ function addProgress(delta) {
         addKey1($progressThisTick['key1'] / $progressThreshold['key1'] * 0.9, keyAt);
         addKey2($progressThisTick['key2'] / $progressThreshold['key2'] * 0.9, keyAt);
         addKey3($progressThisTick['key3'] / $progressThreshold['key3'] * 0.9, keyAt);
+        enchProgressBackup = $enchantProgress['t1'];
         $enchantProgress['t1'] += ($progressThisTick['gems'] / $progressThreshold['gems']);
         if ($enchantProgress['t1'] > $enchantThreshold['t1']) {
             procEnchants(Math.floor($enchantProgress['t1'] / $enchantThreshold['t1']), 't1')
             $enchantProgress['t1'] %= $enchantThreshold['t1'];
+        }
+
+        if (isNaN(enchProgressBackup)) {
+            $enchantProgress['t1'] = enchProgressBackup;
         }
         if ($challengeActive !== 0 && $challengeActive !== 4) {
             $wallet['warp'] = ($wallet['warp'] || 0) + 

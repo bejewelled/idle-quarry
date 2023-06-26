@@ -149,7 +149,8 @@ const BUTTON_SIZE= 100;
     
     $buttonRadiumProgress[0] += rewardAmount;
     if ($buttonRadiumProgress[0] >= $buttonRadiumProgress[1]) {
-      $wallet['radium']+= Math.floor($buttonRadiumProgress[0] / $buttonRadiumProgress[1])
+      $wallet['radium'] = ($wallet['radium'] || 0) 
+      + Math.floor($buttonRadiumProgress[0] / $buttonRadiumProgress[1])
       $buttonRadiumProgress[0] %= $buttonRadiumProgress[1];
     }
     $radiumGainText = '+ ' + f(rewardAmount)

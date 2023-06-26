@@ -173,7 +173,8 @@ const fameGridInfo = [
         * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])
         * $miningUpgrades[19]['formula']($miningUpgradeLevels[19])),
      colorRef: '',
-     criteria: () => ($wallet['totalFame'] > 200 || $wallet['fame'] > 200)
+     criteria: () => ($wallet['totalFame'] > 200 || $wallet['fame'] > 200
+     || $miningUpgradeLevels[16] > 0 || $miningUpgradeLevels[17] > 0 || $miningUpgradeLevels[19] > 0)
     },
 ]
 
