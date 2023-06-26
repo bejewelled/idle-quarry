@@ -314,7 +314,7 @@ export const miningUpgrades = array([{
     name: 'Efficiency II',
     description: 'Increases gem yield again.',
     cost: {
-        crystals: 125,
+        crystals: 690,
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10),
@@ -547,7 +547,7 @@ export const miningUpgrades = array([{
     name: 'Hardened',
     description: 'Your lifetime number of quality button clicks increase gem gain.',
     cost: {
-        crystals: 7500,
+        crystals: 40000,
     },
     ratio: 1.33,
     unlockAt: () => (get(wallet)['crystals'] > 0),
@@ -698,6 +698,26 @@ export const miningUpgrades = array([{
     style: 'game-btn-dust',
     notes: ''
 },
+{
+    index: 29,
+    sortType: ['fame'],
+    name: 'Cerium Decomposition',
+    description: 'Radium produces more crystals.',
+    cost: {
+        fame: 100000,
+    },
+    ratio: 1.4,
+    unlockAt: () => (get(wallet)['totalFame'] > 100000),
+    formula: (lv: any) => 1 + lv * 0.16,
+    noResetRelocate: true,
+    isDust: true,
+    isPercent: false,
+    suffix: ' fame / sec',
+    maxLevel: 100,
+    style: 'game-btn-fame',
+    notes: ''
+},
+
 
 ]);
 

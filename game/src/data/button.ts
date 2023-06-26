@@ -172,8 +172,7 @@ export const buttonUpgrades = array([
     name: 'I\'m Feeling Nice',
     description: 'The center of the button is highlighted.',
     cost: {
-        crystals: 20000,
-        radium: 25
+        crystals: 10000,
     },
     ratio: 4e150,
     formula: (lv: any) => lv,
@@ -187,8 +186,7 @@ export const buttonUpgrades = array([
     name: 'Insanity!',
     description: 'Your lifetime Incredible and Perfect clicks increase mining speed; Perfect clicks have a drastically higher impact.',
     cost: {
-        crystals: 160000,
-        radium: 100
+        crystals: 36000,
     },
     ratio: 4e150,
     formula: (lv: any) => 1 + 
@@ -206,7 +204,7 @@ export const buttonUpgrades = array([
     name: 'Fractals',
     description: 'Increases mining experience gained from excellent+ button clicks.',
     cost: {
-        crystals: 1e6,
+        crystals: 1e5,
     },
     ratio: 1.25,
     formula: (lv: any) => 1 + Math.pow(lv, 2.5)*1.35,
@@ -221,7 +219,7 @@ export const buttonUpgrades = array([
     name: 'The Duck',
     description: 'Increases the chance you get "lucky" and multiply your radioactivity.',
     cost: {
-        crystals: 5e8,
+        crystals: 1e6,
     },
     ratio: 4,
     formula: (lv: any) => lv*0.01,
@@ -236,7 +234,7 @@ export const buttonUpgrades = array([
     name: 'Gamma Radiation',
     description: 'Clicks sometimes give warp.',
     cost: {
-        radium: 1600,
+        crystals: 1e8,
     },
     ratio: 2,
     formula: (lv: any) => lv * 0.04,

@@ -146,6 +146,7 @@ const BUTTON_SIZE= 100;
     rewardAmount = rewardAmount 
     * $buttonUpgrades[1]['formula']($buttonUpgradeLevels[1])
     * $miningUpgrades[23]['formula']($miningUpgradeLevels[23])
+    * $allMultipliers['radium']['formula']($wallet['radium'] || 0)
     
     if (isNaN($wallet['radium'])) $wallet['radium'] = 1;
     $buttonRadiumProgress[0] += rewardAmount;

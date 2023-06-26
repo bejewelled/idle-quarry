@@ -141,9 +141,16 @@ export const allMultipliers = object({
     artifacts: {
         description: 'Multiplying artifact drop chance by',
         prefix: 'x',
-        unlockAt: 10000,
+        unlockAt: 1000,
         formula: (amt: number) => 1 + Math.pow(Math.log10(amt/10000+1), 0.33),
         colorStyle: 'artifacts'
+    },
+    radium: {
+        description: 'Multiplying radioactivity gain by ',
+        prefix: 'x',
+        unlockAt: 10000,
+        formula: (amt: number) => 1 + Math.log(amt/100+1),
+        colorStyle: 'radium'
     },
 
 })

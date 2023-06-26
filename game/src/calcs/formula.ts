@@ -69,7 +69,7 @@ export default class formula {
         array[0] < 10 ? 1.25 + array[0] * 0.075 :
         array[0] < 1000 ? 2 + (array[0]-10) * 0.004 :
         6.8 + Math.pow(array[0] - 1000, 0.4));
-        
+
         2 + 2*10000 + Math.pow(10000*((array[0] - 10000) / 1000), 0.4)
         for (let i = 1; i < array.length; i++) {
           if (array[i] < 1) continue;
@@ -183,6 +183,10 @@ export default class formula {
   // PER SECOND
   static calcCrystalGainFromRadium() {
     const y = (get(wallet)['radium'] || 0);
-    return (y < 100 ? 4*Math.pow(y, 0.7) : 100.47 + Math.pow(y-100, 0.8));
+    return (y < 100 ? 
+      4 * y :
+      400 + Math.pow(y - 100, 0.75)* 3)
+      * get(miningUpgrades)[29]['formula'](get(miningUpgradeLevels)[29])
+      * get(allMultipliers)['radium']['formula'](get(wallet)['artifacts'] || 0);
   }
 }
