@@ -64,7 +64,14 @@ export default class formula {
     
     static calcFameGainKeys(array: Array<number>) { 
         const keyArray = [1,1,1,1,1];
-        for (let i = 0; i < array.length; i++) {
+        keyArray[0] = 
+        (array[0] < 1 ? 1 : 
+        array[0] < 10 ? 1.25 + array[0] * 0.075 :
+        array[0] < 1000 ? 2 + (array[0]-10) * 0.004 :
+        6.8 + Math.pow(array[0] - 1000, 0.4));
+        
+        2 + 2*10000 + Math.pow(10000*((array[0] - 10000) / 1000), 0.4)
+        for (let i = 1; i < array.length; i++) {
           if (array[i] < 1) continue;
           else if (array[i] < 10) {
             keyArray[i] = 1.25 + array[i] * 0.075;
@@ -175,6 +182,7 @@ export default class formula {
 
   // PER SECOND
   static calcCrystalGainFromRadium() {
-    return Math.pow(get(wallet)['radium'] || 0, 0.6) / 7;
+    const y = (get(wallet)['radium'] || 0);
+    return (y < 100 ? 4*Math.pow(y, 0.7) : 100.47 + Math.pow(y-100, 0.8));
   }
 }

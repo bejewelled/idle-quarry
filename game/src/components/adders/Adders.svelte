@@ -667,31 +667,31 @@ function procEnchants(n, tier) {
                     $wallet['key'+tier] += reward;
                     break;  
                 case 7: //clicker hero
-                    const BASE_REWARD = size / 10;
+                    const BASE_REWARD = size / 100;
                     const absDist = Math.random() * (400 - (quality / 2550));
                     let rewardAmount, rewardDescriptionText, rewardStyle;
                     if (absDist < 1) {
-                        rewardAmount = 150;
+                        rewardAmount = 600;
                         rewardDescriptionText = 'PERFECT! +';
                         rewardStyle = 'text-amber-500'
                     } else if (absDist <= 2) {
-                        rewardAmount = 12;
+                        rewardAmount = 300;
                         rewardDescriptionText = 'INCREDIBLE +';
                         rewardStyle = 'text-pink-500'
                     } else if (absDist <= 4) {
-                        rewardAmount = 5;
+                        rewardAmount = 140;
                         rewardDescriptionText = 'Excellent +';
                         rewardStyle = 'text-violet-500'
                     } else if (absDist <= 7) {
-                        rewardAmount = 4;
+                        rewardAmount = 60;
                         rewardDescriptionText = 'Great +';
                         rewardStyle = 'text-sky-500'
                     } else if (absDist <= 10) {
-                        rewardAmount = 3;
+                        rewardAmount = 25;
                         rewardDescriptionText = 'Good +';
                         rewardStyle = 'text-green-500'
                     } else {  
-                        rewardAmount = 1;
+                        rewardAmount = 10;
                         rewardDescriptionText = 'Okay +';
                         rewardStyle = 'text-gray-400';
                     } 

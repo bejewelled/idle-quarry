@@ -265,8 +265,8 @@ export const miningUpgrades = array([{
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[3] > 0),
-    formula: (lv: any) => (lv > 1000 ? 101 + Math.pow((lv-1000), 0.2)*0.06
-    :(1 + lv * 0.1)),
+    formula: (lv: any) => (lv > 1000 ? 201 + Math.pow((lv-1000), 0.2)*0.06
+    :(1 + lv * 0.2)),
     isPercent: false,
     suffix: 'x keys',
     maxLevel: 1000,
