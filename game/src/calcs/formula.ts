@@ -175,6 +175,6 @@ export default class formula {
 
   // PER SECOND
   static calcCrystalGainFromRadium() {
-    return Math.pow(get(wallet)['radium'] || 0, 0.5) / 10;
+    return Math.pow(get(wallet)['radium'] || 0, 0.6) / 7;
   }
 }
