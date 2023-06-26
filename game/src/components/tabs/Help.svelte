@@ -25,7 +25,7 @@
 
     <div class='text-large text-left pb-2 text-gray-300'>Enchants</div>
     <div class='text-small text-white pb-4'>
-    When the enchant bar of each respective color fills, there's a chance for all enchants of the same color as the bar to fire (chance shown on tooltips), giving a very powerful bonus. Upgrade your enchants to increase the proc chance.
+    Every time a mining cycle completes, you gain 1 progress point towards an enchant cycle. When the enchant bar of each respective color fills, there's a chance for all enchants of the same color as the bar to fire (chance shown on tooltips), giving a very powerful bonus. Upgrade your enchants to increase the proc chance.
     </div>
 
     <div class='text-large text-left pb-2 text-gray-300'>Relocate</div>

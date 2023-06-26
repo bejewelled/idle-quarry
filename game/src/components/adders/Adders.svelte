@@ -22,7 +22,8 @@ import {progress, miningUpgradeLevels, wallet, miningDropTable,
     activityLogShow, challengeActive,
     challengesCompleted, challengeProgress,
     challenge3Multi, miningUpgradeLevelsTemp,
-    miningUpgradeLevelsBoughtTemp, miningUpgradeLevelsFreeTemp} from '../../data/player'
+    miningUpgradeLevelsBoughtTemp, miningUpgradeLevelsFreeTemp,
+buttonRadiumProgress} from '../../data/player'
 import {buttonUpgrades} from '../../data/button'
 import {beaconFormulas, beaconBonuses, beaconNextReqs, 
     beaconNums, beaconUpgrades, beaconPowerFlavorText, beaconNameText} from '../../data/beacons'
@@ -156,7 +157,7 @@ function updateprogressThisTick(delta) {
     * progressMultiArtifacts
     , challengeExponent);
 
-    const softcapThresh = $progressThreshold['gems'] * (UPDATE_SPEED/1000) * 100;
+    const softcapThresh = $progressThreshold['gems'] * (UPDATE_SPEED/1000) * 25;
     //softcap!
     if (progGems > softcapThresh) {
         progGems = softcapThresh + Math.sqrt(progGems - softcapThresh);
@@ -169,7 +170,6 @@ function updateprogressThisTick(delta) {
     const progKey1 = Math.pow(($miningUpgradeLevels[3] > 0 ?
     PROGRESS_BASE * $miningUpgrades[3]['formula']($miningUpgradeLevels[3]) : 0)
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
-    * $beaconBonuses[5]
     * progressBonusMulti
     * $challenge3Multi
     * progressMultiArtifacts
@@ -180,7 +180,6 @@ function updateprogressThisTick(delta) {
     const progKey2 = Math.pow(($miningUpgradeLevels[4] > 0 ?
     PROGRESS_BASE * $miningUpgrades[4]['formula']($miningUpgradeLevels[4]) : 0)
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
-    * $beaconBonuses[5]
     * progressBonusMulti
     * $challenge3Multi
     * progressMultiArtifacts
@@ -209,6 +208,7 @@ function updateprogressThisTick(delta) {
 }
 
 let progressGain = 0;
+let mineXpBackup = 0;
 function addProgress(delta) {
 
     const gemAt = $progressThreshold['gems'];
@@ -224,12 +224,20 @@ function addProgress(delta) {
     if (delta > (1000 / UPDATE_SPEED * 120) && !$settings['offlineProgress'])
         return;
 
+    // add radium   
+    $wallet['crystals'] += delta * formula.calcCrystalGainFromRadium() / UPDATE_SPEED;
+    
     // optimize out of focus
     if (delta > 16 || document.hidden) {
         addGems($progressThisTick['gems'] / $progressThreshold['gems'] * 0.9);
 
+        mineXpBackup = $mineLevel['xp']
         $mineLevel['xp'] += ($progressThisTick['gems'] / $progressThreshold['gems'])
         * formula.getMineXPPerCycle();
+
+        if (isNaN($mineLevel['xp'])) {
+            $mineLevel['xp'] = mineXpBackup;
+        }
 
         dropRoll($progressThisTick['gems'] / $progressThreshold['gems'] * 0.9);
         addKey1($progressThisTick['key1'] / $progressThreshold['key1'] * 0.9, keyAt);
@@ -339,8 +347,9 @@ function addGems(n, avgProgress) {
 }
 
 function addKey1(n, keyAt) {
-    const KEY1_BASE = 4;
+    const KEY1_BASE = 8;
         const key1Gain = KEY1_BASE 
+        * $beaconBonuses[5]
         * $miningUpgrades[5]['formula']($miningUpgradeLevels[5])
         * $miningUpgrades[26]['formula']($miningUpgradeLevels[26]);
         $wallet['key1'] = ($wallet['key1'] || 0) + key1Gain * n;
@@ -355,6 +364,7 @@ function addKey1(n, keyAt) {
 function addKey2(n, keyAt) {
     const KEY2_BASE = 1;
         const key2Gain = KEY2_BASE 
+        * $beaconBonuses[5]
         * $miningUpgrades[5]['formula']($miningUpgradeLevels[5])
         * $miningUpgrades[26]['formula']($miningUpgradeLevels[26]);
          
@@ -370,6 +380,7 @@ function addKey2(n, keyAt) {
 function addKey3(n, keyAt) {
     const KEY3_BASE = 0.075;
         const key3Gain = KEY3_BASE 
+        * $beaconBonuses[5]
         * $miningUpgrades[5]['formula']($miningUpgradeLevels[5])
         * $miningUpgrades[26]['formula']($miningUpgradeLevels[26]);
          
@@ -446,7 +457,7 @@ function checkForKeyCraftCompletion() {
                 +$keyCraftMastery[item][0] + ')', 
                 'text-amber-400', 'crafting')
             }
-        addToActivityLog('[Keys] Crafting complete: +' 
+        addToActivityLog('[Crafting] Crafting complete: +' 
         + f(formula.calcKeyCraftAmountGained(i)) + ' ' + $keyCrafts[i]['name'], $keyCrafts[i]['style']||'text-white', 'crafting')
         }
         
@@ -510,7 +521,7 @@ function addBeaconProgress(delta, isOffFocus = false) {
             const numLevels = 
             Math.min(
             Math.max(1,formula.maxNumGeom($beaconProgress[i], $beaconNextReqs[i], $beaconNums[i][1])), 
-            2);
+            (isOffFocus ? 20 : 2));
 
             if ($challengeActive === 4) {
                 $wallet['challengePoints'] += numLevels * ref.challengePointValues['beaconLevels'];
@@ -577,7 +588,7 @@ function procEnchants(n, tier) {
                     break;
                 case 2: // burst
                     addGems(size);
-                    addToActivityLog('[Burst] ' + f(size) + ' mining cycles', 'text-violet-300', 'burst');
+                    addToActivityLog('[Burst] +' + f(size) + ' mining cycles', 'text-violet-300', 'burst');
                     break;
                 case 3: // orb rush
                     const val = (Math.random() + 0.3) * Math.pow(1 + quality, 3);
@@ -624,27 +635,27 @@ function procEnchants(n, tier) {
                     if (keyRand > 1.18) {
                         tier = 5;
                         reward = (reward/250000) + 1;
-                        addToActivityLog('[KEY BOON] INCREDIBLE! +' + reward + ' [*****] keys!', 
+                        addToActivityLog('[KEY BOON] INCREDIBLE! +' + f(reward) + ' [*****] keys!', 
                     'text-amber-400', 'key boon');
                     } else if (keyRand > 1.15) {
                         tier = 4;
                         reward = (reward/10000) + 1;
-                        addToActivityLog('[Key Boon] Excellent! +' + reward + ' [****] keys', 
+                        addToActivityLog('[Key Boon] Excellent! +' + f(reward) + ' [****] keys', 
                             'text-violet-400', 'key boon');
                     } else if (keyRand > 0.9975) {
                         tier = 3;
                         reward = (reward/1000) + 1;
-                        addToActivityLog('[Key Boon] Great! +' + reward + ' [***] keys', 
+                        addToActivityLog('[Key Boon] Great! +' + f(reward) + ' [***] keys', 
                             'text-pink-300', 'key boon');                              
                     } else if (keyRand > 0.925) {
                         tier = 2;
                         reward = (reward/10) + 1;
-                        addToActivityLog('[Key Boon] Great! +' + reward + ' [**] keys', 
+                        addToActivityLog('[Key Boon] Great! +' + f(reward) + ' [**] keys', 
                             'text-blue-300', 'key boon'); 
                     } else {
                         tier = 1;
                         reward = (reward*10) + 1;
-                        addToActivityLog('[Key Boon] +' + reward + ' [*] keys', 
+                        addToActivityLog('[Key Boon] +' + f(reward) + ' [*] keys', 
                             'text-green-300', 'key boon'); 
                     }
                     $wallet['key'+tier] += reward;
@@ -676,10 +687,15 @@ function procEnchants(n, tier) {
                     } else {  
                         rewardAmount = 1;
                         rewardDescriptionText = 'Okay +';
-                        rewardStyle = 'text-gray-500';
+                        rewardStyle = 'text-gray-400';
                     } 
                     rewardAmount = Math.floor(rewardAmount * BASE_REWARD);
-                    addToActivityLog('[Clicker Hero] Result: ' + rewardDescriptionText + f(rewardAmount) + ' crystals', 
+                    $buttonRadiumProgress[0] += rewardAmount;
+                    if ($buttonRadiumProgress[0] >= $buttonRadiumProgress[1]) {
+                    $wallet['radium']+= Math.floor($buttonRadiumProgress[0] / $buttonRadiumProgress[1])
+                    $buttonRadiumProgress[0] %= $buttonRadiumProgress[1];
+                    }
+                    addToActivityLog('[Clicker Hero] ' + rewardDescriptionText + f(rewardAmount) + ' radioactivity', 
                         rewardStyle, 'clicker hero');
                     break;           
             }

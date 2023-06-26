@@ -16,7 +16,9 @@
                 <div class='col-span-3 text-left pl-[8px] {ref.colors[drop[0]] || 'text-white'}'>
                     {$wallet[drop[0]] ? (ref.displayNames[drop[0]] || drop[0]) : '???'}
                 </div>
-                <div class='col-span-3 text-left pl-1'>
+                <div class='col-span-3 
+                {drop[1][0] >= drop[1][3] ? 'text-amber-200' : ''}
+                text-left pl-1'>
                     {fp(Math.min(1,drop[1][0]), 
                     drop[1][0] < 1e-3 ? 
                     drop[1][0] < 1e-4 ?
@@ -70,7 +72,9 @@
         <strong>
             {$progressAverage['gems'] > $progressThreshold['gems'] ? "~" : ""}
             {$gemGainFlavorText > 1 ? f($gemGainFlavorText,0) : 1}</strong>
-         x {f($progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'], 2) } times / sec ]
+          <span class='{$progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'] > 25 ? 'text-amber-200' : ''}'>
+        x {f($progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'], 2) } times / sec ]
+            </span>
     </div>
     <div class='mine-bar-wrapper pb-2'>
         <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
@@ -199,6 +203,7 @@ function changeUpgradeSorting(type) {
 const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
 
 const f = (n: number, pl = 0) => {
+        if (isNaN(n)) return "???"
         if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         else return n.toExponential(3).toString().replace('+', '');
     }   

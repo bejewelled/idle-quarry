@@ -13,7 +13,7 @@
             <div class='col-span-1 py-1 {ref.colors['key' + i]}'>
                 {$wallet['key'+i] >= 1 || $visibleTier >= i ? ref.keyMainNames[i]: '?????'}
             </div>
-                <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
+                <div class='col-span-1 text-med py-1 text-left {ref.colors['key' + i]}'>
                     {f(Math.floor($wallet['key' + i]))}
                 </div>
                 <div class='has-tooltip tooltip-text 
@@ -32,9 +32,9 @@
                                     {ref.displayNames[drop[0]] || drop[0]}
                                 </div>
                                 <div class='col-span-3 text-left pl-1
-                                {(drop[0].includes('key') && drop[1][0] >= 0.333) 
-                                 || (drop[0].includes('key'+i) && drop[1][0] >= 0.25/drop[1][2])
-                                 ? 'text-yellow-400':''}'>
+                                {drop[1][0] >= 1 ? 'text-red-400': 
+                                drop[1][4] > 0 && drop[1][0] >= drop[1][4]
+                                 ? 'text-amber-200':''}'>
                                     {fp(drop[1][0],
                                     drop[1][0] < 1e-5 ? 5: 3)}
                                 </div>

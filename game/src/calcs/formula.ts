@@ -5,6 +5,8 @@ import {keyUpgrades, keyCrafts} from '../data/keys'
 import { get } from 'svelte/store';
 import ref from './ref';
 import { allMultipliers } from '../data/artifacts';
+import { buttonUpgrades } from '../data/button';
+import { miningUpgrades } from '../data/mining';
 export default class formula {
 
     // returns a normally random value
@@ -99,9 +101,15 @@ export default class formula {
       return 10 + lv;
     }
 
-    static calcButtonStreakBonus(n: number) {
-      if (get(buttonUpgradeLevels)[1] < 1) return 1;
-      return 1 + Math.pow(n,0.7)/60;
+    // static calcButtonStreakBonus(n: number) {
+    //   if (get(buttonUpgradeLevels)[1] < 1) return 1;
+    //   return 1 + Math.pow(n,0.7)/600;
+    // }
+
+    static calcButtonRewardBonus() {
+      return 1
+      * get(buttonUpgrades)[1]['formula'](get(buttonUpgradeLevels)[1])
+      * get(miningUpgrades)[23]['formula'](get(miningUpgradeLevels)[23])
     }
     
     static calcHardenedGemBonus(obj: { [x: string]: number; }) {
@@ -138,7 +146,7 @@ export default class formula {
   
   static calcKeySigilGain(sl: number) {
     if (sl < 1000 || get(keyUpgradeLevels)[3] == 0) return 0;
-    else return Math.pow((sl**2 / 1000**2), 0.55)
+    else return Math.pow((sl**2 / 1000**2), 0.45)
   }
 
   static calcKeyCraftAmountGained(i: string) {
@@ -163,5 +171,10 @@ export default class formula {
     * Math.max(1, Math.log((get(wallet)['totalFame'] || 0) / 20 + 1))
     if (isNaN(y)) return 1; 
     else return y;
+  }
+
+  // PER SECOND
+  static calcCrystalGainFromRadium() {
+    return Math.pow(get(wallet)['radium'] || 0, 0.5) / 10;
   }
 }

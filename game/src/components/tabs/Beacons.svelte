@@ -51,7 +51,7 @@
                 $beaconMaxLevels[i] > 1e6 ? 1 : 0)}
             </div>
             <div class='row-span-1 text-center game-text text-small'>
-                +{fp(Math.max(beaconDispBonus[i], 1), 3, true)}
+                +{fp(Math.max(beaconDispBonus[i], 1), 2, true)}
             </div>
         </div>
         {#if ($automationItemsUnlocked['beacon tools ii'])}
@@ -242,7 +242,7 @@ function getBgColor(i) {
 
 function getTextColor(i) {
     if (i < 3) return 'text-emerald-400';
-    else if (i < 6) return 'text-yellow-400';
+    else if (i < 6) return 'text-amber-200';
     else if (i < 8) return 'text-orange-400';
     else return 'text-red-400';
 }

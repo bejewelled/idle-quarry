@@ -173,7 +173,7 @@ const fameGridInfo = [
         * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])
         * $miningUpgrades[19]['formula']($miningUpgradeLevels[19])),
      colorRef: '',
-     criteria: () => ($wallet['totalFame'] > 200)
+     criteria: () => ($wallet['totalFame'] > 200 || $wallet['fame'] > 200)
     },
 ]
 
@@ -270,21 +270,17 @@ export function relocate() {
                 $miningUpgradeLevels[9] = 1;
                 $miningUpgradeLevelsBought[9] = 1;
                 $visibleTier = 3;
-            }
-
-            if ($automationItemsUnlocked['money piles']) {
                 $miningUpgradeLevels[14] = 1;
                 $miningUpgradeLevelsBought[14] = 1;
                 $visibleTier = 4;
-            } else {
-                $miningUpgradeLevels[14] = 0;
-                $miningUpgradeLevelsBought[14] = 0;
             }
 
-            for (let k of Object.keys($keyCraftAmount)) {
-                if (k !== 'energizedCrystal')
-                $keyCraftAmount[k] = 0;
-            }
+            $miningUpgradeLevels = $miningUpgradeLevels.map(
+                (x,i) => $miningUpgradeLevelsBought[i] + $miningUpgradeLevelsFree[i])
+            // for (let k of Object.keys($keyCraftAmount)) {
+            //     if (k !== 'energizedCrystal')
+            //     $keyCraftAmount[k] = 0;
+            // }
         }
     }
 }

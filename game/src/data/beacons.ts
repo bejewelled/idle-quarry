@@ -183,7 +183,7 @@ export const beaconNameText = array([
     'Droprate Multiplier I',
     'Gem Bonus',
     'Fame Bonus',
-    'Key Finder Speed',
+    'Key Finder Yield',
     'Crafting Yield',
     'Key Droprate',]
     .concat(Array(26).fill(''))

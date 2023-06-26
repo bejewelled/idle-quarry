@@ -28,7 +28,7 @@
             {/if}
 
 
-            {#each [1,2,3,4] as i}
+            {#each [1,2,3,4,5,6] as i}
                 {#each Object.entries($wallet) as res}
                     {#if $wallet[res[0]] && $wallet[res[0]] >= 1 && !res[0].includes('key') && !ref.walletExclude[res[0]]
                     && (ref.dropTiers[res[0]] || ref.dropTiers['default']) == i}   
@@ -135,7 +135,7 @@
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
                 <button class='py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950' on:click={() => reset()}>Reset</button>
-                <button class='text-xs text-gray-600'>v0.0.4a-6</button>  
+                <button class='text-xs text-gray-600'>v0.0.4a-7</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
                 {#key clockTabs}
@@ -203,7 +203,7 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     miningUpgradeLevelsFreeTemp, miningUpgradeLevelsTemp,
     activityLogShow, challengeActive,
     challengesCompleted, challengeProgress, beaconSmartSplits,
-    challenge3Multi} from '../data/player.js'
+    challenge3Multi, buttonRadiumProgress} from '../data/player.js'
 import {upgradeSorting} from '../data/mining.ts'
 import {key1DropTable, key2DropTable, key3DropTable, 
 key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
@@ -273,7 +273,7 @@ const toggleMaxBuy = () => {
  * number formatting
  */
 const f = (n, pl = 3) => {
-    if (isNaN(n) || n === null) return 'NaN'
+    if (isNaN(n) || n === null) return '???'
     if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
     else return n.toExponential(3).toString().replace('+', '');
 }
@@ -340,6 +340,7 @@ const save = async (isExport = false) => {
     localStorage.setItem('buttonNumClicks', JSON.stringify($buttonNumClicks));
     localStorage.setItem('buttonUpgradeLevels', JSON.stringify($buttonUpgradeLevels));
     localStorage.setItem('buttonStats', JSON.stringify($buttonStats));
+    localStorage.setItem('buttonRadiumProgress', JSON.stringify($buttonRadiumProgress));
     localStorage.setItem('keyUpgradeLevels', JSON.stringify($keyUpgradeLevels));
     localStorage.setItem('keyCraftTimes', JSON.stringify($keyCraftTimes));
     localStorage.setItem('keyCraftAmount', JSON.stringify($keyCraftAmount));
@@ -433,6 +434,13 @@ const load = async (isImport = false) => {
     if (localStorage.getItem('miningUpgradeLevelsFreeTemp')) {
         miningUpgradeLevelsFreeTemp.set((JSON.parse(localStorage.getItem('miningUpgradeLevelsFreeTemp'))));
     }
+    if (localStorage.getItem('buttonRadiumProgress')) {
+        buttonRadiumProgress.set((JSON.parse(localStorage.getItem('buttonRadiumProgress'))));
+    }
+
+    $miningUpgradeLevels = $miningUpgradeLevels.map(
+                (x,i) => $miningUpgradeLevelsBought[i] + $miningUpgradeLevelsFree[i])
+
     if (localStorage.getItem('progress'))
         unlockedRes.set(JSON.parse(localStorage.getItem('progress')))
     if (localStorage.getItem('keysOpened'))

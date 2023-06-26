@@ -63,7 +63,7 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
           key4: $wallet['key4'],
           key5: $wallet['key5'],
         }
-        reloadClock = !reloadClock;
+        //reloadClock = !reloadClock;
       }, 217)
     })
 
@@ -84,8 +84,6 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
 
 
     function buy() {
-      console.log($wallet['slurry'])
-      console.log(slurryGain)
         $wallet['slurry'] += slurryGain;
         if (sigilGain >= 1) $wallet['sigils'] += sigilGain;
         for (let k of Object.keys($wallet))

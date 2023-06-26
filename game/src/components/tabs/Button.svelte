@@ -13,11 +13,57 @@
           <span class='text-gray-500'>{f($buttonNumClicks['okay'],0)}</span>
            ]
         </div>
+
+        <div class='pb-3 col-span-12 game-text text-center'>
+          Your <span class='{ref.colors['radium']}'>radium</span>
+          is producing 
+          <span class='{ref.colors['crystals']} font-bold'>
+            {f(crystalGains,
+            crystalGains > 100 ? 0 : 2)}  crystals</span> per second
+        </div>
+
         <div class='col-span-12 pb-3 game-text text-center'>
-           Total Clicks: {f($buttonStats['totalClicks'])}
-          [ <span class='game-text'>{f(formula.calcButtonStreakBonus($buttonStats['totalClicks']),3)}x 
-              <span class='text-indigo-300'> crystal bonus</span>
-          </span> ]
+
+        <div class='col-span-9'>
+          <div class='w-full my-1 bg-gray-200 rounded-sm h-4 dark:bg-gray-700'>
+              <div class="
+              flex justify-start items-left">
+                <div class="bg-lime-300 w-4 h-4 rounded-sm 
+                relative z-0" 
+                style="width: {buttonBarWidth}; transition: width 0.6s;"> 
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class='col-span-3 text-left align-text-middle has-tooltip'>
+            <div class='tooltip-text text-med'>Radioactivity 
+            <span class='text-lime-300 text-med pl-3'>
+              {f($buttonRadiumProgress[0])} / {f($buttonRadiumProgress[1])}
+            </span>
+            {#if $radiumGainText.length > 0}
+              <span class='text-lime-300 text-opacity-70 text-med pl-2'>
+                {$radiumGainText}
+              </span>
+            {/if}
+            </div>
+            <span class='tooltip tooltip-style'>
+              <div class='grid grid-cols-6'>
+              <div class='col-span-6 text-center'>Radioactivity Gains</div>
+              {#each Object.entries(ref.buttonColors) as [k,v]}
+                <div class='col-span-2 text-small text-left'>
+                  <span class='{v}'>{k}</span>
+                </div>
+                <div class='col-span-2 text-small text-center'>
+                  <span class='{v} text-small'>{k !== 'okay' ? "<" + f(ref.buttonDistances[k]) + 'px' : ''}</span>
+                </div>
+                <div class='col-span-2 text-small text-right'>
+                  <span class='tooltip-text text-small'>+{f(ref.buttonBaseRewards[k] * formula.calcButtonRewardBonus())}</span>
+                </div>
+              {/each}
+            </div>
+            </span>
+        </div>
+
         </div>
         {#each $buttonUpgrades as b,i}
           <div class='col-span-3 pb-1 '>
@@ -33,8 +79,8 @@
 
   import {buttonStats, buttonNumClicks,
     progress, wallet, enchantUpgradeLevels, miningDropTable,
-        settings, visibleTier, unlockedRes} from '../../data/player';
-  import {buttonUpgrades} from '../../data/button';
+        settings, visibleTier, unlockedRes, buttonRadiumProgress} from '../../data/player';
+  import {buttonUpgrades, radiumGainText} from '../../data/button';
   import { onMount, onDestroy} from 'svelte';
   import ButtonItem from '../buttons/ButtonItem.svelte';
   import {progressThreshold, progressPerTick } from '../../data/mining';
@@ -44,6 +90,20 @@
   import ButtonUpgradeButton from '../buttons/ButtonUpgradeButton.svelte';
 // @ts-nocheck
 
+let clockinterval
+
+onMount(() => {
+  clockinterval = setInterval(() => {
+    crystalGains = formula.calcCrystalGainFromRadium();
+  }, 653);
+});
+
+onDestroy(() => {
+  clearInterval(clockinterval);
+});
+
+$: buttonBarWidth = `${Math.min(1,$buttonRadiumProgress[0] / $buttonRadiumProgress[1]) * 100}%`;
+$: crystalGains = formula.calcCrystalGainFromRadium()
 const f = (n, pl = 0) => {
         if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         else return n.toExponential(3).toString().replace('+', '');

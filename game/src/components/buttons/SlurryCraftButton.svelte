@@ -23,7 +23,7 @@
             pointer-events-none'>
             <div class='cost items-center text-center grid grid-cols-4'>
             {#if craftFinishTime > ct}
-                <div class='tooltip-text text-center'>Crafting...</div>
+                <div class='tooltip-text text-center'>Crafting... </div>
             {:else}
                 {#each Object.entries(costs) as c}
                     {#if c[1] >= 1} 

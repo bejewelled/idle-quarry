@@ -20,6 +20,8 @@ export default class ref {
         warp: 'text-emerald-600',
         trophies: 'text-amber-500',
         dust: 'text-indigo-600',
+        goldenSigils: 'text-amber-200',
+        radium: 'text-lime-300',
     }
 
     static challengePointValues = {
@@ -40,6 +42,7 @@ export default class ref {
         key4: '[****] key',
         key5: '[*****] key',
         beaconPower: 'Beacon Power',
+        goldenSigils: 'golden sigils',
     }
 
     // stuff to not show on the sidebar
@@ -61,12 +64,14 @@ export default class ref {
         key2: 3,
         slurry: 3,
         sigils: 3,
+        radium: 3,
         artifacts: 4,
         key3: 4,
         warp: 4,
         trophies: 4,
         dust: 4,
         key4: 4,
+        goldenSigils: 5,
     }
     
     static keyMainNames = {
@@ -142,7 +147,35 @@ export default class ref {
         artifacts: 'Very rarely gain artifacts from keys, the button, and random drops while mining.',
         warp: 'Gain warp while in a challenge. Gain more warp at higher challenge levels.',
         trophies: 'Gain trophies from completing challenges.',
-        dust: 'Gain dust from ascension, and very rarely while mining.'
+        dust: 'Gain dust from ascension, and very rarely while mining.',
+        radium: 'Gain radium from clicking the button.',
+        goldenSigils: 'Gain golden sigils from crafting.',
+    }
+
+    static buttonBaseRewards = {
+        okay: 5,
+        good: 30,
+        great: 110,
+        excellent: 290,
+        incredible: 560,
+        perfect: 1600,
+    }
+
+    static buttonColors = {
+        okay: 'text-gray-500',
+        good: 'text-green-500',
+        great: 'text-sky-500',
+        excellent: 'text-violet-500',
+        incredible: 'text-pink-500',
+        perfect: 'text-amber-500',
+    }
+
+    static buttonDistances = {
+        good: 10,
+        great: 7,
+        excellent: 4,
+        incredible: 2,
+        perfect: 1
     }
 
 }

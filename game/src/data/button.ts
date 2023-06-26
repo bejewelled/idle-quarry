@@ -1,7 +1,8 @@
 
 import { writable, get } from 'svelte/store';
-import {wallet, miningUpgradeLevels, enchantUpgradeLevels, buttonNumClicks} from './player'
+import {wallet, miningUpgradeLevels, enchantUpgradeLevels, buttonNumClicks, challengesCompleted} from './player'
 import Decimal  from 'break_infinity.js';
+import formula from '../calcs/formula';
 
 function single(context: any) {
     // @ts-ignore
@@ -124,6 +125,7 @@ export const enchantThreshold = object({
     t3: 1e9
 })
 
+export const radiumGainText = single(0);
 
 // edit when changing the level of the haste upgrade
 export const progressPerTick = single(1);
@@ -140,10 +142,10 @@ export const buttonUpgrades = array([
     name: 'Stability',
     description: 'The button moves less after each click.',
     cost: {
-        crystals: 750,
+        radium: 1,
     },
-    ratio: 3.25,
-    formula: (lv: any) => 1 - Math.pow(lv/10.25,0.45),
+    ratio: 4,
+    formula: (lv: any) => 1 - Math.pow(lv/10.4,0.45),
     unlockAt: () => (true),
     isPercent: false,
     suffix: 'x movement multiplier',
@@ -153,15 +155,16 @@ export const buttonUpgrades = array([
 {
     index: 1,
     name: 'Hot Button',
-    description: 'Accumulate a multiplier to crystals as more clicks are made (max 10,000).',
+    description: 'Increases radioactivity gain from the button.',
     cost: {
-        crystals: 1200,
+        crystals: 1100,
     },
-    ratio: 4e150,
-    formula: (lv: any) => lv,
+    ratio: 1.25,
+    formula: (lv: any) => 1 + lv * 0.1,
     unlockAt: () => (true),
+    prefix: 'x',
     isPercent: false,
-    maxLevel: 1,
+    maxLevel: 100,
     notes: ''
 },
 {
@@ -169,7 +172,8 @@ export const buttonUpgrades = array([
     name: 'I\'m Feeling Nice',
     description: 'The center of the button is highlighted.',
     cost: {
-        crystals: 8000,
+        crystals: 20000,
+        radium: 25
     },
     ratio: 4e150,
     formula: (lv: any) => lv,
@@ -183,7 +187,8 @@ export const buttonUpgrades = array([
     name: 'Insanity!',
     description: 'Your lifetime Incredible and Perfect clicks increase mining speed; Perfect clicks have a drastically higher impact.',
     cost: {
-        crystals: 20000,
+        crystals: 160000,
+        radium: 100
     },
     ratio: 4e150,
     formula: (lv: any) => 1 + 
@@ -201,10 +206,10 @@ export const buttonUpgrades = array([
     name: 'Fractals',
     description: 'Increases mining experience gained from excellent+ button clicks.',
     cost: {
-        crystals: 100000
+        crystals: 1e6,
     },
-    ratio: 1.75,
-    formula: (lv: any) => 1 + Math.pow(lv, 1.4)*1.35,
+    ratio: 1.25,
+    formula: (lv: any) => 1 + Math.pow(lv, 2.5)*1.35,
     unlockAt: () => (get(wallet)['crystals'] > 1000),
     isPercent: false,
     suffix: 'x multiplier',
@@ -214,36 +219,37 @@ export const buttonUpgrades = array([
 {
     index: 5,
     name: 'The Duck',
-    description: 'Increases the chance you get "lucky" and multiply your crystals.',
+    description: 'Increases the chance you get "lucky" and multiply your radioactivity.',
     cost: {
-        crystals: 900000,
+        crystals: 5e8,
     },
     ratio: 4,
-    formula: (lv: any) => 0.025 + lv*0.025,
+    formula: (lv: any) => lv*0.01,
     unlockAt: () => (get(wallet)['crystals'] > 10000),
     isPercent: true,
     suffix: ' chance',
-    maxLevel: 10,
+    maxLevel: 25,
     notes: ''
 },
 {
     index: 6,
-    name: '[PLACEHOLDER]',
-    description: 'PLACEHOLDER',
+    name: 'Gamma Radiation',
+    description: 'Clicks sometimes give warp.',
     cost: {
-        crystals: 2e200,
+        radium: 1600,
     },
-    ratio: 4,
-    formula: (lv: any) => lv,
-    unlockAt: () => (get(wallet)['crystals'] > 1e5),
-    isPercent: false,
-    maxLevel: 1,
+    ratio: 2,
+    formula: (lv: any) => lv * 0.04,
+    unlockAt: () => (get(wallet)['warp'] > 1 || formula.sumArray(get(challengesCompleted))>0),
+    isPercent: true,
+    suffix: ' chance',
+    maxLevel: 8,
     notes: ''
 },
 {
     index: 7,
     name: 'Deadly Precision',
-    description: 'The precision point of the button is highlighted red. Incredible clicks that are lucky become Perfect instead.',
+    description: 'Incredible clicks that are lucky become Perfect instead.',
     cost: {
         crystals: 6e7,
     },

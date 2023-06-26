@@ -1,7 +1,7 @@
 
 import { writable, get } from 'svelte/store';
 import {wallet, miningUpgradeLevels, 
-    enchantUpgradeLevels,buttonNumClicks,buttonStats} from './player'
+    enchantUpgradeLevels,buttonNumClicks,buttonStats, miningUpgradeLevelsBought} from './player'
 import formula from '../calcs/formula';
 import Decimal  from 'break_infinity.js';
 
@@ -314,7 +314,7 @@ export const miningUpgrades = array([{
     name: 'Efficiency II',
     description: 'Increases gem yield again.',
     cost: {
-        crystals: 40,
+        crystals: 125,
     },
     ratio: 1.25,
     unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10),
@@ -333,12 +333,13 @@ export const miningUpgrades = array([{
     description: 'Unlocks a new tier of findable drops.',
     cost: {
         orbs: 1e6,
-        crystals: 10000,
+        crystals: 3500,
         beacons: 2500,
         key2: 150,
     },
     ratio: 1.25,
-    unlockAt: () => (get(miningUpgradeLevels)[6] >= 0.997 || get(miningUpgradeLevels)[9] > 0),
+    unlockAt: () => (get(miningUpgradeLevels)[6] >= 0.9 || get(miningUpgradeLevels)[9] > 0
+    || get(miningUpgradeLevelsBought)[9] > 0),
     formula: (lv: any) => (0),
     isPercent: false,
     suffix: ' (no bonus)',
@@ -439,7 +440,7 @@ export const miningUpgrades = array([{
     },
     ratio: 1e90,
     unlockAt: () => ((get(wallet)['fame'] > 0 && get(miningUpgradeLevels)[9] > 0.003)
-    || get(miningUpgradeLevels)[14] > 0),
+    || get(miningUpgradeLevelsBought)[14] > 0),
     formula: (lv: any) => (0),
     isPercent: true,
     noResetRelocate: true,
@@ -493,7 +494,7 @@ export const miningUpgrades = array([{
     description: 'Increases fame gain on relocation.',
     cost: {
         orbs: 1e4,
-        crystals: 750,
+        crystals: 1600,
 
     },
     ratio: 1.25,
@@ -546,7 +547,7 @@ export const miningUpgrades = array([{
     name: 'Hardened',
     description: 'Your lifetime number of quality button clicks increase gem gain.',
     cost: {
-        crystals: 400,
+        crystals: 7500,
     },
     ratio: 1.33,
     unlockAt: () => (get(wallet)['crystals'] > 0),
@@ -583,11 +584,11 @@ export const miningUpgrades = array([{
     name: 'Fortune II',
     description: 'Increases all droprates.',
     cost: {
-        gems: 1e11,
+        gems: 1e13,
     },
-    ratio: 1.8,
+    ratio: 1.65,
     unlockAt: () => (get(wallet)['crystals'] > 0),
-    formula: (lv: any) =>  1 + lv/10,
+    formula: (lv: any) =>  1 + Math.pow(lv,0.8)/10,
     isPercent: false,
     suffix: 'x droprates',
     maxLevel: 400,
@@ -595,14 +596,14 @@ export const miningUpgrades = array([{
 {
     index: 23,
     sortType: ['base'],
-    name: 'Geodes',
-    description: 'Increases crystal gain from the button.',
+    name: 'Isotopes',
+    description: 'Increases radioactivity gain from the button. ',
     cost: {
-        gems: 1e13,
+        gems: 1e19,
     },
-    ratio: 1.8,
+    ratio: 1.65,
     unlockAt: () => (get(wallet)['crystals'] > 0),
-    formula: (lv: any) =>  1 + lv/4,
+    formula: (lv: any) =>  1 + Math.pow(lv,0.8)/10,
     isPercent: true,
     prefix: '+',
     suffix: ' crystal gain',
@@ -614,11 +615,11 @@ export const miningUpgrades = array([{
     name: 'Blinding Lights',
     description: 'Increases beacon path progress.',
     cost: {
-        gems: 1e14,
+        gems: 1e22,
     },
-    ratio: 1.8,
+    ratio: 1.65,
     unlockAt: () => (get(wallet)['crystals'] > 0),
-    formula: (lv: any) =>  1 + lv/4,
+    formula: (lv: any) =>  1 + Math.pow(lv,0.8)/4,
     isPercent: true,
     prefix: '+',
     suffix: ' beacon progress',

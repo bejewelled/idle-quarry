@@ -159,17 +159,18 @@ function dropTable(context: any) {
             update((i: any) => {
                 for (let [item, val] of Object.entries(i)) {
                     if (item == 'tier') continue;
+                    let baseChance = val[3] 
+                    * get(miningUpgrades)[13]['formula'](get(miningUpgradeLevels)[13])
+                    * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])
+                    * (item === 'artifacts' ? get(miningUpgrades)[21]['formula'](get(miningUpgradeLevels)[21]) : 1)
+                    * get(beaconBonuses)[7];
                     i[item]= [
-                        Math.min((item.toString().includes('key'+i['tier']) ? 0.25 / val[2] : 
-                        (item.toString().includes('key') ? 0.33333333 : 1)),
-                        val[3] 
-                        * get(miningUpgrades)[13]['formula'](get(miningUpgradeLevels)[13])
-                        * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])
-                        * (item === 'artifacts' ? get(miningUpgrades)[21]['formula'](get(miningUpgradeLevels)[21]) : 1)
-                        * get(beaconBonuses)[7]),
+                        Math.min(1,
+                        (baseChance > val[4] ? val[4] + Math.pow(baseChance-val[4], 3) : baseChance)),
                         val[1], 
                         val[2],
-                        val[3]
+                        val[3],
+                        val[4] || 1
                     ]
                 }
                 return i;
@@ -181,43 +182,42 @@ function dropTable(context: any) {
 
 export const key1DropTable = dropTable({
     tier: 1,
-    gems: [0.6, 10, 200, 0.6], // [chance, min, max, base]
-    orbs: [0.4, 3, 10, 0.4], 
-    gold: [0.2, 10, 20, 0.2],
-    beacons: [0.025, 1, 1, 0.025],
-    key2: [(1/2500), 1, 1, (1/2500)],
+    gems: [0.6, 10, 200, 0.6, 0.9], // [chance, min, max, base, chanceSoftcap]
+    orbs: [0.4, 3, 10, 0.4, 0.9], 
+    gold: [0.2, 10, 20, 0.2, 0.9],
+    beacons: [0.025, 1, 1, 0.025, 0.1],
+    key2: [(1/2500), 1, 1, (1/2500), 0.01],
 })
 
 export const key2DropTable = dropTable({
     tier: 2,
-    gems: [0.25, 1e6, 1e7, 0.25], // [chance, min, max, base]
-    gold: [0.15, 1e4, 1e5, 0.15],
-    orbs: [0.15, 3200, 18000, 0.15],
-    sigils: [0.11, 1, 1, 0.11],
-    beacons: [0.06, 250, 1000, 0.06],
-    fame: [0.00025, 1, 10, 0.00025],
-    key3: [(1/120000), 1, 1, (1/120000)],
+    gems: [0.25, 1e6, 1e7, 0.25, 0.6], // [chance, min, max, base]
+    gold: [0.15, 1e4, 1e5, 0.15, 0.6],
+    orbs: [0.15, 3200, 18000, 0.15, 0.6],
+    sigils: [0.11, 1, 1, 0.11, 0.6],
+    beacons: [0.06, 250, 1000, 0.06, 0.6],
+    key3: [(1/120000), 1, 1, (1/120000), 0.001],
 })
 
 export const key3DropTable = dropTable({
     tier: 3,
-    // [chance (w/ multipliers), min, max, baseChance]
-    gems: [0.25, 1e14, 1e15, 0.25], 
-    gold: [0.15, 1e8, 5e8, 0.075],
-    crystals: [0.11, 1000, 10000, 0.06],
-    orbs: [0.06, 2.2e6, 1.1e7, 0.06],
-    beacons: [0.04, 1000, 3500, 0.04],
-    sigils: [0.025, 45, 200, 0.025],
-    artifacts: [4.2e-6, 1, 1, 4.2e-6],
-    key4: [(1/5e7), 1, 1, (1/5e7)]
+    // [chance (w/ multipliers), min, max, baseChance, chanceSoftcap]
+    gems: [0.25, 1e14, 1e15, 0.25, 0.4], 
+    gold: [0.15, 1e8, 5e8, 0.075, 0.4],
+    crystals: [0.11, 1000, 10000, 0.11, 0.25],
+    orbs: [0.06, 2.2e6, 1.1e7, 0.06, 0.25],
+    beacons: [0.04, 1000, 3500, 0.04, 0.25],
+    sigils: [0.035, 45, 160, 0.035, 0.25],
+    artifacts: [4.2e-7, 1, 1, 4.2e-6, 0.001],
+    key4: [(1/1e7), 1, 1, (1/1e7), 0.0001]
     
 })
 
 export const key4DropTable = dropTable({
     tier: 4,
     // [chance (w/ multipliers), min, max, baseChance]
-    gems: [0.03, 1e20, 1e21, 0.03], 
-    gold: [0.03, 1e11, 1e12, 0.03],
+    gems: [0.03, 1e26, 1e29, 0.03], 
+    gold: [0.03, 1e14, 1e16, 0.03],
     crystals: [0.02, 1000, 10000, 0.02],
     orbs: [0.016, 5e7, 1e9, 0.016],
     sigils: [0.016, 2500, 10000, 0.016],
@@ -280,7 +280,7 @@ export const keyUpgrades = array([
             warp: 2500,
         },
         ratio: 1.3,
-        formula: (lv: any) => 4 - 0.063*Math.pow(lv, 0.6),
+        formula: (lv: any) => 3 - 0.053*Math.pow(lv, 0.6),
         unlockAt: () => (get(wallet)['sigils'] >= 1e4 || get(keyUpgradeLevels)[1] > 0),
         isPercent: false,
         suffix: ' cost ratio',
@@ -312,7 +312,7 @@ export const keyCrafts = array([
         style: 'text-emerald-300',
         stylebg: 'bg-emerald-300',
         cost: {
-            crystals: 1000
+            crystals: 10
         },
         craftTime: 30, // in seconds
         baseAmount: 1,
@@ -342,7 +342,7 @@ export const keyCrafts = array([
             slurry: 100,
         },
         craftTime: 100, // in seconds
-        baseAmount: 2,
+        baseAmount: 32,
         ratio: 1.04,
         unlockAt: () => (get(wallet)['key2'] > 0 || get(keysOpened)[1] > 0 || get(keysOpened)[0] > 1e4),
     },
@@ -369,8 +369,8 @@ export const keyCrafts = array([
             slurry: 1e7,
             sigils: 100,
         },
-        craftTime: 7200, // in seconds
-        baseAmount: 1,
+        craftTime: 1960, // in seconds
+        baseAmount: 8,
         ratio: 1.05, 
         unlockAt: () => (get(wallet)['key4'] > 0 || get(keysOpened)[3] > 0 || get(keysOpened)[2] > 1e5),
     },
@@ -383,7 +383,7 @@ export const keyCrafts = array([
             slurry: 1e11,
             sigils: 1e5,
         },
-        craftTime: 86400, // in seconds
+        craftTime:3600, // in seconds
         baseAmount: 1,
         ratio: 1.06,
         unlockAt: () => (get(wallet)['key5'] > 0 || get(keysOpened)[4] > 0 || get(keysOpened)[3] > 1e5),
@@ -394,13 +394,26 @@ export const keyCrafts = array([
         style: 'text-slate-200',
         stylebg: 'bg-slate-200',
         cost: {
-            slurry: 1e11,
-            sigils: 1e5,
+            slurry: 1e9,
+            sigils: 1e8,
         },
-        craftTime: 86400, // in seconds
-        baseAmount: 1,
+        craftTime: 1490, // in seconds
+        baseAmount: 100,
         ratio: 1.06,
         unlockAt: () => (get(wallet)['artifacts'] > 0 || get(keysOpened)[2] > 2000),
+    },
+    {
+        item: 'goldenSigils',
+        name: 'Golden Sigil',
+        style: 'text-yellow-300',
+        stylebg: 'bg-yellow-300',
+        cost: {
+            sigils: 1e11,
+        },
+        craftTime: 900, // in seconds
+        baseAmount: 1,
+        ratio: 1.06,
+        unlockAt: () => (get(wallet)['sigils'] > 1e11),
     },
 
 

@@ -1,8 +1,8 @@
-<svelte:window on:keydown|preventDefault={keyDown} on:keyup={keyUp} /> <!-- will be bound to an upgrade-->
+<svelte:window on:keydown|preventDefault={handleClick && keyDown} on:keyup={keyUp} /> <!-- will be bound to an upgrade-->
 <div class='game-text text-small text-center'>Click the outer area of the button once to enable key-clicking.</div>
 
 {#if showRewardDescription}
-<div class='absolute flex w-[350px] h-[35px] {rewardStyle} 
+<div class='fixed flex w-[350px] h-[35px] {rewardStyle} 
 text-center items-center justify-center'
 style = 'top: {textPosition.y}px; left: {textPosition.x}px;'>
 {rewardDescriptionText}</div>
@@ -10,25 +10,17 @@ style = 'top: {textPosition.y}px; left: {textPosition.x}px;'>
 
 <button
     id="button"
-    class="absolute w-[100px] h-[100px] border-4 border-white border-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
+    class="fixed w-[100px] h-[100px] border-4 border-white border-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
     style="top: {buttonPosition.y}px; left: {buttonPosition.x}px;"
     on:click={handleClick} on:keydown={handleClick}
   ></button>
 {#if $buttonUpgradeLevels[2] > 0}
 <button
     id="button"
-    class="absolute w-[20px] h-[20px] bg-gray-400 bg-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
+    class="fixed w-[{ref.buttonDistances['good']*2}px] h-[{ref.buttonDistances['good']*2}px] bg-gray-400 bg-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
     style="top: {buttonPosition.y+40}px; left: {buttonPosition.x+40}px;"
     on:click={handleClick}
   > </button>
-{/if}
-{#if $buttonUpgradeLevels[7] > 0}
-<button
-    id="button"
-    class="absolute w-[4px] h-[4px] bg-red-400 bg-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
-    style="top: {buttonPosition.y+48}px; left: {buttonPosition.x+48}px;"
-    on:click={handleClick}
-  ></button>
 {/if}
 
 
@@ -41,14 +33,14 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     // @ts-ignore
     settings, visibleTier, progressThisTick, progressAverage,
 buttonNumClicks, mineLevel, buttonStats, buttonUpgradeLevels,
-automationItemsUnlocked, flags} from '../../data/player';
+automationItemsUnlocked, flags, buttonRadiumProgress} from '../../data/player';
 // @ts-ignore
 import {progressThreshold, progressPerTick, miningUpgrades,
 // @ts-ignore
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 // @ts-ignore
 import {keyGainFlavorText} from '../../data/keys';
-import {buttonUpgrades} from '../../data/button';
+import {buttonUpgrades, radiumGainText} from '../../data/button';
 import {allMultipliers} from '../../data/artifacts'
 // @ts-ignore
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
@@ -104,43 +96,46 @@ const BUTTON_SIZE= 100;
     $buttonStats['totalClicks']++;
 
     const isLucky = Math.random() < $buttonUpgrades[5]['formula']($buttonUpgradeLevels[5]);
+    const warpAdder = Math.random() < $buttonUpgrades[6]['formula']($buttonUpgradeLevels[6]);
 
     if (isLucky && absDist > 1 && absDist <= 2) absDist = 0;
 
+    if (warpAdder) $wallet['warp'] = ($wallet['warp'] || 0) + Math.ceil(Math.random()*10);
+
     let xpGain = 0;
-    if (absDist < 1) {
-        rewardAmount = 100;
-        rewardDescriptionText = 'PERFECT! +';
+    if (absDist < ref.buttonDistances['perfect']) {
+        rewardAmount = ref.buttonBaseRewards['perfect'];
+        rewardDescriptionText = 'PERFECT';
         rewardStyle = 'text-large text-amber-500 border-amber-500 font-bold'
         $buttonNumClicks['perfect']++;
         xpGain = 3 * $buttonUpgrades[4]['formula']($buttonUpgradeLevels[4]);
-    } else if (absDist <= 2) {
-        rewardAmount = 6;
-        rewardDescriptionText = 'INCREDIBLE +';
+    } else if (absDist <= ref.buttonDistances['incredible']) {
+        rewardAmount = ref.buttonBaseRewards['incredible'];
+        rewardDescriptionText = 'Incredible';
         rewardStyle = 'text-large text-pink-500 border-pink-500 font-bold'
         $buttonNumClicks['incredible']++;
         xpGain = 3 * $buttonUpgrades[4]['formula']($buttonUpgradeLevels[4]);
-    } else if (absDist <= 4) {
-        rewardAmount = 4;
-        rewardDescriptionText = 'Excellent +';
+    } else if (absDist <= ref.buttonDistances['excellent']) {
+        rewardAmount = ref.buttonBaseRewards['excellent'];
+        rewardDescriptionText = 'Excellent';
         rewardStyle = 'text-med text-violet-500 border-violet-500'
         $buttonNumClicks['excellent']++;
         xpGain = 2 * $buttonUpgrades[4]['formula']($buttonUpgradeLevels[4]);
-    } else if (absDist <= 7) {
-        rewardAmount = 3;
-        rewardDescriptionText = 'Great +';
+    } else if (absDist <= ref.buttonDistances['great']) {
+        rewardAmount = ref.buttonBaseRewards['great'];
+        rewardDescriptionText = 'Great';
         rewardStyle = 'text-med text-sky-500 border-sky-500'
         $buttonNumClicks['great']++;
         xpGain = 1;
-    } else if (absDist <= 10) {
-        rewardAmount = 2;
-        rewardDescriptionText = 'Good +';
+    } else if (absDist <= ref.buttonDistances['good']) {
+        rewardAmount = ref.buttonBaseRewards['good'];
+        rewardDescriptionText = 'Good';
         rewardStyle = 'text-med text-green-500 border-green-500'
         $buttonNumClicks['good']++;
         xpGain = 1;
     } else {  
-        rewardAmount = 1;
-        rewardDescriptionText = 'Okay +';
+        rewardAmount = ref.buttonBaseRewards['okay'];
+        rewardDescriptionText = 'Okay';
         rewardStyle = 'text-small text-gray-500 border-gray-500';
         $buttonNumClicks['okay']++;
         xpGain = 1;
@@ -149,10 +144,18 @@ const BUTTON_SIZE= 100;
     $mineLevel['xp'] += xpGain;
 
     rewardAmount = rewardAmount 
-    * formula.calcButtonStreakBonus($buttonStats['totalClicks'])
+    * $buttonUpgrades[1]['formula']($buttonUpgradeLevels[1])
     * $miningUpgrades[23]['formula']($miningUpgradeLevels[23])
     
-    if (isNaN($wallet['crystals'])) $wallet['crystals'] = 0;
+    $buttonRadiumProgress[0] += rewardAmount;
+    if ($buttonRadiumProgress[0] >= $buttonRadiumProgress[1]) {
+      $wallet['radium']+= Math.floor($buttonRadiumProgress[0] / $buttonRadiumProgress[1])
+      $buttonRadiumProgress[0] %= $buttonRadiumProgress[1];
+    }
+    $radiumGainText = '+ ' + f(rewardAmount)
+    setTimeout(() => {
+      $radiumGainText = '';
+    }, 375)
     
     let mplr;
     if (isLucky) {
@@ -160,12 +163,9 @@ const BUTTON_SIZE= 100;
         rewardAmount *= mplr;
     }
    
-    rewardDescriptionText += f(rewardAmount,
-    rewardAmount > 100 ? 0 : 1);
-    if (isLucky)rewardDescriptionText += ' [ LUCKY! x' + f(mplr,0) + ' ]';
+    if (isLucky)rewardDescriptionText += ' [ LUCKY! ]';
 
 
-    $wallet['crystals'] += rewardAmount;
 
     $buttonStats['hardenedBonus'] = formula.calcHardenedGemBonus($buttonNumClicks)
     
@@ -218,7 +218,10 @@ const BUTTON_SIZE= 100;
     }
 
     onMount(() => {
-      handleClick();
+      buttonPosition = {
+        x: 650,
+        y: 320
+      };
     });
     
 // @ts-ignore
