@@ -169,6 +169,8 @@
                     <Challenges />
                 {:else if tab === 'artifacts' && (tabUnlockCriteria['artifacts']())}
                     <Artifacts />
+                {:else if tab === 'ascension' && (tabUnlockCriteria['ascension']())}
+                    <Ascension />
                 {:else if tab === 'help'}
                     <Help />
                 {:else if tab === 'settings'}
@@ -225,6 +227,7 @@ import Settings from '../components/tabs/Settings.svelte';
 import Challenges from '../components/tabs/Challenges.svelte';
 import Artifacts from '../components/tabs/Artifacts.svelte';
 import MiningUpgradeButton from '../components/buttons/MiningUpgradeButton.svelte';
+import Ascension from '../components/tabs/Ascension.svelte'
 import ref from '../calcs/ref.ts'
 
 import { onMount } from 'svelte'
@@ -296,6 +299,7 @@ const tabUnlockCriteria = {
         settings: () => true,
         challenges: () => $automationItemsUnlocked['game on'],
         artifacts: () => ($wallet['artifacts'] && $wallet['artifacts'] >= 1),
+        ascension: () => (formula.sumArray($challengesCompleted) >= 25)
     }
 const tabsUnlocked = {
     mining: true,
@@ -539,10 +543,10 @@ const load = async (isImport = false) => {
         automationItemsUnlocked.set(JSON.parse(localStorage.getItem('automationItemsUnlocked')));
     }
     if ($automationItemsUnlocked['spellcaster']) {
-        $enchantThreshold['t1'] = 90;
+        $enchantThreshold['t1'] *= 0.9;
     }
     if ($automationItemsUnlocked['spellcaster ii']) {
-        $enchantThreshold['t1'] = 81;
+        $enchantThreshold['t1'] *= 0.9;
     }
 
     if (localStorage.getItem('activityLogShow')) {

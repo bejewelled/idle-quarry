@@ -99,8 +99,8 @@ select-none'>{$automationUpgrades[index]['name']}
         $automationItemsUnlocked[$automationUpgrades[index]['name'].toLowerCase()] = true;
 
         // special cases
-        if ($automationItemsUnlocked['spellcaster ii']) $enchantThreshold['t1'] = 81;
-        else if ($automationItemsUnlocked['spellcaster']) $enchantThreshold['t1'] = 90;
+        if ($automationItemsUnlocked['spellcaster ii']) $enchantThreshold['t1'] *= 0.9;
+        else if ($automationItemsUnlocked['spellcaster']) $enchantThreshold['t1'] *= 0.9;
     }
 
     function canAfford() {

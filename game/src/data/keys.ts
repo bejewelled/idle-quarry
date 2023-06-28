@@ -378,8 +378,8 @@ export const keyCrafts = array([
     {
         item: 'efire',
         name: 'Fire Essence',
-        style: 'text-orange-400',
-        stylebg: 'bg-orange-400',
+        style: 'text-red-500',
+        stylebg: 'bg-red-500',
         cost: {
             fame: 1e15,
         },
@@ -391,8 +391,8 @@ export const keyCrafts = array([
     {
         item: 'eearth',
         name: 'Earth Essence',
-        style: 'text-stone-200',
-        stylebg: 'bg-stone-200',
+        style: 'text-emerald-400',
+        stylebg: 'bg-emerald-400',
         cost: {
             dust: 10000
         },
