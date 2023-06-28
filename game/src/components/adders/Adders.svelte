@@ -75,7 +75,6 @@
   import { challengeGoals } from "../../data/challenges";
   import { enchantUpgrades, enchantThreshold } from "../../data/fame";
   import { allMultipliers } from "../../data/artifacts";
-  import {ascensionNames, ascensionDe}
   import ref from "../../calcs/ref";
   import formula from "../../calcs/formula";
 
