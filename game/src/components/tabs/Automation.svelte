@@ -56,7 +56,7 @@ $: pbarWidths = Array(30).fill(0);
 $: beaconDispBonus = $beaconBonuses
 $: fameGainKeys = formula.calcFameGainKeys($keysOpened);
 $: fameMultiGems = formula.calcFameGemMulti($wallet['gems']);
-$: fameMultiBeaconLevels = formula.calcFameBeaconMulti(formula.sumArray($beaconLevels));
+$: fameMultiBeaconLevels = formula.calcFameGainBeacons(formula.sumArray($beaconLevels));
 let beaconDispBonus = $beaconBonuses;
 let reloadClock = true;
 let reloadNumbers;
@@ -66,7 +66,7 @@ onMount(() => {
     const reloadFameGain = setTimeout(() => {
         fameGainKeys = formula.calcFameGainKeys($keysOpened);
         fameMultiGems = formula.calcFameGemMulti($wallet['gems']);
-        fameMultiBeaconLevels = formula.calcFameBeaconMulti(formula.sumArray($beaconLevels));
+        fameMultiBeaconLevels = formula.calcFameGainBeacons(formula.sumArray($beaconLevels));
     }, 100)
     reloadNumbers = setInterval(() => {
         reloadClock= !reloadClock;

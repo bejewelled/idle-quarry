@@ -245,15 +245,15 @@ export const keyUpgrades = array([
         name: 'Mysterious Potion',
         description: 'Concoct a potion that improves key rates for ALL keys.',
         cost: {
-            slurry: 1000,
-            sigils: 1000,
+            slurry: 100,
+            sigils: 100,
         },
-        ratio: 1.4,
-        formula: (lv: any) => 1 + 0.25*Math.pow(lv, 0.9),
+        ratio: 1.3,
+        formula: (lv: any) => 1 + 0.2*Math.pow(lv, 0.8),
         unlockAt: () => (get(wallet)['slurry'] > 0),
         isPercent: false,
         suffix: 'x droprates',
-        maxLevel: 100,
+        maxLevel: 600,
         notes: ''
     },
     {
@@ -312,11 +312,11 @@ export const keyCrafts = array([
         style: 'text-emerald-300',
         stylebg: 'bg-emerald-300',
         cost: {
-            crystals: 10
+            crystals: 1
         },
         craftTime: 30, // in seconds
         baseAmount: 1,
-        ratio: 3,
+        ratio: 10,
         unlockAt: () => (get(wallet)['crystals'] > 0),
     },
     {
@@ -361,20 +361,6 @@ export const keyCrafts = array([
         unlockAt: () => (get(wallet)['key3'] > 0 || get(keysOpened)[2] > 0 || get(keysOpened)[1] > 1e5),
     },
     {
-        item: 'key4',
-        name: '[****] Key',
-        style: 'text-violet-400',
-        stylebg: 'bg-violet-400',
-        cost: {
-            slurry: 1e7,
-            sigils: 100,
-        },
-        craftTime: 1960, // in seconds
-        baseAmount: 8,
-        ratio: 1.05, 
-        unlockAt: () => (get(wallet)['key4'] > 0 || get(keysOpened)[3] > 0 || get(keysOpened)[2] > 1e5),
-    },
-    {
         item: 'key5',
         name: '[*****] Key [NOT IMPLEMENTED]',
         style: 'text-amber-400',
@@ -388,32 +374,76 @@ export const keyCrafts = array([
         ratio: 1.06,
         unlockAt: () => (get(wallet)['key5'] > 0 || get(keysOpened)[4] > 0 || get(keysOpened)[3] > 1e5),
     },
+    // essences
     {
-        item: 'artifacts',
-        name: 'Artifacts',
-        style: 'text-slate-200',
-        stylebg: 'bg-slate-200',
+        item: 'efire',
+        name: 'Fire Essence',
+        style: 'text-orange-400',
+        stylebg: 'bg-orange-400',
         cost: {
-            slurry: 1e9,
-            sigils: 1e8,
+            fame: 1e19,
         },
-        craftTime: 1490, // in seconds
-        baseAmount: 100,
-        ratio: 1.06,
-        unlockAt: () => (get(wallet)['artifacts'] > 0 || get(keysOpened)[2] > 2000),
+        craftTime: 240, // in seconds
+        baseAmount: 1,
+        ratio: 1.1,
+        unlockAt: () => (get(wallet)['totalFame'] > 1e18),
+    },
+    // efire: 'text-orange-400',
+    // eearth: 'text-stone-500',
+    // emagic: 'text-amber-200',
+    // ewater: 'text-sky-300',
+    // ecelestial: 'text-indigo-300',
+    {
+        item: 'eearth',
+        name: 'Earth Essence',
+        style: 'text-stone-200',
+        stylebg: 'bg-stone-200',
+        cost: {
+            dust: 10000
+        },
+        craftTime: 240, // in seconds
+        baseAmount: 1,
+        ratio: 1.1,
+        unlockAt: () => (get(wallet)['dust'] > 7500),
     },
     {
-        item: 'goldenSigils',
-        name: 'Golden Sigil',
-        style: 'text-yellow-300',
-        stylebg: 'bg-yellow-300',
+        item: 'emagic',
+        name: 'Magic Essence',
+        style: 'text-amber-200',
+        stylebg: 'bg-amber-200',
         cost: {
             sigils: 1e11,
         },
-        craftTime: 900, // in seconds
+        craftTime: 240, // in seconds
         baseAmount: 1,
-        ratio: 1.06,
-        unlockAt: () => (get(wallet)['sigils'] > 1e11),
+        ratio: 1.1,
+        unlockAt: () => (get(wallet)['sigils'] > 1e10),
+    },
+    {
+        item: 'ewater',
+        name: 'Water Essence',
+        style: 'text-sky-300',
+        stylebg: 'bg-sky-300',
+        cost: {
+            orbs: 1e14,
+        },
+        craftTime: 240, // in seconds
+        baseAmount: 1,
+        ratio: 1.1,
+        unlockAt: () => (get(wallet)['orbs'] > 1e13),
+    },
+    {
+        item: 'ecelestial',
+        name: 'Celestial Essence',
+        style: 'text-transparent bg-clip-text bg-gradient-to-br from-fuchsia-300 to-violet-700',
+        stylebg: 'bg-gradient-to-br from-fuchsia-300 to-violet-700',
+        cost: {
+            stars: 10,
+        },
+        craftTime: 240, // in seconds
+        baseAmount: 1,
+        ratio: 1.1,
+        unlockAt: () => (get(wallet)['stars'] > 1),
     },
 
 

@@ -20,7 +20,12 @@ export default class ref {
         warp: 'text-emerald-600',
         trophies: 'text-amber-500',
         dust: 'text-indigo-600',
-        goldenSigils: 'text-amber-200',
+        stars: 'text-transparent text-stone-100 bg-clip-text bg-gradient-to-br from-fuchsia-300 to-violet-700',
+        efire: 'text-orange-400 text-shadow-gray',
+        eearth: 'text-stone-200 text-shadow-gray',
+        emagic: 'text-amber-200 text-shadow-gray',
+        ewater: 'text-sky-300 text-shadow-gray',
+        ecelestial: 'text-violet-300 text-shadow-gray',
         radium: 'text-lime-300',
     }
 
@@ -42,7 +47,12 @@ export default class ref {
         key4: '[****] key',
         key5: '[*****] key',
         beaconPower: 'Beacon Power',
-        goldenSigils: 'golden sigils',
+        efire: '[@] fire',
+        eearth: '[@] earth',
+        ewater: '[@] water',
+        ecelestial: '[@] celestial',
+        emagic: '[@] magic',
+        stars: '*stars*'
     }
 
     // stuff to not show on the sidebar
@@ -71,7 +81,12 @@ export default class ref {
         trophies: 4,
         dust: 4,
         key4: 4,
-        goldenSigils: 5,
+        efire: 5,
+        eearth: 5,
+        emagic: 5,
+        ewater: 5,
+        ecelestial: 5,
+        stars: 3,
     }
     
     static keyMainNames = {

@@ -95,7 +95,9 @@
             </div>
             <div class='col-span-3 pl-1 text-left align-text-middle'>
                 <div class='text-[#989898] text-small'>[*] <strong>{$keyGainFlavorText['key1'] > 1 ? f($keyGainFlavorText['key1'],0) : '???'}</strong>
-                    x {f($progressAverage['key1']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key1'], 3)} / sec
+                    <span class='{$progressAverage['key1']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key1'] > 25 ? 'text-amber-200' : ''}'>
+                        x {f($progressAverage['key1']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key1'], 3)} / sec
+                    </span>
 
                 </div>
             </div>
@@ -112,8 +114,9 @@
             </div>
             <div class='col-span-3 pl-1 text-left align-text-middle'>
                 <div class='text-[#989898] text-small'>[**] <strong>{$keyGainFlavorText['key2'] > 1 ? f($keyGainFlavorText['key2'],0) : '???'}</strong>
-                    x {f($progressAverage['key2']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key2'], 3)} / sec
-
+                    <span class='{$progressAverage['key2']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key2'] > 10 ? 'text-amber-200' : ''}'>
+                        x {f($progressAverage['key2']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key2'], 3)} / sec
+                    </span>
                 </div>
             </div>
         {/if}
@@ -129,8 +132,9 @@
             </div>
             <div class='col-span-3 pl-1 text-left align-text-middle'>
                 <div class='text-[#989898] text-small'>[***] <strong>{$keyGainFlavorText['key3'] > 1 ? f($keyGainFlavorText['key3'],0) : '???'}</strong>
-                    x {f($progressAverage['key3']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key3'], 3)} / sec
-
+                    <span class='{$progressAverage['key3']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key3'] > 1 ? 'text-amber-200' : ''}'>
+                        x {f($progressAverage['key3']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key3'], 3)} / sec
+                    </span>
                 </div>
             </div>
         {/if}

@@ -157,7 +157,7 @@ function updateprogressThisTick(delta) {
     * progressMultiArtifacts
     , challengeExponent);
 
-    const softcapThresh = $progressThreshold['gems'] * (UPDATE_SPEED/1000) * 25;
+    let softcapThresh = $progressThreshold['gems'] * (UPDATE_SPEED/1000) * 25;
     //softcap!
     if (progGems > softcapThresh) {
         progGems = softcapThresh + Math.sqrt(progGems - softcapThresh);
@@ -167,28 +167,41 @@ function updateprogressThisTick(delta) {
     $progressThisTick['gems'] = progGems * delta;
 
     
-    const progKey1 = Math.pow(($miningUpgradeLevels[3] > 0 ?
+    let progKey1 = Math.pow(($miningUpgradeLevels[3] > 0 ?
     PROGRESS_BASE * $miningUpgrades[3]['formula']($miningUpgradeLevels[3]) : 0)
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * progressBonusMulti
     * $challenge3Multi
     * progressMultiArtifacts
     * challengeMultiplier, challengeExponent);
+    
+    softcapThresh = $progressThreshold['key1'] * (UPDATE_SPEED/1000) * 25;
+    //softcap!
+    if (progKey1 > softcapThresh) {
+        progKey1 = softcapThresh + Math.sqrt(progKey1 - softcapThresh);
+    }
+
     $progressAverage['key1'] = progKey1;
     $progressThisTick['key1'] = progKey1 * delta;
 
-    const progKey2 = Math.pow(($miningUpgradeLevels[4] > 0 ?
+    let progKey2 = Math.pow(($miningUpgradeLevels[4] > 0 ?
     PROGRESS_BASE * $miningUpgrades[4]['formula']($miningUpgradeLevels[4]) : 0)
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * progressBonusMulti
     * $challenge3Multi
     * progressMultiArtifacts
     * challengeMultiplier, challengeExponent);
+     
+    softcapThresh = $progressThreshold['key2'] * (UPDATE_SPEED/1000) * 10;
+    //softcap!
+    if (progKey2 > softcapThresh) {
+        progKey2 = softcapThresh + Math.sqrt(progKey2 - softcapThresh);
+    }
 
     $progressAverage['key2'] = progKey2;
     $progressThisTick['key2'] = progKey2 * delta;
 
-    const progKey3 = Math.pow(($miningUpgradeLevels[18] > 0 ?
+    let progKey3 = Math.pow(($miningUpgradeLevels[18] > 0 ?
     PROGRESS_BASE * $miningUpgrades[18]['formula']($miningUpgradeLevels[18]) : 0)
     * $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
     * $beaconBonuses[5]
@@ -196,6 +209,12 @@ function updateprogressThisTick(delta) {
     * $challenge3Multi
     * progressMultiArtifacts
     * challengeMultiplier, challengeExponent);
+
+    softcapThresh = $progressThreshold['key3'] * (UPDATE_SPEED/1000) * 1;
+    //softcap!
+    if (progKey3 > softcapThresh) {
+        progKey3 = softcapThresh + Math.sqrt(progKey3 - softcapThresh);
+    }
 
     $progressAverage['key3'] = progKey3;
     $progressThisTick['key3'] = progKey3 * delta;
@@ -496,7 +515,7 @@ function checkForKeyCraftCompletion() {
 
                 // formula
                 if (item == 'energizedCrystal') 
-                $keyCraftMastery[item][2] = (3 + $keyCraftMastery[item][0]) * Math.pow(1.06,$keyCraftMastery[item][0])
+                $keyCraftMastery[item][2] = 3;
                 else $keyCraftMastery[item][2] = 10 + (15 * $keyCraftMastery[item][0]) * Math.pow(1.25,$keyCraftMastery[item][0])
                 $keyCraftMastery[item][2] = Math.floor($keyCraftMastery[item][2]);
                 addToActivityLog('[Keys] Crafting Mastery for ' + val['name'] + 'increased! ('

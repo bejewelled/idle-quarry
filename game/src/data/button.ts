@@ -248,14 +248,15 @@ export const buttonUpgrades = array([
 },
 {
     index: 7,
-    name: 'Deadly Precision',
-    description: 'Incredible clicks that are lucky become Perfect instead.',
+    name: 'Celestial Shattering',
+    description: 'Legends say the perfect click can shatter the fabric of space itself...',
     cost: {
-        crystals: 6e7,
+        radium: 1000,
     },
     ratio: 4,
-    formula: (lv: any) => lv,
+    formula: (lv: any) => 111111,
     unlockAt: () => (get(wallet)['crystals'] > 1e6),
+    isRadiumUpgrade: true,
     isPercent: false,
     maxLevel: 1,
     notes: ''

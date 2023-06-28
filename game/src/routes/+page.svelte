@@ -43,7 +43,7 @@
                         <div class='game-text res-amount col-span-5'>{f(Math.floor(res[1]),0)}</div>
                     {/if}
                 {/each}
-                <div class='res-break py-2 col-span-12'></div>
+                <div class='res-break py-2 border-1 border-gray-700 col-span-12'/>
             {/each}
             <!-- keys -->
             {#each Object.entries($wallet) as res}
@@ -135,7 +135,7 @@
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
                 <button class='py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950' on:click={() => reset()}>Reset</button>
-                <button class='text-xs text-gray-600'>v0.0.4a-8</button>  
+                <button class='text-xs text-gray-600'>v0.0.4a-9</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
                 {#key clockTabs}
@@ -586,7 +586,7 @@ const load = async (isImport = false) => {
 function versionUpdater() {
     console.log($saveVersion)
     const ver = $saveVersion;
-    const LATEST_VER = 21;
+    const LATEST_VER = 23;
     if (ver <= 0) {
         // fix "mysterious potion" error
         $keyUpgradeLevels[0] = 0;
@@ -682,6 +682,10 @@ function versionUpdater() {
         if ($automationItemsUnlocked['money piles']) {
             $wallet['trophies'] += 20;
         }
+    }
+    if (ver < 23) {
+        $wallet['emagic'] = ($wallet['goldenSigils'] ? $wallet['goldenSigils'] : undefined);
+        $wallet['goldenSigils'] = undefined;
     }
 
 
@@ -896,7 +900,9 @@ onMount(() => {
         background-color: none;
         cursor: pointer;
     }
-
+    :global(.text-shadow-gray) {
+        text-shadow: 1px 1px 5px #aaa, 1px 1px 5px #ccc;
+    }
 
 
 

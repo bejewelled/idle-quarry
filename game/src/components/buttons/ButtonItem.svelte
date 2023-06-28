@@ -10,7 +10,7 @@ style = 'top: {textPosition.y}px; left: {textPosition.x}px;'>
 
 <button
     id="button"
-    class="fixed w-[100px] h-[100px] border-4 border-white border-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
+    class="fixed {buttonExtraStyle} w-[100px] h-[100px] border-4 border-white border-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
     style="top: {buttonPosition.y}px; left: {buttonPosition.x}px;"
     on:click={handleClick} on:keydown={handleClick}
   ></button>
@@ -51,6 +51,7 @@ import formula from '../../calcs/formula'
     let showRewardDescription = false;
     let rewardDescriptionText = '';
     let rewardStyle = '';
+    $: buttonExtraStyle = '';
 
 const BUTTON_SIZE= 100;
   
@@ -98,9 +99,7 @@ const BUTTON_SIZE= 100;
     const isLucky = Math.random() < $buttonUpgrades[5]['formula']($buttonUpgradeLevels[5]);
     const warpAdder = Math.random() < $buttonUpgrades[6]['formula']($buttonUpgradeLevels[6]);
 
-    if (isLucky && absDist > 1 && absDist <= 2) absDist = 0;
-
-    if (warpAdder) $wallet['warp'] = ($wallet['warp'] || 0) + Math.ceil(Math.random()*10);
+    if (warpAdder) $wallet['warp'] = ($wallet['warp'] || 0) + Math.ceil(Math.random()*45);
 
     let xpGain = 0;
     if (absDist < ref.buttonDistances['perfect']) {
@@ -171,6 +170,15 @@ const BUTTON_SIZE= 100;
    
     if (isLucky)rewardDescriptionText += ' [ LUCKY! ]';
 
+
+    // star gain
+    if (absDist < ref.buttonDistances['perfect'] && $buttonUpgradeLevels[7] > 0) {
+      $wallet['stars'] = ($wallet['stars'] || 0) + 1
+      buttonExtraStyle = 'bg-fuchsia-300 transition-colors duration-300 ease-in-out hover:bg-violet-600'
+      setTimeout(() => {
+        buttonExtraStyle = '';
+      }, 700)
+    }
 
 
     $buttonStats['hardenedBonus'] = formula.calcHardenedGemBonus($buttonNumClicks)

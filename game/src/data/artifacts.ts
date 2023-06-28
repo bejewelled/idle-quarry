@@ -149,7 +149,7 @@ export const allMultipliers = object({
         description: 'Multiplying radioactivity gain by ',
         prefix: 'x',
         unlockAt: 10000,
-        formula: (amt: number) => 1 + Math.log(amt/100+1),
+        formula: (amt: number) => 1 + Math.log(Math.pow(amt,0.8)/1100+1),
         colorStyle: 'radium'
     },
 

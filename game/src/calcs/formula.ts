@@ -88,9 +88,9 @@ export default class formula {
       return (Math.log10(n+1))
     }
 
-    static calcFameBeaconMulti(n: number) {
-      return (n > 1e6 ? 11 + Math.pow((n - 1e6) / 1e6, 0.75)  : 
-              n > 150 ? 1 + (n - 150) / 1e5 :
+    static calcFameGainBeacons(n: number) {
+      return (n > 1e6 ? 51 + Math.pow((n - 1e6) / 1e6, 0.75)  : 
+              n > 150 ? 1 + (n - 150) / 2e4 :
               n / 150)
     }
 
@@ -142,11 +142,11 @@ export default class formula {
   }
 
   static calcKeySlurryGain(obj: { [x: string]: number; }) {
-    let amount = (Math.pow(obj['key1'], 0.7) || 0)*0.025
-    + (Math.pow(obj['key2'], 0.8) || 0)*0.2
-    + (Math.pow(obj['key3'], 0.9) || 0)*2
-    + (Math.pow(obj['key4'], 0.93) || 0)*35
-    + (Math.pow(obj['key5'], 0.97) || 0)*400;
+    let amount = (Math.pow(obj['key1'], 0.7) || 0)*0.02
+    + (Math.pow(obj['key2'], 0.85) || 0)*0.2
+    + (Math.pow(obj['key3'], 0.93) || 0)*18
+    + (Math.pow(obj['key4'], 0.98) || 0)*16500
+    + (Math.pow(obj['key5'], 0.999) || 0)*1.45e9;
     if (isNaN(amount)) {
       alert('note: this feature is bugged, please report this on Discord - reduced slurry gained (using "safe" formula)')
       return obj['key1'] / 8e5;
