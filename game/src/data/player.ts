@@ -354,7 +354,7 @@ export const stats = object({
 
 export const keyCraftTimes = object({
     // [start, finish]
-    energizedCrystal: [-1, -1], 
+    energy: [-1, -1], 
     key3: [-1, -1],
     key4: [-1, -1],
     key5: [-1, -1],
@@ -363,7 +363,7 @@ export const keyCraftTimes = object({
 
 export const keyCraftMastery = object({
     // [item]: [level, xp, xpNextReq]
-    energizedCrystal: [1,0,3],
+    energy: [1,0,3],
     key3: [1, 0, 100],
     key4: [1, 0, 100],
     key5: [1, 0, 100],
@@ -371,7 +371,7 @@ export const keyCraftMastery = object({
 })
 
 export const keyCraftAmount = object({
-    energizedCrystal: 0,
+    energy: 0,
     key3: 0,
     key4: 0,
     key5: 0,

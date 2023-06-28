@@ -276,15 +276,14 @@ export const keyUpgrades = array([
         name: 'Rift Control',
         description: 'Decreases the cost ratio for energized crystals.',
         cost: {
-            sigils: 5e5,
-            warp: 2500,
+            slurry: 1e15,
         },
-        ratio: 1.3,
-        formula: (lv: any) => 3 - 0.053*Math.pow(lv, 0.6),
+        ratio: 1e5,
+        formula: (lv: any) => 10 - lv,
         unlockAt: () => (get(wallet)['sigils'] >= 1e4 || get(keyUpgradeLevels)[1] > 0),
         isPercent: false,
         suffix: ' cost ratio',
-        maxLevel: 100,
+        maxLevel: 8,
         notes: ''
     },
     {
@@ -292,7 +291,7 @@ export const keyUpgrades = array([
         name: 'Special Slurry',
         description: 'Converting a high amount of keys into slurry will also give sigils. Increase the amount by 20% per level.',
         cost: {
-            warp: 3000,
+            slurry: 1e19,
         },
         ratio: 1.3,
         formula: (lv: any) => 0.8 + 0.2 * lv,
@@ -307,14 +306,14 @@ export const keyUpgrades = array([
 
 export const keyCrafts = array([
     {
-        item: 'energizedCrystal',
+        item: 'energy',
         name: 'Energized Crystal',
         style: 'text-emerald-300',
         stylebg: 'bg-emerald-300',
         cost: {
             crystals: 1
         },
-        craftTime: 30, // in seconds
+        craftTime: 300, // in seconds
         baseAmount: 1,
         ratio: 10,
         unlockAt: () => (get(wallet)['crystals'] > 0),
@@ -382,6 +381,7 @@ export const keyCrafts = array([
         stylebg: 'bg-red-500',
         cost: {
             fame: 1e15,
+            energy: 1
         },
         craftTime: 240, // in seconds
         baseAmount: 1,
@@ -394,7 +394,8 @@ export const keyCrafts = array([
         style: 'text-emerald-400',
         stylebg: 'bg-emerald-400',
         cost: {
-            dust: 10000
+            dust: 7500,
+            energy: 1
         },
         craftTime: 240, // in seconds
         baseAmount: 1,
@@ -408,6 +409,7 @@ export const keyCrafts = array([
         stylebg: 'bg-amber-200',
         cost: {
             sigils: 1e11,
+            energy: 1
         },
         craftTime: 240, // in seconds
         baseAmount: 1,
@@ -421,6 +423,7 @@ export const keyCrafts = array([
         stylebg: 'bg-sky-300',
         cost: {
             orbs: 1e15,
+            energy: 1
         },
         craftTime: 240, // in seconds
         baseAmount: 1,
@@ -433,7 +436,8 @@ export const keyCrafts = array([
         style: 'text-transparent bg-clip-text bg-gradient-to-br from-fuchsia-300 to-violet-700',
         stylebg: 'bg-gradient-to-br from-fuchsia-300 to-violet-700',
         cost: {
-            stars: 10,
+            stars: 25,
+            energy: 1
         },
         craftTime: 240, // in seconds
         baseAmount: 1,

@@ -13,6 +13,7 @@ export default class ref {
         beaconPower: "text-cyan-300",
         fame: "text-orange-400",
         crystals: "text-indigo-300",
+        energy: "text-emerald-400",
         sigils: "text-fuchsia-600",
         slurry: "text-teal-400",
         artifacts: "text-slate-200",
@@ -35,6 +36,7 @@ export default class ref {
         "bg-sky-400",
         "bg-amber-400",
         "bg-violet-400",
+        'bg-indigo-500',
     ];
 
     static essenceTextColors = [
@@ -43,6 +45,7 @@ export default class ref {
         "text-sky-400",
         "text-amber-400",
         "text-violet-400",
+        "text-indigo-500",
     ];
 
     static challengePointValues = {
@@ -69,12 +72,12 @@ export default class ref {
         ecelestial: "[@] celestial",
         emagic: "[@] magic",
         stars: "*stars*",
+        energy: "energy",
     };
 
     // stuff to not show on the sidebar
     static walletExclude = {
         totalFame: true,
-        energizedCrystal: true,
         challengePoints: true,
     };
 
@@ -87,6 +90,7 @@ export default class ref {
         crystals: 2,
         beacons: 2,
         fame: 2,
+        energy: 2,
         key2: 3,
         slurry: 3,
         sigils: 3,
@@ -200,6 +204,12 @@ export default class ref {
         dust: "Gain dust from ascension, and very rarely while mining.",
         radium: "Gain radium from clicking the button.",
         goldenSigils: "Gain golden sigils from crafting.",
+        energy: "Enables you to craft powerful items.",
+        efire: "Gained from crafting, used in ascension.",
+        eearth: "Gained from crafting, used in ascension.",
+        ewater: "Gained from crafting, used in ascension.",
+        ecelestial: "Gained from crafting, used in ascension.",
+        emagic: "Gained from crafting, used in ascension.",
     };
 
     static buttonBaseRewards = {

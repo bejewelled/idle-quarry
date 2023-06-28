@@ -281,7 +281,7 @@ export function relocate() {
                 $miningUpgradeLevels = $miningUpgradeLevels.map(
                     (x,i) => $miningUpgradeLevelsBought[i] + $miningUpgradeLevelsFree[i])
                 // for (let k of Object.keys($keyCraftAmount)) {
-                //     if (k !== 'energizedCrystal')
+                //     if (k !== 'energy')
                 //     $keyCraftAmount[k] = 0;
                 // }
             } catch (e) {

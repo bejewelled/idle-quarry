@@ -23,7 +23,7 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
                 <div class="col-span-2 text-large game-text">
                     <span class='{ref.essenceTextColors[i]}'>{$elementNames[i]}</span>
                 </div>
-                <div class="col-span-7 grid grid-rows-2">
+                <div class="pbar-desc col-span-7 grid grid-rows-2">
                     <div class="row-span-1 game-text text-small">
                         {$elementDescriptions[i]}
                     </div>
@@ -57,9 +57,20 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
                         </div>
                     </div>
                 </div>
-                <div class="col-span-4" />
+                <div class="bonus-text col-span-3 grid grid-rows-2 ml-1 p-1 text-small game-text">
+                    <div class='{ref.essenceTextColors[i]} font-bold row-span-1 text-large'>
+                        {$elementBonusText[i]['prefix']} 41.97{$elementBonusText[i]['suffix']}
+                        <span class='font-normal text-small'>>> 42.65{$elementBonusText[i]['suffix']}</span> 
+                    </div>
+                    <div class='row-span-1'>
+                        {$elementBonusText[i]['text']}
+                    </div>
+                </div>
             </div>
         {/each}
+    </div>
+    <div class='grid grid-cols-12'>
+        <div class='col-span-12 text-center underline font-bold text-indigo-500'>Antimatter Bonuses</div>
     </div>
 </div>
 
@@ -113,7 +124,7 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
         baseBeaconNextReqs,
     } from "../../data/beacons";
     import { enchantUpgrades, enchantThreshold } from "../../data/fame";
-    import { elementNames, elementDescriptions } from "../../data/ascension";
+    import { elementNames, elementDescriptions, elementBonusText } from "../../data/ascension";
     import MiningUpgradeButton from "../buttons/MiningUpgradeButton.svelte";
     import ref from "../../calcs/ref";
     import formula from "../../calcs/formula";

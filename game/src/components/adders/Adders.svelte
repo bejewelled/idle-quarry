@@ -617,7 +617,7 @@
           $keyCraftMastery[item][1] = 0;
 
           // formula
-          if (item == "energizedCrystal") $keyCraftMastery[item][2] = 3;
+          if (item == "energy") $keyCraftMastery[item][2] = 3;
           else
             $keyCraftMastery[item][2] =
               10 +

@@ -161,7 +161,6 @@ export default class formula {
 
   static calcKeyCraftAmountGained(i: string) {
     return get(keyCrafts)[i]['baseAmount']
-    * Math.pow(1.1, get(keyCraftMastery)['energizedCrystal'][0]-1)
     * get(beaconBonuses)[6];
 }
   static calcChallengePointGain(n: number, type: string, isOffFocus: boolean = false) {

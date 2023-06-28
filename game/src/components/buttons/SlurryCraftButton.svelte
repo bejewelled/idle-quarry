@@ -61,11 +61,7 @@
         <div class='row-span-1 grid grid-cols-9'>
             <div class='col-span-3 text-left text-small text-amber-400'>
                 Skill {f($keyCraftMastery[item][0])} 
-                {#if item == 'energizedCrystal'}
-                    [{f(Math.pow(1.1, masteryLevel-1), 1)}x ALL craft yields]
-                {:else}
                     [{f(1 / Math.pow(0.9, masteryLevel-1), 1)}x speed]
-                {/if}
                 </div>
             <div class='col-span-6 mine-bar-wrapper align-middle'>
                 <div class="has-tooltip w-full my-1 bg-gray-200 rounded-full h-1 dark:bg-gray-700">
@@ -109,6 +105,7 @@
         let c = {};
 
         for (let [type, base] of Object.entries($keyCrafts[index]['cost'])) {
+            if (type == 'energy') c[type] = base;
             c[type] = cost(base);
         }
         return c;
@@ -175,12 +172,13 @@
 
     function cost(start) {
        const base = start * Math.pow(
-        (item == 'energizedCrystal' ? $keyUpgrades[2]['formula']($keyUpgradeLevels[2]) 
+        (item == 'energy' ? $keyUpgrades[2]['formula']($keyUpgradeLevels[2]) 
        : $keyCrafts[index]['ratio']), $keyCraftAmount[item]);  
-       const r =  (item == 'energizedCrystal' ? $keyUpgrades[2]['formula']($keyUpgradeLevels[2]) 
+       const r =  (item == 'energy' ? $keyUpgrades[2]['formula']($keyUpgradeLevels[2]) 
        : $keyCrafts[index]['ratio'])
        
        const l = 1; // number of items to buy
+
 
        return formula.gSum(base,r,l)
     }
