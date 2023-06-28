@@ -710,7 +710,6 @@ export const miningUpgrades = array([{
     unlockAt: () => (get(wallet)['totalFame'] > 100000),
     formula: (lv: any) => 1 + lv * 0.16,
     noResetRelocate: true,
-    isDust: true,
     isPercent: false,
     suffix: 'x crystal gain',
     maxLevel: 100,
