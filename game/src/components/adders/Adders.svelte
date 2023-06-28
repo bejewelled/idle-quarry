@@ -667,15 +667,15 @@ function procEnchants(n, tier) {
                     break;
                 case 4: // lightning blast
                     if (lightningBlastLockout) break;
-                    progressBonusMulti *= Math.pow(size, 0.25 );
+                    progressBonusMulti *= (Math.pow(size, 0.7)*3 + 3);
                     lightningBlastLockout = true;
                     setTimeout(() => {
-                        progressBonusMulti /= Math.pow(size, 0.25);
+                        progressBonusMulti /= (Math.pow(size, 0.7)*3 + 3);
                         if (Math.abs(progressBonusMulti - Math.round(progressBonusMulti)) < 0.1) 
                             progressBonusMulti = Math.round(progressBonusMulti);
                         lightningBlastLockout = false;
                     }, 3000)
-                    addToActivityLog('[Lightning Blast] ' + f(Math.pow(size, 0.25)) + 'x mining speed for 3 seconds!',
+                    addToActivityLog('[Lightning Blast] ' + f(Math.pow(size, 0.7)*3 + 3) + 'x mining speed for 3 seconds!',
                      'text-violet-300', 'lightning blast');
                     break;
                 case 5: // scavenger

@@ -388,11 +388,6 @@ export const keyCrafts = array([
         ratio: 1.1,
         unlockAt: () => (get(wallet)['totalFame'] > 1e20),
     },
-    // efire: 'text-orange-400',
-    // eearth: 'text-stone-500',
-    // emagic: 'text-amber-200',
-    // ewater: 'text-sky-300',
-    // ecelestial: 'text-indigo-300',
     {
         item: 'eearth',
         name: 'Earth Essence',
@@ -425,12 +420,12 @@ export const keyCrafts = array([
         style: 'text-sky-300',
         stylebg: 'bg-sky-300',
         cost: {
-            orbs: 1e14,
+            orbs: 1e15,
         },
         craftTime: 240, // in seconds
         baseAmount: 1,
         ratio: 1.1,
-        unlockAt: () => (get(wallet)['orbs'] > 1e13),
+        unlockAt: () => (get(wallet)['orbs'] > 1e14),
     },
     {
         item: 'ecelestial',

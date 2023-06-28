@@ -207,7 +207,7 @@ export const enchantUpgrades = array([{
     },
     tier: 1,
     ratio: 1.3,
-    formula: (lv: any) => (0.013/400) * lv,
+    formula: (lv: any) => (0.02/400) * lv,
     unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,
     suffix: '  chance',
