@@ -381,12 +381,12 @@ export const keyCrafts = array([
         style: 'text-orange-400',
         stylebg: 'bg-orange-400',
         cost: {
-            fame: 1e19,
+            fame: 1e21,
         },
         craftTime: 240, // in seconds
         baseAmount: 1,
         ratio: 1.1,
-        unlockAt: () => (get(wallet)['totalFame'] > 1e18),
+        unlockAt: () => (get(wallet)['totalFame'] > 1e20),
     },
     // efire: 'text-orange-400',
     // eearth: 'text-stone-500',
