@@ -349,6 +349,7 @@ export const buttonUpgradeLevels = array(Array(20).fill(0))
 
 export const stats = object({
     lastRelocate: Date.now(),
+    relocateCount: 0,
 })
 
 export const keyCraftTimes = object({

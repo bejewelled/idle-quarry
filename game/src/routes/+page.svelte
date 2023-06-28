@@ -135,7 +135,7 @@
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('help')}>Help!</button>   
                 <button class='py-1 px-1 text-small save-btn control-btn' on:click={() => changeTab('settings')}>Settings</button>   
                 <button class='py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950' on:click={() => reset()}>Reset</button>
-                <button class='text-xs text-gray-600'>v0.0.4a-7</button>  
+                <button class='text-xs text-gray-600'>v0.0.4a-8</button>  
             </div>
             <div class='row-span-1 tab-buttons'>
                 {#key clockTabs}
@@ -203,7 +203,7 @@ import {wallet, miningUpgradeLevels, miningDropTable, unlockedRes,
     miningUpgradeLevelsFreeTemp, miningUpgradeLevelsTemp,
     activityLogShow, challengeActive,
     challengesCompleted, challengeProgress, beaconSmartSplits,
-    challenge3Multi, buttonRadiumProgress} from '../data/player.js'
+    challenge3Multi, buttonRadiumProgress, stats} from '../data/player.js'
 import {upgradeSorting} from '../data/mining.ts'
 import {key1DropTable, key2DropTable, key3DropTable, 
 key4DropTable, key5DropTable, keyUpgrades, keyCrafts} from '../data/keys.js'
@@ -340,6 +340,7 @@ const save = async (isExport = false) => {
     localStorage.setItem('buttonNumClicks', JSON.stringify($buttonNumClicks));
     localStorage.setItem('buttonUpgradeLevels', JSON.stringify($buttonUpgradeLevels));
     localStorage.setItem('buttonStats', JSON.stringify($buttonStats));
+    localStorage.setItem('stats', JSON.stringify($stats));
     localStorage.setItem('buttonRadiumProgress', JSON.stringify($buttonRadiumProgress));
     localStorage.setItem('keyUpgradeLevels', JSON.stringify($keyUpgradeLevels));
     localStorage.setItem('keyCraftTimes', JSON.stringify($keyCraftTimes));
@@ -436,6 +437,9 @@ const load = async (isImport = false) => {
     }
     if (localStorage.getItem('buttonRadiumProgress')) {
         buttonRadiumProgress.set((JSON.parse(localStorage.getItem('buttonRadiumProgress'))));
+    }
+    if (localStorage.getItem('stats')) {
+        stats.set((JSON.parse(localStorage.getItem('stats'))));
     }
 
     $miningUpgradeLevels = $miningUpgradeLevels.map(
@@ -582,7 +586,7 @@ const load = async (isImport = false) => {
 function versionUpdater() {
     console.log($saveVersion)
     const ver = $saveVersion;
-    const LATEST_VER = 20;
+    const LATEST_VER = 21;
     if (ver <= 0) {
         // fix "mysterious potion" error
         $keyUpgradeLevels[0] = 0;
@@ -672,6 +676,11 @@ function versionUpdater() {
     if (ver < 19) {
         if (!$settings['offlineProgress']) {
             $settings['offlineProgress'] = true;
+        }
+    }
+    if (ver < 21) {
+        if ($automationItemsUnlocked['money piles']) {
+            $wallet['trophies'] += 20;
         }
     }
 

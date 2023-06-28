@@ -114,9 +114,12 @@ export default class formula {
     // }
 
     static calcButtonRewardBonus() {
+      //@ts-ignore
+      const y = get(allMultipliers)['radium']['formula'](get(wallet)['radium'] || 0)
       return 1
       * get(buttonUpgrades)[1]['formula'](get(buttonUpgradeLevels)[1])
       * get(miningUpgrades)[23]['formula'](get(miningUpgradeLevels)[23])
+      * (isNaN(y) ? 1 : y);
     }
     
     static calcHardenedGemBonus(obj: { [x: string]: number; }) {
@@ -161,14 +164,15 @@ export default class formula {
     * Math.pow(1.1, get(keyCraftMastery)['energizedCrystal'][0]-1)
     * get(beaconBonuses)[6];
 }
-  static calcChallengePointGain(n: number, type: string) {
-    
+  static calcChallengePointGain(n: number, type: string, isOffFocus: boolean = false) {
+    // indices of key finder in mining upgrades for each tier
+    const keyFinderIndex = [3, 4, 18]
+    if (type.includes('key') && get(miningUpgradeLevels)[keyFinderIndex[parseInt(type[3])-1]] < 1) return 0;
     //@ts-nocheck
-    const nEff = (type === 'gems'? Math.log10(n) : Math.pow(n, 0.5));
     //@ts-nocheck
-    const y = nEff * ref.challengePointValues[type] || 0;
-    if (get(challengeActive) == 4) return Math.pow(y/1000, 1.5)
-    else return y;
+    if (isOffFocus) return ref.challengePointValues[type] * Math.min(n, 1);
+    const y = n * ref.challengePointValues[type] || 0;
+    return y ;
   }
 
   static getMineXPPerCycle() {

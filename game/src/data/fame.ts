@@ -394,16 +394,7 @@ export const automationUpgrades = array([{
     unlockAt: () => (get(automationItemsUnlocked)['spellcaster'] !== undefined),
     isPercent: true,
 },
-{
-    index: 12,
-    name: 'Money Piles',
-    description: 'Lootmaster III stays unlocked on ascension.',
-    cost: {
-        trophies: 20,
-    },
-    unlockAt: () => (get(wallet)['trophies'] >= 1 && get(miningUpgradeLevels)[14] > 0),
-    isPercent: true,
-},
+
 
 
 

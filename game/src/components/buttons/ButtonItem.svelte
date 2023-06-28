@@ -17,7 +17,7 @@ style = 'top: {textPosition.y}px; left: {textPosition.x}px;'>
 {#if $buttonUpgradeLevels[2] > 0}
 <button
     id="button"
-    class="fixed w-[{ref.buttonDistances['good']*2}px] h-[{ref.buttonDistances['good']*2}px] bg-gray-400 bg-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
+    class="fixed w-[20px] h-[20px] bg-gray-400 bg-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
     style="top: {buttonPosition.y+40}px; left: {buttonPosition.x+40}px;"
     on:click={handleClick}
   > </button>
@@ -142,12 +142,15 @@ const BUTTON_SIZE= 100;
     } 
 
     $mineLevel['xp'] += xpGain;
+    rewardAmount = rewardAmount * formula.calcButtonRewardBonus();
+    $radiumGainText = '+ ' + f(rewardAmount)
 
-    rewardAmount = rewardAmount 
-    * $buttonUpgrades[1]['formula']($buttonUpgradeLevels[1])
-    * $miningUpgrades[23]['formula']($miningUpgradeLevels[23])
-    * $allMultipliers['radium']['formula']($wallet['radium'] || 0)
+    if (rewardAmount + $buttonRadiumProgress[0] > $buttonRadiumProgress[1])
+      $radiumGainText += ('   [ + ' + f(Math.floor((rewardAmount + $buttonRadiumProgress[0]) / $buttonRadiumProgress[1])) + ' radium ]')
     
+    if (rewardAmount + $buttonRadiumProgress[0] > $buttonRadiumProgress[1]*5)
+      $radiumGainText = '+ ' + f(Math.floor(rewardAmount + $buttonRadiumProgress[0] / $buttonRadiumProgress[1])) + ' radium'
+
     if (isNaN($wallet['radium'])) $wallet['radium'] = 1;
     $buttonRadiumProgress[0] += rewardAmount;
     if ($buttonRadiumProgress[0] >= $buttonRadiumProgress[1]) {
@@ -155,7 +158,7 @@ const BUTTON_SIZE= 100;
       + Math.floor($buttonRadiumProgress[0] / $buttonRadiumProgress[1])
       $buttonRadiumProgress[0] %= $buttonRadiumProgress[1];
     }
-    $radiumGainText = '+ ' + f(rewardAmount)
+    
     setTimeout(() => {
       $radiumGainText = '';
     }, 375)
@@ -180,25 +183,22 @@ const BUTTON_SIZE= 100;
       const MAX_X = 950;
       const MIN_Y = 300;
       const MAX_Y = 550;
+      const MID_X = (MAX_X + MIN_X) / 2;
+      const MID_Y = (MAX_Y + MIN_Y) / 2;
       const moveMulti = $buttonUpgrades[0]['formula']($buttonUpgradeLevels[0]);
+      console.log(moveMulti)
       // find a new location then multiply the distance by the multiplier
-      let lastX, lastY;
-      if (buttonPosition.x > MIN_X && buttonPosition.y > MIN_Y)
-        lastX = buttonPosition.x, lastY = buttonPosition.y;
-      else
-        lastX = MIN_X, lastY = MIN_Y;
-      const MAX_MOVE2 = (300*moveMulti)**2;
-      const x2 = (Math.random()*0.7+0.3) * MAX_MOVE2;
-      const y2 = MAX_MOVE2 - x2; 
-      const xDir = Math.random() < 0.5 ? -1 : 1;
-      const yDir = Math.random() < 0.5 ? -1 : 1; 
-      let randomX, randomY;
-      randomX = Math.max(MIN_X, Math.min(MAX_X, lastX + (xDir * Math.sqrt(x2))))
-      randomY = Math.max(MIN_Y, Math.min(MAX_Y, lastY + (yDir * Math.sqrt(y2))))
+      let newX = MID_X + ((Math.random() * (MAX_X - MIN_X)) - ((MAX_X - MIN_X) / 2)) * moveMulti;
+      let newY = MID_Y + ((Math.random() * (MAX_Y - MIN_Y)) - ((MAX_Y - MIN_Y) / 2)) * moveMulti;
+      console.log(newX-MID_X, newY-MID_Y)
+      if (newX < MIN_X) newX = MIN_X;
+      if (newX > MAX_X) newX = MAX_X;
+      if (newY < MIN_Y) newY = MIN_Y;
+      if (newY > MAX_Y) newY = MAX_Y;
       
       buttonPosition = {
-        x: Math.min(Math.max(MIN_X,randomX), MAX_X),
-        y: Math.min(Math.max(MIN_Y,randomY), MAX_Y)
+        x: newX,
+        y: newY
       };
 
       $flags['showMineXPGain'] = xpGain;

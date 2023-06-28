@@ -162,6 +162,9 @@ select-none'>
                     }
                 }
                 rewards[type] = (rewards[type] || 0) + Math.floor(rewardVal);
+                if (type.includes('key')) {
+                    rewards[type] = Math.min(rewards[type]*0.33, amt);
+                }
 
             } else {
                 // poisson approximation

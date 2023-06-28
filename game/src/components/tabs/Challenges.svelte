@@ -87,35 +87,41 @@ function toggleChallenge(i) {
         if (confirm("Are you sure? Challenge progress will be lost.")) {
             if ($challengeActive === 2) {
                 for (let i in $miningUpgradeLevels) {
-                            $miningUpgradeLevels[i] = $miningUpgradeLevelsTemp[i];
-                            $miningUpgradeLevelsBought[i] = $miningUpgradeLevelsBoughtTemp[i];
-                            $miningUpgradeLevelsFree[i] = $miningUpgradeLevelsFreeTemp[i];
-                            $miningUpgradeLevelsTemp[i] = 0;
-                            $miningUpgradeLevelsBoughtTemp[i] = 0;
-                            $miningUpgradeLevelsFreeTemp[i] = 0;
-                    }
+                    $miningUpgradeLevelsBought[i] = $miningUpgradeLevelsBoughtTemp[i];
+                    $miningUpgradeLevelsFree[i] = $miningUpgradeLevelsFreeTemp[i];
+                }
+                for (let i in $miningUpgradeLevels) {
+                    $miningUpgradeLevelsTemp[i] = 0;
+                    $miningUpgradeLevelsBoughtTemp[i] = 0;
+                    $miningUpgradeLevelsFreeTemp[i] = 0;
+                }
             }
             $challengeActive = 0;
             $wallet['challengePoints'] = 0;
         }
     } else {
         console.log(i);
+        $wallet['challengePoints'] = 0;
         if (i == 2) {
             let y = confirm("Are you sure? ALL mining upgrades will be lost!")
             if (y) {
                 $wallet['challengePoints'] = 0;
                 $challengeActive = i;
                 for (let i in $miningUpgrades) {
-                    if (!$miningUpgrades[i]['noResetRelocate'] && !($miningUpgrades[i]['name'].includes('Lootmaster'))) {
                         console.log($miningUpgrades[i]['name'])
                         $miningUpgradeLevelsTemp[i] = $miningUpgradeLevels[i];
                         $miningUpgradeLevelsBoughtTemp[i] = $miningUpgradeLevelsBought[i];
                         $miningUpgradeLevelsFreeTemp[i] = $miningUpgradeLevelsFree[i];
+                        
+                }
+
+                for (let i in $miningUpgradeLevels) {
                         $miningUpgradeLevels[i] = 0;
                         $miningUpgradeLevelsBought[i] = 0;
                         $miningUpgradeLevelsFree[i] = 0;
-                    }
                 }
+                console.log($miningUpgradeLevelsBoughtTemp)
+            console.log($miningUpgradeLevelsFreeTemp)
                 $wallet['challengePoints'] = 0;
                 $challengeActive = i;
             }

@@ -210,7 +210,28 @@ function updateprogressThisTick(delta) {
 let progressGain = 0;
 let mineXpBackup = 0;
 let enchProgressBackup = 0;
+let challengeProgressBackup = 0;
+
+// if anything is NaN it will be reset to a backup value
+function sanityChecks() {
+    if (isNaN($enchantProgress['t1'])) $enchantProgress['t1'] = enchProgressBackup;
+    if (isNaN($mineLevel['xp'])) $mineLevel['xp'] = mineXpBackup;
+    if (isNaN($progressThisTick['gems'])) $progressThisTick['gems'] = 0;
+    if (isNaN($progressThisTick['key1'])) $progressThisTick['key1'] = 0;
+    if (isNaN($progressThisTick['key2'])) $progressThisTick['key2'] = 0;
+    if (isNaN($progressThisTick['key3'])) $progressThisTick['key3'] = 0;
+    if (isNaN($progressThisTick['key4'])) $progressThisTick['key4'] = 0;
+    if (isNaN($progressThisTick['key5'])) $progressThisTick['key5'] = 0;
+    if (isNaN($wallet['challengePoints'])) $wallet['challengePoints'] = challengeProgressBackup;
+
+}
+
+
 function addProgress(delta) {
+    enchProgressBackup = $enchantProgress['t1'] || 0;
+    mineXpBackup = $mineLevel['xp'] || 0;
+    challengeProgressBackup = $challengeProgress || 0;
+
 
     const gemAt = $progressThreshold['gems'];
     const keyAt = [
@@ -230,11 +251,18 @@ function addProgress(delta) {
     
     // optimize out of focus
     if (delta > 16 || document.hidden) {
+        console.log('oi')
         addGems($progressThisTick['gems'] / $progressThreshold['gems'] * 0.9);
 
         mineXpBackup = $mineLevel['xp']
         $mineLevel['xp'] += ($progressThisTick['gems'] / $progressThreshold['gems'])
         * formula.getMineXPPerCycle();
+
+        if ($challengeActive !== 0) {
+        $wallet['warp'] = ($wallet['warp'] || 0) + 
+        Math.log($progressAverage['gems'] + 1)*(UPDATE_SPEED/1000) 
+        * (1 + $challengesCompleted[$challengeActive-1]*0.33);
+        }
 
         if (isNaN($mineLevel['xp'])) {
             $mineLevel['xp'] = mineXpBackup;
@@ -258,6 +286,13 @@ function addProgress(delta) {
             $wallet['warp'] = ($wallet['warp'] || 0) + 
             Math.log($progress['gems'] + 1)*(UPDATE_SPEED/1000) 
             * (1 + $challengesCompleted[$challengeActive-1]*0.33);
+        }
+        sanityChecks();
+        if ($challengeActive !== 0) {
+            for (let i of ['gems', 'key1', 'key2', 'key3', 'key4', 'key5']) {
+                addChallengePoints(($progressThisTick[i] || 0) / ($progressThreshold[i] || 1), i, true);
+            }
+            
         }
         return;
     }
@@ -302,7 +337,7 @@ function addProgress(delta) {
     }
 
     // add warp for being in a challenge
-    if ($challengeActive !== 0 && $challengeActive !== 4) {
+    if ($challengeActive !== 0) {
         $wallet['warp'] = ($wallet['warp'] || 0) + 
         Math.log($progress['gems'] + 1)*(UPDATE_SPEED/1000) 
         * (1 + $challengesCompleted[$challengeActive-1]*0.33);
@@ -312,6 +347,12 @@ function addProgress(delta) {
     $wallet['fame'] = ($wallet['fame'] || 0) 
     + $miningUpgrades[28]['formula']($miningUpgradeLevels[28]) * (UPDATE_SPEED/1000);
 
+    sanityChecks();
+}
+
+function addChallengePoints(n, t) {
+   $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
+   + formula.calcChallengePointGain(n, t);
 }
 
 /** 
@@ -346,8 +387,7 @@ function addGems(n, avgProgress) {
     // add chance to get fame
 
     if ($challengeActive !== 0) {
-        $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
-        + formula.calcChallengePointGain(gemGain*n, 'gems');
+        addChallengePoints(n, 'gems');
     }
 
 }
@@ -361,9 +401,9 @@ function addKey1(n, keyAt) {
         $wallet['key1'] = ($wallet['key1'] || 0) + key1Gain * n;
         $progress['key1'] %= keyAt[0];
         $keyGainFlavorText['key1'] = key1Gain;
+        
         if ($challengeActive !== 0) {
-            $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
-            + formula.calcChallengePointGain(key1Gain*n, 'key1');
+            addChallengePoints(n, 'key1');
         }
 }
 
@@ -377,9 +417,9 @@ function addKey2(n, keyAt) {
         $wallet['key2'] = ($wallet['key2'] || 0) + key2Gain * n;
         $progress['key2'] %= keyAt[1];
         $keyGainFlavorText['key2'] = key2Gain;
+
         if ($challengeActive !== 0) {
-            $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
-            + formula.calcChallengePointGain(key2Gain*n, 'key2');
+            addChallengePoints(n, 'key2');
         }
 }
 
@@ -393,9 +433,9 @@ function addKey3(n, keyAt) {
         $wallet['key3'] = ($wallet['key3'] || 0) + key3Gain * n;
         $progress['key3'] %= keyAt[2];
         $keyGainFlavorText['key3'] = key3Gain;
+        
         if ($challengeActive !== 0) {
-            $wallet['challengePoints'] = ($wallet['challengePoints'] || 0) 
-            + formula.calcChallengePointGain(key3Gain*n, 'key3');
+            addChallengePoints(n, 'key3');
         }
 }
 
@@ -481,22 +521,27 @@ function checkForChallengeCompletion() {
         'text-amber-400', 'challenges')
         if ($challengeActive === 2) {
             $challengeActive = 0;
-            console.log($miningUpgradeLevelsBoughtTemp)
-            for (let i in $miningUpgradeLevels) {
-            if (!$miningUpgrades[i]['noResetRelocate'] && !($miningUpgrades[i]['name'].includes('Lootmaster'))) {
-                    $miningUpgradeLevels[i] = $miningUpgradeLevelsTemp[i];
+
+                for (let i in $miningUpgradeLevels) {
                     $miningUpgradeLevelsBought[i] = $miningUpgradeLevelsBoughtTemp[i];
                     $miningUpgradeLevelsFree[i] = $miningUpgradeLevelsFreeTemp[i];
+                    
+                }
+                for (let i in $miningUpgradeLevels) {
                     $miningUpgradeLevelsTemp[i] = 0;
                     $miningUpgradeLevelsBoughtTemp[i] = 0;
                     $miningUpgradeLevelsFreeTemp[i] = 0;
                 }
-            }
+
+                $miningUpgradeLevels = $miningUpgradeLevels.map(
+                (x,i) => $miningUpgradeLevelsBought[i] + $miningUpgradeLevelsFree[i])
+            
             console.log($miningUpgradeLevels)
             console.log($miningUpgradeLevelsBought)
         }
 
         $challengeActive = 0;
+        $wallet['challengePoints'] = 0;
     }
 }
 

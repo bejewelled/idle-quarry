@@ -60,6 +60,9 @@
     {/key}
     </div>
 </div>
+
+<div class='pt-3 pb-16 tooltip-text text-center w-full'>
+    You have relocated {f($stats['relocateCount'])} times.</div>
 {/if}
     
 
@@ -196,92 +199,94 @@ const resourceResetItems = ['beaconPower']
 export function relocate() {
     if (calcFameGain() >= 10) {
         if (confirm("Are you sure? Relocating will reset all previous progress.")) {
-            $flags['relocateNavBack'] = true;
-            $wallet['fame'] = ($wallet['fame'] || 0) + calcFameGain();
-            $wallet['totalFame'] = ($wallet['fame'] || 0) + calcFameGain();
+            try {
+                $flags['relocateNavBack'] = true;
+                $wallet['fame'] = ($wallet['fame'] || 0) + calcFameGain();
+                $wallet['totalFame'] = ($wallet['fame'] || 0) + calcFameGain();
 
-            $stats['lastRelocate'] = Date.now();
+                $stats['lastRelocate'] = Date.now();
+                $stats['relocateCount'] = ($stats['relocateCount'] || 0) + 1;
 
-            // reset stuff
-            
-            for (let i of walletResetItems) {
-                $wallet[i] = 0;
-            }
-            for (let i of resourceResetItems) {
-                if ($automationItemsUnlocked['unlimited power!'] && i == 'beaconPower') continue;
-                $resources[i] = 0;
-            }
-            for (let i of Object.entries($progress)) {
-                $progress[i[0]] = 0;
-                $progressAverage[i[0]] = 0;
-                $progressThisTick[i[0]] = 0;
-            }
-            if (!($automationItemsUnlocked['persistent beacons'])) {
-                for (let i in $beaconLevels) {
-                    $beaconLevels[i] = 0;
-                    $beaconProgress[i] = 0;
-                    $beaconActivations[i] = 0;
+                // reset stuff
+                
+                for (let i of walletResetItems) {
+                    $wallet[i] = 0;
                 }
-            }
-            for (let bR in $beaconNextReqs) {
-                $beaconNextReqs[bR] = ($beaconLevels[bR]+1) * $baseBeaconNextReqs[bR];
-            }
-            $keysOpened = Array($keysOpened.length).fill(0);
-            $beaconBonuses = Array(30).fill(1)
-
-            // reset lootmaster
-            $miningUpgradeLevels[6] = 0;
-            $miningUpgradeLevelsBought[6] = 0;
-            $miningUpgradeLevels[9] = 0;
-            $miningUpgradeLevelsBought[9] = 0;
-            $visibleTier = 1;
-            
-                for (let i in $miningUpgrades) {
-                    //remove all free levels
-                    $miningUpgradeLevels[i] = $miningUpgradeLevelsBought[i];
-
-                    // if cosmic brilliance unlocked, use that formula
-                    $miningUpgradeLevelsFree[i] = 
-                    (i == 0 || i == 1 || i == 2 || i == 7
-                    ? $miningUpgrades[27]['formula']($miningUpgradeLevels[27]): 0 );
-
-                    if (!$automationItemsUnlocked['omnipotent']) {
-                        if (!($miningUpgrades[i]['noResetRelocate']))  {
-                            $miningUpgradeLevelsBought[i] = 0;
-                            $miningUpgradeLevels[i] = $miningUpgradeLevelsBought[i]
-                            + $miningUpgradeLevelsFree[i];
-                        }
+                for (let i of resourceResetItems) {
+                    if ($automationItemsUnlocked['unlimited power!'] && i == 'beaconPower') continue;
+                    $resources[i] = 0;
+                }
+                for (let i of Object.entries($progress)) {
+                    $progress[i[0]] = 0;
+                    $progressAverage[i[0]] = 0;
+                    $progressThisTick[i[0]] = 0;
+                }
+                if (!($automationItemsUnlocked['persistent beacons'])) {
+                    for (let i in $beaconLevels) {
+                        $beaconLevels[i] = 0;
+                        $beaconProgress[i] = 0;
+                        $beaconActivations[i] = 0;
                     }
                 }
-            console.log($automationItemsUnlocked)
+                for (let bR in $beaconNextReqs) {
+                    $beaconNextReqs[bR] = ($beaconLevels[bR]+1) * $baseBeaconNextReqs[bR];
+                }
+                $keysOpened = Array($keysOpened.length).fill(0);
+                $beaconBonuses = Array(30).fill(1)
+
+                // reset lootmaster
+                $miningUpgradeLevels[6] = 0;
+                $miningUpgradeLevelsBought[6] = 0;
+                $miningUpgradeLevels[9] = 0;
+                $miningUpgradeLevelsBought[9] = 0;
+                $visibleTier = 1;
                 
-            if (!$automationItemsUnlocked['unlimited power!'])
-            $beaconUpgradeLevels = Array($beaconUpgradeLevels.length).fill(0);
+                    for (let i in $miningUpgrades) {
+                        //remove all free levels
+                        $miningUpgradeLevels[i] = $miningUpgradeLevelsBought[i];
 
-            if ($automationItemsUnlocked['jumpstart']) {
-                $wallet['gems'] = 5000;
-                $wallet['gold'] = 100;
-            }
-            if ($automationItemsUnlocked['beaconizer']) {
-                $wallet['beacons'] = 50000;
-            }
-            if ($automationItemsUnlocked['deep pockets']) {
-                $miningUpgradeLevels[6] = 1;
-                $miningUpgradeLevelsBought[6] = 1;
-                $miningUpgradeLevels[9] = 1;
-                $miningUpgradeLevelsBought[9] = 1;
-                $visibleTier = 3;
-                $miningUpgradeLevels[14] = 1;
-                $miningUpgradeLevelsBought[14] = 1;
-                $visibleTier = 4;
-            }
+                        // if cosmic brilliance unlocked, use that formula
+                        $miningUpgradeLevelsFree[i] = 
+                        (i == 0 || i == 1 || i == 2 || i == 7
+                        ? $miningUpgrades[27]['formula']($miningUpgradeLevels[27]): 0 );
 
-            $miningUpgradeLevels = $miningUpgradeLevels.map(
-                (x,i) => $miningUpgradeLevelsBought[i] + $miningUpgradeLevelsFree[i])
-            // for (let k of Object.keys($keyCraftAmount)) {
-            //     if (k !== 'energizedCrystal')
-            //     $keyCraftAmount[k] = 0;
-            // }
+                        if (!$automationItemsUnlocked['omnipotent']) {
+                            if (!($miningUpgrades[i]['noResetRelocate']))  {
+                                $miningUpgradeLevelsBought[i] = 0;
+                                $miningUpgradeLevels[i] = $miningUpgradeLevelsBought[i]
+                                + $miningUpgradeLevelsFree[i];
+                            }
+                        }
+                    }
+                console.log($automationItemsUnlocked)
+                    
+                if (!$automationItemsUnlocked['unlimited power!'])
+                $beaconUpgradeLevels = Array($beaconUpgradeLevels.length).fill(0);
+
+                if ($automationItemsUnlocked['jumpstart']) {
+                    $wallet['gems'] = 5000;
+                    $wallet['gold'] = 100;
+                }
+                if ($automationItemsUnlocked['beaconizer']) {
+                    $wallet['beacons'] = 50000;
+                }
+                if ($automationItemsUnlocked['deep pockets'] || $miningUpgradeLevels[14] >= 1) {
+                    $miningUpgradeLevels[6] = 1;
+                    $miningUpgradeLevelsBought[6] = 1;
+                    $miningUpgradeLevels[9] = 1;
+                    $miningUpgradeLevelsBought[9] = 1;
+                    $visibleTier = 3;
+                }
+
+                $miningUpgradeLevels = $miningUpgradeLevels.map(
+                    (x,i) => $miningUpgradeLevelsBought[i] + $miningUpgradeLevelsFree[i])
+                // for (let k of Object.keys($keyCraftAmount)) {
+                //     if (k !== 'energizedCrystal')
+                //     $keyCraftAmount[k] = 0;
+                // }
+            } catch (e) {
+                console.log("Error! Please report this on discord. Code: relocate " + e )
+            }
         }
     }
 }

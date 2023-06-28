@@ -149,6 +149,7 @@ export const buttonUpgrades = array([
     unlockAt: () => (true),
     isPercent: false,
     suffix: 'x movement multiplier',
+    isRadiumUpgrade: true,
     maxLevel: 10,
     notes: ''
 },
@@ -160,7 +161,7 @@ export const buttonUpgrades = array([
         crystals: 1100,
     },
     ratio: 1.25,
-    formula: (lv: any) => 1 + lv * 0.1,
+    formula: (lv: any) => 1 + lv * 0.04,
     unlockAt: () => (true),
     prefix: 'x',
     isPercent: false,
@@ -186,7 +187,7 @@ export const buttonUpgrades = array([
     name: 'Insanity!',
     description: 'Your lifetime Incredible and Perfect clicks increase mining speed; Perfect clicks have a drastically higher impact.',
     cost: {
-        crystals: 36000,
+        radium: 500,
     },
     ratio: 4e150,
     formula: (lv: any) => 1 + 
@@ -195,6 +196,7 @@ export const buttonUpgrades = array([
     ),
     unlockAt: () => (true),
     isPercent: false,
+    isRadiumUpgrade: true,
     suffix: 'x speed multiplier',
     maxLevel: 1,
     notes: ''

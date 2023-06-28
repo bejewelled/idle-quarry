@@ -27,7 +27,7 @@ export default class ref {
     static challengePointValues = {
         default: 0,
         beaconPower: 0.025,
-        gems: 1,
+        gems: 0.15,
         key1: 1,
         key2: 36,
         key3: 850,
@@ -153,12 +153,12 @@ export default class ref {
     }
 
     static buttonBaseRewards = {
-        okay: 5,
-        good: 30,
-        great: 110,
-        excellent: 290,
-        incredible: 560,
-        perfect: 1600,
+        okay: 2000,
+        good: 4000,
+        great: 6500,
+        excellent: 9500,
+        incredible: 15000,
+        perfect: 40000,
     }
 
     static buttonColors = {

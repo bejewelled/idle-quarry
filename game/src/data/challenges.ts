@@ -154,12 +154,12 @@ export const challengeDescriptions = array([
     "All beacon path levels are reset. Beacon path progress is drastically slowed, but each level gives challenge points. All sources of challenge points other than beacon levels are heavily slowed. (Slowdown increases each completion until completion 18.)",
 ])
 
-export const challengeGoals = array([2000, 1400, 10000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
+export const challengeGoals = array([750, 1400, 10000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
 
-export const baseChallengeGoals = array([2000, 1400, 10000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
+export const baseChallengeGoals = array([750, 1400, 10000, 6000, 6000, 6000, 6000, 6000, 6000, 6000])
 
 
-export const challengeMultipliers = array([1.4, 1.36, 1.175, 1.4, 1.4, 1.2, 1.1, 1.1, 1.1, 1.1])
+export const challengeMultipliers = array([1.33, 1.33, 1.175, 1.4, 1.4, 1.2, 1.1, 1.1, 1.1, 1.1])
 
 export const currChallengeInfo = object({
 
