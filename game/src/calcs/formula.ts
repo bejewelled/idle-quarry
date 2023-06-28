@@ -188,9 +188,8 @@ export default class formula {
   static calcCrystalGainFromRadium() {
     const y = (get(wallet)['radium'] || 0);
     return (y < 100 ? 
-      4 * y :
-      400 + Math.pow(y - 100, 0.75)* 3)
+      30 * Math.pow(y, 2)*0.01 :
+      3000 + Math.pow(y - 100, 0.825)* 16)
       * get(miningUpgrades)[29]['formula'](get(miningUpgradeLevels)[29])
-      * get(allMultipliers)['radium']['formula'](get(wallet)['artifacts'] || 0);
   }
 }
