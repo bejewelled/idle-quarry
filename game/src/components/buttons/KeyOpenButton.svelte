@@ -183,14 +183,14 @@ select-none'>
                         while (!done && k < 9) {
                             console.log(rand);
                             if (rand < (1-pFail)) {
+                                if (n * (1-pFail) > 0.97) {
+                                    k += 1;
+                                }
                                 k++;
                                 pFail += (Math.exp(-1*n*p) * Math.pow(n*p, k) / factorials[k]);
                             } else done = true;
                         }
-                        if (n * p > 0.97) {
-                            k += (amt - k) * ((1 - p**25) + (p**25 * Math.random()))
-                        }
-
+                        
                         rewards[type] = (rewards[type] || 0) +
                         (k * (vals[1] + Math.random()*(vals[2] - vals[1])));
                         console.log(rewards[type])

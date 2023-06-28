@@ -181,7 +181,11 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
         miningDropTable.updateTable();
         if (($miningUpgrades[index]['name'] || '') == 'Lootmaster I') $visibleTier = 2;
         if (($miningUpgrades[index]['name'] || '') == 'Lootmaster II') $visibleTier = 3;
-        if (($miningUpgrades[index]['name'] || '') == 'Lootmaster III') $visibleTier = 4;
+        if (($miningUpgrades[index]['name'] || '') == 'Lootmaster III') {
+            $miningUpgradeLevels[6] = 1;
+            $miningUpgradeLevels[9] = 1;
+            $visibleTier = 4;
+        }
     }
 
     function canAfford() {
