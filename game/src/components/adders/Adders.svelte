@@ -464,7 +464,7 @@ function dropRoll(n) {
         if ($visibleTier >= ref.dropTiers[item]) {
             if (vals[0] >= 1) {
                 rewards[item] = (rewards[item] || 0) 
-                + vals[1]+(Math.random() * (vals[2] - vals[1]));
+                + n * (vals[1]+(Math.random() * (vals[2] - vals[1])));
                 continue;
             } else if (n > (1 / vals[0])) {
                 const stdev= Math.sqrt(n*vals[0]*(1-vals[0]));
