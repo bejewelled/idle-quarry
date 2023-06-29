@@ -164,3 +164,7 @@ export const elementBonusText = array([
         text: "unique bonuses",
     },
 ]);
+
+export const ascensionConstants = object({
+    levelFormula: (lv: number) => 1 + (Math.pow(lv,2) * 0.14),
+})

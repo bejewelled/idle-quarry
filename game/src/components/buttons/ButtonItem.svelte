@@ -72,9 +72,14 @@ const BUTTON_SIZE= 100;
       if (e.keyCode > 0) badKeyDown = false;
     }
   
+    let lastClick = Date.now();
+    let lastAbsDists = [100,100,100,100,100];
+    let hasConfirmedAutoclicker = false
     let badKeyDown = false;
     // @ts-ignore
     const handleClick = (event) => {
+
+
         if (badKeyDown && !$automationItemsUnlocked['another button']) return;
         textPosition = {
         x: buttonPosition.x - 100,
@@ -90,7 +95,20 @@ const BUTTON_SIZE= 100;
 
    let absDist = Math.sqrt(Math.abs(cursorX - buttonPosition.x-(BUTTON_SIZE/2)) ** 2 
     + Math.abs(cursorY - buttonPosition.y-(BUTTON_SIZE/2)) ** 2);
-    
+
+    // // autoclick detection
+    // lastAbsDists.shift();
+    // lastAbsDists = [absDist, ...lastAbsDists];
+    // const avgAbsDist = lastAbsDists.reduce((a,b) => a+b, 0) / lastAbsDists.length;
+    // isAutoclicker = avgAbsDist < 1.5 && Date.now() - lastClick < 250;
+
+    // if (isAutoclicker && !hasConfirmedAutoclicker) {
+    //   alert("Note: It appears you are using an autoclicker. To ensure game balance, " + 
+    //   "you will not gain any Perfect clicks while using an autoclicker.")
+    //   hasConfirmedAutoclicker = true;
+    // }
+
+
     let rewardAmount = 0;
 
 

@@ -79,76 +79,6 @@
                         </div>
                     {/if}
                 {/each}
-                <!-- mining level bar -->
-                <div class="col-span-12 grid grid-cols-7 has-tooltip">
-                    <div
-                        class="text-[#989898] text-small col-span-2 text-left pt-4 pb-1"
-                    >
-                        Mining Level
-                        <span
-                            class="font-bold
-                    {$mineLevel['level'] > 69
-                                ? 'text-red-500'
-                                : 'text-cyan-400'}"
-                        >
-                            {$mineLevel["level"]}</span
-                        >
-                    </div>
-                    {#if $flags["showMineXPGain"] >= 0}
-                        <div
-                            class="text-small {$mineLevel['level'] > 69
-                                ? 'text-red-500'
-                                : 'text-cyan-400'}
-                    col-span-5 text-left pt-4 pb-1 px-1"
-                        >
-                            + {f($flags["showMineXPGain"], 0)}
-                        </div>
-                    {/if}
-                    <span
-                        class="px-2 mx-4 tooltip tooltip-text shadow-lg p-1
-                border-white border-double border bg-[#222529] ml-16
-                  pointer-events-none max-w-[300px] text-center weight-bold"
-                    >
-                        <div class="grid grid-cols-3">
-                            <div
-                                class="col-span-3 text-center
-                        {$mineLevel['level'] > 69
-                                    ? 'text-red-500'
-                                    : 'text-cyan-500'}"
-                            >
-                                [ {f($mineLevel["xp"], 0)} / {f(
-                                    $mineLevel["xpNextReq"],
-                                    0
-                                )} ]
-                            </div>
-                            <div class="col-span-3 text-center">
-                                Each mine operation gives <strong
-                                    >{f(xpPerCycle, 2)}</strong
-                                > xp.
-                            </div>
-                            <div class="col-span-3 text-center">
-                                This value increases based on the total amount
-                                of fame gained across all reset tiers.
-                            </div>
-                        </div>
-                    </span>
-                </div>
-
-                <div class="col-span-12">
-                    <div class="mine-bar-wrapper pb-2">
-                        <div
-                            class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700"
-                        >
-                            <div
-                                class="{$mineLevel['level'] > 69
-                                    ? 'bg-red-500'
-                                    : 'bg-cyan-500'} 
-                        h-2.5 rounded-full"
-                                style="width: {mineLevelBarWidth}%"
-                            />
-                        </div>
-                    </div>
-                </div>
 
                 <div class="alog-break pt-4 col-span-12" />
                 <div class="alog-title game-text col-span-9">Activity Log</div>
@@ -231,7 +161,73 @@
                     on:click={() => reset()}>Reset</button
                 >
                 <button class="text-xs text-gray-600">v0.0.4a-9</button>
+                <!-- mining level bar -->
+                <div class="wrapper grid grid-cols-9">
+                    <div class="col-span-1 p-[1px] has-tooltip">
+                        <div
+                            class="text-[#989898] text-small text-left"
+                        >
+                            Mining Level
+                            <span
+                                class="font-bold
+                        {$mineLevel['level'] > 69
+                                    ? 'text-red-500'
+                                    : 'text-cyan-400'}"
+                            >
+                                {$mineLevel["level"]}</span
+                            >
+                        </div>
+                    
+                        <span
+                            class="px-2 tooltip tooltip-text shadow-lg p-1
+                            border-white border-double border bg-[#222529] ml-16
+                                pointer-events-none max-w-[300px] text-center weight-bold"
+                        >
+                            <div class="grid grid-cols-3">
+                                <div
+                                    class="col-span-3 text-center
+                        {$mineLevel['level'] > 69
+                                        ? 'text-red-500'
+                                        : 'text-cyan-500'}"
+                                >
+                                    [ {f($mineLevel["xp"], 0)} / {f(
+                                        $mineLevel["xpNextReq"],
+                                        0
+                                    )} ]
+                                </div>
+                                <div class="col-span-3 text-center">
+                                    Each mine operation gives <strong
+                                        >{f(xpPerCycle, 2)}</strong
+                                    > xp.
+                                </div>
+                                <div class="col-span-3 text-center">
+                                    This value increases based on the total
+                                    amount of fame gained across all reset
+                                    tiers.
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+
+                    <div class="col-span-5 p-[1px] mt-1">
+                        <div class="mine-bar-wrapper">
+                            <div
+                                class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700"
+                            >
+                                <div
+                                    class="{$mineLevel['level'] > 69
+                                        ? 'bg-red-500'
+                                        : 'bg-cyan-500'} 
+                        h-2.5 rounded-full"
+                                    style="width: {mineLevelBarWidth}%"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-span-1' />
+                </div>
             </div>
+
             <div class="row-span-1 tab-buttons">
                 {#key clockTabs}
                     {#each ref.tabs as t}

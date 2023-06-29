@@ -105,7 +105,10 @@
         let c = {};
 
         for (let [type, base] of Object.entries($keyCrafts[index]['cost'])) {
-            if (type == 'energy') c[type] = base;
+            if (type == 'energy') {
+                c[type] = base;
+                continue;
+            }
             c[type] = cost(base);
         }
         return c;

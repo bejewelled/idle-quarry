@@ -177,9 +177,10 @@ select-none'>
                         const n = amt;
                         const p = vals[0];
                         const rand = Math.random();
-                        let pFail = Math.exp(-1*n*p)
+                        const lambda = n*p;
+                        let pFail = Math.exp(-1*lambda)
                         let k = 0, done = false;
-                        const factorials = [0, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880]
+                        const factorials = [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880]
                         while (!done && k < 9) {
                             console.log(rand);
                             if (rand < (1-pFail)) {
@@ -187,7 +188,7 @@ select-none'>
                                     k += 1;
                                 }
                                 k++;
-                                pFail += (Math.exp(-1*n*p) * Math.pow(n*p, k) / factorials[k]);
+                                pFail += (Math.exp(-1*lambda) * Math.pow(lambda, k) / factorials[k]);
                             } else done = true;
                         }
                         

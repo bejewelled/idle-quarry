@@ -400,3 +400,16 @@ export const challengeProgress = single(0);
 export const challenge3Multi = single(1);
 
 export const challengesCompleted = array(Array(30).fill(0));
+
+// ---
+
+export const ascensionLevels = object({
+    // level 0 (0 / 2 essence)
+    fire: [0, 0, 2],
+    earth: [0, 0, 2],
+    water: [0, 0, 2],
+    air: [0, 0, 2],
+    celestial: [0, 0, 2],
+    magic: [0, 0, 2],
+    
+})

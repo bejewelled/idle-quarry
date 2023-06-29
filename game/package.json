@@ -25,6 +25,7 @@
 	"type": "module",
 	"dependencies": {
 		"break_infinity.js": "^2.2.0",
+		"lib-r-math.js": "^2.0.0",
 		"mathjs": "^11.8.0",
 		"statistics.js": "^1.0.0"
 	}

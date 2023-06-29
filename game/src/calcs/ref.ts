@@ -23,7 +23,7 @@ export default class ref {
         dust: "text-indigo-600",
         stars: "text-transparent text-stone-100 bg-clip-text bg-gradient-to-br from-fuchsia-300 to-violet-700",
         efire: "text-orange-400 text-shadow-gray",
-        eearth: "text-stone-200 text-shadow-gray",
+        eearth: "text-emerald-200 text-shadow-gray",
         emagic: "text-amber-200 text-shadow-gray",
         ewater: "text-sky-300 text-shadow-gray",
         ecelestial: "text-violet-300 text-shadow-gray",

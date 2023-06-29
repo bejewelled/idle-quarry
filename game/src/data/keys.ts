@@ -301,6 +301,21 @@ export const keyUpgrades = array([
         maxLevel: 100,
         notes: ''
     },
+    {
+        index: 4,
+        name: 'Capacitor',
+        description: 'Increases all crafting yields.',
+        cost: {
+            slurry: 1e11,
+        },
+        ratio: 10,
+        formula: (lv: any) => 1 + lv * 0.25,
+        unlockAt: () => (get(wallet)['antimatter'] >= 1),
+        isPercent: true,
+        suffix: ' craft bonus',
+        maxLevel: 40,
+        notes: ''
+    },
     
 ])
 
@@ -391,8 +406,8 @@ export const keyCrafts = array([
     {
         item: 'eearth',
         name: 'Earth Essence',
-        style: 'text-emerald-400',
-        stylebg: 'bg-emerald-400',
+        style: 'text-emerald-200',
+        stylebg: 'bg-emerald-200',
         cost: {
             dust: 7500,
             energy: 1
