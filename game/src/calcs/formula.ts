@@ -257,4 +257,13 @@ export default class formula {
       return get(ascFormula)['antimatter'](get(ascensionLevels)['antimatter'][0]);
     else return 1;      
   }
+
+  static calcEnchantProgressGain(n: number) {
+    return n * ascFormula.getVal('magic');
+  }
+
+  static calcMiningCostRatio(n: number) {
+    return Math.max(1.025, 
+      1 + ((n-1) * (get(miningUpgrades)[32]['formula'](get(miningUpgradeLevels)[32]))))
+  }
 }

@@ -151,8 +151,11 @@
             {:else}
             {/if}
         {/each}
-        <div class='col-span-2 py-7'></div>
     </div>
+    <div class='col-span-2 pb-12'></div>
+    <div class='col-span-2 pb-12'></div>
+    <div class='col-span-2 pb-12'></div>
+    <div class='col-span-2 pb-12'></div>
     {/key}
 </div>
 

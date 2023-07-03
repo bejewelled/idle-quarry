@@ -80,6 +80,7 @@ export default class ref {
     static walletExclude = {
         totalFame: true,
         challengePoints: true,
+        totalAntimatter: true,
     };
 
     static dropTiers = {

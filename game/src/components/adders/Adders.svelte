@@ -446,7 +446,9 @@
             // TODO: implement enchant proc method
             for (let [k, v] of Object.entries($enchantProgress)) {
                 $enchantProgress[k] += 
-                    ($progress['gems'] / gemAt) * ascFormula.getVal('magic')
+                    formula.calcEnchantProgressGain(
+                        $progress['gems'] / gemAt
+                    );
                 
                 if ($enchantProgress[k] >= $enchantThreshold[k]) {
                     procEnchants(

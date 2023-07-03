@@ -338,7 +338,7 @@ export const miningUpgrades = array([{
     description: 'Unlocks a new tier of findable drops.',
     cost: {
         orbs: 1e6,
-        crystals: 3500,
+        crystals: 30000,
         beacons: 2500,
         key2: 150,
     },
@@ -538,7 +538,7 @@ export const miningUpgrades = array([{
         sigils: 2500
     },
     ratio: 2,
-    unlockAt: () => (get(wallet)['sigils'] > 25),
+    unlockAt: () => (get(wallet)['sigils'] > 0),
     formula: (lv: any) => (1 + 0.1 * lv),
     isPercent: false,
     suffix: 'x fame gain',
@@ -737,6 +737,100 @@ export const miningUpgrades = array([{
     isPercent: false,
     suffix: 'x gem gain',
     maxLevel: 10,
+    style: 'game-btn-antimatter',
+    notes: ''
+},
+{
+    index: 31,
+    sortType: ['antimatter'],
+    name: 'Lootmaster IV',
+    description: 'Unlocks a new tier of findable drops, and automatically unlocks LM1-3 if they aren\'t already.',
+    cost: {
+        antimatter: 75000,
+        warp: 1e7,
+        key4: 10000,
+        void: 75
+    },
+    ratio: 1e90,
+    unlockAt: () => ((get(wallet)['void'] > 0 && get(miningUpgradeLevels)[14] > 0.003)
+    || get(miningUpgradeLevelsBought)[31] > 0),
+    formula: (lv: any) => (0),
+    isPercent: true,
+    noResetRelocate: true,
+    suffix: ' (no bonus)',
+    maxLevel: 1,
+    style: 'game-btn-antimatter',
+    notes: ''
+},
+{
+    index: 32,
+    sortType: ['antimatter'],
+    name: 'Negative Mass',
+    description: 'Decreases the cost ratios of mining upgrades.',
+    cost: {
+        antimatter: 250,
+    },
+    ratio: 1,
+    unlockAt: () => (get(wallet)['antimatter'] > 0),
+    formula: (lv: any) => 1 - (0.15 * lv),
+    isPercent: false,
+    noResetRelocate: true,
+    suffix: 'x cost ratios',
+    maxLevel: 1,
+    style: 'game-btn-antimatter',
+    notes: ''
+},
+{
+    index: 33,
+    sortType: ['antimatter'],
+    name: 'Collapse',
+    description: 'Decreases the cost ratios of mining upgrades.',
+    cost: {
+        antimatter: 3000,
+    },
+    ratio: 1e90,
+    unlockAt: () => (get(miningUpgradeLevels)[32] > 0.003),
+    formula: (lv: any) => 1 - (0.10 * lv),
+    isPercent: false,
+    noResetRelocate: true,
+    suffix: 'x cost ratios',
+    maxLevel: 1,
+    style: 'game-btn-antimatter',
+    notes: ''
+},
+{
+    index: 34,
+    sortType: ['antimatter'],
+    name: 'Event Horizon',
+    description: 'Decreases the cost ratios of mining upgrades.',
+    cost: {
+        antimatter: 60000,
+    },
+    ratio: 1e90,
+    unlockAt: () => (get(miningUpgradeLevels)[33] > 0.003),
+    formula: (lv: any) => 1 - (0.10 * lv),
+    isPercent: false,
+    noResetRelocate: true,
+    suffix: 'x cost ratios',
+    maxLevel: 1,
+    style: 'game-btn-antimatter',
+    notes: ''
+},
+{
+    index: 35,
+    sortType: ['antimatter'],
+    name: 'Total Darkness',
+    description: 'Decreases the cost ratios of mining upgrades.',
+    cost: {
+        antimatter: 1.75e6,
+    },
+    ratio: 1e90,
+    unlockAt: () => (get(miningUpgradeLevels)[34] > 0.003),
+    formula: (lv: any) => 1 - (0.08 * lv),
+    isPercent: false,
+    noResetRelocate: true,
+    suffix: 'x cost ratios',
+    maxLevel: 1,
     style: 'game-btn-antimatter',
     notes: ''
 },

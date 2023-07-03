@@ -38,6 +38,7 @@ select-none'>{$automationUpgrades[index]['name']}
         
 
  <script>
+	import { miningUpgradeLevels, miningUpgradeLevelsBought } from './../../data/player.ts';
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
@@ -101,6 +102,22 @@ select-none'>{$automationUpgrades[index]['name']}
         // special cases
         if ($automationItemsUnlocked['spellcaster ii']) $enchantThreshold['t1'] *= 0.9;
         else if ($automationItemsUnlocked['spellcaster']) $enchantThreshold['t1'] *= 0.9;
+
+        if ($automationItemsUnlocked['deep pockets']) {
+            $miningUpgradeLevels[6] = 1;
+            $miningUpgradeLevelsBought[6] = 1;
+            $visibleTier = 2;
+        }
+        if ($automationItemsUnlocked['deep pockets ii']) {
+            $miningUpgradeLevels[6] = 1;
+            $miningUpgradeLevelsBought[6] = 1;
+            $visibleTier = 3;
+        }
+        if ($automationItemsUnlocked['deep pockets iii']) {
+            $miningUpgradeLevels[14] = 1;
+            $miningUpgradeLevelsBought[14] = 1;
+            $visibleTier = 4;
+        }
     }
 
     function canAfford() {

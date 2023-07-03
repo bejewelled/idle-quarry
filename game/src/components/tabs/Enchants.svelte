@@ -9,7 +9,7 @@
         {/each}
     </div>
     <div class='text-[#989898] text-small pt-4'>enchant progress
-        [ {f(0.01 * $progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'], 2)} / sec ]
+        [ {f(0.01 * (formula.calcEnchantProgressGain($progressAverage['gems'] / $progressThreshold['gems']))* (1000/$settings['UPDATE_SPEED']) , 2)} / sec ]
     </div>
     <div class = 'grid grid-cols-12 pt-1'>
     <div class='{$antiFlickerFlags['enchants'] ? 'col-span-12' :'col-span-10'}'>

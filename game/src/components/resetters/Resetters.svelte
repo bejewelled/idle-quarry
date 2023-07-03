@@ -123,6 +123,7 @@
             $wallet = {
                 gems: 0,
                 antimatter: antimatterOnAscend,
+                totalAntimatter: antimatterOnAscend
             }
             $resources = {}
             // for (let k in Object.keys($wallet)) {
@@ -142,6 +143,7 @@
             $buttonStats = $baseButtonStats
             $enchantUpgradeLevels = Array(200).fill(0)
             $automationItemsUnlocked = {}
+            $enchantThreshold['t1'] = 100;
             $challengesCompleted = Array(30).fill(0)
             challengeGoals.updateChallengeReqs()
             $buttonNumClicks = $baseButtonNumClicks
@@ -156,6 +158,8 @@
             $beaconUpgradeLevels = Array(200).fill(0)
             $beaconBonuses = Array(30).fill(1)
             $beaconProgress = Array(30).fill(0)
+
+            
 
             miningDropTable.updateTable()
             key1DropTable.updateTable()
