@@ -261,6 +261,22 @@ export const buttonUpgrades = array([
     maxLevel: 1,
     notes: ''
 },
+{
+    index: 8,
+    name: 'Quantum Tunneling',
+    description: 'Legends say the perfect click can shatter the fabric of space itself...',
+    cost: {
+        antimatter: 100,
+    },
+    ratio: 4,
+    formula: (lv: any) => 111111,
+    unlockAt: () => (get(wallet)['crystals'] > 1e6),
+    isRadiumUpgrade: true,
+    isPercent: false,
+    maxLevel: 1,
+    style: 'game-btn-antimatter',
+    notes: ''
+},
 ]);
 
 

@@ -312,7 +312,22 @@ export const keyUpgrades = array([
         },
         ratio: 10,
         formula: (lv: any) => 1 + lv * 0.25,
-        unlockAt: () => (get(wallet)['antimatter'] >= 1),
+        unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1),
+        isPercent: true,
+        suffix: ' craft bonus',
+        maxLevel: 40,
+        notes: ''
+    },
+    {
+        index: 5,
+        name: 'Fabrication Clocking',
+        description: '.',
+        cost: {
+            slurry: 1e11,
+        },
+        ratio: 10,
+        formula: (lv: any) => 1 + lv * 0.25,
+        unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1),
         isPercent: true,
         suffix: ' craft bonus',
         maxLevel: 40,
