@@ -3,6 +3,7 @@ import { writable, get } from 'svelte/store';
 import { miningUpgrades } from './mining';
 import { miningUpgradeLevels, keyUpgradeLevels, wallet, keysOpened} from './player';
 import {beaconBonuses} from './beacons'
+import formula from '../calcs/formula'
 
 function single(context: any) {
     // @ts-ignore
@@ -163,7 +164,8 @@ function dropTable(context: any) {
                     * get(miningUpgrades)[13]['formula'](get(miningUpgradeLevels)[13])
                     * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])
                     * (item === 'artifacts' ? get(miningUpgrades)[21]['formula'](get(miningUpgradeLevels)[21]) : 1)
-                    * get(beaconBonuses)[7];
+                    * get(beaconBonuses)[7]
+                    * formula.getAntimatterBonusAmount(1);
                     i[item]= [
                         Math.min(1,
                         (baseChance > val[4] ? val[4] + Math.pow(baseChance-val[4], 3) : baseChance)),

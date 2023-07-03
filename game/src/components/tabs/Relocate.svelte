@@ -277,6 +277,11 @@ export function relocate() {
                     $miningUpgradeLevelsBought[9] = 1;
                     $visibleTier = 3;
                 }
+                if ($automationItemsUnlocked['omnipotent'] && $miningUpgradeLevels[14] >= 1) {
+                    $miningUpgradeLevels[14] = 1;
+                    $miningUpgradeLevelsBought[14] = 1;
+                    $visibleTier = 4;
+                }
 
                 $miningUpgradeLevels = $miningUpgradeLevels.map(
                     (x,i) => $miningUpgradeLevelsBought[i] + $miningUpgradeLevelsFree[i])

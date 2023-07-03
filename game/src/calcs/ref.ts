@@ -28,6 +28,7 @@ export default class ref {
         ewater: "text-sky-300 text-shadow-gray",
         ecelestial: "text-violet-300 text-shadow-gray",
         radium: "text-lime-300",
+        antimatter:  "text-transparent text-stone-100 bg-clip-text bg-gradient-to-br from-blue-500 to-indigo-800",
     };
 
     static essenceBgColors = [
@@ -107,6 +108,7 @@ export default class ref {
         ewater: 5,
         ecelestial: 5,
         stars: 3,
+        antimatter: 5,
     };
 
     static keyMainNames = {
@@ -213,12 +215,12 @@ export default class ref {
     };
 
     static buttonBaseRewards = {
-        okay: 2000,
-        good: 4000,
-        great: 6500,
-        excellent: 9500,
-        incredible: 15000,
-        perfect: 40000,
+        okay: 1000,
+        good: 5000,
+        great: 9000,
+        excellent: 14000,
+        incredible: 24000,
+        perfect: 50000,
     };
 
     static buttonColors = {

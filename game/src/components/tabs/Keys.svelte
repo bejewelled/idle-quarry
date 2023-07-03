@@ -11,10 +11,11 @@
         </div>
         {#each [1,2,3,4,5] as i}
             <div class='col-span-1 py-1 {ref.colors['key' + i]}'>
-                {$wallet['key'+i] >= 1 || $visibleTier >= i ? ref.keyMainNames[i]: '?????'}
+                {($wallet['key'+i] && $wallet['key'+i] >= 1) 
+                || $visibleTier >= i ? ref.keyMainNames[i]: '?????'}
             </div>
                 <div class='col-span-1 text-med py-1 text-left {ref.colors['key' + i]}'>
-                    {f(Math.floor($wallet['key' + i]))}
+                    {f(Math.floor($wallet['key' + i] || 0))}
                 </div>
                 <div class='has-tooltip tooltip-text 
                     game-btn py-2 items-center text-center 

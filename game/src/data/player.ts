@@ -4,6 +4,7 @@ import ref from '../calcs/ref'
 import { miningUpgrades } from './mining';
 import { beaconUpgrades, beaconBonuses } from './beacons';
 import { allMultipliers } from './artifacts';
+import formula from '../calcs/formula';
 
 function single(context: any) {
     // @ts-ignore
@@ -170,7 +171,8 @@ function dropTable(context: any) {
                         * Math.max(1,get(beaconBonuses)[2])
                         * (item === 'beacons' ? get(beaconUpgrades)[1]['formula'](get(beaconUpgradeLevels)[1]) : 1)
                         * (item === 'artifacts' ? get(allMultipliers)['artifacts']['formula'](get(wallet)['artifacts'] || 0) : 1)
-                    i[item]= [
+                        * (item === 'dust' ? formula.getAntimatterBonusAmount(4) : 1)
+                        i[item]= [
                         // add drop table multipliers here
                         //@ts-ignore
                         (baseChance >= val[3] ? val[3] + Math.pow((baseChance-val[3])/4, 3) : baseChance),
@@ -246,7 +248,7 @@ export const baseMiningDropTable = dropTable({
     //lm3
     dust: [1e-6, 0.06, 0.28, 0.0025],
     key3: [2e-7,0.01,0.03, 0.0025],
-    artifacts: [3.3e-7, 0.04, 0.05, 1e-5],
+    artifacts: [3.3e-8, 0.04, 0.05, 1e-5],
 
 });
 
@@ -337,7 +339,24 @@ export const buttonNumClicks = object({
     perfect: 0
 })
 
+export const baseButtonNumClicks = object({
+    okay: 0,
+    good: 0,
+    great: 0,
+    excellent: 0,
+    incredible: 0,
+    perfect: 0
+})
+
 export const buttonStats = object({
+    clicksUntilFame: 1e308,
+    totalClicks: 0,
+    totalClicksToday: 0,
+    todayStartTime: Date.now(),
+    hardenedBonus: 1,
+})
+
+export const baseButtonStats = object({
     clicksUntilFame: 1e308,
     totalClicks: 0,
     totalClicksToday: 0,
@@ -360,8 +379,25 @@ export const keyCraftTimes = object({
     key5: [-1, -1],
     beacons: [-1, -1],
 })
+export const baseKeyCraftTimes = object({
+    // [start, finish]
+    energy: [-1, -1], 
+    key3: [-1, -1],
+    key4: [-1, -1],
+    key5: [-1, -1],
+    beacons: [-1, -1],
+})
 
 export const keyCraftMastery = object({
+    // [item]: [level, xp, xpNextReq]
+    energy: [1,0,3],
+    key3: [1, 0, 100],
+    key4: [1, 0, 100],
+    key5: [1, 0, 100],
+    beacons: [1 ,0, 100],
+})
+
+export const baseKeyCraftMastery = object({
     // [item]: [level, xp, xpNextReq]
     energy: [1,0,3],
     key3: [1, 0, 100],
@@ -405,11 +441,20 @@ export const challengesCompleted = array(Array(30).fill(0));
 
 export const ascensionLevels = object({
     // level 0 (0 / 2 essence)
-    fire: [0, 0, 2],
-    earth: [0, 0, 2],
-    water: [0, 0, 2],
-    air: [0, 0, 2],
-    celestial: [0, 0, 2],
-    magic: [0, 0, 2],
+    fire: [1, 0, 2],
+    earth: [1, 0, 2],
+    water: [1, 0, 2],
+    magic: [1, 0, 2],
+    celestial: [1, 0, 15], 
+    antimatter: [1, 0, 35],
     
 })
+
+export const ascensionStats = object({
+    lastAscension: -1,
+    ascensionCount: 0,
+});
+
+export const ascensionUpgradeLevels = array(Array(100).fill(0))
+
+export const antimatterBonusesUnlocked = single(0); 

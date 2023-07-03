@@ -155,6 +155,10 @@ export const upgradeSorting = object({
         on: true,
         unlockAt: () => (get(wallet)['dust'] > 0),
     },
+    antimatter: {
+        on: true,
+        unlockAt: () => (get(wallet)['antimatter'] > 0),
+    },
 })
 
 // edit when changing the level of the hastpe upgrade
@@ -317,7 +321,8 @@ export const miningUpgrades = array([{
         crystals: 690,
     },
     ratio: 1.25,
-    unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10),
+    unlockAt: () => (get(miningUpgradeLevels)[0] >= 10 && get(miningUpgradeLevels)[1] >= 10
+    && get(wallet)['crystals'] > 0),
     formula: (lv: any) => 1 + lv * 0.12,
     isPercent: true,
     prefix: '+',
@@ -553,6 +558,7 @@ export const miningUpgrades = array([{
     unlockAt: () => (get(wallet)['crystals'] > 0),
     formula: (lv: any) =>  formula.dispCalcHardenedGemBonus(get(buttonNumClicks), lv),
     isPercent: true,
+    prefix: '+',
     suffix: ' gems',
     maxLevel: 1000,
     style: 'game-btn-crystal',
@@ -714,6 +720,24 @@ export const miningUpgrades = array([{
     suffix: 'x crystal gain',
     maxLevel: 100,
     style: 'game-btn-fame',
+    notes: ''
+},
+{
+    index: 30,
+    sortType: ['antimatter'],
+    name: 'Elusive Minerals',
+    description: 'Increases gem gain.',
+    cost: {
+        antimatter: 5,
+    },
+    ratio: 150,
+    unlockAt: () => (get(wallet)['antimatter'] > 0),
+    formula: (lv: any) => 1 + Math.pow(lv,3),
+    noResetRelocate: true,
+    isPercent: false,
+    suffix: 'x gem gain',
+    maxLevel: 10,
+    style: 'game-btn-antimatter',
     notes: ''
 },
 

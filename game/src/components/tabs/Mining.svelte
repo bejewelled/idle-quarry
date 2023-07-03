@@ -53,7 +53,7 @@
     {#if upgradeTab === 'regular'}
         <div class='pt-2 grid grid-cols-8'>
             {#each Object.entries($upgradeSorting) as u}
-                {#if u[1] !== undefined}
+                {#if u[1] !== undefined && u[1]['unlockAt']()}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <div class='m-1 text-center 
                     {$upgradeSorting[u[0]]['on'] ? 'control-btn-toggleon' : 'control-btn'}
@@ -72,7 +72,7 @@
         <strong>
             {$progressAverage['gems'] > $progressThreshold['gems'] ? "~" : ""}
             {$gemGainFlavorText > 1 ? f($gemGainFlavorText,0) : 1}</strong>
-          <span class='{$progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'] > 25 ? 'text-amber-200' : ''}'>
+          <span class='{$progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'] > (25*ascFormula.getVal('fire')) ? 'text-amber-200' : ''}'>
         x {f($progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'], 2) } times / sec ]
             </span>
     </div>
@@ -95,7 +95,7 @@
             </div>
             <div class='col-span-3 pl-1 text-left align-text-middle'>
                 <div class='text-[#989898] text-small'>[*] <strong>{$keyGainFlavorText['key1'] > 1 ? f($keyGainFlavorText['key1'],0) : '???'}</strong>
-                    <span class='{$progressAverage['key1']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key1'] > 25 ? 'text-amber-200' : ''}'>
+                    <span class='{$progressAverage['key1']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key1'] > 25*ascFormula.getVal('fire') ? 'text-amber-200' : ''}'>
                         x {f($progressAverage['key1']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key1'], 3)} / sec
                     </span>
 
@@ -114,7 +114,7 @@
             </div>
             <div class='col-span-3 pl-1 text-left align-text-middle'>
                 <div class='text-[#989898] text-small'>[**] <strong>{$keyGainFlavorText['key2'] > 1 ? f($keyGainFlavorText['key2'],0) : '???'}</strong>
-                    <span class='{$progressAverage['key2']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key2'] > 10 ? 'text-amber-200' : ''}'>
+                    <span class='{$progressAverage['key2']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key2'] > 10*ascFormula.getVal('fire') ? 'text-amber-200' : ''}'>
                         x {f($progressAverage['key2']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key2'], 3)} / sec
                     </span>
                 </div>
@@ -132,7 +132,7 @@
             </div>
             <div class='col-span-3 pl-1 text-left align-text-middle'>
                 <div class='text-[#989898] text-small'>[***] <strong>{$keyGainFlavorText['key3'] > 1 ? f($keyGainFlavorText['key3'],0) : '???'}</strong>
-                    <span class='{$progressAverage['key3']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key3'] > 1 ? 'text-amber-200' : ''}'>
+                    <span class='{$progressAverage['key3']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key3'] > 1*ascFormula.getVal('fire') ? 'text-amber-200' : ''}'>
                         x {f($progressAverage['key3']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['key3'], 3)} / sec
                     </span>
                 </div>
@@ -158,6 +158,7 @@
 
 
 <script lang='ts'>
+	import { ascFormula } from './../../data/ascension.ts';
  //@ts-nocheck
 import { onMount } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 

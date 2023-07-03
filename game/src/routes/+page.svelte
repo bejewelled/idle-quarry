@@ -1,4 +1,5 @@
 <!-- <title>Into the Quarry</title> -->
+
 {#if loadingFinished}
     <Adders />
 {/if}
@@ -20,7 +21,7 @@
                         ]
                     </div>
                     <div class="col-span-12">
-                        <div class="mine-bar-wrapper pb-2">
+                        <div class="mine-bar-wrapper pb-1">
                             <div
                                 class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700"
                             >
@@ -36,12 +37,12 @@
                     </div>
                 {/if}
 
-                {#each [1, 2, 3, 4, 5, 6] as i}
+                {#each [1, 2, 3, 4, 5] as i}
                     {#each Object.entries($wallet) as res}
                         {#if $wallet[res[0]] && $wallet[res[0]] >= 1 && !res[0].includes("key") && !ref.walletExclude[res[0]] && (ref.dropTiers[res[0]] || ref.dropTiers["default"]) == i}
                             <div
                                 class="{ref.colors[res[0]]} res-name
-                        has-tooltip col-span-7"
+                        has-tooltip col-span-7 text-[13px]"
                             >
                                 {ref.displayNames[res[0]] || res[0]}
                                 {#if $settings["tutorialMode"]}
@@ -50,13 +51,13 @@
                                     </span>
                                 {/if}
                             </div>
-                            <div class="game-text res-amount col-span-5">
+                            <div class="text-white text-[13px] res-amount col-span-5">
                                 {f(Math.floor(res[1]), 0)}
                             </div>
                         {/if}
                     {/each}
                     <div
-                        class="res-break py-2 border-1 border-gray-700 col-span-12"
+                        class="res-break py-1 mt-2 border-1 border-gray-700 col-span-12"
                     />
                 {/each}
                 <!-- keys -->
@@ -64,7 +65,7 @@
                     {#if ($wallet[res[0]] || $unlockedRes.has(res[0])) && res[0].includes("key")}
                         <div
                             class="{ref.colors[res[0]]} res-name
-                        has-tooltip col-span-7"
+                        has-tooltip col-span-7 text-[13px]"
                         >
                             {ref.displayNames[res[0]] || res[0]}
                             {#if $settings["tutorialMode"]}
@@ -74,7 +75,7 @@
                             {/if}
                         </div>
 
-                        <div class="game-text res-amount col-span-5">
+                        <div class="text-white text-[13px] res-amount col-span-5">
                             {f(Math.floor(res[1]), 0)}
                         </div>
                     {/if}
@@ -202,8 +203,7 @@
                                 </div>
                                 <div class="col-span-3 text-center">
                                     This value increases based on the total
-                                    amount of fame gained across all reset
-                                    tiers.
+                                    amount of fame gained in this ascension.
                                 </div>
                             </div>
                         </span>
@@ -282,8 +282,9 @@
     </div>
 </div>
 
-<script lang="ts">
-    // @ts-nocheck
+<script lang='ts'>
+	import { ascensionLevels, ascensionUpgradeLevels } from './../data/player.ts';
+
 
     import Decimal from "break_infinity.js";
     import {
@@ -330,7 +331,8 @@
         challenge3Multi,
         buttonRadiumProgress,
         stats,
-    } from "../data/player.js";
+        ascensionStats
+    } from "../data/player.ts";
     import { upgradeSorting } from "../data/mining.ts";
     import {
         key1DropTable,
@@ -340,7 +342,7 @@
         key5DropTable,
         keyUpgrades,
         keyCrafts,
-    } from "../data/keys.js";
+    } from "../data/keys.ts";
     import {
         beaconNextReqs,
         beaconSpendAmt,
@@ -371,7 +373,7 @@
     import ref from "../calcs/ref.ts";
 
     import { onMount } from "svelte";
-    import formula from "../calcs/formula.js";
+    import formula from "../calcs/formula.ts";
 
     let tab = "mining";
     let AUTOSAVE = true;
@@ -394,12 +396,12 @@
         //$settings['alogShow'] = alogShow;
     };
 
-    const changeTab = (t: string) => {
+    const changeTab = (t) => {
         tab = t;
         $settings["activeTab"] = t;
     };
 
-    const d = (i: string | number) => {
+    const d = (i) => {
         return new Decimal(i);
     };
 
@@ -450,7 +452,8 @@
         settings: () => true,
         challenges: () => $automationItemsUnlocked["game on"],
         artifacts: () => $wallet["artifacts"] && $wallet["artifacts"] >= 1,
-        ascension: () => formula.sumArray($challengesCompleted) >= 25,
+        ascension: () => (formula.sumArray($challengesCompleted) >= 25
+        || $ascensionLevels['antimatter'][1] > 0 || $ascensionLevels['antimatter'][0] > 0),
     };
     const tabsUnlocked = {
         mining: true,
@@ -463,6 +466,10 @@
 
     const save = async (isExport = false) => {
         localStorage.setItem("wallet", JSON.stringify($wallet));
+        localStorage.setItem(
+            "ascensionUpgradeLevels",
+            JSON.stringify($ascensionUpgradeLevels)
+        );
         localStorage.setItem(
             "miningUpgradeLevels",
             JSON.stringify($miningUpgradeLevels)
@@ -528,6 +535,7 @@
         );
         localStorage.setItem("buttonStats", JSON.stringify($buttonStats));
         localStorage.setItem("stats", JSON.stringify($stats));
+        localStorage.setItem("ascensionStats", JSON.stringify($ascensionStats));
         localStorage.setItem(
             "buttonRadiumProgress",
             JSON.stringify($buttonRadiumProgress)
@@ -573,6 +581,10 @@
             "challenge3Multi",
             JSON.stringify($challenge3Multi)
         );
+        localStorage.setItem(
+            "ascensionLevels",
+            JSON.stringify($ascensionLevels)
+        )
 
         saveConfirm = true;
         if (isExport) {
@@ -636,6 +648,11 @@
                 JSON.parse(localStorage.getItem("miningUpgradeLevels"))
             );
         }
+        if (localStorage.getItem("ascensionUpgradeLevels")) {
+            ascensionUpgradeLevels.set(
+                JSON.parse(localStorage.getItem("ascensionUpgradeLevels"))
+            );
+        }
         if (localStorage.getItem("miningUpgradeLevelsTemp")) {
             miningUpgradeLevelsTemp.set(
                 JSON.parse(localStorage.getItem("miningUpgradeLevelsTemp"))
@@ -672,6 +689,12 @@
                 JSON.parse(localStorage.getItem("buttonRadiumProgress"))
             );
         }
+        if (localStorage.getItem("ascensionLevels")) {
+            ascensionLevels.set(
+                JSON.parse(localStorage.getItem("ascensionLevels"))
+            );
+        }
+        console.log($ascensionLevels);
         if (localStorage.getItem("stats")) {
             stats.set(JSON.parse(localStorage.getItem("stats")));
         }
@@ -764,6 +787,9 @@
         }
         if (localStorage.getItem("buttonStats")) {
             buttonStats.set(JSON.parse(localStorage.getItem("buttonStats")));
+        }
+        if (localStorage.getItem("ascensionStats")) {
+            ascensionStats.set(JSON.parse(localStorage.getItem("ascensionStats")));
         }
         if (localStorage.getItem("keyUpgradeLevels")) {
             keyUpgradeLevels.set(
@@ -865,7 +891,7 @@
         $wallet["energizedCrystal"] = undefined;
         console.log($saveVersion);
         const ver = $saveVersion;
-        const LATEST_VER = 25;
+        const LATEST_VER = 26;
         if (ver <= 0) {
             // fix "mysterious potion" error
             $keyUpgradeLevels[0] = 0;
@@ -982,6 +1008,16 @@
         if (ver < 25) {
             $keyUpgradeLevels[2] = 0;
             $keyUpgradeLevels[3] = 0;
+        }
+        if (ver < 26) {
+            $ascensionLevels = {
+                fire: [1, 0, 2],
+                earth: [1, 0, 2],
+                water: [1, 0, 2],
+                magic: [1, 0, 2],
+                celestial: [1, 0, 15], 
+                antimatter: [1, 0, 35],
+            }
         }
 
         $saveVersion = LATEST_VER;
@@ -1175,6 +1211,39 @@
     :global(.game-btn-sigil-noafford) {
         border: 1px solid #5a044e;
         color: #5a044e;
+        cursor: pointer;
+    }
+
+    :global(.game-btn-antimatter) {
+        background-image: linear-gradient(to bottom right, #285cb1, #331c7c);
+        border-color: -webkit-linear-gradient(45deg, #3b82f6, #3730a3);
+        border: 1px solid white;
+        text-color: white;
+        cursor: pointer;
+    }
+    :global(.game-btn-antimatter:hover) {
+        background-image: linear-gradient(to bottom right, #457cd5, #593cbb);
+        cursor: pointer;
+    }
+    :global(.game-btn-antimatter-noafford) {
+        background-image: linear-gradient(to bottom right, #18396d, #150c32);
+        color: #285cb1;
+        cursor: pointer;
+    }
+
+    :global(.game-btn-celestial) {
+        background-image: linear-gradient(to bottom right, #9877b099, #1e133799);
+        border: 1px solid white;
+        color: white;
+        cursor: pointer;
+    }
+    :global(.game-btn-celestial:hover) {
+        background-image: linear-gradient(to bottom right, #b99ace, #322258);
+        cursor: pointer;
+    }
+    :global(.game-btn-celestial-noafford) {
+        background-image: linear-gradient(to bottom right, #4d3c59, #080410);
+        color: #7f7f7f;
         cursor: pointer;
     }
 

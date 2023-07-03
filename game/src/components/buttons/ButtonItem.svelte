@@ -159,7 +159,9 @@ const BUTTON_SIZE= 100;
     } 
 
     $mineLevel['xp'] += xpGain;
-    rewardAmount = rewardAmount * formula.calcButtonRewardBonus();
+    rewardAmount = rewardAmount 
+    * formula.calcButtonRewardBonus()
+    * formula.getAntimatterBonusAmount(2);
     $radiumGainText = '+ ' + f(rewardAmount)
 
     if (rewardAmount + $buttonRadiumProgress[0] > $buttonRadiumProgress[1])

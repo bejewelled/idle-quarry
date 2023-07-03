@@ -2,6 +2,7 @@
 import { writable, get } from 'svelte/store';
 import { miningUpgrades } from './mining';
 import { miningUpgradeLevels, wallet, resources } from './player';
+import { ascFormula } from './ascension';
 
 function single(context: any) {
     // @ts-ignore
@@ -237,6 +238,7 @@ export const beaconUpgrades = array([{
         26 + Math.pow((lv-100), 0.6)*0.2 :
         1 + 0.25*lv),
     mineLevelReq: 0,
+    unlockAt: () => true,
     isPercent: true,
     prefix: '+',
     maxLevel: 300,
@@ -251,6 +253,7 @@ export const beaconUpgrades = array([{
     ratio: 2,
     formula: (lv: any) => 1 + 0.1*lv,
     mineLevelReq: 6,
+    unlockAt: () => true,
     isPercent: false,
     prefix: 'x',
     suffix: '  droprate',
@@ -266,8 +269,25 @@ export const beaconUpgrades = array([{
     ratio: 4,
     formula: (lv: any) => (lv === 0 ? 1 : 1 + Math.log((lv+1) * get(resources)['beaconPower']/1e3 + 1) / Math.log(5)),
     mineLevelReq: 12,
+    unlockAt: () => true,
     isPercent: true,
     suffix: ' bonus',
     maxLevel: 10,
     notes: ''
+},
+{
+    name: 'Angelic Intervention',
+    description: 'Glory, oh glory. Beacons gain additional power based on the path\'s level.',
+    cost: {
+        antimatter: 8,
+    },
+    ratio: 2,
+    formula: (lv: any) => 1 + lv*0.001,
+    mineLevelReq: 12,
+    unlockAt: () => ascFormula.getVal('celestial') >= 2,
+    isPercent: true,
+    suffix: ' per level',
+    maxLevel: 50,
+    notes: '',
+    isCelestial: true,
 },])

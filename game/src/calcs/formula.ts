@@ -1,5 +1,5 @@
 import {buttonUpgradeLevels, miningUpgradeLevels, keyUpgradeLevels,
-keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet} from '../data/player';
+keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet, ascensionLevels, ascensionStats} from '../data/player';
 import { beaconBonuses } from '../data/beacons';
 import {keyUpgrades, keyCrafts} from '../data/keys'
 import { get } from 'svelte/store';
@@ -7,6 +7,7 @@ import ref from './ref';
 import { allMultipliers } from '../data/artifacts';
 import { buttonUpgrades } from '../data/button';
 import { miningUpgrades } from '../data/mining';
+import { antimatterBonusAscensionReqs, ascFormula } from '../data/ascension';
 export default class formula {
 
     // returns a normally random value
@@ -41,6 +42,61 @@ export default class formula {
       
         return sum;
       }
+    
+    static polySum2(n: number, multi: number = 1) {
+      return multi * (n * (n + 1) * (2 * n + 1) / 6);
+    }
+
+    static polySum3(n: number, multi: number = 1) {
+      return multi * ((n**2)*((n+1)**2)/4);
+    }
+
+    static maxNumPoly2(n: number, multi: number = 1) {
+      if (multi === 0) multi = 1;
+      return Math.sqrt(n / multi);
+    }
+
+    static sumFinitePoly2(start: number, end: number, multi: number = 1) {
+      return multi * (end**3 - start**3) / 3
+    }
+
+    static maxFinitePoly2(n: number, p: number, nums: object, e: string, log: boolean = false) {
+      let left = n, q = p;
+      if (log) console.log('left: ' + left + ' q: ' + q);
+      while (left > 0) {
+        left -= (nums['const'][e] + nums['multi'][e]*(q**2));
+        q++;
+        if (log) console.log('left: ' + left + ' q: ' + q);
+      }
+      return q-1;
+    }
+
+    static maxFinitePoly3(n: number, p: number, nums: object, e: string, log: boolean = false) {
+      //@ts-nocheck
+      let left = n, q = p;
+      while (left > 0) {
+        q++;
+        left -= (nums['const'][e] + nums['multi'][e]*(q**3));
+      }
+      return q;
+    }
+
+    static sumEssence() {
+      let sum = 0;
+      for (let i of Object.keys(get(wallet))) {
+        if (i.startsWith('e') && i !== 'energy') {
+          sum += (get(wallet)[i] || 0);
+        }  
+      }
+      console.log(sum);
+      return sum;
+    }
+
+    static calcEssenceXPGain(e: string) {
+      if (e == 'antimatter') return this.sumEssence();
+      return get(wallet)['e'+e] || 0;
+    }
+    
     static maxNumGeom(amt: number, base: number, r: number) {
         const n = Math.floor(Math.log((amt/base) * (r - 1) + 1) / Math.log(r));
         const actualPrice = base * Math.pow(r, n);
@@ -124,21 +180,21 @@ export default class formula {
     
     static calcHardenedGemBonus(obj: { [x: string]: number; }) {
       if (get(miningUpgradeLevels)[20] < 1) return 1;
-        return ((1 + 0.1*get(miningUpgradeLevels)[20])
-        * ((Math.log(obj['good']+2) / Math.log(9))
-          + (Math.log(obj['great']+2) / Math.log(7))
-          + (Math.log(obj['excellent']+2) / Math.log(5))
-          + (Math.log(obj['incredible']+2) / Math.log(3)) 
-          + (Math.log(obj['perfect']+2) / Math.log(2))));
+        return (1 + (0.33*get(miningUpgradeLevels)[20])
+        * (0.04 * (Math.log(obj['good']+9) / Math.log(9))
+          + 0.06 * (Math.log(obj['great']+7) / Math.log(7))
+          + 0.08* (Math.log(obj['excellent']+5) / Math.log(5))
+          + 0.12 * (Math.log(obj['incredible']+3) / Math.log(3)) 
+          + 0.16 * (Math.log(obj['perfect']+2) / Math.log(2))));
     }
     static dispCalcHardenedGemBonus(obj: { [x: string]: number;}, m: number) {
       if (m < 1) return 1;
-      return ((1 + 0.1*m)
-      * ((Math.log(obj['good']/40+2) / Math.log(9))
-        + (Math.log(obj['great']/25+2) / Math.log(7))
-        + (Math.log(obj['excellent']/20+2) / Math.log(5))
-        + (Math.log(obj['incredible']/15+2) / Math.log(3)) 
-        + (Math.log(obj['perfect']/10+2) / Math.log(2))));
+        return (1 + (0.33*m)
+        * (0.04 * (Math.log(obj['good']+9) / Math.log(9))
+          + 0.06 * (Math.log(obj['great']+7) / Math.log(7))
+          + 0.08* (Math.log(obj['excellent']+5) / Math.log(5))
+          + 0.12 * (Math.log(obj['incredible']+3) / Math.log(3)) 
+          + 0.16 * (Math.log(obj['perfect']+2) / Math.log(2))));
   }
 
   static calcKeySlurryGain(obj: { [x: string]: number; }) {
@@ -151,7 +207,9 @@ export default class formula {
       alert('note: this feature is bugged, please report this on Discord - reduced slurry gained (using "safe" formula)')
       return obj['key1'] / 8e5;
     }
-    return amount * get(keyUpgrades)[1]['formula'](get(keyUpgradeLevels)[1]);
+    return amount
+    * get(keyUpgrades)[1]['formula'](get(keyUpgradeLevels)[1]) 
+    * formula.getAntimatterBonusAmount(3);
   }
   
   static calcKeySigilGain(sl: number) {
@@ -170,7 +228,8 @@ export default class formula {
     //@ts-nocheck
     //@ts-nocheck
     if (isOffFocus) return ref.challengePointValues[type] * Math.min(n, 1);
-    const y = n * ref.challengePointValues[type] || 0;
+    const y = n * (ref.challengePointValues[type] || 0)
+    * ascFormula.getVal('water');
     return y ;
   }
 
@@ -190,5 +249,12 @@ export default class formula {
       30 * Math.pow(y, 2)*0.01 :
       3000 + Math.pow(y - 100, 0.825)* 16)
       * get(miningUpgrades)[29]['formula'](get(miningUpgradeLevels)[29])
+      * ascFormula.getVal('earth')
+  }
+
+  static getAntimatterBonusAmount(i: number) {
+    if (get(ascensionStats)["ascensionCount"] >= get(antimatterBonusAscensionReqs)[i])
+      return get(ascFormula)['antimatter'](get(ascensionLevels)['antimatter'][0]);
+    else return 1;      
   }
 }

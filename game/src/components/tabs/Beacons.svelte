@@ -88,16 +88,20 @@
 
     <div class='py-2'></div>
     {#each $beaconUpgrades as b,i}
+    {#if $beaconUpgrades[i]['unlockAt']()}
     <div class='pt-1'></div>
         <BeaconPowerUpgradeButton index={i} />
+    {/if}
     {/each}
-    <div class='col-span-12 pb-15'>i</div>
+    <div class='col-span-12 pb-16'></div>
+    <div class='col-span-12 pb-16'></div>
     <div>s</div>
 </div>
 </div>
 
 
 <script lang='ts'>
+	import { beaconUpgrades } from './../../data/beacons.ts';
  //@ts-nocheck
 import { onMount, onDestroy } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
@@ -110,7 +114,7 @@ gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import {beaconPower, beaconBonuses, beaconSpendAmt,
     beaconFormulas, beaconNums, beaconNextReqs,
-beaconUpgrades, beaconNameText, beaconPowerFlavorText,
+ beaconNameText, beaconPowerFlavorText,
 beaconMaxLevels, beaconMiningLevelReqs} from '../../data/beacons';
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'

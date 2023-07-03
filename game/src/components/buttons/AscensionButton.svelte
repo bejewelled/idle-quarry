@@ -1,3 +1,4 @@
+<Resetters bind:this={resetFuncs} />
 <div
   class="border-2 select-none text-center {canAscend()
     ? 'border-fuchsia-300 text-center hover:bg-fuchsia-800 hover:bg-opacity-50 transition ease-in duration-150'
@@ -5,18 +6,21 @@
  p-1 w-full"
 >
   {#if canAscend()}
-    <span
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div on:click={() => ascend()}
       class="text-center items-center justify-center text-xl font-bold
     bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparent"
     >
       ASCEND
-    </span>
+  </div>
   {:else}
     You need at least 1 of each essence type to ascend.
   {/if}
 </div>
 
 <script lang="ts">
+	import { ascensionElements } from './../../data/ascension.ts';
+	import Resetters from './../resetters/Resetters.svelte';
   import { onMount, onDestroy } from "svelte";
   import {
     progress,
@@ -73,13 +77,19 @@
   import BeaconPowerUpgradeButton from "../buttons/BeaconPowerUpgradeButton.svelte";
   import EnchantUpgradeButton from "../buttons/EnchantUpgradeButton.svelte";
 
+let resetFuncs: any;
+
   function canAscend() {
-    return (
-      $wallet["efire"] > 0 &&
-      $wallet["eearth"] > 0 &&
-      $wallet["ewater"] > 0 &&
-      $wallet["emagic"] > 0 &&
-      $wallet["ecelestial"] > 0
-    );
+    for (let i of $ascensionElements) {
+      if (i != 'antimatter' && (!$wallet['e'+i] || $wallet['e'+i] < 1)) {
+        return false;
+      }
+    }
+    return true;
   }
+  function ascend() {
+        if (confirm('ARE YOU SURE??? This will reset EVERYTHING! If this is your first ascension, MAKE SURE you are gaining a bonus of some sort, or you will essentially be hard resetting!')) {
+            resetFuncs.ascend();
+        }
+    }
 </script>

@@ -1,5 +1,5 @@
 import { writable, get } from "svelte/store";
-import { wallet, miningUpgradeLevels, enchantUpgradeLevels } from "./player";
+import { wallet, miningUpgradeLevels, enchantUpgradeLevels, ascensionLevels } from "./player";
 import Decimal from "break_infinity.js";
 
 function single(context: any) {
@@ -109,10 +109,31 @@ function object(context: any) {
     };
 }
 
-export const ascensionStats = object({
-    lastAscension: -1,
-    ascensionCount: 0,
-});
+function ascFormulaGetter(context: any) {
+    // @ts-ignore
+    const { subscribe, set, update} = writable(context);
+    return {
+        subscribe,
+        set(item: string | number, amt: any) {
+            update((i: any) => {
+                i[item] = amt;
+                return i;
+            });
+        },
+        refresh(item: string | number) {
+        },
+        // get value based on current level
+        getVal(ele: string) {
+            return context[ele](get(ascensionLevels)[ele][0]);
+        },
+        // get value @ certain level
+        getValAt(ele: string, lv: number) { 
+            return context[ele](lv);
+        }
+
+    }
+}
+
 
 export const elementNames = array([
     "Path of Fire",
@@ -135,36 +156,95 @@ export const elementDescriptions = array([
 export const elementBonusText = array([
     {
         prefix: "+",
-        suffix: "%",
+        suffix: "",
         text: "speed softcap",
+        isPercent: true
     },
     {
         prefix: "+",
-        suffix: "%",
+        suffix: "",
         text: "crystal production",
+        isPercent: true
     },
     {
         prefix: "+",
-        suffix: "%",
+        suffix: "",
         text: "challenge point gain",
+        isPercent: true
     },
     {
         prefix: "+",
-        suffix: "%",
+        suffix: "",
         text: "enchant proc speed",
+        isPercent: true
     },
     {
         prefix: "+",
         suffix: "",
-        text: "celestial upgrade levels",
+        text: "celestial beacon upgrades",
+        isPercent: false
     },
     {
         prefix: "+",
         suffix: "",
-        text: "unique bonuses",
+        isPercent: true,
+        text: "antimatter bonuses",
     },
 ]);
 
 export const ascensionConstants = object({
-    levelFormula: (lv: number) => 1 + (Math.pow(lv,2) * 0.14),
+    levelFormula: (lv: number) => 2 + (Math.pow(lv,2) * 0.14),
+    levelFormulaNums: {
+        multi: {
+            fire: 0.14,
+            earth: 0.14,
+            water: 0.14,
+            magic: 0.14,
+            celestial: 0.14,
+        },
+        const: {
+            fire: 2,
+            earth: 2,
+            water: 2,
+            magic: 2,
+            celestial: 15,
+        }
+    },
+    antimatterLevelFormula: (lv: number) => 35 + (Math.pow(lv,2) * 9),
+    antimatterLevelFormulaNums: {
+        multi: 9,
+        const: 35
+    },
 })
+
+export const ascensionElements = array([
+    "fire",
+    "earth",
+    "water",
+    "magic",
+    "celestial",
+    "antimatter"
+]);
+
+// formula for bonuses
+// returns a non-percentile value
+export const ascFormula = ascFormulaGetter({
+    fire: (lv: number) => 1 + 0.4*Math.pow(lv-1, 0.6), // mine speed softcap
+    earth: (lv: number) => 1 + 0.3*Math.pow(lv-1, 0.8), // crystal gain
+    water: (lv: number) => 1 + 0.13*Math.pow(lv-1, 0.7), // challenge point gain
+    magic: (lv: number) => 1 + 0.04*Math.pow(lv-1, 0.8), // enchant proc speed
+    celestial: (lv: number) => lv-1, // beacon special levels
+    antimatter: (lv: number) => 1 + 0.02*Math.pow(lv-1, 0.75), // minespeed/droprate
+})
+
+export const antimatterBonusAscensionReqs = array([
+1, 2, 3, 5, 7, 10, 16, 25, 35, 60, 100
+])
+
+export const antimatterBonusText = object([
+    "Mining Speed",
+    "Key Droprate",
+    "Radioactivity Gain",
+    "Slurry Gain",
+    "Dust Droprate"
+].concat(Array(20).fill('[to be implemented]')))

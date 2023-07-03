@@ -30,6 +30,7 @@
     </div>
     <div class='py-2'>
         <div class='fame-upgrade-wrapper grid grid-cols-2 pt-2'>
+            {#key $enchantUpgradeLevels[0] || $enchantUpgradeLevels[1]}
             {#each Object.entries($enchantUpgrades) as upgrade,i}
                 {#if i >= 2 && $enchantUpgrades[i]['unlockAt']()}
                 <div class='py-1 col-span-1 mine-upgrade-button-wrapper'>
@@ -37,6 +38,7 @@
                 </div>
                 {/if}
             {/each}
+            {/key}
         </div>
     </div>
 </div>
@@ -46,13 +48,14 @@
 
 
 <script lang='ts'>
+	import { enchantUpgradeLevels } from './../../data/player.ts';
  //@ts-nocheck
 import { onMount, onDestroy } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
     settings, visibleTier, progressThisTick, progressAverage,
     beaconActivations, beaconLevels, beaconProgress, resources,
      keysOpened, unlockedRes, beaconUpgradeLevels, flags, 
-     enchantUpgradeLevels, enchantProgress, antiFlickerFlags} from '../../data/player';
+    enchantProgress, antiFlickerFlags} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
