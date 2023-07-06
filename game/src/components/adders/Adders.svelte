@@ -1119,6 +1119,18 @@
                             'clicker hero'
                         )
                         break
+                    case 8: // rift tearing
+                        const essences = ['efire', 'eearth', 'ewater', 'emagic', 'ecelestial'];
+                        const type = essences[Math.floor(Math.random() * essences.length)];
+                        const amt = Math.ceil(size / 1275) + 1;
+                        $wallet[type] = ($wallet[type] || 0) + amt;
+                        addToActivityLog('[Rift Tearing] +' + f(amt) + ' ' + type.substring(1) + ' essence', 
+                        // @ts-ignore
+                        ref.colors[type], 'rift tearing');
+                        break
+                    case 9: // double down
+                        addToActivityLog('[Double Down] Another enchant cycle completed.', 'text-violet-300', 'double down')
+                        procEnchants();
                 }
             }
         }

@@ -262,6 +262,38 @@ export const enchantUpgrades = array([{
     maxLevel: 400,
     notes: ''
 },
+{
+    index: 8,
+    name: 'Rift Tearing',
+    description: 'Has a chance to open a rift in the mine, giving essence.',
+    cost: {
+        fame: 1e18,
+    },
+    tier: 1,
+    ratio: 1.34,
+    formula: (lv: any) => (lv/200) * 0.02,
+    unlockAt: () => (get(wallet)['totalAntimatter'] > 0 || get(wallet)['antimatter'] > 0),
+    isPercent: true,
+    suffix: '  chance',
+    maxLevel: 200,
+    notes: ''
+},
+{
+    index: 9,
+    name: 'Double Down',
+    description: 'Has a chance to immediately trigger the next enchant cycle.',
+    cost: {
+        fame: 1e18,
+    },
+    tier: 1,
+    ratio: 1.34,
+    formula: (lv: any) => (lv/200) * 0.1,
+    unlockAt: () => (get(wallet)['totalAntimatter'] > 0 || get(wallet)['antimatter'] > 0),
+    isPercent: true,
+    suffix: '  chance',
+    maxLevel: 200,
+    notes: ''
+},
 
 ]);
 

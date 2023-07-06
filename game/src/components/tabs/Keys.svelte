@@ -117,7 +117,7 @@
 
     <div class='grid grid-cols-12 pt-2'>
         {#each $keyUpgrades as k, i}
-        <div class='col-span-3'>
+        <div class='col-span-3 pb-1'>
             <SlurryUpgradeButton index={i}/>
         </div>
         {/each}

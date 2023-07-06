@@ -198,18 +198,19 @@ export default class formula {
   }
 
   static calcKeySlurryGain(obj: { [x: string]: number; }) {
-    let amount = (Math.pow(obj['key1'], 0.7) || 0)*0.02
+    let amount = ((Math.pow(obj['key1'], 0.7) || 0)*0.02
     + (Math.pow(obj['key2'], 0.85) || 0)*0.2
     + (Math.pow(obj['key3'], 0.93) || 0)*18
     + (Math.pow(obj['key4'], 0.98) || 0)*16500
-    + (Math.pow(obj['key5'], 0.999) || 0)*1.45e9;
+    + (Math.pow(obj['key5'], 0.999) || 0)*1.45e9)
+    * get(keyUpgrades)[1]['formula'](get(keyUpgradeLevels)[1]) 
+    * formula.getAntimatterBonusAmount(3);
     if (isNaN(amount)) {
       alert('note: this feature is bugged, please report this on Discord - reduced slurry gained (using "safe" formula)')
       return obj['key1'] / 8e5;
     }
     return amount
-    * get(keyUpgrades)[1]['formula'](get(keyUpgradeLevels)[1]) 
-    * formula.getAntimatterBonusAmount(3);
+  
   }
   
   static calcKeySigilGain(sl: number) {

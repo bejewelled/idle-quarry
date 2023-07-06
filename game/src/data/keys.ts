@@ -164,6 +164,7 @@ function dropTable(context: any) {
                     * get(miningUpgrades)[13]['formula'](get(miningUpgradeLevels)[13])
                     * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])
                     * (item === 'artifacts' ? get(miningUpgrades)[21]['formula'](get(miningUpgradeLevels)[21]) : 1)
+                    * get(miningUpgrades)[36]['formula'](get(miningUpgradeLevels)[36])
                     * get(beaconBonuses)[7]
                     * formula.getAntimatterBonusAmount(1);
                     i[item]= [
@@ -278,11 +279,11 @@ export const keyUpgrades = array([
         name: 'Rift Control',
         description: 'Decreases the cost ratio for energized crystals.',
         cost: {
-            slurry: 1e15,
+            slurry: 1e10,
         },
         ratio: 1e5,
         formula: (lv: any) => 10 - lv,
-        unlockAt: () => (get(wallet)['sigils'] >= 1e4 || get(keyUpgradeLevels)[1] > 0),
+        unlockAt: () => (get(wallet)['antimatter'] > 0 || get(wallet)['totalAntimatter'] > 0),
         isPercent: false,
         suffix: ' cost ratio',
         maxLevel: 8,
@@ -293,11 +294,11 @@ export const keyUpgrades = array([
         name: 'Special Slurry',
         description: 'Converting a high amount of keys into slurry will also give sigils. Increase the amount by 20% per level.',
         cost: {
-            slurry: 1e19,
+            slurry: 1e11,
         },
         ratio: 1.3,
         formula: (lv: any) => 0.8 + 0.2 * lv,
-        unlockAt: () => (get(wallet)['sigils'] >= 1e4 || get(keyUpgradeLevels)[1] > 0),
+        unlockAt: () => (get(wallet)['antimatter'] > 0 || get(wallet)['totalAntimatter'] > 0),
         isPercent: true,
         suffix: ' convert sigils',
         maxLevel: 100,
@@ -308,11 +309,11 @@ export const keyUpgrades = array([
         name: 'Capacitor',
         description: 'Increases all crafting yields.',
         cost: {
-            slurry: 1e11,
+            slurry: 7500
         },
         ratio: 10,
         formula: (lv: any) => 1 + lv * 0.25,
-        unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1),
+        unlockAt: () => (get(wallet)['antimatter'] >= 190 || get(wallet)['totalAntimatter'] >= 190),
         isPercent: true,
         suffix: ' craft bonus',
         maxLevel: 40,
@@ -321,13 +322,13 @@ export const keyUpgrades = array([
     {
         index: 5,
         name: 'Fabrication Clocking',
-        description: '.',
+        description: 'Greatly increases key finder yields.',
         cost: {
             slurry: 1e11,
         },
         ratio: 10,
-        formula: (lv: any) => 1 + lv * 0.25,
-        unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1),
+        formula: (lv: any) => 1 + lv**2,
+        unlockAt: () => (get(wallet)['antimatter'] >= 190 || get(wallet)['totalAntimatter'] >= 190),
         isPercent: true,
         suffix: ' craft bonus',
         maxLevel: 40,

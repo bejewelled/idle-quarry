@@ -290,4 +290,21 @@ export const beaconUpgrades = array([{
     maxLevel: 50,
     notes: '',
     isCelestial: true,
-},])
+},
+{
+    name: 'Divine Blessing',
+    description: 'Dramatically increases the effect of beacon levels on beacon power.',
+    cost: {
+        antimatter: 96,
+    },
+    ratio: 1.65,
+    formula: (lv: any) => lv * 0.33,
+    mineLevelReq: 12,
+    unlockAt: () => ascFormula.getVal('celestial') >= 2,
+    isPercent: true,
+    suffix: ' increased level effectiveness',
+    maxLevel: 50,
+    notes: '',
+    isCelestial: true,
+}, 
+])

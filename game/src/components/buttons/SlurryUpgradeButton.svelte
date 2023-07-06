@@ -3,7 +3,7 @@
 {#key permUnlocked || affordable || $keyUpgradeLevels[index] > 0}
 {#if $keyUpgrades[index]['unlockAt']() || permUnlocked || $keyUpgradeLevels[index] > 0}
 <div on:click={() => buy()}
-class='has-tooltip tooltip-text 
+class='has-tooltip tooltip-text py-1
 {(
 ($keyUpgradeLevels[index] >= $keyUpgrades[index]['maxLevel']) ?
 'game-btn-noafford text-indigo-300 bg-indigo-800' :

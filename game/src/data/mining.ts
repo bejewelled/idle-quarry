@@ -126,6 +126,10 @@ export const progressThreshold = object({
 })
 
 export const upgradeSorting = object({
+    all: {
+        on: true,
+        unlockAt: () => (true),
+    },
     base: {
         on: true,
         unlockAt: () => (true),
@@ -746,13 +750,17 @@ export const miningUpgrades = array([{
     name: 'Lootmaster IV',
     description: 'Unlocks a new tier of findable drops, and automatically unlocks LM1-3 if they aren\'t already.',
     cost: {
-        antimatter: 75000,
         warp: 1e7,
+        antimatter: 75000,
+        efire: 21000,
+        eearth: 21000,
+        ewater: 21000,
+        emagic: 21000,
+        ecelestial: 21000,
         key4: 10000,
-        void: 75
     },
     ratio: 1e90,
-    unlockAt: () => ((get(wallet)['void'] > 0 && get(miningUpgradeLevels)[14] > 0.003)
+    unlockAt: () => (get(miningUpgradeLevels)[14] > 0.003
     || get(miningUpgradeLevelsBought)[31] > 0),
     formula: (lv: any) => (0),
     isPercent: true,
@@ -831,6 +839,24 @@ export const miningUpgrades = array([{
     noResetRelocate: true,
     suffix: 'x cost ratios',
     maxLevel: 1,
+    style: 'game-btn-antimatter',
+    notes: ''
+},
+{
+    index: 36,
+    sortType: ['antimatter'],
+    name: 'Ethereal Box',
+    description: 'Increases key droprates.',
+    cost: {
+        antimatter: 5,
+    },
+    ratio: 150,
+    unlockAt: () => (get(wallet)['antimatter'] > 0),
+    formula: (lv: any) => 1 + 0.65*Math.pow(lv,1.75),
+    noResetRelocate: true,
+    isPercent: false,
+    suffix: 'x key droprates',
+    maxLevel: 10,
     style: 'game-btn-antimatter',
     notes: ''
 },

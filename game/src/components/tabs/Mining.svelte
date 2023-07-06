@@ -50,6 +50,7 @@
     {/if}
 
     <!-- upgrade sorting -->
+    {#key $upgradeSorting}
     {#if upgradeTab === 'regular'}
         <div class='pt-2 grid grid-cols-8'>
             {#each Object.entries($upgradeSorting) as u}
@@ -65,6 +66,7 @@
             {/each}          
         </div>
     {/if}
+    {/key}
 
 
     <!-- progress bar (gems) -->
@@ -240,6 +242,7 @@ const setRenderedUpgrades = () => {
 
 
 const upgradeSortShow = (i) => {
+    if ($upgradeSorting['all']['on']) return true;
     for (let sort of ($miningUpgrades[i]['sortType'])) {
         if ($upgradeSorting[sort]['on']) {
             return true;
