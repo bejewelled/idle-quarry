@@ -63,8 +63,11 @@ export default class formula {
     static maxFinitePoly2(n: number, p: number, nums: object, e: string, log: boolean = false) {
       let left = n, q = p;
       if (log) console.log('left: ' + left + ' q: ' + q);
+      if (e == 'antimatter') console.log(n, p, nums, e, log)
       while (left > 0) {
-        left -= (nums['const'][e] + nums['multi'][e]*(q**2));
+        if (e == 'antimatter') left -= (nums['const'] + nums['multi']*(q**2));
+        else left -= (nums['const'][e] + nums['multi'][e]*(q**2));
+        if (e == 'antimatter') console.log(left)
         q++;
         if (log) console.log('left: ' + left + ' q: ' + q);
       }
