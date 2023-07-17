@@ -475,11 +475,10 @@
                     formula.calcEnchantProgressGain(
                         $progress['gems'] / gemAt
                     );
-                
                 if ($enchantProgress[k] >= $enchantThreshold[k]) {
                     procEnchants(
                         Math.floor($enchantProgress[k] / $enchantThreshold[k]),
-                        k
+                        k.substring(1)
                     )
                     $enchantProgress[k] %= $enchantThreshold[k]
                 }
