@@ -228,8 +228,12 @@ export default class formula {
   }
 
   static calcKeyCraftAmountGained(i: string) {
-    return get(keyCrafts)[i]['baseAmount']
-    * get(beaconBonuses)[6];
+    const y = get(keyCrafts)[i]['baseAmount']
+    * get(beaconBonuses)[6]
+    * (i == 'beacons' ? 
+    Math.pow(formula.sumArray(get(beaconLevels)), 0.65) : 1);
+
+    return y;
 }
   static calcChallengePointGain(n: number, type: string, isOffFocus: boolean = false) {
     // indices of key finder in mining upgrades for each tier

@@ -897,7 +897,6 @@
         $wallet["energy"] =
             $wallet["energizedCrystal"] || $wallet["energy"] || 0;
         $wallet["energizedCrystal"] = undefined;
-        console.log($saveVersion);
         const ver = $saveVersion;
         const LATEST_VER = 28;
         if (ver <= 0) {
