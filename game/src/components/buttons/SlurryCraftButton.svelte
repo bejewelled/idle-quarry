@@ -189,6 +189,7 @@
     function calcCraftTime() {
         let base = $keyCrafts[index]['craftTime'];
         base *= Math.pow(0.9, $keyCraftMastery[item][0]-1);
+        base /= $settings['speed']
         return base*1000;
     }
 

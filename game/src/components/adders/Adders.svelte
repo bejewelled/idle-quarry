@@ -369,7 +369,7 @@
 
         // add radium
         $wallet['crystals'] +=
-            (delta * formula.calcCrystalGainFromRadium()) / UPDATE_SPEED / 2
+            $settings['speed'] * (delta * formula.calcCrystalGainFromRadium()) / UPDATE_SPEED / 2
 
         // optimize out of focus
         // if (delta > 16) {
