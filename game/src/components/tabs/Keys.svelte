@@ -128,9 +128,11 @@
     {#if $wallet['slurry'] > 1}
     <div class='grid grid-cols-12 pt-2'>
         {#each $keyCrafts as k, i}
+        {#if $keyCrafts[i]['unlockAt']()}
         <div class='col-span-12'>
             <SlurryCraftButton index={i}/>
         </div>
+        {/if}
         {/each}
     </div>
     {/if}

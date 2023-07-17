@@ -1,7 +1,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 {#key $wallet[item] >= 0.9}
-{#if $keyCrafts[index]['unlockAt']()}
+
 <div class='wrapper grid grid-cols-12 py-1'>
     <div on:click={() => buy(index)}
         class='has-tooltip tooltip-text 
@@ -79,7 +79,6 @@
         </div>
     </div>
 </div>
-        {/if}
 {/key}
         
 
