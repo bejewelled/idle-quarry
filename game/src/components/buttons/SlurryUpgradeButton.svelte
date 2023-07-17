@@ -11,7 +11,10 @@ class='has-tooltip tooltip-text py-1
 )}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>
-{$keyUpgrades[index]['name']} [{$keyUpgradeLevels[index]} / {$keyUpgrades[index]['maxLevel']}]
+{$keyUpgrades[index]['name']} [{$keyUpgradeLevels[index]} / {$keyUpgrades[index]['maxLevel']}] 
+{#if $settings['maxBuy'] && buyAmount >= 1}
+(+{buyAmount})
+{/if}
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
@@ -28,10 +31,12 @@ select-none'>
                  </span>
                  <span class='current text-[#999999]'>  => 
                     {$keyUpgrades[index]['prefix'] || ""}{$keyUpgrades[index]['isPercent'] ?
-                   fp($keyUpgrades[index]['formula']($keyUpgradeLevels[index]+$settings['buyAmount']),3, false) :
-                   f($keyUpgrades[index]['formula']($keyUpgradeLevels[index]+$settings['buyAmount']),3)}{$keyUpgrades[index]['suffix'] || ""}
-                 </span>
-
+                   fp($keyUpgrades[index]['formula']($keyUpgradeLevels[index]+Math.max(1,buyAmount)),3, false) :
+                   f($keyUpgrades[index]['formula']($keyUpgradeLevels[index]+Math.max(1,buyAmount)),3)}{$keyUpgrades[index]['suffix'] || ""}
+                 </span> 
+                 {#if $settings['maxBuy'] && buyAmount >= 1}
+                 (x{buyAmount})
+                 {/if}
             </div>
         </div>
         <hr />
@@ -84,6 +89,7 @@ select-none'>
     let affordable, unlocked;
     let permUnlocked = ($keyUpgradeLevels[index] > 0)
     let affordInterval;
+    let buyAmount;
     
     onMount(() => {
         setTimeout(() => {
@@ -96,6 +102,13 @@ select-none'>
             affordable = canAfford();
             unlocked = isUnlocked();
             if ($keyUpgrades[index]['unlockAt']()) permUnlocked = true;
+            if ($settings['maxBuy']) {
+                buyAmount = calcMaxBuyAmount();
+                costs = getCosts();
+            } else {
+                buyAmount = $settings['buyAmount'];
+                costs = getCosts();
+            }
         }, 100 + (Math.random() * 20))
     })
 
@@ -116,9 +129,22 @@ select-none'>
     function cost(start) {
        const base = start * Math.pow($keyUpgrades[index]['ratio'], $keyUpgradeLevels[index]);  
        const r =  $keyUpgrades[index]['ratio']
-       const l = $settings['buyAmount']
-
+       const l = Math.max(1,buyAmount)
        return formula.gSum(base,r,l)
+    }
+
+    function calcMaxBuyAmount() {
+        if ($keyUpgrades[index]['maxLevel'] == 1)
+            return $keyUpgradeLevels[index] == 0 ? 1 : 0;
+        const levelsRemaining = $keyUpgrades[index]['maxLevel'] - $keyUpgradeLevels[index];
+        let maxBuy = 1e9; // or any large number
+        for (let [type, bCost] of Object.entries($keyUpgrades[index]['cost'])) {
+            if (!$wallet[type]) return 0;
+            const base = bCost * Math.pow($keyUpgrades[index]['ratio'], $keyUpgradeLevels[index]); 
+            maxBuy = Math.min(maxBuy, 
+            formula.maxNumGeom($wallet[type], base, $keyUpgrades[index]['ratio']));
+        }
+        return Math.min(levelsRemaining, maxBuy);
     }
 
     function buy() {

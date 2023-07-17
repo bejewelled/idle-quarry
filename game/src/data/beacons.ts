@@ -186,7 +186,9 @@ export const beaconNameText = array([
     'Fame Bonus',
     'Key Finder Yield',
     'Crafting Yield',
-    'Key Droprate',]
+    'Key Droprate',
+    'Droprate Multiplier II',
+    'Antimatter Gain on Ascension']
     .concat(Array(26).fill(''))
 )
 export const beaconMiningLevelReqs = array([0,0,0,12,14,16,24,27,36,40])
@@ -199,7 +201,9 @@ export const beaconFormulas = array([
     /* fame bonus */ function(lv: number) {return 1 + Math.pow(lv,0.5)*0.02},
     /* key finder speed */ function(lv: number) {return 1 + Math.pow(lv, 0.5)*0.05},
     /* craft yield */ function(lv: number) {return 1 + (Math.pow(lv,1.2) * 0.000025)},
-    /* key droprate */ function(lv: number) {return 1 + (Math.pow(lv,0.6) * 0.003)},]
+    /* key droprate */ function(lv: number) {return 1 + (Math.pow(lv,0.6) * 0.003)},
+    /* droprate ii */ function(lv: number) {return 1 + (Math.pow(lv,0.5) * 0.001)},
+    /* antimatter */ function(lv: number) {return 1 + (Math.pow(lv,0.65) * 0.004)},]
     .concat(Array(25).fill(function(lv: number) {return 1}))
 )
 

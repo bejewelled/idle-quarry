@@ -62,7 +62,9 @@
                 {/each}
                 <!-- keys -->
                 {#each Object.entries($wallet) as res}
-                    {#if ($wallet[res[0]] || $unlockedRes.has(res[0])) && res[0].includes("key")}
+                    {#if ($wallet[res[0]] || $unlockedRes.has(res[0])) 
+                    && (res[0].includes("key") || res[0].includes("fragments"))
+                    }
                         <div
                             class="{ref.colors[res[0]]} res-name
                         has-tooltip col-span-7 text-[13px]"
@@ -161,7 +163,7 @@
                     class="py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950"
                     on:click={() => reset()}>Reset</button
                 >
-                <button class="text-xs text-gray-600">v0.0.4a-9</button>
+                <button class="text-xs text-gray-600">v0.0.5a</button>
                 <!-- mining level bar -->
                 <div class="wrapper grid grid-cols-9">
                     <div class="col-span-1 p-[1px] has-tooltip">
@@ -258,7 +260,7 @@
                     <Enchants />
                 {:else if tab === "button" && tabUnlockCriteria["button"]()}
                     <Button />
-                {:else if tab === "automation" && tabUnlockCriteria["automation"]()}
+                {:else if tab === "augments" && tabUnlockCriteria["augments"]()}
                     <Automation />
                 {:else if tab === "challenges" && tabUnlockCriteria["challenges"]()}
                     <Challenges />
@@ -441,7 +443,7 @@
         enchants: () =>
             ($wallet["fame"] && $wallet["totalFame"] >= 100) ||
             formula.sumArray($enchantUpgradeLevels) > 0,
-        automation: () =>
+        augments: () =>
             ($wallet["fame"] && $wallet["fame"] >= 0.997) ||
             formula.sumArray($enchantUpgradeLevels) > 0 ||
             $miningUpgradeLevels[10] > 0 ||
@@ -1215,19 +1217,19 @@
     }
 
     :global(.game-btn-antimatter) {
-        background-image: linear-gradient(to bottom right, #285cb1, #331c7c);
-        border-color: -webkit-linear-gradient(45deg, #3b82f6, #3730a3);
+        background-image: linear-gradient(to bottom right, #457dd7, #4b329d);
+        border-color: -webkit-linear-gradient(45deg, #457dd7, #4b329d);
         border: 1px solid white;
-        text-color: white;
+        color: white;
         cursor: pointer;
     }
     :global(.game-btn-antimatter:hover) {
-        background-image: linear-gradient(to bottom right, #457cd5, #593cbb);
+        background-image: linear-gradient(to bottom right, #6a98e2, #6b50c3);
         cursor: pointer;
     }
     :global(.game-btn-antimatter-noafford) {
-        background-image: linear-gradient(to bottom right, #18396d, #150c32);
-        color: #285cb1;
+        background-image: linear-gradient(to bottom right, #4067a5, #201542);
+        color: #4b82db;
         cursor: pointer;
     }
 

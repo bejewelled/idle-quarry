@@ -4,7 +4,7 @@
         class="text-center items-center justify-center text-3xl font-bold
 bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparent select-none"
     >
-        Ascension
+        Ascension {$ascensionStats['ascensionCount'] + 1}
     </div>
     <div class="py-2"><AscensionButton /></div>
 

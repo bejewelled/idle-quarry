@@ -114,7 +114,6 @@ const BUTTON_SIZE= 100;
 
     $buttonStats['totalClicks']++;
 
-    const isLucky = Math.random() < $buttonUpgrades[5]['formula']($buttonUpgradeLevels[5]);
     const warpAdder = Math.random() < $buttonUpgrades[6]['formula']($buttonUpgradeLevels[6]);
 
     if (warpAdder) $wallet['warp'] = ($wallet['warp'] || 0) + Math.ceil(Math.random()*45);
@@ -162,6 +161,18 @@ const BUTTON_SIZE= 100;
     rewardAmount = rewardAmount 
     * formula.calcButtonRewardBonus()
     * formula.getAntimatterBonusAmount(2);
+
+    
+    const isLucky = Math.random() < $buttonUpgrades[5]['formula']($buttonUpgradeLevels[5]);
+
+    if (isLucky) {
+        console.log('sd')
+        const mplr = 8 + Math.round(Math.random() * 12);
+        rewardAmount *= mplr;
+    }
+   
+    if (isLucky)rewardDescriptionText += ' [ LUCKY! ]';
+
     $radiumGainText = '+ ' + f(rewardAmount)
 
     if (rewardAmount + $buttonRadiumProgress[0] > $buttonRadiumProgress[1])
@@ -183,13 +194,6 @@ const BUTTON_SIZE= 100;
     }, 375)
     
     let mplr;
-    if (isLucky) {
-        mplr = 8 + Math.round(Math.random() * 12);
-        rewardAmount *= mplr;
-    }
-   
-    if (isLucky)rewardDescriptionText += ' [ LUCKY! ]';
-
 
     // star gain
     if (absDist < ref.buttonDistances['perfect'] && $buttonUpgradeLevels[7] > 0) {
@@ -214,11 +218,9 @@ const BUTTON_SIZE= 100;
       const MID_X = (MAX_X + MIN_X) / 2;
       const MID_Y = (MAX_Y + MIN_Y) / 2;
       const moveMulti = $buttonUpgrades[0]['formula']($buttonUpgradeLevels[0]);
-      console.log(moveMulti)
       // find a new location then multiply the distance by the multiplier
       let newX = MID_X + ((Math.random() * (MAX_X - MIN_X)) - ((MAX_X - MIN_X) / 2)) * moveMulti;
       let newY = MID_Y + ((Math.random() * (MAX_Y - MIN_Y)) - ((MAX_Y - MIN_Y) / 2)) * moveMulti;
-      console.log(newX-MID_X, newY-MID_Y)
       if (newX < MIN_X) newX = MIN_X;
       if (newX > MAX_X) newX = MAX_X;
       if (newY < MIN_Y) newY = MIN_Y;

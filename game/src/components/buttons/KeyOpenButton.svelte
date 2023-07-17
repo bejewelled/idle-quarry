@@ -35,6 +35,9 @@ select-none"
 </div>
 
 <script>
+// @ts-nocheck
+
+	import { automationItemsUnlocked } from './../../data/player.ts';
     // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte'
@@ -64,7 +67,10 @@ select-none"
     import { keyRewardText } from '../../data/keys'
     import { combinations } from 'mathjs'
     // @ts-nocheck
-    export let rarity, amt
+    /**
+     * @type {string | number}
+     */
+     export let rarity, amt
     let affordable, unlocked
     let affordInterval
 
@@ -122,6 +128,7 @@ select-none"
     function openKeys(amt) {
         amt = Number(amt)
         let rewards = {}
+        if ($automationItemsUnlocked['violent openings']) rewards['fragments'] = amt * 0.01
         $keysOpened[rarity - 1] += Number(amt)
         let dropTable
         switch (rarity) {
@@ -202,10 +209,8 @@ select-none"
                         rewardVal = Math.min(rewardVal, amt * vals[0] * 0.33)
                     }
                 }
-                rewards[type] = (rewards[type] || 0) + Math.floor(rewardVal)
-                if (type.includes('key')) {
-                    rewards[type] = Math.min(rewards[type] * 0.33, amt)
-                }
+                rewards[type] = (rewards[type] || 0) + rewardVal
+
             }
             // NEW
             else if (amt * vals[0] >= 1) {
@@ -231,8 +236,7 @@ select-none"
                 const rewardVal =
                     (val[Math.floor(Math.random() * val.length)] +
                         val[Math.floor(Math.random() * val.length)] +
-                        val[Math.floor(Math.random() * val.length)]) /
-                    3
+                        val[Math.floor(Math.random() * val.length)]) / 3
 
                 rewards[type] = (rewards[type] || 0) + numWins * rewardVal
                 // if E[x] < 1

@@ -168,7 +168,7 @@ export const enchantUpgrades = array([{
 {
     index: 2,
     name: 'Burst',
-    description: 'Has a chance to clear a mine level, instantly giving mining cycles (the number of mining cycles is equal to mine size).',
+    description: 'Has a chance to clear a mine level, instantly giving mining cycles based on mine size.',
     cost: {
         fame: 30,
     },
@@ -446,6 +446,26 @@ export const automationUpgrades = array([{
         trophies: 3,
     },
     unlockAt: () => (get(automationItemsUnlocked)['spellcaster'] !== undefined),
+    isPercent: true,
+},
+{
+    index: 12,
+    name: 'Violent Openings',
+    description: 'Opening keys gives key fragments.',
+    cost: {
+        antimatter: 45,
+    },
+    unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1),
+    isPercent: true,
+},
+{
+    index: 13,
+    name: 'Abundance',
+    description: 'Key Finder 1-3 gains a 4,096x / 16x / 2x multiplier to yield.',
+    cost: {
+        antimatter: 270,
+    },
+    unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1),
     isPercent: true,
 },
 

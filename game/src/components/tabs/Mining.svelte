@@ -8,7 +8,7 @@
           <!-- Drop Table Display -->
           
           {#each Object.entries($miningDropTable).sort((a,b) => b[1][0] - a[1][0]) as drop}
-            {#if $visibleTier >= ref.dropTiers[drop[0]]}
+            {#if $visibleTier >= drop[1][4]}
             <div class='drop-table-disp grid grid-cols-9'>
                 <div class='col-span-1 text-left {ref.dropTierColors[ref.dropTiers[drop[0]]] ||'text-white'}'>
                 [{romanNumerals[Math.max(0,ref.dropTiers[drop[0]]-1)]}]

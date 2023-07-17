@@ -1,5 +1,5 @@
 import {buttonUpgradeLevels, miningUpgradeLevels, keyUpgradeLevels,
-keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet, ascensionLevels, ascensionStats} from '../data/player';
+keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet, ascensionLevels, ascensionStats, automationItemsUnlocked} from '../data/player';
 import { beaconBonuses } from '../data/beacons';
 import {keyUpgrades, keyCrafts} from '../data/keys'
 import { get } from 'svelte/store';
@@ -90,6 +90,11 @@ export default class formula {
       }
       console.log(sum);
       return sum;
+    }
+
+    static calcAntimatterGain() {
+      return this.sumEssence()
+      * 1;
     }
 
     static calcEssenceXPGain(e: string) {
@@ -198,13 +203,13 @@ export default class formula {
   }
 
   static calcKeySlurryGain(obj: { [x: string]: number; }) {
-    let amount = ((Math.pow(obj['key1'], 0.7) || 0)*0.02
-    + (Math.pow(obj['key2'], 0.85) || 0)*0.2
-    + (Math.pow(obj['key3'], 0.93) || 0)*18
-    + (Math.pow(obj['key4'], 0.98) || 0)*16500
-    + (Math.pow(obj['key5'], 0.999) || 0)*1.45e9)
+    let amount = ((Math.pow(obj['key1'], 0.65) || 0)*1e-3
+    + (Math.pow(obj['key2'], 0.7) || 0)*1e-1
+    + (Math.pow(obj['key3'], 0.75) || 0)*1e3
+    + (Math.pow(obj['key4'], 0.8) || 0)*1e7
+    + (Math.pow(obj['key5'], 0.85) || 0)*1e13)
     * get(keyUpgrades)[1]['formula'](get(keyUpgradeLevels)[1]) 
-    * formula.getAntimatterBonusAmount(3);
+    * formula.getAntimatterBonusAmount(3); // get antimatter bonus if # of ascensions is 3 or more
     if (isNaN(amount)) {
       alert('note: this feature is bugged, please report this on Discord - reduced slurry gained (using "safe" formula)')
       return obj['key1'] / 8e5;
@@ -213,6 +218,10 @@ export default class formula {
   
   }
   
+  static calcFragmentGain(t: number, amt: number) {
+    return amt / (Math.pow(10, 6-t));
+  }
+
   static calcKeySigilGain(sl: number) {
     if (sl < 1000 || get(keyUpgradeLevels)[3] == 0) return 0;
     else return Math.pow((sl**2 / 1000**2), 0.45)
@@ -248,7 +257,7 @@ export default class formula {
     const y = (get(wallet)['radium'] || 0);
     return (y < 100 ? 
       30 * Math.pow(y, 2)*0.01 :
-      3000 + Math.pow(y - 100, 0.825)* 16)
+      3000 + Math.pow(y - 100, 0.9)* 8)
       * get(miningUpgrades)[29]['formula'](get(miningUpgradeLevels)[29])
       * ascFormula.getVal('earth')
   }
@@ -266,5 +275,11 @@ export default class formula {
   static calcMiningCostRatio(n: number) {
     return Math.max(1.025, 
       1 + ((n-1) * (get(miningUpgrades)[32]['formula'](get(miningUpgradeLevels)[32]))))
+  }
+
+  static calcKeyFinderAbundanceBonus(t: number) {
+    if (!get(automationItemsUnlocked)['abundance']) return 1;
+    const bonuses = [4096, 16, 2, 1, 1]
+    return bonuses[t-1];
   }
 }

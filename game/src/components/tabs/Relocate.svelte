@@ -179,6 +179,12 @@ const fameGridInfo = [
      criteria: () => ($wallet['totalFame'] > 200 || $wallet['fame'] > 200
      || $miningUpgradeLevels[16] > 0 || $miningUpgradeLevels[17] > 0 || $miningUpgradeLevels[19] > 0)
     },
+    {
+     name: 'Phantom Legend', 
+     value: () => ($miningUpgrades[37]['formula']($miningUpgradeLevels[37])),
+     colorRef: 'antimatter',
+     criteria: () => ($wallet['antimatter'] > 0 || $wallet['totalAntimatter'] > 0)
+    },
 ]
 
 // make sure to update the description when updating this!
@@ -190,6 +196,7 @@ function calcFameGain() {
     * $miningUpgrades[16]['formula']($miningUpgradeLevels[16]) // legendary i - iii 
     * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])
     * $miningUpgrades[19]['formula']($miningUpgradeLevels[19])
+    * $miningUpgrades[37]['formula']($miningUpgradeLevels[37]) // phantom legend
     * $beaconFormulas[4]($beaconLevels[4]) // beacon path
 }
 

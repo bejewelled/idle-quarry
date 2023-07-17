@@ -343,7 +343,7 @@
 
         // add radium
         $wallet['crystals'] +=
-            (delta * formula.calcCrystalGainFromRadium()) / UPDATE_SPEED
+            (delta * formula.calcCrystalGainFromRadium()) / UPDATE_SPEED / 2
 
         // optimize out of focus
         // if (delta > 16) {
@@ -562,7 +562,9 @@
             KEY1_BASE *
             $beaconBonuses[5] *
             $miningUpgrades[5]['formula']($miningUpgradeLevels[5]) *
-            $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
+            $miningUpgrades[26]['formula']($miningUpgradeLevels[26]) *
+            formula.calcKeyFinderAbundanceBonus(1)
+
         $wallet['key1'] = ($wallet['key1'] || 0) + key1Gain * n
         $progress['key1'] %= keyAt[0]
         $keyGainFlavorText['key1'] = key1Gain
@@ -578,7 +580,8 @@
             KEY2_BASE *
             $beaconBonuses[5] *
             $miningUpgrades[5]['formula']($miningUpgradeLevels[5]) *
-            $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
+            $miningUpgrades[26]['formula']($miningUpgradeLevels[26])* 
+            formula.calcKeyFinderAbundanceBonus(2)
 
         $wallet['key2'] = ($wallet['key2'] || 0) + key2Gain * n
         $progress['key2'] %= keyAt[1]
@@ -595,7 +598,8 @@
             KEY3_BASE *
             $beaconBonuses[5] *
             $miningUpgrades[5]['formula']($miningUpgradeLevels[5]) *
-            $miningUpgrades[26]['formula']($miningUpgradeLevels[26])
+            $miningUpgrades[26]['formula']($miningUpgradeLevels[26])*
+            formula.calcKeyFinderAbundanceBonus(3)
 
         $wallet['key3'] = ($wallet['key3'] || 0) + key3Gain * n
         $progress['key3'] %= keyAt[2]
@@ -609,7 +613,7 @@
     function dropRoll(n) {
         let rewards = {}
         for (let [item, vals] of Object.entries($miningDropTable)) {
-            if ($visibleTier >= ref.dropTiers[item]) {
+            if ($visibleTier >= vals[4]) {
                 // when P(x) >= 1
                 if (vals[0] >= 1) {
                     rewards[item] =
@@ -945,16 +949,16 @@
                     case 1:
                         break
                     case 2: // burst
-                        addGems(size)
+                        addGems(size / 15)
                         addToActivityLog(
-                            '[Burst] +' + f(size) + ' mining cycles',
+                            '[Burst] +' + f(size / 15) + ' mining cycles',
                             'text-violet-300',
                             'burst'
                         )
                         break
                     case 3: // orb rush
                         const val =
-                            (Math.random() + 0.3) * Math.pow(1 + quality, 3)
+                            (Math.random() + 0.3) * Math.pow(1 + (quality/20), 3.5)
                         $wallet['orbs'] += val
                         addToActivityLog(
                             '[Orb Rush] +' + f(val) + ' orbs',

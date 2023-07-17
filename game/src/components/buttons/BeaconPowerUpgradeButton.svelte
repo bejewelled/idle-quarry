@@ -7,7 +7,10 @@
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none"
 >
-    {$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index], 0)}]
+    {$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index], 0)}] 
+    {#if $settings['maxBuy'] && buyAmount >= 1}
+    (+{buyAmount})
+    {/if}
     {#key $resources['beaconPower']}
         <span
             class="px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
@@ -42,16 +45,14 @@ select-none"
                             ''}{$beaconUpgrades[index]['isPercent']
                             ? fp(
                                   $beaconUpgrades[index]['formula'](
-                                      $beaconUpgradeLevels[index] +
-                                          $settings['buyAmount']
+                                      $beaconUpgradeLevels[index]+Math.max(1,buyAmount),3
                                   ),
                                   3,
                                   true
                               )
                             : f(
                                   $beaconUpgrades[index]['formula'](
-                                      $beaconUpgradeLevels[index] +
-                                          $settings['buyAmount']
+                                     $beaconUpgradeLevels[index]+Math.max(1,buyAmount),3
                                   ),
                                   3
                               )}{$beaconUpgrades[index]['suffix'] || ''}
@@ -118,6 +119,7 @@ select-none"
     let affordable, unlocked
     let permUnlocked = $beaconUpgradeLevels[index] > 0
     let affordInterval
+    let buyAmount;
 
     onMount(() => {
         setTimeout(() => {
@@ -126,6 +128,12 @@ select-none"
         }, 50)
         affordInterval = setInterval(() => {
             affordable = canAfford()
+            if ($settings['maxBuy']) {
+                buyAmount = calcMaxBuyAmount();
+                costs = getCosts();
+            } else {
+                buyAmount = $settings['buyAmount'];
+            }
         }, 100 + Math.random() * 20)
     })
 
@@ -162,9 +170,23 @@ select-none"
                 $beaconUpgradeLevels[index]
             )
         const r = $beaconUpgrades[index]['ratio']
-        const l = $settings['buyAmount']
+        const l = Math.max(1,buyAmount)
 
         return formula.gSum(base, r, l)
+    }
+
+    function calcMaxBuyAmount() {
+        if ($beaconUpgrades[index]['maxLevel'] == 1)
+            return $beaconUpgradeLevels[index] == 0 ? 1 : 0;
+        const levelsRemaining = $beaconUpgrades[index]['maxLevel'] - $beaconUpgradeLevels[index];
+        let maxBuy = 1e9; // or any large number
+        for (let [type, bCost] of Object.entries($beaconUpgrades[index]['cost'])) {
+            if (!$wallet[type]) return 0;
+            const base = bCost * Math.pow($beaconUpgrades[index]['ratio'], $beaconUpgradeLevels[index]); 
+            maxBuy = Math.min(maxBuy, 
+            formula.maxNumGeom($wallet[type], base, $beaconUpgrades[index]['ratio']));
+        }
+        return Math.min(levelsRemaining, maxBuy);
     }
 
     function buy() {

@@ -189,7 +189,7 @@ export const key1DropTable = dropTable({
     orbs: [0.4, 3, 10, 0.4, 0.9], 
     gold: [0.2, 10, 20, 0.2, 0.9],
     beacons: [0.025, 1, 1, 0.025, 0.1],
-    key2: [(1/2500), 1, 1, (1/2500), 0.01],
+    key2: [(1/2700), 1, 1, (1/2500), 0.01],
 })
 
 export const key2DropTable = dropTable({
@@ -199,7 +199,7 @@ export const key2DropTable = dropTable({
     orbs: [0.15, 3200, 18000, 0.15, 0.6],
     sigils: [0.11, 1, 1, 0.11, 0.6],
     beacons: [0.06, 250, 1000, 0.06, 0.6],
-    key3: [(1/120000), 1, 1, (1/120000), 0.001],
+    key3: [(1/130000), 0.67, 0.9, (1/120000), 0.001],
 })
 
 export const key3DropTable = dropTable({
@@ -211,8 +211,8 @@ export const key3DropTable = dropTable({
     orbs: [0.06, 2.2e6, 1.1e7, 0.06, 0.25],
     beacons: [0.04, 1000, 3500, 0.04, 0.25],
     sigils: [0.035, 45, 160, 0.035, 0.25],
-    artifacts: [4.2e-7, 1, 1, 4.2e-6, 0.001],
-    key4: [(1/1e7), 1, 1, (1/1e7), 0.0001]
+    artifacts: [4.2e-7, 0.65, 1, 4.2e-6, 0.001],
+    key4: [(1/1e7), 0.125, 0.27, (1/1e7), 0.0001]
     
 })
 
@@ -245,14 +245,14 @@ export const keyProgressFlavorNextUpdate = single(Date.now()+500)
 export const keyUpgrades = array([
     {
         index: 0,
-        name: 'Mysterious Potion',
+        name: 'Mystic Potion',
         description: 'Concoct a potion that improves key rates for ALL keys.',
         cost: {
             slurry: 100,
             sigils: 100,
         },
         ratio: 1.3,
-        formula: (lv: any) => 1 + 0.2*Math.pow(lv, 0.8),
+        formula: (lv: any) => 1 + 0.15*Math.pow(lv, 0.875),
         unlockAt: () => (get(wallet)['slurry'] > 0),
         isPercent: false,
         suffix: 'x droprates',
@@ -279,7 +279,7 @@ export const keyUpgrades = array([
         name: 'Rift Control',
         description: 'Decreases the cost ratio for energized crystals.',
         cost: {
-            slurry: 1e10,
+            slurry: 1e5,
         },
         ratio: 1e5,
         formula: (lv: any) => 10 - lv,
@@ -313,9 +313,10 @@ export const keyUpgrades = array([
         },
         ratio: 10,
         formula: (lv: any) => 1 + lv * 0.25,
-        unlockAt: () => (get(wallet)['antimatter'] >= 190 || get(wallet)['totalAntimatter'] >= 190),
-        isPercent: true,
-        suffix: ' craft bonus',
+        unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1)
+        && (get(wallet)['slurry'] >= 1),
+        isPercent: false,
+        suffix: ' craft yields',
         maxLevel: 40,
         notes: ''
     },

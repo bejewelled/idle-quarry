@@ -34,6 +34,9 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
                    fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+Math.max(1,buyAmount)),3, true) :
                    f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+Math.max(1,buyAmount)),3)}{$miningUpgrades[index]['suffix'] || ""}
                  </span>
+                 {#if $settings['maxBuy'] && buyAmount >= 1}
+                 (x{buyAmount})
+                 {/if}
 
             </div>
         </div>
@@ -125,8 +128,7 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
         const r =  formula.calcMiningCostRatio($miningUpgrades[index]['ratio'])
         const base = start * Math.pow(r, $miningUpgradeLevelsBought[index]);  
         const l = (Math.max(1, buyAmount));
-        if (index == 2) console.log(r);
-        if (index == 2) console.log(formula.gSum(base,r,l))
+    
         return formula.gSum(base,r,l)
     }
 

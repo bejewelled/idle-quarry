@@ -860,6 +860,24 @@ export const miningUpgrades = array([{
     style: 'game-btn-antimatter',
     notes: ''
 },
+{
+    index: 37,
+    sortType: ['antimatter'],
+    name: 'Phantom Legend',
+    description: 'Increases fame gain on relocation.',
+    cost: {
+        antimatter: 5,
+    },
+    ratio: 150,
+    unlockAt: () => (get(wallet)['antimatter'] > 0),
+    formula: (lv: any) => 1 + 0.4*Math.pow(lv,2),
+    noResetRelocate: true,
+    isPercent: false,
+    suffix: 'x fame gain',
+    maxLevel: 10,
+    style: 'game-btn-antimatter',
+    notes: ''
+},
 
 
 ]);

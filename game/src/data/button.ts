@@ -187,7 +187,7 @@ export const buttonUpgrades = array([
     name: 'Insanity!',
     description: 'Your lifetime Incredible and Perfect clicks increase mining speed; Perfect clicks have a drastically higher impact.',
     cost: {
-        radium: 500,
+        radium: 25,
     },
     ratio: 4e150,
     formula: (lv: any) => 1 + 
@@ -251,9 +251,9 @@ export const buttonUpgrades = array([
     name: 'Celestial Shattering',
     description: 'Legends say the perfect click can shatter the fabric of space itself...',
     cost: {
-        radium: 1000,
+        radium: 125,
     },
-    ratio: 4,
+    ratio: 40,
     formula: (lv: any) => 111111,
     unlockAt: () => (get(wallet)['crystals'] > 1e6),
     isRadiumUpgrade: true,

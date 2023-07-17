@@ -186,7 +186,8 @@ function dropTable(context: any) {
                         * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11])
                         * ((item === 'gold' || item === 'orbs')
                         ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1)),
-                        val[3]
+                        val[3],
+                        val[4]
                     ]
                     if (get(miningUpgradeLevels)[15] > 0 && i[item][0] > 1) {
                         i[item][1] += Math.max(0, Math.pow(
@@ -236,36 +237,44 @@ export const miningUpgradeLevelsTemp = array(Array(200).fill(0));
 export const keyUpgradeLevels = array(Array(50).fill(0));
 
 export const baseMiningDropTable = dropTable({
-    gold: [0.20,1,3,1], // 20% chance to drop 1 - 3 gold, softcap at 100%
-    key1: [0.025,1,1,0.25], 
-    orbs: [0.007,1,1,0.25],
+    gold: [0.20,1,3,1,1], // 20% chance to drop 1 - 3 gold, softcap at 100%, min tier 1 (lm0)
+    key1: [0.025,1,1,0.25, 1], 
+    orbs: [0.007,1,1,0.25, 1],
     //lm1
-    beacons: [0.005,1,1, 0.1],
-    crystals: [0.002,0.4,0.9, 0.1],
+    beacons: [0.005,1,1, 0.1, 2],
+    crystals: [0.002,0.4,0.9, 0.1, 2],
     //lm2
-    sigils: [0.0003,0.08,0.27, 0.02],
-    key2: [0.0001,0.04, 0.16, 0.02],
+    sigils: [0.0003,0.08,0.27, 0.02, 3],
+    key2: [0.0001,0.04, 0.16, 0.02, 3],
     //lm3
-    dust: [1e-6, 0.06, 0.28, 0.0025],
-    key3: [2e-7,0.01,0.03, 0.0025],
-    artifacts: [3.3e-8, 0.04, 0.05, 1e-5],
+    dust: [1e-6, 0.06, 0.28, 0.0025, 4],
+    key3: [2e-7,0.01,0.03, 0.0025, 4],
+    artifacts: [3.3e-8, 0.04, 0.05, 1e-5, 4],
+    //lm4
+    radium: [1e-7, 0.01, 0.02, 1e-4, 5],
+    energy: [1e-9, 0.003, 0.007, 1e-6, 5],
+    void: [1e-13, 1e-6, 3e-6, 1e-7, 5]
 
 });
 
 export const miningDropTable = dropTable({
-    gold: [0.20,1,3,1], // 20% chance to drop 1 - 3 gold, softcap at 100%
-    key1: [0.025,1,1,0.25], 
-    orbs: [0.007,1,1,0.25],
+    gold: [0.20,1,3,1,1], // 20% chance to drop 1 - 3 gold, softcap at 100%, min tier 1 (lm0)
+    key1: [0.025,1,1,0.25, 1], 
+    orbs: [0.007,1,1,0.25, 1],
     //lm1
-    beacons: [0.005,1,1, 0.1],
-    crystals: [0.002,0.4,0.9, 0.1],
+    beacons: [0.005,1,1, 0.1, 2],
+    crystals: [0.002,0.4,0.9, 0.1, 2],
     //lm2
-    sigils: [0.0003,0.08,0.27, 0.02],
-    key2: [0.0001,0.04, 0.16, 0.02],
+    sigils: [0.0003,0.08,0.27, 0.02, 3],
+    key2: [0.0001,0.04, 0.16, 0.02, 3],
     //lm3
-    dust: [1e-6, 0.06, 0.28, 0.0025],
-    key3: [2e-7,0.01,0.03, 0.0025],
-    artifacts: [3.3e-8, 0.04, 0.05, 1e-5],
+    dust: [1e-6, 0.06, 0.28, 0.0025, 4],
+    key3: [2e-7,0.01,0.03, 0.0025, 4],
+    artifacts: [3.3e-8, 0.04, 0.05, 1e-5, 4],
+    //lm4
+    radium: [1e-7, 0.01, 0.02, 1e-4, 5],
+    energy: [1e-9, 0.003, 0.007, 1e-6, 5],
+    void: [1e-13, 1e-6, 3e-6, 1e-7, 5]
 
 });
 

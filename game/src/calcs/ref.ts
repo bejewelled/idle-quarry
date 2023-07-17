@@ -21,6 +21,7 @@ export default class ref {
         warp: "text-emerald-600",
         trophies: "text-amber-500",
         dust: "text-indigo-600",
+        fragments: "text-sky-600",
         stars: "text-transparent text-stone-100 bg-clip-text bg-gradient-to-br from-fuchsia-300 to-violet-700",
         efire: "text-orange-400 text-shadow-gray",
         eearth: "text-emerald-200 text-shadow-gray",
@@ -85,6 +86,7 @@ export default class ref {
 
     static dropTiers = {
         default: 1,
+        fragments: 999,
         gems: 0,
         gold: 1,
         key1: 1,
@@ -97,19 +99,20 @@ export default class ref {
         slurry: 3,
         sigils: 3,
         radium: 3,
+        stars: 3,
         artifacts: 4,
         key3: 4,
         warp: 4,
         trophies: 4,
         dust: 4,
-        key4: 4,
+        key4: 5,
         efire: 5,
         eearth: 5,
         emagic: 5,
         ewater: 5,
-        ecelestial: 5,
-        stars: 3,
+        ecelestial: 5,      
         antimatter: 5,
+        void: 6,
     };
 
     static keyMainNames = {
@@ -135,7 +138,7 @@ export default class ref {
         "button",
         "relocate",
         "enchants",
-        "automation",
+        "augments",
         "challenges",
         "artifacts",
         "ascension",
@@ -217,11 +220,11 @@ export default class ref {
 
     static buttonBaseRewards = {
         okay: 1000,
-        good: 5000,
+        good: 4000,
         great: 9000,
-        excellent: 14000,
-        incredible: 24000,
-        perfect: 50000,
+        excellent: 13000,
+        incredible: 21000,
+        perfect: 40000,
     };
 
     static buttonColors = {
