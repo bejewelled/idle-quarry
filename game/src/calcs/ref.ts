@@ -30,6 +30,7 @@ export default class ref {
         ecelestial: "text-violet-300 text-shadow-gray",
         radium: "text-lime-300",
         antimatter:  "text-transparent text-stone-100 bg-clip-text bg-gradient-to-br from-blue-500 to-indigo-800",
+        void: "text-gray-800",
     };
 
     static essenceBgColors = [

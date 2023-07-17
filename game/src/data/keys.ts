@@ -189,7 +189,7 @@ export const key1DropTable = dropTable({
     orbs: [0.4, 3, 10, 0.4, 0.9], 
     gold: [0.2, 10, 20, 0.2, 0.9],
     beacons: [0.025, 1, 1, 0.025, 0.1],
-    key2: [(1/2700), 1, 1, (1/2500), 0.01],
+    key2: [(1/2700), 1, 1, (1/2500), 0.04],
 })
 
 export const key2DropTable = dropTable({
@@ -199,7 +199,7 @@ export const key2DropTable = dropTable({
     orbs: [0.15, 3200, 18000, 0.15, 0.6],
     sigils: [0.11, 1, 1, 0.11, 0.6],
     beacons: [0.06, 250, 1000, 0.06, 0.6],
-    key3: [(1/130000), 0.67, 0.9, (1/120000), 0.001],
+    key3: [(1/130000), 0.67, 0.9, (1/120000), 0.004],
 })
 
 export const key3DropTable = dropTable({
@@ -212,7 +212,7 @@ export const key3DropTable = dropTable({
     beacons: [0.04, 1000, 3500, 0.04, 0.25],
     sigils: [0.035, 45, 160, 0.035, 0.25],
     artifacts: [4.2e-7, 0.65, 1, 4.2e-6, 0.001],
-    key4: [(1/1e7), 0.125, 0.27, (1/1e7), 0.0001]
+    key4: [(1/1e7), 0.125, 0.27, (1/1e7), 0.0004]
     
 })
 
@@ -225,7 +225,6 @@ export const key4DropTable = dropTable({
     orbs: [0.016, 5e7, 1e9, 0.016],
     sigils: [0.016, 2500, 10000, 0.016],
     artifacts: [0.00005, 15, 50, 0.00005],
-    key4: [(1/5e5), 1, 1, (1/5e5)],
     key5: [(1/1e11), 1, 1, (1/1e11)]
 })
 

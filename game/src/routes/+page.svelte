@@ -459,8 +459,9 @@
         settings: () => true,
         challenges: () => $automationItemsUnlocked["game on"],
         artifacts: () => $wallet["artifacts"] && $wallet["artifacts"] >= 1,
-        ascension: () => (formula.sumArray($challengesCompleted) >= 25
-        || $ascensionLevels['antimatter'][1] > 0 || $ascensionLevels['antimatter'][0] > 0),
+        ascension: () => ($wallet['fame'] > 1e15
+        || $ascensionLevels['antimatter'][1] > 0 || $ascensionLevels['antimatter'][0] > 0
+        || $ascensionStats['ascensionCount'] > 0),
     };
     const tabsUnlocked = {
         mining: true,
