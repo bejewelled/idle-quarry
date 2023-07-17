@@ -156,7 +156,7 @@ export default class ref {
         challenges: "Buy challenges with fame to unlock.",
         artifacts: "Find an artifact with a T3 [***] or higher key to unlock.",
         mastery: "???",
-        ascension: "Gain a total of 25 trophies.",
+        ascension: "Obtain 1e15 fame.",
         button: "Reach Mining Level 8 to unlock.",
     };
 
