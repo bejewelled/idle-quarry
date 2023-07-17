@@ -128,7 +128,8 @@ select-none"
     function openKeys(amt) {
         amt = Number(amt)
         let rewards = {}
-        if ($automationItemsUnlocked['violent openings']) rewards['fragments'] = amt * 0.01
+        if ($automationItemsUnlocked['violent openings']) 
+            rewards['fragments'] = (amt * Math.pow(10, rarity*3 - 11))
         $keysOpened[rarity - 1] += Number(amt)
         let dropTable
         switch (rarity) {

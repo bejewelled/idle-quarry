@@ -456,7 +456,7 @@ export const automationUpgrades = array([{
 {
     index: 12,
     name: 'Violent Openings',
-    description: 'Opening keys gives key fragments.',
+    description: 'Opening a lot of keys at once gives key fragments.',
     cost: {
         antimatter: 45,
     },
