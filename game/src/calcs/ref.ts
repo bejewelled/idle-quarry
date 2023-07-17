@@ -84,6 +84,7 @@ export default class ref {
         totalFame: true,
         challengePoints: true,
         totalAntimatter: true,
+        beaconPower: true,
     };
 
     static dropTiers = {
