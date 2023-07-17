@@ -144,12 +144,6 @@
                         : 'control-btn'}"
                     on:click={() => toggleMaxBuy()}
                     >Buy Max
-                    <span
-                        class="px-2 mx-4 tooltip tooltip-text shadow-lg p-1
-                    border-white border-double border bg-[#222529] ml-16
-                      pointer-events-none max-w-[300px] text-center weight-bold"
-                        >Buy Max only works on Mining and Enchant upgrades.</span
-                    >
                 </button>
                 <button
                     class="py-1 px-1 text-small save-btn control-btn"
@@ -161,9 +155,11 @@
                 >
                 <button
                     class="py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950"
-                    on:click={() => reset()}>Reset</button
-                >
-                <button class="text-xs text-gray-600">v0.0.5a</button>
+                    on:click={() => reset()}>Reset</button>
+                <button class="text-xs text-gray-600">game speed (x{$settings['speed']})</button>
+                <input id="default-range" type="range" bind:value={$settings['speed']} min="1" max="100" 
+                class="w-1/6 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                <button class="text-xs text-gray-600">v0.0.5a-TEST</button>
                 <!-- mining level bar -->
                 <div class="wrapper grid grid-cols-9">
                     <div class="col-span-1 p-[1px] has-tooltip">
@@ -419,6 +415,15 @@
         if (!$settings["maxBuy"]) $settings["maxBuy"] = false;
         $settings["maxBuy"] = !$settings["maxBuy"];
     };
+
+    $: speedText = ''
+    const toggleSpeed = () => {
+        if (!$settings["speed"]) $settings["speed"] = 1;
+        $settings["speed"] = ($settings["speed"] + 1) % 3;
+        if ($settings["speed"] == 0) speedText = 'Normal'
+        else if ($settings["speed"] == 1) speedText = 'Fast (x3)'
+        else if ($settings["speed"] == 2) speedText = 'Ultimate (x50)'
+    }
     /**
      * number formatting
      */
@@ -893,7 +898,7 @@
         $wallet["energizedCrystal"] = undefined;
         console.log($saveVersion);
         const ver = $saveVersion;
-        const LATEST_VER = 26;
+        const LATEST_VER = 28;
         if (ver <= 0) {
             // fix "mysterious potion" error
             $keyUpgradeLevels[0] = 0;
@@ -1020,6 +1025,9 @@
                 celestial: [1, 0, 15], 
                 antimatter: [1, 0, 35],
             }
+        }
+        if (ver < 28) {
+            $settings['speed'] = 1;
         }
 
         $saveVersion = LATEST_VER;
@@ -1166,11 +1174,38 @@
         color: #c4b5fd;
         cursor: pointer;
     }
+
+    :global(.game-btn-encht1:hover) {
+        border: 1px solid #dbd3fb;
+        color: #dbd3fb;
+        background-color: #2e2a4e;
+        cursor: pointer;
+    }
     :global(.game-btn-encht1-noafford) {
         border: 1px solid #625b7e;
         color: #625b7e;
         cursor: pointer;
     }
+
+    :global(.game-btn-encht2) {
+        border: 1px solid #5e9460;
+        color: #5e9460;
+        cursor: pointer;
+    }
+
+    :global(.game-btn-encht2:hover) {
+        border: 1px solid #7fbf8a;
+        color: #7fbf8a;
+        background-color: #2e4e2a;
+        cursor: pointer;
+    }
+
+    :global(.game-btn-encht2-noafford) {
+        border: 1px solid #3a5e3a;
+        color: #3a5e3a;
+        cursor: pointer;
+    }
+
     :global(.game-btn-fame) {
         border: 1px solid #fb923c;
         color: #fb923c;

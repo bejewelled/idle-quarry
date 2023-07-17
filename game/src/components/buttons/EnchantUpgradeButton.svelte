@@ -16,7 +16,10 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
        border-white border-double border bg-[#222529] ml-16
          pointer-events-none'>
          <div class='title text-small-gray items-start text-center pb-1'>
-            {$enchantUpgrades[index]['description']}
+            {$enchantUpgrades[index]['description']} 
+            {#if $enchantUpgrades[index]['name'] == 'Rift Tearing'}
+            <span class='text-[#7fbf8a] font-bold'> (Enchants in green only fire when the green bar fills.) </span>
+            {/if}
         </div>
         <div class='text-center effect-wrapper'>
             <div class='tooltip-text-xs text-[#cccccc]'>

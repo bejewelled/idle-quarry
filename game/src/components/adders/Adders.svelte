@@ -126,12 +126,11 @@
     const UPDATE_SPEED = $settings['UPDATE_SPEED'] // ms per tick
     let last, dt
     let beaconUpdateCounter = 0
-    const TEST_SERVER_SPEEDUP = 1
     onMount(() => {
         updateBeaconBonuses()
         last = Date.now()
         const mainLoop = setInterval(() => {
-            dt = (TEST_SERVER_SPEEDUP * (Date.now() - last)) / UPDATE_SPEED
+            dt = (Date.now() - last) / UPDATE_SPEED
             addProgress(dt)
             updateMiningLevel()
             checkForKeyCraftCompletion()
@@ -199,7 +198,10 @@
             )
         }
 
-        const GLOBAL_MULTI = formula.getAntimatterBonusAmount(0)
+        const TEST_SPEEDUP = ($settings['speed'] || 1)
+        const GLOBAL_MULTI = formula.getAntimatterBonusAmount(0) * TEST_SPEEDUP
+
+        
 
         let progGems = Math.pow(
             PROGRESS_BASE *
@@ -295,6 +297,30 @@
 
         $progressAverage['key3'] = progKey3
         $progressThisTick['key3'] = progKey3 * delta
+
+        let progKey4 = Math.pow(
+            ($miningUpgradeLevels[38] > 0
+                ? PROGRESS_BASE *
+                  $miningUpgrades[38]['formula']($miningUpgradeLevels[38])
+                : 0) *
+                $miningUpgrades[26]['formula']($miningUpgradeLevels[26]) *
+                $beaconBonuses[5] *
+                progressBonusMulti *
+                $challenge3Multi *
+                progressMultiArtifacts *
+                challengeMultiplier *
+                GLOBAL_MULTI,
+            challengeExponent
+        )
+
+        softcapThresh = $progressThreshold['key3'] * (UPDATE_SPEED / 1000) * 1
+        //softcap!
+        if (progKey4 > softcapThresh) {
+            progKey4 = softcapThresh + Math.sqrt(progKey4 - softcapThresh)
+        }
+
+        $progressAverage['key4'] = progKey4
+        $progressThisTick['key4'] = progKey4 * delta
 
         // TODO change index when adding
         // const progKey3 = ($miningUpgradeLevels[5] > 0 ?
@@ -477,7 +503,9 @@
         if ($progress['key3'] >= keyAt[2]) {
             addKey3(Math.floor($progress['key3'] / keyAt[2]), keyAt)
         }
-
+        if ($progress['key4'] >= keyAt[3]) {
+            addKey4(Math.floor($progress['key4'] / keyAt[3]), keyAt)
+        }
         // add warp for being in a challenge
         if ($challengeActive !== 0) {
             $wallet['warp'] =
@@ -607,6 +635,24 @@
 
         if ($challengeActive !== 0) {
             addChallengePoints(n, 'key3')
+        }
+    }
+
+    function addKey4(n, keyAt) {
+        const KEY4_BASE = 0.0016
+        const key3Gain =
+            KEY4_BASE *
+            $beaconBonuses[5] *
+            $miningUpgrades[5]['formula']($miningUpgradeLevels[5]) *
+            $miningUpgrades[26]['formula']($miningUpgradeLevels[26])*
+            formula.calcKeyFinderAbundanceBonus(3)
+
+        $wallet['key4'] = ($wallet['key4'] || 0) + key3Gain * n
+        $progress['key4'] %= keyAt[2]
+        $keyGainFlavorText['key4'] = key3Gain
+
+        if ($challengeActive !== 0) {
+            addChallengePoints(n, 'key4')
         }
     }
 
@@ -934,12 +980,17 @@
     }
 
     let lightningBlastLockout = false
+    /**
+     * @param {number | undefined} [n]
+     * @param {string | undefined} [tier]
+     */
     function procEnchants(n, tier) {
         if (n > 100) return
         const size = $enchantUpgrades[0]['formula']($enchantUpgradeLevels[0])
         const quality = $enchantUpgrades[1]['formula']($enchantUpgradeLevels[1])
 
         for (let [i, ench] of $enchantUpgrades.entries()) {
+            if (ench['tier'] != tier) continue
             const rand = Math.random() / n
 
             if (rand < ench['formula']($enchantUpgradeLevels[i])) {

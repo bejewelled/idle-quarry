@@ -137,7 +137,7 @@
             $miningUpgradeLevelsBought = Array(200).fill(0)
             $miningUpgradeLevelsFree = Array(200).fill(0)
             $keysOpened = Array(5).fill(0)
-            $keyCrafts = Array(5).fill(0)
+            $keyCrafts = Array(40).fill(0)
             $beaconLevels = Array(30).fill(0)
             $beaconActivations = Array(30).fill(0)
             $buttonStats = $baseButtonStats

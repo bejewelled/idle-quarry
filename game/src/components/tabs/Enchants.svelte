@@ -9,7 +9,7 @@
         {/each}
     </div>
     <div class='text-[#989898] text-small pt-4'>enchant progress
-        [ {f(0.01 * (formula.calcEnchantProgressGain($progressAverage['gems'] / $progressThreshold['gems']))* (1000/$settings['UPDATE_SPEED']) , 2)} / sec ]
+        [ {f((formula.calcEnchantProgressGain($progressAverage['gems'] / $progressThreshold['gems']))* (1000/$settings['UPDATE_SPEED']) , 2)} progress / sec ]
     </div>
     <div class = 'grid grid-cols-12 pt-1'>
     <div class='{$antiFlickerFlags['enchants'] ? 'col-span-12' :'col-span-10'}'>
@@ -21,12 +21,31 @@
         </div>
     </div>
     <div class='{$antiFlickerFlags['enchants'] ? '' :'col-span-2'} pl-1 text-center align-text-middle'>
-        <div class='text-[#989898] text-small'> <strong>
+        <div class='text-[#989898] text-small text-left pl-2'> <strong>
             {!$antiFlickerFlags['enchants'] ? (f($enchantProgress['t1'], 0) +  ' / ' +  f($enchantThreshold['t1'], 0)) : ''}
         </strong>
 
         </div>
     </div>
+    
+    {#if $enchantTierUnlockAt[1]()}
+    <div class='{$antiFlickerFlags['enchants'] ? 'col-span-12' :'col-span-10'}'>
+        <div class='ench-t1-wrapper align-middle'>
+            <div class="w-full my-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                <div class="bg-[#7fbf8a] h-2.5 rounded-full" 
+                style="width: {$antiFlickerFlags['enchants'] ? '100%' : encht2BarWidth}"></div>
+            </div>
+        </div>
+    </div>
+    <div class='{$antiFlickerFlags['enchants'] ? '' :'col-span-2'} pl-1 text-center align-text-middle'>
+        <div class='text-[#989898] text-small text-left pl-2'> <strong>
+            {!$antiFlickerFlags['enchants'] ? (f($enchantProgress['t2'], 0) +  ' / ' +  f($enchantThreshold['t2'], 0)) : ''}
+        </strong>
+
+        </div>
+    </div>
+    {/if}
+
     </div>
     <div class='py-2'>
         <div class='fame-upgrade-wrapper grid grid-cols-2 pt-2'>
@@ -48,6 +67,7 @@
 
 
 <script lang='ts'>
+	import { enchantTierUnlockAt } from './../../data/fame.ts';
 	import { enchantUpgradeLevels } from './../../data/player.ts';
  //@ts-nocheck
 import { onMount, onDestroy } from 'svelte';
@@ -72,6 +92,7 @@ import EnchantUpgradeButton from '../buttons/EnchantUpgradeButton.svelte';
 
 
 $: encht1BarWidth = `${$enchantProgress['t1']/$enchantThreshold['t1'] * 100}%`
+$: encht2BarWidth = `${$enchantProgress['t2']/$enchantThreshold['t2'] * 100}%`
 $: pbarWidths = Array(30).fill(0);
 $: beaconDispBonus = $beaconBonuses
 $: fameGainKeys = formula.calcFameGainKeys($keysOpened);

@@ -268,7 +268,10 @@ export function relocate() {
                 console.log($automationItemsUnlocked)
                     
                 if (!$automationItemsUnlocked['unlimited power!'])
-                $beaconUpgradeLevels = Array($beaconUpgradeLevels.length).fill(0);
+                    for (let i in $beaconUpgradeLevels) {
+                        if (!$beaconUpgrades[i]['isCelestial'])
+                            $beaconUpgradeLevels[i] = 0;
+                    }
 
                 if ($automationItemsUnlocked['jumpstart']) {
                     $wallet['gems'] = 5000;

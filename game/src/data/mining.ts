@@ -878,6 +878,25 @@ export const miningUpgrades = array([{
     style: 'game-btn-antimatter',
     notes: ''
 },
+{
+    index: 38,
+    sortType: ['keys', 'base'],
+    name: '[****] Key Finder',
+    description: 'While mining, you will occasionally find a bundle of T4 [****] keys.' 
+    + '\nUpgrades increase progress gained towards this milestone.',
+    cost: {
+        orbs: 3e19,
+        key4: 2500,
+        void: 750,
+    },
+    ratio: 1.3,
+    unlockAt: () => (get(miningUpgradeLevels)[18] > 0.003 && (get(wallet)['key4'] > 0 && get(wallet)['totalAntimatter'] > 0)),
+    formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
+    isPercent: false,
+    suffix: 'x speed',
+    maxLevel: 500,
+    notes: '(1 + floor(level/10)) * level^0.6' 
+},
 
 
 ]);

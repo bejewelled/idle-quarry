@@ -53,10 +53,11 @@ export default class ref {
     static challengePointValues = {
         default: 0,
         beaconPower: 0.025,
-        gems: 0.15,
+        gems: 0.37,
         key1: 1,
         key2: 36,
         key3: 850,
+        key4: 2375,
 
         beaconLevels: 10,
     };

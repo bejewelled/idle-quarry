@@ -121,7 +121,7 @@ const ceil = (n: number) => Math.ceil(n);
 // the number of mining operations until enchants will have a chance to proc
 export const enchantThreshold = object({
     t1: 100,
-    t2: 40000,
+    t2: 6475,
     t3: 1e9
 })
 
@@ -269,9 +269,9 @@ export const enchantUpgrades = array([{
     cost: {
         fame: 1e18,
     },
-    tier: 1,
+    tier: 2,
     ratio: 1.34,
-    formula: (lv: any) => (lv/200) * 0.02,
+    formula: (lv: any) => (lv/200) * 0.16,
     unlockAt: () => (get(wallet)['totalAntimatter'] > 0 || get(wallet)['antimatter'] > 0),
     isPercent: true,
     suffix: '  chance',
@@ -285,9 +285,9 @@ export const enchantUpgrades = array([{
     cost: {
         fame: 1e18,
     },
-    tier: 1,
+    tier: 2,
     ratio: 1.34,
-    formula: (lv: any) => (lv/200) * 0.1,
+    formula: (lv: any) => (lv/200) * 0.5,
     unlockAt: () => (get(wallet)['totalAntimatter'] > 0 || get(wallet)['antimatter'] > 0),
     isPercent: true,
     suffix: '  chance',
@@ -297,6 +297,11 @@ export const enchantUpgrades = array([{
 
 ]);
 
+
+export const enchantTierUnlockAt = array([
+    () => true,
+    () => (get(wallet)['antimatter'] > 0 || get(wallet)['totalAntimatter'] > 0),
+])
 
 
 

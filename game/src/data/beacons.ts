@@ -311,4 +311,20 @@ export const beaconUpgrades = array([{
     notes: '',
     isCelestial: true,
 }, 
+{
+    name: '[???]',
+    description: '[coming soon]',
+    cost: {
+        antimatter: 8294,
+    },
+    ratio: 1.65,
+    formula: (lv: any) => lv * 0.33,
+    mineLevelReq: 12,
+    unlockAt: () => ascFormula.getVal('celestial') >= 3,
+    isPercent: true,
+    suffix: ' ???',
+    maxLevel: 50,
+    notes: '',
+    isCelestial: true,
+}, 
 ])
