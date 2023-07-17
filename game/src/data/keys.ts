@@ -347,7 +347,7 @@ export const keyCrafts = array([
             crystals: 1
         },
         craftTime: 15, // in seconds
-        baseAmount: 1,
+        baseAmount: 3,
         ratio: 10,
         unlockAt: () => (get(wallet)['crystals'] > 0),
     },
