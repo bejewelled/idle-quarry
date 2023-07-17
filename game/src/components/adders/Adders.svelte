@@ -1129,19 +1129,19 @@
                         const absDist = Math.random() * (400 - quality / 2550)
                         let rewardAmount, rewardDescriptionText, rewardStyle
                         if (absDist < 1) {
-                            rewardAmount = 600
+                            rewardAmount = 120000
                             rewardDescriptionText = 'PERFECT! +'
                             rewardStyle = 'text-amber-500'
                         } else if (absDist <= 2) {
-                            rewardAmount = 300
+                            rewardAmount = 9000
                             rewardDescriptionText = 'INCREDIBLE +'
                             rewardStyle = 'text-pink-500'
                         } else if (absDist <= 4) {
-                            rewardAmount = 140
+                            rewardAmount = 750
                             rewardDescriptionText = 'Excellent +'
                             rewardStyle = 'text-violet-500'
                         } else if (absDist <= 7) {
-                            rewardAmount = 60
+                            rewardAmount = 85
                             rewardDescriptionText = 'Great +'
                             rewardStyle = 'text-sky-500'
                         } else if (absDist <= 10) {
