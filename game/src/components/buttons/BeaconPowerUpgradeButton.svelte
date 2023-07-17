@@ -9,7 +9,7 @@ select-none"
 >
     {$beaconUpgrades[index]['name']} [{f($beaconUpgradeLevels[index], 0)}] 
     {#if $settings['maxBuy'] && buyAmount >= 1}
-    (+{buyAmount})
+        (+{buyAmount})
     {/if}
     {#key $resources['beaconPower']}
         <span
@@ -57,6 +57,9 @@ select-none"
                                   3
                               )}{$beaconUpgrades[index]['suffix'] || ''}
                     </span>
+                    {#if $settings['maxBuy'] && buyAmount >= 1}
+                    (x{buyAmount})
+                    {/if}
                 </div>
             </div>
             <hr />
@@ -176,17 +179,15 @@ select-none"
     }
 
     function calcMaxBuyAmount() {
-        if ($beaconUpgrades[index]['maxLevel'] == 1)
-            return $beaconUpgradeLevels[index] == 0 ? 1 : 0;
-        const levelsRemaining = $beaconUpgrades[index]['maxLevel'] - $beaconUpgradeLevels[index];
         let maxBuy = 1e9; // or any large number
         for (let [type, bCost] of Object.entries($beaconUpgrades[index]['cost'])) {
             if (!$wallet[type]) return 0;
             const base = bCost * Math.pow($beaconUpgrades[index]['ratio'], $beaconUpgradeLevels[index]); 
             maxBuy = Math.min(maxBuy, 
             formula.maxNumGeom($wallet[type], base, $beaconUpgrades[index]['ratio']));
+            console.log($wallet[type], base, $beaconUpgrades[index]['ratio'], maxBuy)
         }
-        return Math.min(levelsRemaining, maxBuy);
+        return maxBuy;
     }
 
     function buy() {
@@ -206,16 +207,17 @@ select-none"
                 $wallet[type] -= val
             }
         }
-        $beaconUpgradeLevels[index] += $settings['buyAmount']
+        console.log(buyAmount);
+        $beaconUpgradeLevels[index] += buyAmount
         costs = getCosts()
     }
 
     function canAfford() {
-        if (isNaN($resources['beaconPower'])) return false
+        if (isNaN($wallet['beaconPower'])) return false
         costs = getCosts()
         for (let [type, val] of Object.entries(costs)) {
             if ((type =='beaconPower' && 
-            (!$resources['beaconPower'] || $resources['beaconPower'] < val)) ||
+            (!$wallet['beaconPower'] || $wallet['beaconPower'] < val)) ||
             (type != 'beaconPower' && (!$wallet[type] || $wallet[type] < val))) {
                 return false;
             }
