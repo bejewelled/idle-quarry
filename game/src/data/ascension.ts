@@ -210,9 +210,9 @@ export const ascensionConstants = object({
             celestial: 15,
         }
     },
-    antimatterLevelFormula: (lv: number) => 35 + (Math.pow(lv,2) * 9),
+    antimatterLevelFormula: (lv: number) => 35 + (Math.pow(lv,2) * 3),
     antimatterLevelFormulaNums: {
-        multi: 9,
+        multi: 3,
         const: 35
     },
 })

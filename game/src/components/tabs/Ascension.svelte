@@ -82,7 +82,7 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
                             >>> 
                             {#if e === 'antimatter'}
                             {fp(ascFormula.getValAt(e, Math.floor(
-                                formula.maxFinitePoly3(
+                                formula.maxFinitePoly2(
                                     ($ascensionLevels[e][1] || 0) + 
                                     sumEssence(), $ascensionLevels[e][0],
                                     $ascensionConstants['antimatterLevelFormulaNums'],
