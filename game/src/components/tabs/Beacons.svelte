@@ -1,6 +1,6 @@
 <div class='wrapper py-2'>
 <div class='beacon-power-display text-center text-large game-text'>
-    You have <span class='text-cyan-300 font-bold'>{f($resources['beaconPower'] || 0)}</span> beacon power. 
+    You have <span class='text-cyan-300 font-bold'>{f($wallet['beaconPower'] || 0)}</span> beacon power. 
 
 </div> 
 <div class='beacon-power-tooltip text-center tooltip-text'>

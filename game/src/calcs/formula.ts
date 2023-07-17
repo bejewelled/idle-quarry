@@ -67,7 +67,6 @@ export default class formula {
       while (left > 0) {
         if (e == 'antimatter') left -= (nums['const'] + nums['multi']*(q**2));
         else left -= (nums['const'][e] + nums['multi'][e]*(q**2));
-        if (e == 'antimatter') console.log(left)
         q++;
         if (log) console.log('left: ' + left + ' q: ' + q);
       }

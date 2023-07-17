@@ -158,7 +158,7 @@ select-none'>
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1) $wallet[type] -= val;
         }
-        $keyUpgradeLevels[index] += $settings['buyAmount'];
+        $keyUpgradeLevels[index] += buyAmount
         costs = getCosts();
         permUnlocked = true;
         updateDropTables()

@@ -223,11 +223,11 @@ export default class ref {
 
     static buttonBaseRewards = {
         okay: 1000,
-        good: 4000,
-        great: 9000,
-        excellent: 13000,
-        incredible: 21000,
-        perfect: 40000,
+        good: 8000,
+        great: 12000,
+        excellent: 16000,
+        incredible: 35000,
+        perfect: 75000,
     };
 
     static buttonColors = {

@@ -844,7 +844,7 @@
 
     let locks = new Set() // makes sure levelups don't repeat when leveling up from next function call
     function addBeaconProgress(delta, isOffFocus = false) {
-        if (isNaN($resources['beaconPower'])) $resources['beaconPower'] = 0
+        if (isNaN($wallet['beaconPower'])) $wallet['beaconPower'] = 0
         const progressGains = $beaconActivations.map(
             (e, i) =>
                 e *
@@ -963,7 +963,7 @@
             $beaconBonuses[0] *
             delta
 
-        $resources['beaconPower'] = ($resources['beaconPower'] || 0) + bpGain
+        $wallet['beaconPower'] = ($wallet['beaconPower'] || 0) + bpGain
         if (challengeActive !== 0) {
             $wallet['challengePoints'] =
                 ($wallet['challengePoints'] || 0) +

@@ -11,7 +11,7 @@ select-none"
     {#if $settings['maxBuy'] && buyAmount >= 1}
         (+{buyAmount})
     {/if}
-    {#key $resources['beaconPower']}
+    {#key $wallet['beaconPower']}
         <span
             class="px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
@@ -75,7 +75,7 @@ select-none"
                                 : c[0]}
                         </div>
                         <div
-                            class="col-span-2 {$resources['beaconPower'] < c[1]
+                            class="col-span-2 {$wallet['beaconPower'] < c[1]
                                 ? 'text-red-600'
                                 : ''}
                     text-left"
@@ -174,7 +174,7 @@ select-none"
             )
         const r = $beaconUpgrades[index]['ratio']
         const l = Math.max(1,buyAmount)
-
+        // console.log(formula.gSum(base, r, l))
         return formula.gSum(base, r, l)
     }
 
@@ -183,31 +183,30 @@ select-none"
         for (let [type, bCost] of Object.entries($beaconUpgrades[index]['cost'])) {
             if (!$wallet[type]) return 0;
             const base = bCost * Math.pow($beaconUpgrades[index]['ratio'], $beaconUpgradeLevels[index]); 
+
             maxBuy = Math.min(maxBuy, 
             formula.maxNumGeom($wallet[type], base, $beaconUpgrades[index]['ratio']));
-            console.log($wallet[type], base, $beaconUpgrades[index]['ratio'], maxBuy)
         }
         return maxBuy;
     }
 
     function buy() {
-        if (isNaN($resources['beaconPower'])) return
+        if (isNaN($wallet['beaconPower'])) return
         costs = getCosts()
         for (let [type, val] of Object.entries(costs)) {
             if ((type =='beaconPower' && 
-            (!$resources['beaconPower'] || $resources['beaconPower'] < val)) ||
+            (!$wallet['beaconPower'] || $wallet['beaconPower'] < val)) ||
             (type != 'beaconPower' && (!$wallet[type] || $wallet[type] < val))) {
                 return
             }
         }
         for (let [type, val] of Object.entries(costs)) {
             if (type == 'beaconPower') {
-                $resources['beaconPower'] -= val
+                $wallet['beaconPower'] -= val
             } else {
                 $wallet[type] -= val
             }
         }
-        console.log(buyAmount);
         $beaconUpgradeLevels[index] += buyAmount
         costs = getCosts()
     }
@@ -216,12 +215,10 @@ select-none"
         if (isNaN($wallet['beaconPower'])) return false
         costs = getCosts()
         for (let [type, val] of Object.entries(costs)) {
-            if ((type =='beaconPower' && 
-            (!$wallet['beaconPower'] || $wallet['beaconPower'] < val)) ||
-            (type != 'beaconPower' && (!$wallet[type] || $wallet[type] < val))) {
+            if ((val >= 1 && $wallet[type] < val-0.003) || !$wallet[type]) {
                 return false;
             }
-        }
+        }  
         return true
     }
 </script>
