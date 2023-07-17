@@ -436,20 +436,6 @@ export const keyCrafts = array([
         unlockAt: () => (get(wallet)['dust'] > 7500),
     },
     {
-        item: 'emagic',
-        name: 'Magic Essence',
-        style: 'text-amber-200',
-        stylebg: 'bg-amber-200',
-        cost: {
-            sigils: 1e11,
-            energy: 1
-        },
-        craftTime: 240, // in seconds
-        baseAmount: 1,
-        ratio: 1.1,
-        unlockAt: () => (get(wallet)['sigils'] > 1e10),
-    },
-    {
         item: 'ewater',
         name: 'Water Essence',
         style: 'text-sky-300',
@@ -462,6 +448,20 @@ export const keyCrafts = array([
         baseAmount: 1,
         ratio: 1.1,
         unlockAt: () => (get(wallet)['orbs'] > 1e14),
+    },
+    {
+        item: 'emagic',
+        name: 'Magic Essence',
+        style: 'text-amber-200',
+        stylebg: 'bg-amber-200',
+        cost: {
+            sigils: 1e10,
+            energy: 1
+        },
+        craftTime: 240, // in seconds
+        baseAmount: 1,
+        ratio: 1.1,
+        unlockAt: () => (get(wallet)['sigils'] > 1e10),
     },
     {
         item: 'ecelestial',
