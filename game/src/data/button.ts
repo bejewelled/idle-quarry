@@ -139,16 +139,16 @@ export const progressPerTick = single(1);
 export const buttonUpgrades = array([
 {
     index: 0,
-    name: 'Stability',
-    description: 'The button moves less after each click.',
+    name: 'Heat Sink',
+    description: 'The area of the button for good clicks and better is increased.',
     cost: {
         radium: 1,
     },
-    ratio: 4,
-    formula: (lv: any) => 1 - Math.pow(lv/10.4,0.45),
+    ratio: 1.1,
+    formula: (lv: any) => lv*0.1,
     unlockAt: () => (true),
-    isPercent: false,
-    suffix: 'x movement multiplier',
+    isPercent: true,
+    suffix: ' additional width',
     isRadiumUpgrade: true,
     maxLevel: 10,
     notes: ''

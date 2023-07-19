@@ -271,7 +271,7 @@ export const beaconUpgrades = array([{
         beaconPower: 2.5e6,
     },
     ratio: 4,
-    formula: (lv: any) => (lv === 0 ? 1 : 1 + Math.log((lv+1) * get(resources)['beaconPower']/1e3 + 1) / Math.log(5)),
+    formula: (lv: any) => (lv === 0 ? 1 : 1 + Math.log((lv+1) * get(wallet)['beaconPower']/1e3 + 1) / Math.log(5)),
     mineLevelReq: 12,
     unlockAt: () => true,
     isPercent: true,

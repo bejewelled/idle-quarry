@@ -201,8 +201,7 @@ function calcFameGain() {
 }
 
 // ONLY things in these arrays will be reset on relocate
-const walletResetItems = ['gems', 'gold', 'orbs', 'beacons', 'key1', 'key2']
-const resourceResetItems = ['beaconPower']
+const walletResetItems = ['gems', 'gold', 'orbs', 'beacons', 'key1', 'key2', 'beaconPower']
 export function relocate() {
     if (calcFameGain() >= 10) {
         if (confirm("Are you sure? Relocating will reset all previous progress.")) {
@@ -280,9 +279,12 @@ export function relocate() {
                 if ($automationItemsUnlocked['beaconizer']) {
                     $wallet['beacons'] = 50000;
                 }
-                if ($automationItemsUnlocked['deep pockets'] || $miningUpgradeLevels[14] >= 1) {
+                if ($automationItemsUnlocked['deep pockets']) {
                     $miningUpgradeLevels[6] = 1;
                     $miningUpgradeLevelsBought[6] = 1;
+                    $visibleTier = 2;
+                }
+                if ($automationItemsUnlocked['deep pockets ii']) {
                     $miningUpgradeLevels[9] = 1;
                     $miningUpgradeLevelsBought[9] = 1;
                     $visibleTier = 3;

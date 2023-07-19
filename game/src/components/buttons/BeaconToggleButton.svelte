@@ -1,13 +1,13 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class='grid grid-cols-2'>
+<div on:click={() => sub()}
+class='has-tooltip tooltip-text game-btn 
+py-2 items-center text-center border-solid select-none m-1'>-</div>
 <div on:click={() => add()}
 class='has-tooltip tooltip-text game-btn
 py-2 items-center text-center border-solid select-none m-1'>+</div>
-    <div on:click={() => sub()}
-        class='has-tooltip tooltip-text 
-        game-btn py-2 items-center text-center 
-        border-solid select-none m-1'>-</div>
+
 </div>
   
 

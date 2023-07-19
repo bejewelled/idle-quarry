@@ -157,6 +157,18 @@ export default class formula {
               n / 150)
     }
 
+    static getButtonDistanceVals() {
+      const distanceMulti = get(buttonUpgrades)[0]['formula'](get(buttonUpgradeLevels)[0]);
+
+      return {
+        good: Math.floor(10 * distanceMulti * window.devicePixelRatio),
+        great: Math.floor(7 + distanceMulti * window.devicePixelRatio),
+        excellent: Math.floor(3 + distanceMulti * window.devicePixelRatio),
+        incredible: Math.floor(2 + distanceMulti * window.devicePixelRatio),
+        perfect: Math.floor(1 + distanceMulti * window.devicePixelRatio),
+      };
+    }
+
     static calcFameTimeMultiplier(last: number) {
       if (get(buttonUpgradeLevels)[6] < 1) return 1;
       const sec = (Date.now() - last) / 1000;

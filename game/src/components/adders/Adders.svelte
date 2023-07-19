@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
     import { ascFormula } from './../../data/ascension.ts'
     // @ts-nocheck
     // invisible component handling addition math
@@ -116,7 +118,8 @@
     let i = 0
     function addToActivityLog(text, color, showParam) {
         if (!$activityLogShow[showParam]) return
-        const item = [text, color]
+        const timestamp = Date.now().toLocaleTimeString('it-IT')
+        const item = [timestamp + " " + text, color]
         $activityLog = [...$activityLog, item]
         if ($activityLog.length > 100) $activityLog.shift()
     }

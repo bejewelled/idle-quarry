@@ -133,9 +133,15 @@
             //     }
             // }
             $visibleTier = 1
-            $miningUpgradeLevels = Array(200).fill(0)
-            $miningUpgradeLevelsBought = Array(200).fill(0)
             $miningUpgradeLevelsFree = Array(200).fill(0)
+            for (let i in $miningUpgradeLevels) {
+                if (!($miningUpgrades[i]['noResetAscension']))  {
+                    $miningUpgradeLevelsBought[i] = 0;
+                    $miningUpgradeLevels[i] = $miningUpgradeLevelsBought[i]
+                    + $miningUpgradeLevelsFree[i];
+                }
+            }
+
             $keysOpened = Array(5).fill(0)
             $keyCrafts = Array(40).fill(0)
             $beaconLevels = Array(30).fill(0)

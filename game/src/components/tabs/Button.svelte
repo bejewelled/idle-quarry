@@ -54,7 +54,7 @@
                   <span class='{v}'>{k}</span>
                 </div>
                 <div class='col-span-2 text-small text-center'>
-                  <span class='{v} text-small'>{k !== 'okay' ? "<" + f(ref.buttonDistances[k]) + 'px' : ''}</span>
+                  <span class='{v} text-small'>{k !== 'okay' ? "<" + f(formula.getButtonDistanceVals()[k]) + 'px' : ''}</span>
                 </div>
                 <div class='col-span-2 text-small text-right'>
                   <span class='tooltip-text text-small'>+{f(ref.buttonBaseRewards[k] * formula.calcButtonRewardBonus())}</span>

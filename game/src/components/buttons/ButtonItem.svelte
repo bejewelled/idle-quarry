@@ -17,7 +17,8 @@ style = 'top: {textPosition.y}px; left: {textPosition.x}px;'>
 {#if $buttonUpgradeLevels[2] > 0}
 <button
     id="button"
-    class="fixed w-[20px] h-[20px] bg-gray-400 bg-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
+    class="fixed w-[20px] 
+    h-[20px] bg-gray-400 bg-opacity-50 text-white flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
     style="top: {buttonPosition.y+40}px; left: {buttonPosition.x+40}px;"
     on:click={handleClick}
   > </button>
@@ -111,6 +112,17 @@ const BUTTON_SIZE= 100;
 
     let rewardAmount = 0;
 
+    const distanceMulti = $buttonUpgrades[0]['formula']($buttonUpgradeLevels[0]);
+
+    const buttonDistances = {
+        good: Math.floor(10 * distanceMulti * window.devicePixelRatio),
+        great: Math.floor(7 + distanceMulti * window.devicePixelRatio),
+        excellent: Math.floor(3 + distanceMulti * window.devicePixelRatio),
+        incredible: Math.floor(2 + distanceMulti * window.devicePixelRatio),
+        perfect: Math.floor(1 + distanceMulti * window.devicePixelRatio),
+    };
+    console.log(window.devicePixelRatio)
+
 
     $buttonStats['totalClicks']++;
 
@@ -119,31 +131,31 @@ const BUTTON_SIZE= 100;
     if (warpAdder) $wallet['warp'] = ($wallet['warp'] || 0) + Math.ceil(Math.random()*45);
 
     let xpGain = 0;
-    if (absDist < ref.buttonDistances['perfect']) {
+    if (absDist < buttonDistances['perfect']) {
         rewardAmount = ref.buttonBaseRewards['perfect'];
         rewardDescriptionText = 'PERFECT';
         rewardStyle = 'text-large text-amber-500 border-amber-500 font-bold'
         $buttonNumClicks['perfect']++;
         xpGain = 3 * $buttonUpgrades[4]['formula']($buttonUpgradeLevels[4]);
-    } else if (absDist <= ref.buttonDistances['incredible']) {
+    } else if (absDist <= buttonDistances['incredible']) {
         rewardAmount = ref.buttonBaseRewards['incredible'];
         rewardDescriptionText = 'Incredible';
         rewardStyle = 'text-large text-pink-500 border-pink-500 font-bold'
         $buttonNumClicks['incredible']++;
         xpGain = 3 * $buttonUpgrades[4]['formula']($buttonUpgradeLevels[4]);
-    } else if (absDist <= ref.buttonDistances['excellent']) {
+    } else if (absDist <= buttonDistances['excellent']) {
         rewardAmount = ref.buttonBaseRewards['excellent'];
         rewardDescriptionText = 'Excellent';
         rewardStyle = 'text-med text-violet-500 border-violet-500'
         $buttonNumClicks['excellent']++;
         xpGain = 2 * $buttonUpgrades[4]['formula']($buttonUpgradeLevels[4]);
-    } else if (absDist <= ref.buttonDistances['great']) {
+    } else if (absDist <= buttonDistances['great']) {
         rewardAmount = ref.buttonBaseRewards['great'];
         rewardDescriptionText = 'Great';
         rewardStyle = 'text-med text-sky-500 border-sky-500'
         $buttonNumClicks['great']++;
         xpGain = 1;
-    } else if (absDist <= ref.buttonDistances['good']) {
+    } else if (absDist <= buttonDistances['good']) {
         rewardAmount = ref.buttonBaseRewards['good'];
         rewardDescriptionText = 'Good';
         rewardStyle = 'text-med text-green-500 border-green-500'
@@ -169,9 +181,10 @@ const BUTTON_SIZE= 100;
         console.log('sd')
         const mplr = 8 + Math.round(Math.random() * 12);
         rewardAmount *= mplr;
+        rewardDescriptionText += ' [ LUCKY! x' + f(mplr) + ' ]';
     }
    
-    if (isLucky)rewardDescriptionText += ' [ LUCKY! ]';
+    if (isLucky)rewardDescriptionText += ' [ LUCKY! x10 ]';
 
     $radiumGainText = '+ ' + f(rewardAmount)
 
@@ -196,7 +209,7 @@ const BUTTON_SIZE= 100;
     let mplr;
 
     // star gain
-    if (absDist < ref.buttonDistances['perfect'] && $buttonUpgradeLevels[7] > 0) {
+    if (absDist < buttonDistances['perfect'] && $buttonUpgradeLevels[7] > 0) {
       $wallet['stars'] = ($wallet['stars'] || 0) + 1
       buttonExtraStyle = 'bg-fuchsia-300 transition-colors duration-300 ease-in-out hover:bg-violet-600'
       setTimeout(() => {
@@ -217,7 +230,7 @@ const BUTTON_SIZE= 100;
       const MAX_Y = 550;
       const MID_X = (MAX_X + MIN_X) / 2;
       const MID_Y = (MAX_Y + MIN_Y) / 2;
-      const moveMulti = $buttonUpgrades[0]['formula']($buttonUpgradeLevels[0]);
+      const moveMulti = 0.025
       // find a new location then multiply the distance by the multiplier
       let newX = MID_X + ((Math.random() * (MAX_X - MIN_X)) - ((MAX_X - MIN_X) / 2)) * moveMulti;
       let newY = MID_Y + ((Math.random() * (MAX_Y - MIN_Y)) - ((MAX_Y - MIN_Y) / 2)) * moveMulti;

@@ -321,7 +321,7 @@ export const automationUpgrades = array([{
     name: 'Deep Pockets',
     description: 'Lootmaster I is automatially unlocked and stays unlocked on relocate.',
     cost: {
-        fame: 1850,
+        fame: 2150,
     },
     unlockAt: () => (get(wallet)['fame'] >= 1),
     isPercent: true,
@@ -331,19 +331,19 @@ export const automationUpgrades = array([{
     index: 1,
     name: 'Deep Pockets II',
     description: 'Lootmaster II is automatially unlocked and stays unlocked on relocate.',
-    cost: {
+    cost: {  
         trophies: 5,
     },
     unlockAt: () => (get(wallet)['trophies'] >= 1),
-    isPercent: true,
-    suffix: ' chance',
+    isPercent: false,
+    suffix: '---',
 },
 {
     index: 1,
     name: 'Deep Pockets III',
-    description: 'Lootmaster III is automatially unlocked and stays unlocked on relocate.',
+    description: 'Lootmaster III is automatially unlocked and stays unlocked on ascension.',
     cost: {
-        void: 90,
+        void: 5,
     },
     unlockAt: () => (get(wallet)['void'] >= 1),
     isPercent: true,

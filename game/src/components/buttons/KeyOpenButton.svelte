@@ -151,8 +151,15 @@ select-none"
         }
         for (let [type, vals] of Object.entries(dropTable)) {
             if (type == 'tier') continue
+
+            else if (Number(amt) == 1) {
+                if (Math.random() < vals[0]) {
+                    rewards[type] = (rewards[type] || 0) + 
+                    (vals[1] + Math.random() * (vals[2] - vals[1]))
+                }
+            }
             // if E[x] > 1, then we can calculate based on variance
-            if (Number(amt) * vals[0] >= 1) {
+            else if (Number(amt) * vals[0] >= 10) {
                 // vals[0] is the probability of winning
 
                 // Array.from takes the {length: l} parameter and applies the function given, l times
@@ -210,37 +217,7 @@ select-none"
                         rewardVal = Math.min(rewardVal, amt * vals[0] * 0.33)
                     }
                 }
-                rewards[type] = (rewards[type] || 0) + rewardVal
-
-            }
-            // NEW
-            else if (amt * vals[0] >= 1) {
-                const stdev = Math.sqrt(amt * vals[0] * (1 - vals[0]))
-                const val = Array.from(
-                    { length: Math.floor(Math.sqrt(amt)) },
-                    () =>
-                        Math.floor(
-                            vals[1] + Math.random() * (vals[2] - vals[1])
-                        )
-                )
-                const c = Math.random() * 2.83 + 0.01
-                const numWins =
-                    vals[0] * amt +
-                    Math.max(
-                        (Math.random() > 0.5 ? 1 : -1) *
-                            stdev *
-                            Math.pow(c / (c - 5), 6),
-                        0
-                    )
-
-                // monte carlo value selector
-                const rewardVal =
-                    (val[Math.floor(Math.random() * val.length)] +
-                        val[Math.floor(Math.random() * val.length)] +
-                        val[Math.floor(Math.random() * val.length)]) / 3
-
-                rewards[type] = (rewards[type] || 0) + numWins * rewardVal
-                // if E[x] < 1
+                rewards[type] = (rewards[type] || 0) + rewardVal           
             } else {
                 let wins = 0
                 const p = vals[0]
@@ -254,15 +231,14 @@ select-none"
                     const rand = Math.random()
                     let k = 0
                     // roll once, then check again if success
-                    if (rand < 1 - pFail) {
-                        k++
-                        pFail +=
-                            (Math.exp(-1 * amt * p) * Math.pow(amt * p, k)) / 1
+                    let done = false;
+                    while (!done && k < 4) {
                         if (rand < 1 - pFail) {
                             k++
-                        }
+                            pFail += (Math.exp(-1 * amt * p) * Math.pow(amt * p, k)) / 1 
+                        } else done = true;
                     }
-                    wins = k * 1.01
+                    wins = k;
                     // for higher probability use normal approximation to binomial
                 } else {
                     const stdev = Math.sqrt(amt * p * (1 - p))
