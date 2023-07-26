@@ -208,8 +208,8 @@ export default class ref {
         sigils: "Gain sigils from random drops while mining and from keys.",
         artifacts:
             "Very rarely gain artifacts from keys, the button, and random drops while mining.",
-        warp: "Gain warp while in a challenge. Gain more warp at higher challenge levels.",
-        trophies: "Gain trophies from completing challenges.",
+        warp: "Gain warp from mastery.",
+        trophies: "Gain trophies from mastery.",
         dust: "Gain dust from ascension, and very rarely while mining.",
         radium: "Gain radium from clicking the button.",
         goldenSigils: "Gain golden sigils from crafting.",
