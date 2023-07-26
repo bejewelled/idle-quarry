@@ -748,7 +748,7 @@ export const miningUpgrades = array([{
 {
     index: 31,
     sortType: ['antimatter'],
-    name: 'Lootmaster IV',
+    name: 'Lootmaster IV [unimplemented]',
     description: 'Unlocks a new tier of findable drops, and automatically unlocks LM1-3 if they aren\'t already.',
     cost: {
         warp: 1e7,
