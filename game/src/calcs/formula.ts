@@ -96,7 +96,7 @@ export default class formula {
 
     static calcAntimatterGain() {
       return this.sumEssence()
-      * 1;
+      * get(beaconBonuses)[9];
     }
 
     static calcEssenceXPGain(e: string) {
@@ -216,38 +216,41 @@ export default class formula {
           + 0.16 * (Math.log(obj['perfect']+2) / Math.log(2))));
   }
 
+  static calcMasteryNextReq() {
+    const y = get(wallet)['totalTrophies'] || 0;
+    return 16225 * Math.pow(1.13 + Math.log10((y+1)*0.05), y);
+  }
+
   static calcKeySlurryGain(obj: { [x: string]: number; }) {
-    let amount = ((Math.pow(obj['key1'], 0.65) || 0)*1e-3
-    + (Math.pow(obj['key2'], 0.7) || 0)*1e-1
-    + (Math.pow(obj['key3'], 0.75) || 0)*1e3
-    + (Math.pow(obj['key4'], 0.8) || 0)*1e7
-    + (Math.pow(obj['key5'], 0.85) || 0)*1e13)
-    * get(keyUpgrades)[1]['formula'](get(keyUpgradeLevels)[1]) 
-    * formula.getAntimatterBonusAmount(3); // get antimatter bonus if # of ascensions is 3 or more
-    if (isNaN(amount)) {
+    const vals = ref.slurryGainFromKeys;
+    const y = vals.reduce((sum: number, value: number, i: number) => 
+    sum + value*(obj['key'+(i+1)] || 0), 0) * formula.getAntimatterBonusAmount(3); // get antimatter bonus if # of ascensions is 3 or more
+    if (isNaN(y)) {
       alert('note: this feature is bugged, please report this on Discord - reduced slurry gained (using "safe" formula)')
       return obj['key1'] / 8e5;
     }
-    return amount
+    return y
   
   }
   
   static calcFragmentGain(t: number, amt: number) {
-    return amt / (Math.pow(10, 6-t));
+    return Math.pow(amt / (Math.pow(10, 6-t)), 1.1);
   }
 
   static calcKeySigilGain(sl: number) {
     if (sl < 1000 || get(keyUpgradeLevels)[3] == 0) return 0;
-    else return Math.pow((sl**2 / 1000**2), 0.45)
+    else return sl / 1e7;
   }
 
   static calcKeyCraftAmountGained(i: string) {
-    const y = get(keyCrafts)[i]['baseAmount']
+    const min = get(keyCrafts)[i]['min']
+    const max = get(keyCrafts)[i]['max']
+    return Math.round(min + Math.random()*(max-min))
     * get(beaconBonuses)[6]
     * (i == 'beacons' ? 
     Math.pow(formula.sumArray(get(beaconLevels)), 0.65) : 1);
 
-    return y;
+
 }
   static calcChallengePointGain(n: number, type: string, isOffFocus: boolean = false) {
     // indices of key finder in mining upgrades for each tier

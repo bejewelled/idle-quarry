@@ -1,5 +1,4 @@
 <svelte:window on:keydown|preventDefault={handleClick && keyDown} on:keyup={keyUp} /> <!-- will be bound to an upgrade-->
-<div class='game-text text-small text-center'>Click the outer area of the button once to enable key-clicking.</div>
 
 {#if showRewardDescription}
 <div class='fixed flex w-[350px] h-[35px] {rewardStyle} 
@@ -73,9 +72,9 @@ const BUTTON_SIZE= 100;
       if (e.keyCode > 0) badKeyDown = false;
     }
   
-    let lastClick = Date.now();
-    let lastAbsDists = [100,100,100,100,100];
-    let hasConfirmedAutoclicker = false
+
+
+
     let badKeyDown = false;
     // @ts-ignore
     const handleClick = (event) => {

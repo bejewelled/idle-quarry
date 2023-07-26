@@ -158,6 +158,10 @@
             for (let k in Object.keys($keyCraftTimes)) {
                 $keyCraftTimes[k] = [-1, -1]
             }
+            for (let i of Object.keys($keyCraftAmount)) {
+                $keyCraftAmount[i] = 0
+            }
+
             $keyCraftMastery = $baseKeyCraftMastery
             $keyUpgradeLevels = Array(200).fill(0)
             $buttonUpgradeLevels = Array(200).fill(0)

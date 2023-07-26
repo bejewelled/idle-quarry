@@ -205,7 +205,6 @@ const walletResetItems = ['gems', 'gold', 'orbs', 'beacons', 'key1', 'key2', 'be
 export function relocate() {
     if (calcFameGain() >= 10) {
         if (confirm("Are you sure? Relocating will reset all previous progress.")) {
-            try {
                 $flags['relocateNavBack'] = true;
                 $wallet['fame'] = ($wallet['fame'] || 0) + calcFameGain();
                 $wallet['totalFame'] = ($wallet['fame'] || 0) + calcFameGain();
@@ -216,11 +215,8 @@ export function relocate() {
                 // reset stuff
                 
                 for (let i of walletResetItems) {
-                    $wallet[i] = 0;
-                }
-                for (let i of resourceResetItems) {
                     if ($automationItemsUnlocked['unlimited power!'] && i == 'beaconPower') continue;
-                    $resources[i] = 0;
+                    $wallet[i] = 0;
                 }
                 for (let i of Object.entries($progress)) {
                     $progress[i[0]] = 0;
@@ -267,7 +263,7 @@ export function relocate() {
                 console.log($automationItemsUnlocked)
                     
                 if (!$automationItemsUnlocked['unlimited power!'])
-                    for (let i in $beaconUpgradeLevels) {
+                    for (let i in $beaconUpgrades) {
                         if (!$beaconUpgrades[i]['isCelestial'])
                             $beaconUpgradeLevels[i] = 0;
                     }
@@ -278,16 +274,6 @@ export function relocate() {
                 }
                 if ($automationItemsUnlocked['beaconizer']) {
                     $wallet['beacons'] = 50000;
-                }
-                if ($automationItemsUnlocked['deep pockets']) {
-                    $miningUpgradeLevels[6] = 1;
-                    $miningUpgradeLevelsBought[6] = 1;
-                    $visibleTier = 2;
-                }
-                if ($automationItemsUnlocked['deep pockets ii']) {
-                    $miningUpgradeLevels[9] = 1;
-                    $miningUpgradeLevelsBought[9] = 1;
-                    $visibleTier = 3;
                 }
                 if ($automationItemsUnlocked['omnipotent'] && $miningUpgradeLevels[14] >= 1) {
                     $miningUpgradeLevels[14] = 1;
@@ -301,12 +287,20 @@ export function relocate() {
                 //     if (k !== 'energy')
                 //     $keyCraftAmount[k] = 0;
                 // }
-            } catch (e) {
-                console.log("Error! Please report this on discord. Code: relocate " + e )
+                if ($automationItemsUnlocked['deep pockets']) {
+                    $miningUpgradeLevels[6] = 1;
+                    $miningUpgradeLevelsBought[6] = 1;
+                    $visibleTier = 2;
+                }
+                if ($automationItemsUnlocked['deep pockets ii']) {
+                    $miningUpgradeLevels[9] = 1;
+                    $miningUpgradeLevelsBought[9] = 1;
+                    $visibleTier = 3;
+                }
             }
         }
     }
-}
+
 
 const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
 

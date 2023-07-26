@@ -53,6 +53,7 @@
     {#key $upgradeSorting}
     {#if upgradeTab === 'regular'}
         <div class='pt-2 grid grid-cols-8'>
+            {#key mountCheck}
             {#each Object.entries($upgradeSorting) as u}
                 {#if u[1] !== undefined && u[1]['unlockAt']()}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -63,7 +64,8 @@
                         {u[0]}
                     </div>
                 {/if}
-            {/each}          
+            {/each}  
+            {/key}        
         </div>
     {/if}
     {/key}
@@ -158,6 +160,9 @@
     <div class='col-span-2 pb-12'></div>
     <div class='col-span-2 pb-12'></div>
     <div class='col-span-2 pb-12'></div>
+    <div class='col-span-12 pb-16'></div>
+    <div class='col-span-12 pb-16'></div>
+    <div></div>
     {/key}
 </div>
 
@@ -185,8 +190,10 @@ $: upgradeOrder = renderedUpgrades.map((_,i) => i).sort((a,b) => miningSort([a,r
 let clockr = false;
 let renderedUpgrades = $miningUpgrades;
 let upgradeTab = 'regular';
+let mountCheck = false;
 
 onMount(() => {
+    mountCheck = !mountCheck
     const clock = setInterval(() => {
         clockr = !clockr;
     }, 517)
@@ -202,7 +209,7 @@ function changeUpgradeType(type) {
 function changeUpgradeSorting(type) {
     if ($upgradeSorting[type] !== undefined) 
         $upgradeSorting[type]['on'] = !$upgradeSorting[type]['on'];
-        if ($settings['exclusiveSort'] && $upgradeSorting[type]['on']) {
+        if ($settings['exclusiveSort']) {
             for (let o of Object.keys($upgradeSorting)) {
                 if ($upgradeSorting[o] !== undefined && o !== type) 
                     $upgradeSorting[o]['on'] = false;

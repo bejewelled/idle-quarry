@@ -85,6 +85,8 @@ export default class ref {
         challengePoints: true,
         totalAntimatter: true,
         beaconPower: true,
+        mastery: true,
+        totalTrophies: true
     };
 
     static dropTiers = {
@@ -142,10 +144,9 @@ export default class ref {
         "relocate",
         "enchants",
         "augments",
-        "challenges",
+        "mastery",
         "artifacts",
         "ascension",
-        "mastery",
     ];
 
     static tabNotUnlockedText = {
@@ -154,9 +155,8 @@ export default class ref {
         relocate: "Use 200 total keys to unlock.",
         enchants: "Relocate and gain at least 100 fame to unlock.",
         automation: "Relocate and gain at least 1 fame to unlock.",
-        challenges: "Buy challenges with fame to unlock.",
+        mastery: "Buy mastery with fame to unlock.",
         artifacts: "Find an artifact with a T3 [***] or higher key to unlock.",
-        mastery: "???",
         ascension: "Obtain 1e15 fame.",
         button: "Reach Mining Level 8 to unlock.",
     };
@@ -223,11 +223,11 @@ export default class ref {
 
     static buttonBaseRewards = {
         okay: 1000,
-        good: 8000,
-        great: 12000,
-        excellent: 16000,
-        incredible: 35000,
-        perfect: 75000,
+        good: 3000,
+        great: 6000,
+        excellent: 11000,
+        incredible: 18000,
+        perfect: 30000,
     };
 
     static buttonColors = {
@@ -246,4 +246,12 @@ export default class ref {
         incredible: 2,
         perfect: 1,
     };
+
+    static slurryGainFromKeys = [
+        1e-5,
+        1e-3,
+        1,
+        1e4,
+        1e9
+    ]
 }

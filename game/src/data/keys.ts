@@ -347,23 +347,26 @@ export const keyCrafts = array([
             crystals: 1
         },
         craftTime: 15, // in seconds
-        baseAmount: 3,
+        min: 3,
+        max: 3,
         ratio: 10,
         unlockAt: () => (get(wallet)['crystals'] > 0),
     },
     {
-        item: 'beacons',
-        name: 'Beacons',
-        style: 'text-sky-400',
-        stylebg: 'bg-sky-400',
+        item: 'relics',
+        name: 'Relic',
+        style: 'text-transparent bg-clip-text bg-gradient-to-tr from-orange-300 to-amber-300',
+        stylebg: 'bg-gradient-to-br from-fuchsia-300 to-violet-700',
         cost: {
-            slurry: 1e3,
-            sigils: 1,
+            fragments: 100000,
+            artifacts: 15000,
+            antimatter: 300
         },
-        craftTime: 60, // in seconds
-        baseAmount: 1000,
-        ratio: 1.025,
-        unlockAt: () => (get(wallet)['beacons'] > 0),
+        craftTime: 750, // in seconds
+        min: 1,
+        max: 1,
+        ratio: 1.33,
+        unlockAt: () => (get(wallet)['fragments'] > 0),
     },
     {
         item: 'key2',
@@ -374,7 +377,8 @@ export const keyCrafts = array([
             slurry: 100,
         },
         craftTime: 100, // in seconds
-        baseAmount: 32,
+        min: 32,
+        max: 112,
         ratio: 1.04,
         unlockAt: () => (get(wallet)['key2'] > 0 || get(keysOpened)[1] > 0 || get(keysOpened)[0] > 1e4),
     },
@@ -388,24 +392,25 @@ export const keyCrafts = array([
             sigils: 10,
         },
         craftTime: 860, // in seconds
-        baseAmount: 16,
+        min: 9,
+        max: 25,
         ratio: 1.04,
         unlockAt: () => (get(wallet)['key3'] > 0 || get(keysOpened)[2] > 0 || get(keysOpened)[1] > 1e5),
     },
-    {
-        item: 'key5',
-        name: '[*****] Key [NOT IMPLEMENTED]',
-        style: 'text-amber-400',
-        stylebg: 'bg-amber-400',
-        cost: {
-            slurry: 1e11,
-            sigils: 1e5,
-        },
-        craftTime: 3600, // in seconds
-        baseAmount: 1,
-        ratio: 1.06,
-        unlockAt: () => (get(wallet)['key5'] > 0 || get(keysOpened)[4] > 0 || get(keysOpened)[3] > 1e5),
-    },
+    // {
+    //     item: 'key5',
+    //     name: '[*****] Key [NOT IMPLEMENTED]',
+    //     style: 'text-amber-400',
+    //     stylebg: 'bg-amber-400',
+    //     cost: {
+    //         slurry: 1e11,
+    //         sigils: 1e5,
+    //     },
+    //     craftTime: 3600, // in seconds
+    //     baseAmount: 1,
+    //     ratio: 1.06,
+    //     unlockAt: () => (get(wallet)['key5'] > 0 || get(keysOpened)[4] > 0 || get(keysOpened)[3] > 1e5),
+    // },
     // essences
     {
         item: 'efire',
@@ -417,7 +422,8 @@ export const keyCrafts = array([
             energy: 1
         },
         craftTime: 180, // in seconds
-        baseAmount: 1,
+        min: 2,
+        max: 5,
         ratio: 1.1,
         unlockAt: () => (get(wallet)['totalFame'] > 1e15),
     },
@@ -431,7 +437,8 @@ export const keyCrafts = array([
             energy: 1
         },
         craftTime: 180, // in seconds
-        baseAmount: 1,
+        min: 2,
+        max: 5,
         ratio: 1.1,
         unlockAt: () => (get(wallet)['dust'] > 7500),
     },
@@ -445,7 +452,8 @@ export const keyCrafts = array([
             energy: 1
         },
         craftTime: 180, // in seconds
-        baseAmount: 1,
+        min: 2,
+        max: 5,
         ratio: 1.1,
         unlockAt: () => (get(wallet)['orbs'] > 1e14),
     },
@@ -459,7 +467,8 @@ export const keyCrafts = array([
             energy: 1
         },
         craftTime: 180, // in seconds
-        baseAmount: 1,
+        min: 2,
+        max: 5,
         ratio: 1.1,
         unlockAt: () => (get(wallet)['sigils'] > 1e10),
     },
@@ -473,7 +482,8 @@ export const keyCrafts = array([
             energy: 1
         },
         craftTime: 180, // in seconds
-        baseAmount: 1,
+        min: 2,
+        max: 5,
         ratio: 1.1,
         unlockAt: () => (get(wallet)['stars'] > 1),
     },

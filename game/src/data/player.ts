@@ -175,7 +175,7 @@ function dropTable(context: any) {
                         i[item]= [
                         // add drop table multipliers here
                         //@ts-ignore
-                        (baseChance >= val[3] ? val[3] + Math.pow((baseChance-val[3])/4, 3) : baseChance),
+                        (baseChance >= val[3] ? val[3] + Math.pow((baseChance-val[3])/3.5, 2.33) : baseChance),
                         //@ts-ignore
                         Math.max(1,(val[1])
                         * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11])
@@ -247,12 +247,12 @@ export const baseMiningDropTable = dropTable({
     sigils: [0.0003,0.08,0.27, 0.02, 3],
     key2: [0.0001,0.04, 0.16, 0.02, 3],
     //lm3
-    dust: [1e-6, 0.06, 0.28, 0.0025, 4],
-    key3: [2e-7,0.01,0.03, 0.0025, 4],
+    dust: [1e-6, 0.06, 0.28, 0.004, 4],
+    key3: [2e-7, 0.01, 0.03, 0.004, 4],
     artifacts: [3.3e-8, 0.04, 0.05, 1e-5, 4],
     //lm4
-    radium: [1e-7, 0.01, 0.02, 1e-4, 5],
-    energy: [1e-9, 0.003, 0.007, 1e-6, 5],
+    radium: [1e-7, 0.01, 0.03, 1e-4, 5],
+    energy: [1e-9, 0.01, 0.03, 1e-6, 5],
     void: [1e-13, 1e-6, 3e-6, 1e-7, 5]
 
 });
@@ -268,12 +268,12 @@ export const miningDropTable = dropTable({
     sigils: [0.0003,0.08,0.27, 0.02, 3],
     key2: [0.0001,0.04, 0.16, 0.02, 3],
     //lm3
-    dust: [1e-6, 0.06, 0.28, 0.0025, 4],
-    key3: [2e-7,0.01,0.03, 0.0025, 4],
+    dust: [1e-6, 0.06, 0.28, 0.004, 4],
+    key3: [2e-7, 0.01, 0.03, 0.004, 4],
     artifacts: [3.3e-8, 0.04, 0.05, 1e-5, 4],
     //lm4
-    radium: [1e-7, 0.01, 0.02, 1e-4, 5],
-    energy: [1e-9, 0.003, 0.007, 1e-6, 5],
+    radium: [1e-7, 0.01, 0.03, 1e-4, 5],
+    energy: [1e-9, 0.01, 0.03, 1e-6, 5],
     void: [1e-13, 1e-6, 3e-6, 1e-7, 5]
 
 });

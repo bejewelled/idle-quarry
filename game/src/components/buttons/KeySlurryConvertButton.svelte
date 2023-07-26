@@ -20,6 +20,19 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
             <div class='text-small game-text'>
                 You will gain {f(slurryGain)} slurry.
             </div>
+            <hr />
+            <div class='pt-1'>
+            {#each Object.keys(keysInWallet) as key}
+              {#if keysInWallet[key] > 0}
+                <div class='text-small justify-center'>
+                  <span class='text-left {ref.colors[key]}'>[{'*'.repeat(parseInt(key.substring(3)))}]: </span> 
+                  <span class='text-right align-right w-3/4 text-white'>+ {f(ref.slurryGainFromKeys[parseInt(key.substring(3))-1],
+                  (parseInt(key.substring(3))-1 == 0 ? 5 : 3))}</span>
+
+                </div> 
+              {/if}
+            {/each}
+          </div>
         </div>
     
          </span>
@@ -71,8 +84,8 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
       clearInterval(rcInterval);
     })
 
-    const f = (n, pl = 0) => {
-        if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    const f = (n, pl = 0, forceExponential=false) => {
+        if (n < 1e9 && !forceExponential) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         else return n.toExponential(3).toString().replace('+', '');
     }   
 

@@ -80,12 +80,7 @@
 let resetFuncs: any;
 
   function canAscend() {
-    for (let i of $ascensionElements) {
-      if (i != 'antimatter' && (!$wallet['e'+i] || $wallet['e'+i] < 1)) {
-        return false;
-      }
-    }
-    return true;
+    return formula.sumEssence() >= 0
   }
   function ascend() {
         if (confirm('ARE YOU SURE??? This will reset EVERYTHING! If this is your first ascension, MAKE SURE you are gaining a bonus of some sort, or you will essentially be hard resetting!')) {

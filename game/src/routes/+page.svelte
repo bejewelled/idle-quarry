@@ -258,8 +258,8 @@
                     <Button />
                 {:else if tab === "augments" && tabUnlockCriteria["augments"]()}
                     <Automation />
-                {:else if tab === "challenges" && tabUnlockCriteria["challenges"]()}
-                    <Challenges />
+                {:else if tab === "mastery" && tabUnlockCriteria["mastery"]()}
+                    <Mastery />
                 {:else if tab === "artifacts" && tabUnlockCriteria["artifacts"]()}
                     <Artifacts />
                 {:else if tab === "ascension" && tabUnlockCriteria["ascension"]()}
@@ -281,6 +281,7 @@
 </div>
 
 <script lang='ts'>
+	import { masteryNextReq } from './../data/mastery.ts';
 	import { ascensionLevels, ascensionUpgradeLevels } from './../data/player.ts';
 
 
@@ -364,7 +365,7 @@
     import Button from "../components/tabs/Button.svelte";
     import Help from "../components/tabs/Help.svelte";
     import Settings from "../components/tabs/Settings.svelte";
-    import Challenges from "../components/tabs/Challenges.svelte";
+    import Mastery from "../components/tabs/Mastery.svelte";
     import Artifacts from "../components/tabs/Artifacts.svelte";
     import MiningUpgradeButton from "../components/buttons/MiningUpgradeButton.svelte";
     import Ascension from "../components/tabs/Ascension.svelte";
@@ -457,7 +458,7 @@
         default: () => false,
         help: () => true,
         settings: () => true,
-        challenges: () => $automationItemsUnlocked["game on"],
+        mastery: () => $automationItemsUnlocked["masterful"],
         artifacts: () => $wallet["artifacts"] && $wallet["artifacts"] >= 1,
         ascension: () => ($wallet['totalFame'] > 1e15
         || $ascensionLevels['antimatter'][1] > 0 || $ascensionLevels['antimatter'][0] > 0
@@ -888,6 +889,9 @@
 
         challengeGoals.updateChallengeReqs();
 
+        $masteryNextReq = formula.calcMasteryNextReq()
+
+
         loadingFinished = true;
         console.log($activityLogShow);
         return true;
@@ -898,7 +902,7 @@
             $wallet["energizedCrystal"] || $wallet["energy"] || 0;
         $wallet["energizedCrystal"] = undefined;
         const ver = $saveVersion;
-        const LATEST_VER = 28;
+        const LATEST_VER = 30;
         if (ver <= 0) {
             // fix "mysterious potion" error
             $keyUpgradeLevels[0] = 0;
@@ -1028,6 +1032,11 @@
         }
         if (ver < 28) {
             $settings['speed'] = 1;
+        }
+        if (ver < 30) {
+            if ($automationItemsUnlocked['game on']) {
+                $automationItemsUnlocked["masterful"] = true;
+            }
         }
 
         $saveVersion = LATEST_VER;

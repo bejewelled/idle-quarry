@@ -4,40 +4,28 @@
 </div>
 
 <div class='grid grid-cols-12'>
-    {#key $challengeActive}
-        {#each $challengeNames as c,i}
-            {#if $challengeUnlockCriteria[i]()}
-                <div class='col-span-2 game-text text-left'>{c} [{$challengesCompleted[i]}]</div>
-                <div class='col-span-6 align-middle tooltip-text text-xs text-justify'>{$challengeDescriptions[i]}</div>
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div class='col-span-2 tooltip-text text-xs'>
-                    <div class='grid grid-cols-2'>
-                        <div class='text-center 
-                        text-amber-500'>points </div>
-                        <div class='text-left col-span-1'>{f($challengeGoals[i])}</div>
-                    </div>
-                </div>
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div class='col-span-2 ml-2 align-middle mb-5 text-center 
-                {$challengeActive == i+1 ? 'game-btn-toggleon' : 'game-btn'}'
-                on:click={() => toggleChallenge(i+1)}>
-                    {#if $challengeActive == i+1}
-                        Exit
-                    {:else}
-                        Start
-                    {/if}
-                </div>
-                <div class='col-span-12 py-1'></div>
-            {/if}
-        {/each}
-        
-    {/key}
+    <div class='col-span-12 text-white'>Mastery - Do nothing, get trophies (STILL WIP STAY TUNED)</div>
+    <div class='col-span-12 text-white text-small'>Progress to Next Trophy</div>
 
+<div class='col-span-12'>
+    <div class='mine-bar-wrapper align-middle'>
+        <div class="w-full my-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 has-tooltip">
+            <span class='tooltip tooltip-style'>
+                {f($wallet['mastery'] || 0)} / {f($masteryNextReq)}
+            </span>
+            <div class="bg-orange-400 h-2.5 rounded-full has-tooltip" 
+            style="width: {masteryBarWidth}">
+
+        </div>
+        </div>
+    </div>
+</div>
 </div>
 </div>
 
 
 <script lang='ts'>
+	import { masteryNextReq } from '../../data/mastery.js';
  //@ts-nocheck
  import { onMount, onDestroy } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
@@ -48,21 +36,19 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     mineLevel, buttonUpgradeLevels, stats, keyCraftAmount,
 miningUpgradeLevelsBought, miningUpgradeLevelsFree,
 challengeActive, challengesCompleted, miningUpgradeLevelsBoughtTemp,
-miningUpgradeLevelsFreeTemp, miningUpgradeLevelsTemp} from '../../data/player';
-import {challengeNames, challengeDescriptions, challengeGoals,
-challengeUnlockCriteria} from '../../data/challenges';
-import {buttonUpgrades} from '../../data/button';
+miningUpgradeLevelsFreeTemp, miningUpgradeLevelsTemp} from '../../data/player.js';
+import {buttonUpgrades} from '../../data/button.js';
 import {progressThreshold, progressPerTick, miningUpgrades,
-gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
-import {keyGainFlavorText} from '../../data/keys';
+gemGainFlavorText, gemProgressFlavorText } from '../../data/mining.js';
+import {keyGainFlavorText} from '../../data/keys.js';
 import {beaconPower, beaconBonuses,
     beaconFormulas, beaconNums, beaconNextReqs, beaconSpendAmt ,
-beaconUpgrades, beaconNameText, baseBeaconNextReqs} from '../../data/beacons';
-import {enchantUpgrades, enchantThreshold} from '../../data/fame';
-import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
-import ref from '../../calcs/ref'
-import formula from '../../calcs/formula';
+beaconUpgrades, beaconNameText, baseBeaconNextReqs} from '../../data/beacons.js';
+import {enchantUpgrades, enchantThreshold} from '../../data/fame.js';
+import ref from '../../calcs/ref.js'
+import formula from '../../calcs/formula.js';
 
+$: masteryBarWidth = `${($wallet['mastery']||0) / $masteryNextReq * 100}%`;
 
 const f = (n: number, pl = 0) => {
         if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");

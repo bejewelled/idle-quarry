@@ -373,8 +373,8 @@ export const automationUpgrades = array([{
 },
 {
     index: 4,
-    name: 'Game On',
-    description: 'Unlocks challenges 1 - 3.',
+    name: 'Masterful',
+    description: 'Unlocks Mastery.',
     cost: {
         fame: 100000,
     },
@@ -432,16 +432,16 @@ export const automationUpgrades = array([{
     unlockAt: () => (get(wallet)['trophies'] >= 1 || formula.sumArray(get(challengesCompleted)) > 0),
     isPercent: true,
 },
-{
-    index: 10,
-    name: 'Hellfire',
-    description: '[NOT IMPLEMENTED YET] Unlocks challenges 4 - 6.',
-    cost: {
-        dust: 1e207,
-    },
-    unlockAt: () => (get(wallet)['trophies'] >= 1 || formula.sumArray(get(challengesCompleted)) > 0),
-    isPercent: true,
-},
+// {
+//     index: 10,
+//     name: 'Hellfire',
+//     description: '[NOT IMPLEMENTED YET] Unlocks challenges 4 - 6.',
+//     cost: {
+//         dust: 1e207,
+//     },
+//     unlockAt: () => (get(wallet)['trophies'] >= 1 || formula.sumArray(get(challengesCompleted)) > 0),
+//     isPercent: true,
+// },
 {
     index: 11,
     name: 'Spellcaster II',
