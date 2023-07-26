@@ -80,7 +80,7 @@
 let resetFuncs: any;
 
   function canAscend() {
-    return formula.sumEssence() >= 0
+    return formula.sumEssence() >= 30
   }
   function ascend() {
         if (confirm('ARE YOU SURE??? This will reset EVERYTHING! If this is your first ascension, MAKE SURE you are gaining a bonus of some sort, or you will essentially be hard resetting!')) {
