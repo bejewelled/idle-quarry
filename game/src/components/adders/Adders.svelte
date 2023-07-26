@@ -777,7 +777,8 @@
     }
 
     function addMastery(dt) {
-        $wallet['mastery'] += dt
+        $wallet['mastery'] = ($wallet['mastery'] || 0) + dt
+        $wallet['warp'] = ($wallet['warp'] || 0) + (dt * formula.calcWarpGainFromMastery() / (1000/UPDATE_SPEED))
         checkForMasteryCompletion()
     }
 

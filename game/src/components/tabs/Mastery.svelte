@@ -5,14 +5,16 @@
 
 <div class='grid grid-cols-12'>
     <div class='col-span-12 text-white'>Mastery - Do nothing, get trophies (STILL WIP STAY TUNED)</div>
-    <div class='col-span-12 text-white text-small'>Progress to Next Trophy</div>
+    <div class='col-span-12 text-white text-small'>Progress to Next Trophy - 
+        <span class='text-orange-400'>{f($wallet['mastery'] || 0)} / {f($masteryNextReq)}</span>
+    </div>
+    <div class='col-span-12 text-white text-small'>Your mastery 
+        <span class='text-orange-400'>({f($wallet['totalTrophies'])})</span>
+    is producing <span class='{ref.colors['warp']}'>{f(formula.calcWarpGainFromMastery(), 2)} warp per second.</span></div>
 
 <div class='col-span-12'>
     <div class='mine-bar-wrapper align-middle'>
         <div class="w-full my-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 has-tooltip">
-            <span class='tooltip tooltip-style'>
-                {f($wallet['mastery'] || 0)} / {f($masteryNextReq)}
-            </span>
             <div class="bg-orange-400 h-2.5 rounded-full has-tooltip" 
             style="width: {masteryBarWidth}">
 

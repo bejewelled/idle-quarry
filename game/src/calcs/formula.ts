@@ -249,9 +249,13 @@ export default class formula {
     * get(beaconBonuses)[6]
     * (i == 'beacons' ? 
     Math.pow(formula.sumArray(get(beaconLevels)), 0.65) : 1);
-
-
 }
+
+  static calcWarpGainFromMastery() {
+    const y = get(wallet)['totalTrophies'] || 0;
+    return 0.13*y + 0.0004*y**2;
+  }
+
   static calcChallengePointGain(n: number, type: string, isOffFocus: boolean = false) {
     // indices of key finder in mining upgrades for each tier
     const keyFinderIndex = [3, 4, 18]

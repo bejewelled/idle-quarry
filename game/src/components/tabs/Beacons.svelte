@@ -95,7 +95,7 @@
     {/each}
     <div class='col-span-12 pb-16'></div>
     <div class='col-span-12 pb-16'></div>
-    <div>s</div>
+    <div></div>
 </div>
 </div>
 
