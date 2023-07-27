@@ -14,7 +14,7 @@
       ASCEND
   </div>
   {:else}
-    You need at least 1 of each essence type to ascend.
+    You need at least 30 total essence to ascend.
   {/if}
 </div>
 

@@ -232,6 +232,7 @@ export const beaconSpendAmt = single(1);
 export const beaconPowerFlavorText = single(1);
 
 export const beaconUpgrades = array([{
+    index: 0,
     name: 'Supercharged',
     description: 'Increases all beacon path progress.',
     cost: {
@@ -249,6 +250,7 @@ export const beaconUpgrades = array([{
     notes: '0.25*lv until 36, (lv-36)*0.025 until 916, sqrt(lv-916)*0.025 after'
 },
 {
+    index: 1,
     name: 'Shining Light',
     description: 'Increases the droprate for beacons (mining only).',
     cost: {
@@ -265,6 +267,7 @@ export const beaconUpgrades = array([{
     notes: '0.25*lv until 36, (lv-36)*0.025 until 916, sqrt(lv-916)*0.025 after'
 },
 {
+    index: 2,
     name: 'Ramping Power',
     description: 'Unspent beacon power boosts beacon path progress. Upgrades multiply this amount.',
     cost: {
@@ -280,6 +283,7 @@ export const beaconUpgrades = array([{
     notes: ''
 },
 {
+    index: 3,
     name: 'Angelic Intervention',
     description: 'Glory, oh glory. Beacons gain additional power based on the path\'s level.',
     cost: {
@@ -296,13 +300,14 @@ export const beaconUpgrades = array([{
     isCelestial: true,
 },
 {
+    index: 4,
     name: 'Divine Blessing',
     description: 'Dramatically increases the effect of beacon levels on beacon power.',
     cost: {
         antimatter: 96,
     },
     ratio: 1.65,
-    formula: (lv: any) => lv * 0.33,
+    formula: (lv: any) => 1 + lv * 0.33,
     mineLevelReq: 12,
     unlockAt: () => ascFormula.getVal('celestial') >= 2,
     isPercent: true,
@@ -312,6 +317,7 @@ export const beaconUpgrades = array([{
     isCelestial: true,
 }, 
 {
+    index: 5,
     name: '[???]',
     description: '[coming soon]',
     cost: {

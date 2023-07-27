@@ -777,6 +777,7 @@
     }
 
     function addMastery(dt) {
+        if (!$automationItemsUnlocked['masterful']) return
         $wallet['mastery'] = ($wallet['mastery'] || 0) + dt
         $wallet['warp'] = ($wallet['warp'] || 0) + (dt * formula.calcWarpGainFromMastery() / (1000/UPDATE_SPEED))
         checkForMasteryCompletion()
