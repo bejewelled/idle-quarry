@@ -63,6 +63,7 @@
         miningUpgradeLevelsBoughtTemp,
         miningUpgradeLevelsFreeTemp,
         buttonRadiumProgress,
+        masteryItemLevels
     } from '../../data/player'
     import { buttonUpgrades } from '../../data/button'
     import {
@@ -74,6 +75,7 @@
         beaconPowerFlavorText,
         beaconNameText,
     } from '../../data/beacons'
+    import {masteryItemReqs, masteryItemInfo} from '../../data/mastery'
     import { challengeGoals } from '../../data/challenges'
     import { enchantUpgrades, enchantThreshold } from '../../data/fame'
     import { allMultipliers } from '../../data/artifacts'
@@ -135,7 +137,7 @@
         updateBeaconBonuses()
         last = Date.now()
         const mainLoop = setInterval(() => {
-            const TEST_SPEEDUP = ($settings['speed'] || 1)
+            const TEST_SPEEDUP = 1
             dt = (Date.now() - last) / UPDATE_SPEED * TEST_SPEEDUP
             addProgress(dt)
             updateMiningLevel()

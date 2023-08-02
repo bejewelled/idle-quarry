@@ -156,10 +156,7 @@
                 <button
                     class="py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950"
                     on:click={() => reset()}>Reset</button>
-                <button class="text-xs text-gray-600">game speed (x{$settings['speed']})</button>
-                <input id="default-range" type="range" bind:value={$settings['speed']} min="1" max="100" 
-                class="w-1/6 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
-                <button class="text-xs text-gray-600">v0.0.5a-2 (TESTING)</button>
+                <button class="text-xs text-gray-600">v0.0.5a-3</button>
                 <!-- mining level bar -->
                 <div class="wrapper grid grid-cols-9">
                     <div class="col-span-1 p-[1px] has-tooltip">
@@ -899,6 +896,8 @@
         challengeGoals.updateChallengeReqs();
 
         $masteryNextReq = formula.calcMasteryNextReq()
+
+        $settings['speed'] = 1;
 
         // update mastery current for each item
         updateMasteryLevels()
