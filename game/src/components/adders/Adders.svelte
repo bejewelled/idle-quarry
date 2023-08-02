@@ -1,6 +1,4 @@
 <script>
-	import { masteryItemReqs, masteryItemInfo } from './../../data/mastery.ts';
-	import { masteryItemLevels } from './../../data/player.ts';
 // @ts-nocheck
 
     import { ascFormula } from './../../data/ascension.ts'
@@ -529,35 +527,21 @@
 
     }
 
-    function dropRoll(n) {
-        let rewards = {}
-        for (let [item, vals] of Object.entries($miningDropTable)) {
-            if ($visibleTier >= vals[4]) {
-                // when P(x) >= 1
-                if (vals[0] >= 1) {
-                    rewards[item] =
-                        (rewards[item] || 0) +
-                        n * (vals[1] + Math.random() * (vals[2] - vals[1]))
-                    continue
-                    // when E[x] > 1 but P(x) < 1
-                } else if (n * vals[0] >= 1) {
-                    const stdev = Math.sqrt(n * vals[0] * (1 - vals[0]))
-                    const val = Array.from(
-                        { length: Math.floor(Math.sqrt(n)) },
-                        () =>
-                            Math.floor(
-                                vals[1] + Math.random() * (vals[2] - vals[1])
-                            )
-                    )
-                    const c = Math.random() * 2.83 + 0.01
-                    const numWins =
-                        vals[0] * n +
-                        Math.max(
-                            (Math.random() > 0.5 ? 1 : -1) *
-                                stdev *
-                                Math.pow(c / (c - 5), 6),
-                            0
-                        )
+function dropRoll(n) {
+    let rewards = {}
+    for (let [item, vals] of Object.entries($miningDropTable)) {
+        if ($visibleTier >= ref.dropTiers[item]) {
+            if (vals[0] >= 1) {
+                rewards[item] = (rewards[item] || 0) 
+                + vals[1]+(Math.random() * (vals[2] - vals[1]));
+                continue;
+            } else if (n > (1 / vals[0])) {
+                const stdev= Math.sqrt(n*vals[0]*(1-vals[0]));
+                const val = Array.from({length: Math.floor(Math.sqrt(n))}, 
+                () => Math.floor(vals[1] + Math.random()*(vals[2]-vals[1])));
+                const c = (Math.random()*2.83)+0.01;
+                const numWins = vals[0]*n +
+                Math.max(((Math.random() > 0.5 ? 1 : -1) * stdev * Math.pow(c/(c-5), 6)),0);
 
                     // monte carlo value selector
                     const rewardVal =
