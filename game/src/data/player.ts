@@ -467,3 +467,15 @@ export const ascensionStats = object({
 export const ascensionUpgradeLevels = array(Array(100).fill(0))
 
 export const antimatterBonusesUnlocked = single(0); 
+
+export const masteryItemLevels = object({
+    gems: 0,
+    gold: 0,
+    orbs: 0,
+    crystals: 0,
+    sigils: 0,
+    slurry: 0,
+    dust: 0,
+    artifacts: 0,
+    radium: 0
+})

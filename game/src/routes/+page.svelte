@@ -281,7 +281,7 @@
 </div>
 
 <script lang='ts'>
-	import { masteryNextReq } from './../data/mastery.ts';
+	import { masteryNextReq, masteryItemInfo, masteryItemReqs } from './../data/mastery.ts';
 	import { ascensionLevels, ascensionUpgradeLevels } from './../data/player.ts';
 
 
@@ -330,7 +330,8 @@
         challenge3Multi,
         buttonRadiumProgress,
         stats,
-        ascensionStats
+        ascensionStats, 
+        masteryItemLevels 
     } from "../data/player.ts";
     import { upgradeSorting } from "../data/mining.ts";
     import {
@@ -508,6 +509,7 @@
         for (let key of Object.keys($keyItemsUnlocked)) {
             keyItems[key] = Array.from($keyItemsUnlocked[key] || []);
         }
+        localStorage.setItem("masteryItemLevels", JSON.stringify($masteryItemLevels))
         localStorage.setItem("keyItemsUnlocked", JSON.stringify(keyItems));
         localStorage.setItem("keysOpened", JSON.stringify($keysOpened));
         localStorage.setItem("progress", JSON.stringify($progress));
@@ -840,10 +842,12 @@
             );
         }
         if ($automationItemsUnlocked["spellcaster"]) {
-            $enchantThreshold["t1"] *= 0.9;
+            for (let i of Object.keys($enchantThreshold))
+                $enchantThreshold[i] *= 0.9;
         }
         if ($automationItemsUnlocked["spellcaster ii"]) {
-            $enchantThreshold["t1"] *= 0.9;
+            for (let i of Object.keys($enchantThreshold))
+                $enchantThreshold[i] *= 0.9;
         }
 
         if (localStorage.getItem("activityLogShow")) {
@@ -871,6 +875,11 @@
                 JSON.parse(localStorage.getItem("challenge3Multi"))
             );
         }
+        if (localStorage.getItem("masteryItemLevels")) {
+            masteryItemLevels.set(
+                JSON.parse(localStorage.getItem("masteryItemLevels"))
+            );
+        }
 
         // updates older save files to new format
         await versionUpdater();
@@ -891,11 +900,32 @@
 
         $masteryNextReq = formula.calcMasteryNextReq()
 
+        // update mastery current for each item
+        updateMasteryLevels()
+        updateMasteryReqs()
 
         loadingFinished = true;
         console.log($activityLogShow);
         return true;
     };
+
+    function updateMasteryLevels() {
+        for (let i of Object.keys($masteryItemInfo)) {
+            if (!$masteryItemLevels[i]) $masteryItemLevels[i] = 0
+        }
+    }
+
+    function updateMasteryReqs() {
+        for (let i of Object.keys($masteryItemLevels)) {
+            if (typeof i == 'object') continue
+            console.log($masteryItemLevels)
+            $masteryItemReqs[i] = $masteryItemInfo[i]['base'] * Math.pow($masteryItemInfo[i]['increase'], $masteryItemLevels[i])
+        }
+        for (let i of Object.keys($masteryItemReqs)) {
+            if (typeof i == 'object' || $masteryItemReqs[i] == undefined) delete $masteryItemReqs[i]
+        }
+        console.log($masteryItemReqs)
+    }
 
     function versionUpdater() {
         $wallet["energy"] =

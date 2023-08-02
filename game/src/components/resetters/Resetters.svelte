@@ -179,6 +179,9 @@
             key5DropTable.updateTable()
             $beaconNextReqs = $baseBeaconNextReqs
             console.log(ascFormula.getVal('magic'))
+            
+
+
         } catch (e) {
             console.log(
                 'Error! Please report this on discord. Code: ascend ' + e

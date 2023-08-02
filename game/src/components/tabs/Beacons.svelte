@@ -49,6 +49,11 @@
             <div class='row-span-1 text-center game-text text-small'>
                 {f($beaconLevels[i],0)} / {fExp($beaconMaxLevels[i],
                 $beaconMaxLevels[i] > 1e6 ? 1 : 0)}
+                {#if $beaconLevels[i] > 10000}
+                <span class='text-cyan-300 text-small'>
+                     (x{f(formula.calcBeaconPowerMulti($beaconLevels[i]), 2)})
+                </span>
+                {/if}
             </div>
             <div class='row-span-1 text-center game-text text-small'>
                 +{fp(Math.max(beaconDispBonus[i], 1), 2, true)}

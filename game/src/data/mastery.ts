@@ -131,4 +131,55 @@ const ceil = (n: number) => Math.ceil(n);
 
 export const masteryNextReq = single(100)
 
+export const masteryItemInfo = object({
+    gems: {
+        base: 1e13,
+        increase: 1e3,
+        cap: 1e295
+    },
+    gold: {
+        base: 1e11,
+        increase: 1e2,
+        cap: 1e295
+    },
+    orbs: {
+        base: 1e10,
+        increase: 1e2,
+        cap: 1e295
+    },
+    crystals: {
+        base: 1e7,
+        increase: 1e2,
+        cap: 1e115
+    },
+    sigils: {
+        base: 1e6,
+        increase: 1e2,
+        cap: 1e115
+    },
+    slurry: {
+        base: 1e6,
+        increase: 1e2,
+        cap: 1e115
+    },
+    dust: {
+        base: 1e4,
+        increase: 1e1,
+        cap: 1e78
+    },
+    artifacts: {
+        base: 1e3,
+        increase: 1e1,
+        cap: 1e78
+    },
+    radium: {
+        base: 1e2,
+        increase: 1e1,
+        cap: 1e78
+    },
+})
+
+export const masteryItemReqs = object({
+    gems: 0
+})
 

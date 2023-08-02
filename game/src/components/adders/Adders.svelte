@@ -1,4 +1,6 @@
 <script>
+	import { masteryItemReqs, masteryItemInfo } from './../../data/mastery.ts';
+	import { masteryItemLevels } from './../../data/player.ts';
 // @ts-nocheck
 
     import { ascFormula } from './../../data/ascension.ts'
@@ -40,6 +42,7 @@
         beaconProgress,
         resources,
         beaconUpgradeLevels,
+
         enchantProgress,
         enchantUpgradeLevels,
         automationItemsUnlocked,
@@ -139,6 +142,7 @@
             addProgress(dt)
             updateMiningLevel()
             checkForKeyCraftCompletion()
+
             addMastery(dt)
             // out of focus - update more slowly to conserve resources
             if ($settings['activeTab'] !== 'beacons') {
@@ -756,11 +760,13 @@
         }
 
         // NOTE!!!!! When you update this, make sure to update the display in Beacons.svelte line 7
+
+
         const bpGain =
             25 *
             (UPDATE_SPEED / 1000) *
             $beaconLevels.reduce(
-                (s, c) => s * (c > 10000 ? Math.log10(c) - 3 : 1),
+                (s, c) => s * (c > 10000 ? formula.calcBeaconPowerMulti(c): 1),
                 1
             ) *
             $beaconBonuses[0] *
@@ -776,11 +782,35 @@
         }
     }
 
+    let masteryUpdateTicks = 0, m = formula.calcMasteryGainPerTick();
+    const MASTERY_GAIN_UPDATE_AT = 11
+    
     function addMastery(dt) {
+        if (masteryUpdateTicks > MASTERY_GAIN_UPDATE_AT) {
+            m = formula.calcMasteryGainPerTick()
+            masteryUpdateTicks = 0
+        }
         if (!$automationItemsUnlocked['masterful']) return
-        $wallet['mastery'] = ($wallet['mastery'] || 0) + dt
+        $wallet['mastery'] = ($wallet['mastery'] || 0) + m
         $wallet['warp'] = ($wallet['warp'] || 0) + (dt * formula.calcWarpGainFromMastery() / (1000/UPDATE_SPEED))
         checkForMasteryCompletion()
+        checkForItemMasteryLevelUp()
+    }
+
+    function checkForItemMasteryLevelUp() {
+        //@ts-nocheck
+        for (let m of Object.keys($masteryItemLevels)) {
+            // console.log($masteryItemReqs)
+            if ($wallet[m] > $masteryItemReqs[m]) {
+                console.log(m)
+                $masteryItemLevels[m]++
+                $masteryItemReqs[m] = (
+                    $masteryItemInfo[m]['base']
+                    * Math.pow($masteryItemInfo[m]['increase'], 
+                    $masteryItemLevels[m])   
+                )
+            }
+        }
     }
 
     let lightningBlastLockout = false
@@ -969,11 +999,16 @@
                             )
                             $buttonRadiumProgress[0] %= $buttonRadiumProgress[1]
                         }
-                        addToActivityLog(
-                            '[Clicker Hero] ' +
+                        let warp = 0;
+                        warp += Math.round(1 + (0.6 + Math.random()*0.8) * (Math.pow($buttonUpgradeLevels[6], 1.6) * 3))
+                        $wallet['warp'] = ($wallet['warp'] || 0) + warp
+                        const text = '[Clicker Hero] ' +
                                 rewardDescriptionText +
                                 f(rewardAmount) +
-                                ' radioactivity',
+                                ' radioactivity' + 
+                                (warp > 0 ? ', ' + f(warp) + ' warp' : '')
+                        addToActivityLog(
+                            text,
                             rewardStyle,
                             'clicker hero'
                         )

@@ -1,5 +1,5 @@
 import {buttonUpgradeLevels, miningUpgradeLevels, keyUpgradeLevels,
-keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet, ascensionLevels, ascensionStats, automationItemsUnlocked} from '../data/player';
+keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet, ascensionLevels, ascensionStats, automationItemsUnlocked, masteryItemLevels} from '../data/player';
 import { beaconBonuses } from '../data/beacons';
 import {keyUpgrades, keyCrafts} from '../data/keys'
 import { get } from 'svelte/store';
@@ -218,7 +218,8 @@ export default class formula {
 
   static calcMasteryNextReq() {
     const y = get(wallet)['totalTrophies'] || 0;
-    return 16225 * Math.pow(1.13 + Math.log10((y+1)*0.05), y);
+    const c = 1.1 + (Math.pow(y, 0.34)*0.01)
+    return 1160 * (y**2) * Math.pow(c, y);
   }
 
   static calcKeySlurryGain(obj: { [x: string]: number; }) {
@@ -229,8 +230,12 @@ export default class formula {
       alert('note: this feature is bugged, please report this on Discord - reduced slurry gained (using "safe" formula)')
       return obj['key1'] / 8e5;
     }
-    return y
+    return y * get(keyUpgrades)[1]['formula'](get(keyUpgradeLevels)[1]);
   
+  }
+
+  static calcBeaconPowerMulti(lv: number) {
+    return (lv > 10000 ? Math.log10(lv) - 3 : 1)
   }
   
   static calcFragmentGain(t: number, amt: number) {
@@ -306,5 +311,19 @@ export default class formula {
     if (!get(automationItemsUnlocked)['abundance']) return 1;
     const bonuses = [4096, 16, 2, 1, 1]
     return bonuses[t-1];
+  }
+
+  static calcMasteryGainPerTick() {
+    const lvs = get(masteryItemLevels)
+    let y = 1, i: any;
+    for (i of Object.values(lvs)) {
+      y *= this.calcMasteryGainMulti(i)
+    }
+    console.log(y)
+    return y
+  }
+
+  static calcMasteryGainMulti(lv: number) {
+    return Math.pow(lv+1, 0.68)
   }
 }

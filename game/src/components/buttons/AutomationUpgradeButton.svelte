@@ -49,7 +49,10 @@ select-none'>{$automationUpgrades[index]['name']}
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
 // @ts-nocheck
-    export let index;
+    /**
+     * @type {string | number}
+     */
+     export let index;
     let getCosts = () => {
         let c = {};
         for (let [type, base] of Object.entries($automationUpgrades[index]['cost'])) {
@@ -100,8 +103,14 @@ select-none'>{$automationUpgrades[index]['name']}
         $automationItemsUnlocked[$automationUpgrades[index]['name'].toLowerCase()] = true;
 
         // special cases
-        if ($automationItemsUnlocked['spellcaster ii']) $enchantThreshold['t1'] *= 0.9;
-        else if ($automationItemsUnlocked['spellcaster']) $enchantThreshold['t1'] *= 0.9;
+        if ($automationUpgrades[index]['name'] == 'spellcaster') {
+            for (let i of Object.keys($enchantThreshold))
+                $enchantThreshold[i] *= 0.9;
+        }
+        if ($automationUpgrades[index]['name'] == 'spellcaster ii') {
+            for (let i of Object.keys($enchantThreshold))
+                $enchantThreshold[i] *= 0.9;
+        }
 
         if ($automationItemsUnlocked['deep pockets']) {
             $miningUpgradeLevels[6] = 1;
