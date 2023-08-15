@@ -423,7 +423,7 @@ export const keyCrafts = array([
         },
         craftTime: 180, // in seconds
         min: 2,
-        max: 5,
+        max: 9,
         ratio: 1.1,
         unlockAt: () => (get(wallet)['totalFame'] > 1e15),
     },
@@ -438,7 +438,7 @@ export const keyCrafts = array([
         },
         craftTime: 180, // in seconds
         min: 2,
-        max: 5,
+        max: 9,
         ratio: 1.1,
         unlockAt: () => (get(wallet)['dust'] > 7500),
     },
@@ -453,7 +453,7 @@ export const keyCrafts = array([
         },
         craftTime: 180, // in seconds
         min: 2,
-        max: 5,
+        max: 9,
         ratio: 1.1,
         unlockAt: () => (get(wallet)['orbs'] > 1e14),
     },
@@ -468,7 +468,7 @@ export const keyCrafts = array([
         },
         craftTime: 180, // in seconds
         min: 2,
-        max: 5,
+        max: 9,
         ratio: 1.1,
         unlockAt: () => (get(wallet)['sigils'] > 1e10),
     },
@@ -483,7 +483,7 @@ export const keyCrafts = array([
         },
         craftTime: 180, // in seconds
         min: 2,
-        max: 5,
+        max: 9,
         ratio: 1.1,
         unlockAt: () => (get(wallet)['stars'] > 1),
     },
