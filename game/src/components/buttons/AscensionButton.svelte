@@ -83,8 +83,10 @@ let resetFuncs: any;
   const ascReq = () => Math.ceil(30 * Math.pow($ascensionStats['ascensionCount']+1, 1.33));
 
   function canAscend() {
-    return formula.sumEssence() >= ascReq
+    if (formula.sumEssence() >= ascReq()) return true;
+    return false;
   }
+  
   function ascend() {
         if (confirm('ARE YOU SURE??? This will reset EVERYTHING! If this is your first ascension, MAKE SURE you are gaining a bonus of some sort, or you will essentially be hard resetting!')) {
             resetFuncs.ascend();
