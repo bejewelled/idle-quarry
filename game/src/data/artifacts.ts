@@ -152,5 +152,12 @@ export const allMultipliers = object({
         formula: (amt: number) => 1 + Math.log(Math.pow(amt,0.8)/1100+1),
         colorStyle: 'radium'
     },
+    mastery: {
+        description: 'Multiplying mastery gain by ',
+        prefix: 'x',
+        unlockAt: 1e8,
+        formula: (amt: number) => 1 + Math.log10(Math.pow(amt,0.6)/3795+1),
+        colorStyle: 'fame'
+    },
 
 })

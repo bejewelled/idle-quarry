@@ -22,6 +22,9 @@ select-none"
                     $buttonUpgradeLevels[index],
                     0
                 )} / {f($buttonUpgrades[index]['maxLevel'], 0)}]
+                    {#if ($settings['maxBuy'] && buyAmount > 0) || buyAmount > 1}
+                    <span class='text-gray-300'>(x{buyAmount})</span>
+                    {/if}
             </span>
             <span
                 class="px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
@@ -93,7 +96,7 @@ select-none"
                                             : c[0]
                                         : '???'}
                                 </div>
-                                <div class="col-span-2 text-left">
+                                <div class="col-span-2 {!(thisTypeAffordable(c[0])) ?'text-red-600' : ''} text-left">
                                     {f(c[1])}
                                 </div>
                             {/if}
@@ -141,6 +144,7 @@ select-none"
     let affordable, unlocked
     let permUnlocked = $buttonUpgradeLevels[index] > 0
     let affordInterval
+    let buyAmount = $settings['buyAmount']
 
     onMount(() => {
         setTimeout(() => {
@@ -150,6 +154,13 @@ select-none"
             permUnlocked = $buttonUpgradeLevels[index] > 0
         }, 50)
         affordInterval = setInterval(() => {
+            if ($settings['maxBuy']) {
+                buyAmount = calcMaxBuyAmount();
+                costs = getCosts();
+            } else {
+                buyAmount = $settings['buyAmount'];
+                costs = getCosts();
+            }
             affordable = canAfford()
             unlocked = isUnlocked()
             if ($buttonUpgrades[index]['unlockAt']()) permUnlocked = true
@@ -181,6 +192,10 @@ select-none"
             return (n * 100).toExponential(pl).toString().replace('+', '') + '%'
     }
 
+    function thisTypeAffordable(type) {
+        return ($wallet[type] >= costs[type]);
+    }
+
     function cost(start) {
         const base =
             start *
@@ -205,10 +220,24 @@ select-none"
             if (val >= 1) $wallet[type] -= val
         }
         $buttonUpgradeLevels[index] += Math.min(
-            $settings['buyAmount'],
+            buyAmount,
             $buttonUpgrades[index]['maxLevel'] - $buttonUpgradeLevels[index]
         )
         permUnlocked = true
+    }
+
+    function calcMaxBuyAmount() {
+        if ($buttonUpgrades[index]['maxLevel'] == 1)
+            return $buttonUpgradeLevels[index] == 0 ? 1 : 0;
+        const levelsRemaining = $buttonUpgrades[index]['maxLevel'] - $buttonUpgradeLevels[index];
+        let maxBuy = 1e9; // or any large number
+        for (let [type, bCost] of Object.entries($buttonUpgrades[index]['cost'])) {
+            if (!$wallet[type]) return 0;
+            const base = bCost * Math.pow($buttonUpgrades[index]['ratio'], $buttonUpgradeLevels[index]); 
+            maxBuy = Math.min(maxBuy, 
+            formula.maxNumGeom($wallet[type], base, $buttonUpgrades[index]['ratio']));
+        }
+        return Math.min(levelsRemaining, maxBuy);
     }
 
     function canAfford() {

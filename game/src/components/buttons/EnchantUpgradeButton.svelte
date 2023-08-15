@@ -9,8 +9,8 @@ class='has-tooltip tooltip-text
  'game-btn-encht' + $enchantUpgrades[index]['tier'] : 'game-btn-encht' + $enchantUpgrades[index]['tier'] + '-noafford')}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],0)} / {f($enchantUpgrades[index]['maxLevel'],0)}] 
-{#if $settings['maxBuy'] && maxBuyCalcFinished && buyAmount >= 1}
-(+{buyAmount})
+{#if ($settings['maxBuy'] && buyAmount > 0) || buyAmount > 1}
+<span class='text-gray-300'>(x{buyAmount})</span>
 {/if}
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
@@ -46,7 +46,7 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
                     <div class='{ref.colors[c[0]] || ref.colors['default']} text-right pr-3 col-span-2'>{
                     $wallet[c[0]] || $unlockedRes.has(c[0]) ? 
                     (ref.displayNames[c[0]] ? ref.displayNames[c[0]] : c[0]) : "???"}</div>
-                    <div class='col-span-2 text-left'>{f(c[1])}</div>
+                    <div class='col-span-2  {!(thisTypeAffordable(c[0])) ?'text-red-600' : ''} text-left'>{f(c[1])}</div>
                 {/if}
             {/each}
             {/if}
@@ -139,6 +139,10 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
         $enchantUpgradeLevels[index] += buyAmount;
         costs = getCosts();
         permUnlocked = true;
+    }
+
+    function thisTypeAffordable(type) {
+        return ($wallet[type] >= costs[type]);
     }
 
     function calcMaxBuyAmount() {

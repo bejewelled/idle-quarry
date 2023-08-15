@@ -12,8 +12,8 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
 {#if $miningUpgradeLevelsFree[index] > 0}
 + {f($miningUpgradeLevelsFree[index],0)} 
 {/if}] 
-{#if $settings['maxBuy'] && maxBuyCalcFinished && buyAmount >= 1}
-(+{buyAmount})
+{#if ($settings['maxBuy'] && buyAmount > 0) || buyAmount > 1}
+<span class='text-gray-400'>(x{buyAmount})</span>
 {/if}
          <span class='tooltip tooltip-style'>
          <div class='title text-small-gray items-start text-center pb-1'>

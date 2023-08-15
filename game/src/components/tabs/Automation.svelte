@@ -22,6 +22,11 @@
         </div>
     </div>
 </div>
+
+<div class='pb-16 pt-8 tooltip-text text-center w-full italic'>
+    Any augments that boost production do so multiplicatively. <br/>
+</div>
+
     
 
 

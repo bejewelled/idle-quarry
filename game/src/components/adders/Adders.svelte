@@ -839,10 +839,10 @@ function dropRoll(n) {
                         break
                     case 4: // lightning blast
                         if (lightningBlastLockout) break
-                        progressBonusMulti *= Math.pow(size, 0.5) * 1.4 + 3
+                        progressBonusMulti *= Math.pow(size, 0.25) * 1.4 + 3
                         lightningBlastLockout = true
                         setTimeout(() => {
-                            progressBonusMulti /= Math.pow(size, 0.5) * 1.4 + 3
+                            progressBonusMulti /= Math.pow(size, 0.25) * 1.4 + 3
                             if (
                                 Math.abs(
                                     progressBonusMulti -
@@ -1002,7 +1002,7 @@ function dropRoll(n) {
                     case 8: // rift tearing
                         const essences = ['efire', 'eearth', 'ewater', 'emagic', 'ecelestial'];
                         const type = essences[Math.floor(Math.random() * essences.length)];
-                        const amt = 1 + Math.floor(Math.pow(size / 1890, 2))
+                        const amt = 1 + Math.floor(size / 32750)
                         $wallet[type] = ($wallet[type] || 0) + amt;
                         addToActivityLog('[Rift Tearing] +' + f(amt) + ' ' + type.substring(1) + ' essence', 
                         // @ts-ignore

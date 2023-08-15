@@ -182,8 +182,7 @@ const BUTTON_SIZE= 100;
         rewardAmount *= mplr;
         rewardDescriptionText += ' [ LUCKY! x' + f(mplr) + ' ]';
     }
-   
-    if (isLucky)rewardDescriptionText += ' [ LUCKY! x10 ]';
+  
 
     $radiumGainText = '+ ' + f(rewardAmount)
 

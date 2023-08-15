@@ -9,7 +9,7 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
     <div class="py-2"><AscensionButton /></div>
 
     <div class="game-text justify-center w-full flex">
-        Ascension resets EVERYTHING, but allows you to harness the elements to
+        Ascension resets most things up to this point (except for mastery)  , but allows you to harness the elements to
         make your next legacy stronger.
     </div>
     <div class="game-text justify-center w-full flex">
@@ -123,6 +123,8 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
                     <div class='col-span-12 text-indigo-500 text-small text-left'>{a}</div>
                 {/if}
             {/each}
+            <br/>
+            Ascensions will eventually unlock more boosts.
         </div>
     </div>
     <div class="grid grid-cols-12">

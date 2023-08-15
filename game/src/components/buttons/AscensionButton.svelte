@@ -14,11 +14,12 @@
       ASCEND
   </div>
   {:else}
-    You need at least 30 total essence to ascend.
+    You need at least {ascReq()} total essence to ascend.
   {/if}
 </div>
 
 <script lang="ts">
+	import { ascensionStats } from './../../data/player.ts';
 	import { ascensionElements } from './../../data/ascension.ts';
 	import Resetters from './../resetters/Resetters.svelte';
   import { onMount, onDestroy } from "svelte";
@@ -79,8 +80,10 @@
 
 let resetFuncs: any;
 
+  const ascReq = () => Math.ceil(30 * Math.pow($ascensionStats['ascensionCount']+1, 1.33));
+
   function canAscend() {
-    return formula.sumEssence() >= 30
+    return formula.sumEssence() >= ascReq
   }
   function ascend() {
         if (confirm('ARE YOU SURE??? This will reset EVERYTHING! If this is your first ascension, MAKE SURE you are gaining a bonus of some sort, or you will essentially be hard resetting!')) {

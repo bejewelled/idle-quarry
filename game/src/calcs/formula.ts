@@ -63,7 +63,6 @@ export default class formula {
     static maxFinitePoly2(n: number, p: number, nums: object, e: string, log: boolean = false) {
       let left = n, q = p;
       if (log) console.log('left: ' + left + ' q: ' + q);
-      if (e == 'antimatter') console.log(n, p, nums, e, log)
       while (left > 0) {
         if (e == 'antimatter') left -= (nums['const'] + nums['multi']*(q**2));
         else left -= (nums['const'][e] + nums['multi'][e]*(q**2));
@@ -90,7 +89,6 @@ export default class formula {
           sum += (get(wallet)[i] || 0);
         }  
       }
-      console.log(sum);
       return sum;
     }
 
@@ -258,7 +256,7 @@ export default class formula {
 
   static calcWarpGainFromMastery() {
     const y = get(wallet)['totalTrophies'] || 0;
-    return 0.13*y + 0.0004*y**2;
+    return 0.25*y + 0.00067*y**2;
   }
 
   static calcChallengePointGain(n: number, type: string, isOffFocus: boolean = false) {
@@ -319,6 +317,7 @@ export default class formula {
     for (i of Object.values(lvs)) {
       y *= this.calcMasteryGainMulti(i)
     }
+    y *= get(allMultipliers)['mastery']['formula'](get(wallet)['artifacts'] || 0)
     console.log(y)
     return y
   }

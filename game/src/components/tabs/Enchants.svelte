@@ -62,7 +62,9 @@
     </div>
 </div>
     
-
+<div class='pb-16 pt-8 tooltip-text text-center w-full italic'>
+    Every mining cycle produces {f(formula.calcEnchantProgressGain(1), 2)} enchant progress. <br/>
+</div>
 
 
 

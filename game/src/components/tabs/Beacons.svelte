@@ -98,10 +98,12 @@
         <BeaconPowerUpgradeButton index={i} />
     {/if}
     {/each}
-    <div class='col-span-12 pb-16'></div>
-    <div class='col-span-12 pb-16'></div>
     <div></div>
 </div>
+</div>
+
+<div class='pb-16 pt-8 tooltip-text text-center w-full italic'>
+    Beacon level progress requirements scale exponentially, not linearly. <br/>
 </div>
 
 

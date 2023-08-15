@@ -20,7 +20,7 @@
 
     {#if getNextArtifactUnlock() > 0}
       <div class="col-span-4 pb-1 artifact-display text-right game-text">
-        [ Next bonus at <span class="text-slate-200"
+        [ Next bonus at <span class="text-slate-300 font-bold"
           >{f(getNextArtifactUnlock())}</span
         > artifacts ]
       </div>
@@ -28,6 +28,11 @@
     {/if}
   </div>
 </div>
+
+<div class='pb-16 pt-8 tooltip-text text-center w-full italic'>
+  You'll unlock a new feature of artifacts after unlocking post-Ascension content.
+</div>
+
 
 <script lang="ts">
   //@ts-nocheck

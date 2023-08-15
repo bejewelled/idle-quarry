@@ -12,8 +12,8 @@ class='has-tooltip tooltip-text py-1
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none'>
 {$keyUpgrades[index]['name']} [{$keyUpgradeLevels[index]} / {$keyUpgrades[index]['maxLevel']}] 
-{#if $settings['maxBuy'] && buyAmount >= 1}
-(+{buyAmount})
+{#if ($settings['maxBuy'] && buyAmount > 0) || buyAmount >= 1}
+(x{buyAmount})
 {/if}
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
@@ -34,7 +34,7 @@ select-none'>
                    fp($keyUpgrades[index]['formula']($keyUpgradeLevels[index]+Math.max(1,buyAmount)),3, false) :
                    f($keyUpgrades[index]['formula']($keyUpgradeLevels[index]+Math.max(1,buyAmount)),3)}{$keyUpgrades[index]['suffix'] || ""}
                  </span> 
-                 {#if $settings['maxBuy'] && buyAmount >= 1}
+                 {#if buyAmount > 1}
                  (x{buyAmount})
                  {/if}
             </div>

@@ -134,7 +134,7 @@
             // }
             $visibleTier = 1
             $miningUpgradeLevelsFree = Array(200).fill(0)
-            for (let i in $miningUpgradeLevels) {
+            for (let i in $miningUpgrades) {
                 if (!($miningUpgrades[i]['noResetAscension']))  {
                     $miningUpgradeLevelsBought[i] = 0;
                     $miningUpgradeLevels[i] = $miningUpgradeLevelsBought[i]
@@ -142,6 +142,7 @@
                 }
             }
 
+            $stats['relocateCount'] = 0
             $keysOpened = Array(5).fill(0)
             $keyCrafts = Array(40).fill(0)
             $beaconLevels = Array(30).fill(0)
@@ -180,6 +181,10 @@
             $beaconNextReqs = $baseBeaconNextReqs
             console.log(ascFormula.getVal('magic'))
             
+            setTimeout(() => {
+                console.log($keyCraftMastery)
+                console.log($keyCraftAmount)
+            }, 500)
 
 
         } catch (e) {
