@@ -14,7 +14,7 @@
       ASCEND
   </div>
   {:else}
-    You need at least {ascReq()} total essence to ascend.
+    You need at least {ascReq()} total essence to ascend. [{f(formula.sumEssence())} / {f(ascReq())}]
   {/if}
 </div>
 
@@ -89,5 +89,16 @@ let resetFuncs: any;
         if (confirm('ARE YOU SURE??? This will reset EVERYTHING! If this is your first ascension, MAKE SURE you are gaining a bonus of some sort, or you will essentially be hard resetting!')) {
             resetFuncs.ascend();
         }
+    }
+
+    const f = (n: number, pl = 0) => {
+        if (isNaN(n)) return "???";
+
+        if (n < 1e9)
+            return n
+                .toFixed(n < 1e3 ? pl : 0)
+                .toString()
+                .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        else return n.toExponential(3).toString().replace("+", "");
     }
 </script>
