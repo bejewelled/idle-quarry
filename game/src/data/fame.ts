@@ -173,12 +173,12 @@ export const enchantUpgrades = array([{
         fame: 30,
     },
     tier: 1,
-    ratio: 1.25,
-    formula: (lv: any) => (0.15/400) * lv,
+    ratio: 10,
+    formula: (lv: any) => (0.15/20) * lv,
     unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,
     suffix: ' chance',
-    maxLevel: 400,
+    maxLevel: 20,
     notes: ''
 },
 {
@@ -186,16 +186,15 @@ export const enchantUpgrades = array([{
     name: 'Orb Rush',
     description: 'Has a chance to give orbs based on mine quality.',
     cost: {
-        fame: 30,
-        gems: 1e7
+        fame: 30
     },
     tier: 1,
-    ratio: 1.25,
-    formula: (lv: any) => (0.12/400) * lv,
+    ratio: 10,
+    formula: (lv: any) => (0.12/20) * lv,
     unlockAt: () => (get(wallet)['fame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,
     suffix: '  chance',
-    maxLevel: 400,
+    maxLevel: 20,
     notes: ''
 },
 {
@@ -206,12 +205,12 @@ export const enchantUpgrades = array([{
         fame: 2500,
     },
     tier: 1,
-    ratio: 1.3,
-    formula: (lv: any) => (0.02/400) * lv,
+    ratio: 25,
+    formula: (lv: any) => (0.02/20) * lv,
     unlockAt: () => (get(wallet)['totalFame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,
     suffix: '  chance',
-    maxLevel: 400,
+    maxLevel: 20,
     notes: ''
 },
 {
@@ -222,12 +221,12 @@ export const enchantUpgrades = array([{
         fame: 2500,
     },
     tier: 1,
-    ratio: 1.3,
-    formula: (lv: any) => Math.pow(lv/400, 2) * 0.05,
+    ratio: 25,
+    formula: (lv: any) => Math.pow(lv/20, 2) * 0.05,
     unlockAt: () => (get(wallet)['totalFame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
     isPercent: true,
     suffix: '  chance',
-    maxLevel: 400,
+    maxLevel: 20,
     notes: ''
 },
 {
@@ -238,18 +237,18 @@ export const enchantUpgrades = array([{
         fame: 1e6,
     },
     tier: 1,
-    ratio: 1.32,
-    formula: (lv: any) => (lv/400) * 0.025,
+    ratio: 100,
+    formula: (lv: any) => (lv/30) * 0.025,
     unlockAt: () => (get(wallet)['totalFame'] >= 1e4 || get(enchantUpgradeLevels)[0] >= 25),
     isPercent: true,
     suffix: '  chance',
-    maxLevel: 400,
+    maxLevel: 30,
     notes: ''
 },
 {
     index: 7,
-    name: 'Clicker Hero',
-    description: '"Clicks" the button for you. Mine size increases crystal gain, Mine quality increases click quality.',
+    name: 'Nuclear Fission',
+    description: '???',
     cost: {
         fame: 1e6,
     },
@@ -270,12 +269,12 @@ export const enchantUpgrades = array([{
         fame: 1e18,
     },
     tier: 2,
-    ratio: 1.34,
-    formula: (lv: any) => (lv/200) * 0.16,
+    ratio: 1e12,
+    formula: (lv: any) => (lv/10) * 0.16,
     unlockAt: () => (get(wallet)['totalAntimatter'] > 0 || get(wallet)['antimatter'] > 0),
     isPercent: true,
     suffix: '  chance',
-    maxLevel: 200,
+    maxLevel: 10,
     notes: ''
 },
 {
@@ -286,12 +285,12 @@ export const enchantUpgrades = array([{
         fame: 1e18,
     },
     tier: 2,
-    ratio: 1.34,
-    formula: (lv: any) => (lv/200) * 0.5,
+    ratio: 1e12,
+    formula: (lv: any) => (lv/10) * 0.5,
     unlockAt: () => (get(wallet)['totalAntimatter'] > 0 || get(wallet)['antimatter'] > 0),
     isPercent: true,
     suffix: '  chance',
-    maxLevel: 200,
+    maxLevel: 10,
     notes: ''
 },
 

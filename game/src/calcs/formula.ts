@@ -1,5 +1,5 @@
 import {buttonUpgradeLevels, miningUpgradeLevels, keyUpgradeLevels,
-keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet, ascensionLevels, ascensionStats, automationItemsUnlocked, masteryItemLevels} from '../data/player';
+keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet, ascensionLevels, ascensionStats, automationItemsUnlocked, masteryItemLevels, slurryToggles} from '../data/player';
 import { beaconBonuses } from '../data/beacons';
 import {keyUpgrades, keyCrafts} from '../data/keys'
 import { get } from 'svelte/store';
@@ -122,6 +122,10 @@ export default class formula {
     static productArray(array: Array<number>) {
         return array.reduce((sum, value) => sum * value, 1);
       }
+
+    static sumObject(obj: object) {
+      return Object.values(obj).reduce((sum, value) => sum + value, 0);
+    }
     
     static calcFameGainKeys(array: Array<number>) { 
         const keyArray = [1,1,1,1,1];
@@ -223,13 +227,24 @@ export default class formula {
   static calcKeySlurryGain(obj: { [x: string]: number; }) {
     const vals = ref.slurryGainFromKeys;
     const y = vals.reduce((sum: number, value: number, i: number) => 
-    sum + value*(obj['key'+(i+1)] || 0), 0) * formula.getAntimatterBonusAmount(3); // get antimatter bonus if # of ascensions is 3 or more
+    sum + (get(slurryToggles)[i+1] ? value*(obj['key'+(i+1)] || 0) : 0), 0) * formula.getAntimatterBonusAmount(3); // get antimatter bonus if # of ascensions is 3 or more
     if (isNaN(y)) {
       alert('note: this feature is bugged, please report this on Discord - reduced slurry gained (using "safe" formula)')
       return obj['key1'] / 8e5;
     }
     return y * get(keyUpgrades)[1]['formula'](get(keyUpgradeLevels)[1]);
   
+  }
+
+  static calcCraftMasteryNextReq(lv: number) {
+    return 100 * lv**3 * (lv/13)**4.5;
+  }
+
+  static calcCraftMasterySpeedBonus(lv: number) {
+    const y = 1 + (lv-1)*0.75 + ((lv-1)**2)*0.004 + ((lv-1)**3)*3e-6;
+    console.log(y)
+    if (isNaN(y)) return 1
+    else return y
   }
 
   static calcBeaconPowerMulti(lv: number) {
@@ -248,7 +263,7 @@ export default class formula {
   static calcKeyCraftAmountGained(i: string) {
     const min = get(keyCrafts)[i]['min']
     const max = get(keyCrafts)[i]['max']
-    return Math.round(min + Math.random()*(max-min))
+    return Math.floor(min + Math.random()*(max-min))
     * get(beaconBonuses)[6]
     * (i == 'beacons' ? 
     Math.pow(formula.sumArray(get(beaconLevels)), 0.65) : 1);
@@ -259,23 +274,12 @@ export default class formula {
     return 0.25*y + 0.00067*y**2;
   }
 
-  static calcChallengePointGain(n: number, type: string, isOffFocus: boolean = false) {
-    // indices of key finder in mining upgrades for each tier
-    const keyFinderIndex = [3, 4, 18]
-    if (type.includes('key') && get(miningUpgradeLevels)[keyFinderIndex[parseInt(type[3])-1]] < 1) return 0;
-    //@ts-nocheck
-    //@ts-nocheck
-    if (isOffFocus) return ref.challengePointValues[type] * Math.min(n, 1);
-    const y = n * (ref.challengePointValues[type] || 0)
-    * ascFormula.getVal('water');
-    return y ;
-  }
 
   static getMineXPPerCycle() {
     const artifactMulti = get(allMultipliers)['mineXP']['formula'](get(wallet)['artifacts'] || 0)
     const y = 1 
     * (isNaN(artifactMulti) ? 1 : artifactMulti)
-    * Math.max(1, Math.log((get(wallet)['totalFame'] || 0) / 20 + 1))
+    * Math.max(1, Math.log((get(wallet)['totalFame'] || 0) / 6 + 1))
     if (isNaN(y)) return 1; 
     else return y;
   }
@@ -318,6 +322,7 @@ export default class formula {
       y *= this.calcMasteryGainMulti(i)
     }
     y *= get(allMultipliers)['mastery']['formula'](get(wallet)['artifacts'] || 0)
+    y *= ascFormula.getVal('water');
     console.log(y)
     return y
   }

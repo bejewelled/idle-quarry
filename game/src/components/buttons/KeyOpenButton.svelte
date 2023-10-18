@@ -10,14 +10,14 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
 select-none"
 >
     {#if unlocked && keyKnowledgeCriteria()}
-        {#if amt == 1}
+        {#if amt == 'single'}
             Use <span class={ref.colors['key' + rarity]}
                 >{getKeyDisplayName()}</span
             > Key
         {:else if amt == 'max'}
-            Open All
+            Open <strong>All</strong>
         {:else}
-            x{f(parseInt(amt), 0)}
+            Open <strong>{f(parseInt(amt), 0)}%</strong>
         {/if}
     {:else if keyKnowledgeCriteria()}
         {#if amt == 1}
@@ -105,6 +105,12 @@ select-none"
     }
 
     function open() {
+        if (amt == 'single' && $wallet['key' + rarity.toString()] >= 1) {
+            const openAmount = 1
+            $wallet['key' + rarity.toString()] -= 1
+            $keysOpened['key' + (rarity - 1)] += 1
+            openKeys(openAmount)
+        }
         if (amt == 'max') {
             const openAmount = $wallet['key' + rarity.toString()]
             $wallet['key' + rarity.toString()] = 0
@@ -113,9 +119,13 @@ select-none"
             keyKnowledgeCriteria() &&
             $wallet['key' + rarity.toString()] >= amt
         ) {
-            $wallet['key' + rarity.toString()] -= parseInt(amt)
-            $keysOpened['key' + (rarity - 1)] += parseInt(amt)
-            openKeys(amt)
+            const ratioOpen = parseInt(amt) / 100;
+            const openAmount = Math.floor(
+                $wallet['key' + rarity.toString()] * ratioOpen
+            )
+            $wallet['key' + rarity.toString()] -= openAmount
+            $keysOpened['key' + (rarity - 1)] += openAmount
+            openKeys(openAmount)
         }
     }
     /**
@@ -269,6 +279,7 @@ select-none"
     }
 
     function canAfford() {
+        if (amt == 'single') return $wallet['key' + rarity.toString()] >= 1
         if (amt == 'max') return $wallet['key' + rarity.toString()] >= 1
         return $wallet['key' + rarity.toString()] >= amt
     }

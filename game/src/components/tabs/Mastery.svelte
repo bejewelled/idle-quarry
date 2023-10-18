@@ -38,7 +38,7 @@
                 <span class='{ref.colors[m[0]]}'>🌟{f(m[1])}</span>
             </div>
             <div class='col-span-2 text-left pr-2 text-med'>
-                <span class='text-orange-400'>[ x{f(formula.calcMasteryGainMulti($masteryItemLevels[m[0]]), 2)} progress ]</span>
+                <span class='text-orange-400'>[ x{f(formula.calcMasteryGainMulti($masteryItemLevels[m[0]]), 2)} progress]</span>
             </div>
             <div class='col-span-5 grid grid-rows-2 mt-1 mx-5'>
                 <div class='bar-wrapper align-middle'>
@@ -60,7 +60,9 @@
 
 <div class='pb-16 pt-8 tooltip-text text-center w-full italic'>
     Mastery levels are never reset. <br/>
-    Each Mastery Level increases the speed at which you gain trophies.
+    Each Mastery Level increases the speed at which you gain trophies. <br/>
+    For some reason, certain colors refuse to render in the progress bars, ONLY on this particular tab. (???)
+    I don't get it. Anyway, some bars will be blank until I figure it out.
 </div>
 
 
@@ -96,7 +98,6 @@ $: nextTrophyBarWidth = `${Math.min(1,$wallet['mastery'] / $masteryNextReq) * 10
 $: masteryBarWidth = () => {
     const w = {}
     for (let i of Object.keys($masteryItemLevels)) {
-
         if ($settings['masteryUseLogScale'])
         w[i] = (100 * (Math.log10($wallet[i]) || 0) / Math.log10($masteryItemReqs[i])) + "%"
         else w[i] = (100 * ($wallet[i] || 0) / $masteryItemReqs[i]) + "%"

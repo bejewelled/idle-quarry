@@ -169,7 +169,7 @@ export const elementBonusText = array([
     {
         prefix: "+",
         suffix: "",
-        text: "challenge point gain",
+        text: "mastery gain",
         isPercent: true
     },
     {

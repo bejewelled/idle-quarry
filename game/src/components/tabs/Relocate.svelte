@@ -62,10 +62,15 @@
 </div>
 
 <div class='pt-3 pb-16 tooltip-text text-center w-full'>
-    You have relocated {f($stats['relocateCount'])} times.</div>
+    You have relocated {f($stats['relocateCount'])} times. <br/>
+    {#if $stats['relocateCount'] < 1}
+        Your first relocate should yield approximately 30-40 fame for optimal progression.
+    {:else if $stats['relocateCount'] < 2}
+        Your second relocate should yield at least 100 fame.
+    {/if}
+</div>
 {/if}
     
-
 
 
 

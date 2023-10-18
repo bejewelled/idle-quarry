@@ -39,7 +39,7 @@
 
                 {#each [1, 2, 3, 4, 5] as i}
                     {#each Object.entries($wallet) as res}
-                        {#if $wallet[res[0]] && $wallet[res[0]] >= 1 && !res[0].includes("key") && !ref.walletExclude[res[0]] && (ref.dropTiers[res[0]] || ref.dropTiers["default"]) == i}
+                        {#if ($permaWallet[res[0]] || $wallet[res[0]] >= 1) && !res[0].includes("key") && !ref.walletExclude[res[0]] && (ref.dropTiers[res[0]] || ref.dropTiers["default"]) == i}
                             <div
                                 class="{ref.colors[res[0]]} res-name
                         has-tooltip col-span-7 text-[13px]"
@@ -56,9 +56,7 @@
                             </div>
                         {/if}
                     {/each}
-                    <div
-                        class="res-break py-1 mt-2 border-1 border-gray-700 col-span-12"
-                    />
+
                 {/each}
                 <!-- keys -->
                 {#each Object.entries($wallet) as res}
@@ -279,12 +277,13 @@
 
 <script lang='ts'>
 	import { masteryNextReq, masteryItemInfo, masteryItemReqs } from './../data/mastery.ts';
-	import { ascensionLevels, ascensionUpgradeLevels } from './../data/player.ts';
+	import { ascensionLevels, ascensionUpgradeLevels, craftMasteryLevel, craftMasteryProgress } from './../data/player.ts';
 
 
     import Decimal from "break_infinity.js";
     import {
         wallet,
+        permaWallet,
         miningUpgradeLevels,
         miningDropTable,
         unlockedRes,
@@ -328,7 +327,8 @@
         buttonRadiumProgress,
         stats,
         ascensionStats, 
-        masteryItemLevels 
+        masteryItemLevels ,
+        totalCrafts
     } from "../data/player.ts";
     import { upgradeSorting } from "../data/mining.ts";
     import {
@@ -459,7 +459,6 @@
         mastery: () => $automationItemsUnlocked["masterful"],
         artifacts: () => $wallet["artifacts"] && $wallet["artifacts"] >= 1,
         ascension: () => ($wallet['totalFame'] > 1e15
-        || $ascensionLevels['antimatter'][1] > 0 || $ascensionLevels['antimatter'][0] > 0
         || $ascensionStats['ascensionCount'] > 0),
     };
     const tabsUnlocked = {
@@ -473,6 +472,7 @@
 
     const save = async (isExport = false) => {
         localStorage.setItem("wallet", JSON.stringify($wallet));
+        localStorage.setItem("permaWallet", JSON.stringify($permaWallet));
         localStorage.setItem(
             "ascensionUpgradeLevels",
             JSON.stringify($ascensionUpgradeLevels)
@@ -532,6 +532,8 @@
             JSON.stringify($enchantUpgradeLevels)
         );
         localStorage.setItem("beaconSpendAmt", JSON.stringify($beaconSpendAmt));
+        localStorage.setItem("craftMasteryLevel", JSON.stringify($craftMasteryLevel));
+        localStorage.setItem("craftMasteryProgress", JSON.stringify($craftMasteryProgress));
         localStorage.setItem("mineLevel", JSON.stringify($mineLevel));
         localStorage.setItem(
             "buttonNumClicks",
@@ -651,6 +653,12 @@
                 if (isNaN($wallet[k])) $wallet[k] = 0;
             }
         }
+        if (localStorage.getItem("permaWallet")) {
+            permaWallet.set(JSON.parse(localStorage.getItem("permaWallet")));
+            for (let k of Object.keys($permaWallet)) {
+                if (isNaN($permaWallet[k])) $permaWallet[k] = 0;
+            }
+        }
         if (localStorage.getItem("miningUpgradeLevels")) {
             miningUpgradeLevels.set(
                 JSON.parse(localStorage.getItem("miningUpgradeLevels"))
@@ -700,6 +708,16 @@
         if (localStorage.getItem("ascensionLevels")) {
             ascensionLevels.set(
                 JSON.parse(localStorage.getItem("ascensionLevels"))
+            );
+        }
+        if (localStorage.getItem("craftMasteryLevel")) {
+            craftMasteryLevel.set(
+                JSON.parse(localStorage.getItem("craftMasteryLevel"))
+            );
+        }
+        if (localStorage.getItem("craftMasteryProgress")) {
+            craftMasteryProgress.set(
+                JSON.parse(localStorage.getItem("craftMasteryProgress"))
             );
         }
         console.log($ascensionLevels);
@@ -877,7 +895,6 @@
                 JSON.parse(localStorage.getItem("masteryItemLevels"))
             );
         }
-
         // updates older save files to new format
         await versionUpdater();
 
@@ -896,6 +913,9 @@
         challengeGoals.updateChallengeReqs();
 
         $masteryNextReq = formula.calcMasteryNextReq()
+
+        $totalCrafts = formula.sumObject($keyCraftAmount)
+
 
         $settings['speed'] = 1;
 
@@ -1268,12 +1288,28 @@
         background-color: #333851;
         cursor: pointer;
     }
+    
     :global(.game-btn-crystal-noafford) {
         border: 1px solid #3c4262;
         color: #3c4262;
         cursor: pointer;
     }
-
+    
+    :global(.game-btn-lootmaster) {
+        border: 1px solid #e8d333;
+        color: #e8d333;
+        cursor: pointer;
+    }
+    :global(.game-btn-lootmaster:hover) {
+        color: #fbee8b;
+        background-color: #6a611b;
+        cursor: pointer;
+    }
+    :global(.game-btn-lootmaster-noafford) {
+        border: 1px solid #867602;
+        color: #867602;
+        cursor: pointer;
+    }
     :global(.game-btn-sigil) {
         border: 1px solid #c026d3;
         color: #c026d3;

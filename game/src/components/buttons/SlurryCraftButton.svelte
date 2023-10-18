@@ -90,7 +90,7 @@
          settings, visibleTier, unlockedRes, 
          buttonStats, buttonNumClicks, buttonUpgradeLevels,
         keyUpgradeLevels, keyCraftTimes, 
-        keyCraftMastery, keyCraftAmount} from '../../data/player';
+        keyCraftMastery, keyCraftAmount, craftMasteryLevel, craftMasteryNextReq} from '../../data/player';
     import {progressThreshold, progressPerTick } from '../../data/mining';
     import {keyUpgrades, keyCrafts} from '../../data/keys';
     import { enchantUpgrades } from '../../data/fame';
@@ -188,6 +188,7 @@
     function calcCraftTime() {
         let base = $keyCrafts[index]['craftTime'];
         base *= Math.pow(0.9, $keyCraftMastery[item][0]-1);
+        base *= 1 / formula.calcCraftMasterySpeedBonus($craftMasteryLevel);
         base /= $settings['speed']
         return base*1000;
     }

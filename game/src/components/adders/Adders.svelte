@@ -1,4 +1,6 @@
 <script>
+	import { keyFinderBases } from './../../data/mining.ts';
+	import { craftMasteryProgress, craftMasteryNextReq, craftMasteryLevel } from './../../data/player.ts';
 // @ts-nocheck
 
     import { ascFormula } from './../../data/ascension.ts'
@@ -63,7 +65,8 @@
         miningUpgradeLevelsBoughtTemp,
         miningUpgradeLevelsFreeTemp,
         buttonRadiumProgress,
-        masteryItemLevels
+        masteryItemLevels,
+        permaWallet
     } from '../../data/player'
     import { buttonUpgrades } from '../../data/button'
     import {
@@ -166,11 +169,20 @@
             for (let [k, v] of Object.entries($wallet)) {
                 if (v > 0 && !$unlockedRes.has(k)) $unlockedRes.add(k)
             }
+            setPermaWallet();
         }, 773 + Math.random() * 227)
         const progressUpdater = setInterval(() => {
             updateprogressThisTick(dt)
         }, UPDATE_SPEED + Math.random() * 3) // set intervals to prime numbers to avoid sync
     })
+
+    // set the permanent wallet, that keeps track of unlocked resources
+    function setPermaWallet() {
+        for (let k of Object.keys($wallet)) {
+            $permaWallet[k] = $wallet[k]
+            
+        }
+    }
 
     function checkForMasteryCompletion() {
         if ($wallet['mastery'] >= $masteryNextReq) {
@@ -178,8 +190,8 @@
             $wallet['trophies'] = ($wallet['trophies'] || 0) + 1
             $wallet['totalTrophies'] = ($wallet['totalTrophies'] || 0) + 1
             $masteryNextReq = formula.calcMasteryNextReq()
+        }
     }
-}
 
     function updateMiningLevel() {
         if ($mineLevel['xp'] >= $mineLevel['xpNextReq']) {
@@ -190,10 +202,17 @@
             const BASE = 0.00015
             $mineLevel['xpNextReq'] =
                 100 *
-                lv ** 3 *
-                Math.pow(1.01 + lv ** 2 * BASE, lv) *
+                (lv ** 2.65) *
+                Math.pow(1.01 + (lv ** 2) * BASE, lv) *
                 Math.pow(2 + Math.max(0, lv - 69) * 0.3, lv > 69 ? lv : 0)
-        }
+
+            addToActivityLog(
+                'Mining level increased to ' + $mineLevel['level'],
+                'text-sky-500',
+                'always'
+            )
+            }
+
     }
 
     const PROGRESS_BASE = 1
@@ -213,7 +232,8 @@
 
         let progGems = 
             PROGRESS_BASE *
-                $miningUpgrades[0]['formula']($miningUpgradeLevels[0]) *
+                $miningUpgrades[0]['formula']($miningUpgradeLevels[0]) * // haste
+                $miningUpgrades[13]['formula']($miningUpgradeLevels[13]) * // demon
                 Math.max(1, $beaconBonuses[1]) *
                 $buttonUpgrades[3]['formula']($buttonUpgradeLevels[3]) *
                 progressBonusMulti *
@@ -392,16 +412,16 @@
         }
         // add keys
         if ($progress['key1'] >= keyAt[0]) {
-            addKey1(Math.floor($progress['key1'] / keyAt[0]), keyAt)
+            addKey(1,Math.floor($progress['key1'] / keyAt[0]), keyAt)
         }
         if ($progress['key2'] >= keyAt[1]) {
-            addKey2(Math.floor($progress['key2'] / keyAt[1]), keyAt)
+            addKey(2,Math.floor($progress['key2'] / keyAt[1]), keyAt)
         }
         if ($progress['key3'] >= keyAt[2]) {
-            addKey3(Math.floor($progress['key3'] / keyAt[2]), keyAt)
+            addKey(3,Math.floor($progress['key3'] / keyAt[2]), keyAt)
         }
         if ($progress['key4'] >= keyAt[3]) {
-            addKey4(Math.floor($progress['key4'] / keyAt[3]), keyAt)
+            addKey(4,Math.floor($progress['key4'] / keyAt[3]), keyAt)
         }
 
 
@@ -415,11 +435,6 @@
     }
     
 
-    function addChallengePoints(n, t) {
-        $wallet['challengePoints'] =
-            ($wallet['challengePoints'] || 0) +
-            formula.calcChallengePointGain(n, t)
-    }
 
     /**
      * @param n - number of times to add gems
@@ -469,65 +484,65 @@
 
     }
 
-    function addKey1(n, keyAt) {
-        const KEY1_BASE = 8
-        const key1Gain =
-            KEY1_BASE *
+
+    function addKey(tier, n, keyAt) {
+        const KEY_BASE = $keyFinderBases[tier];
+        const keyGain =
+            KEY_BASE *
             $beaconBonuses[5] *
             $miningUpgrades[5]['formula']($miningUpgradeLevels[5]) *
             $miningUpgrades[26]['formula']($miningUpgradeLevels[26]) *
             formula.calcKeyFinderAbundanceBonus(1)
 
-        $wallet['key1'] = ($wallet['key1'] || 0) + key1Gain * n
-        $progress['key1'] %= keyAt[0]
-        $keyGainFlavorText['key1'] = key1Gain
-
+        $wallet['key'+tier] = ($wallet['key'+tier] || 0) + keyGain * n
+        $progress['key'+tier] %= keyAt[0]
+        $keyGainFlavorText['key'+tier] = keyGain
     }
 
-    function addKey2(n, keyAt) {
-        const KEY2_BASE = 1
-        const key2Gain =
-            KEY2_BASE *
-            $beaconBonuses[5] *
-            $miningUpgrades[5]['formula']($miningUpgradeLevels[5]) *
-            $miningUpgrades[26]['formula']($miningUpgradeLevels[26])* 
-            formula.calcKeyFinderAbundanceBonus(2)
+    // function addKey2(n, keyAt) {
+    //     const KEY2_BASE = 1
+    //     const key2Gain =
+    //         KEY2_BASE *
+    //         $beaconBonuses[5] *
+    //         $miningUpgrades[5]['formula']($miningUpgradeLevels[5]) *
+    //         $miningUpgrades[26]['formula']($miningUpgradeLevels[26])* 
+    //         formula.calcKeyFinderAbundanceBonus(2)
 
-        $wallet['key2'] = ($wallet['key2'] || 0) + key2Gain * n
-        $progress['key2'] %= keyAt[1]
-        $keyGainFlavorText['key2'] = key2Gain
+    //     $wallet['key2'] = ($wallet['key2'] || 0) + key2Gain * n
+    //     $progress['key2'] %= keyAt[1]
+    //     $keyGainFlavorText['key2'] = key2Gain
 
-    }
+    // }
 
-    function addKey3(n, keyAt) {
-        const KEY3_BASE = 0.075
-        const key3Gain =
-            KEY3_BASE *
-            $beaconBonuses[5] *
-            $miningUpgrades[5]['formula']($miningUpgradeLevels[5]) *
-            $miningUpgrades[26]['formula']($miningUpgradeLevels[26])*
-            formula.calcKeyFinderAbundanceBonus(3)
+    // function addKey3(n, keyAt) {
+    //     const KEY3_BASE = 0.075
+    //     const key3Gain =
+    //         KEY3_BASE *
+    //         $beaconBonuses[5] *
+    //         $miningUpgrades[5]['formula']($miningUpgradeLevels[5]) *
+    //         $miningUpgrades[26]['formula']($miningUpgradeLevels[26])*
+    //         formula.calcKeyFinderAbundanceBonus(3)
 
-        $wallet['key3'] = ($wallet['key3'] || 0) + key3Gain * n
-        $progress['key3'] %= keyAt[2]
-        $keyGainFlavorText['key3'] = key3Gain
+    //     $wallet['key3'] = ($wallet['key3'] || 0) + key3Gain * n
+    //     $progress['key3'] %= keyAt[2]
+    //     $keyGainFlavorText['key3'] = key3Gain
 
-    }
+    // }
 
-    function addKey4(n, keyAt) {
-        const KEY4_BASE = 0.0016
-        const key3Gain =
-            KEY4_BASE *
-            $beaconBonuses[5] *
-            $miningUpgrades[5]['formula']($miningUpgradeLevels[5]) *
-            $miningUpgrades[26]['formula']($miningUpgradeLevels[26])*
-            formula.calcKeyFinderAbundanceBonus(3)
+    // function addKey4(n, keyAt) {
+    //     const KEY4_BASE = 0.0016
+    //     const key3Gain =
+    //         KEY4_BASE *
+    //         $beaconBonuses[5] *
+    //         $miningUpgrades[5]['formula']($miningUpgradeLevels[5]) *
+    //         $miningUpgrades[26]['formula']($miningUpgradeLevels[26])*
+    //         formula.calcKeyFinderAbundanceBonus(3)
 
-        $wallet['key4'] = ($wallet['key4'] || 0) + key3Gain * n
-        $progress['key4'] %= keyAt[2]
-        $keyGainFlavorText['key4'] = key3Gain
+    //     $wallet['key4'] = ($wallet['key4'] || 0) + key3Gain * n
+    //     $progress['key4'] %= keyAt[2]
+    //     $keyGainFlavorText['key4'] = key3Gain
 
-    }
+    // }
 
 function dropRoll(n) {
     let rewards = {}
@@ -609,10 +624,25 @@ function dropRoll(n) {
             }
             const finish = $keyCraftTimes[item][1]
             if (Date.now() > finish && finish != -1) {
+                const gain = formula.calcKeyCraftAmountGained(i)
                 $keyCraftAmount[item]++
                 $wallet[item] =
                     ($wallet[item] || 0) + formula.calcKeyCraftAmountGained(i)
                 $keyCraftTimes[item][1] = -1
+
+                $craftMasteryProgress++;
+                if ($craftMasteryProgress >= $craftMasteryNextReq) {
+                    $craftMasteryProgress -= $craftMasteryNextReq
+                    $craftMasteryLevel++
+                    $craftMasteryNextReq = formula.calcCraftMasteryNextReq($craftMasteryLevel)
+                    addToActivityLog(
+                        '[Crafting] Crafting Mastery increased! (' +
+                            $craftMasteryLevel +
+                            ')',
+                        'text-amber-500',
+                        'crafting'
+                    )
+                }
 
                 $keyCraftMastery[item][1] =
                     parseInt($keyCraftMastery[item][1] || 0) + 1
@@ -643,7 +673,7 @@ function dropRoll(n) {
                 }
                 addToActivityLog(
                     '[Crafting] Crafting complete: +' +
-                        f(formula.calcKeyCraftAmountGained(i)) +
+                        f(gain) +
                         ' ' +
                         $keyCrafts[i]['name'],
                     $keyCrafts[i]['style'] || 'text-white',
@@ -749,6 +779,7 @@ function dropRoll(n) {
 
 
         const bpGain =
+            ((formula.sumArray($beaconLevels) < 1) ? 0 : 
             25 *
             (UPDATE_SPEED / 1000) *
             $beaconLevels.reduce(
@@ -756,7 +787,7 @@ function dropRoll(n) {
                 1
             ) *
             $beaconBonuses[0] *
-            delta
+            delta)
 
         $wallet['beaconPower'] = ($wallet['beaconPower'] || 0) + bpGain
         $beaconPowerFlavorText = bpGain
@@ -820,7 +851,7 @@ function dropRoll(n) {
                     case 1:
                         break
                     case 2: // burst
-                        addGems(size / 12)
+                        addGems(Math.pow(size, 1.4) / 36)
                         addToActivityLog(
                             '[Burst] +' + f(size / 12) + ' mining cycles',
                             'text-violet-300',
@@ -839,10 +870,10 @@ function dropRoll(n) {
                         break
                     case 4: // lightning blast
                         if (lightningBlastLockout) break
-                        progressBonusMulti *= Math.pow(size, 0.25) * 1.4 + 3
+                        progressBonusMulti = Math.pow(size, 0.25) + 3
                         lightningBlastLockout = true
                         setTimeout(() => {
-                            progressBonusMulti /= Math.pow(size, 0.25) * 1.4 + 3
+                            progressBonusMulti = 1
                             if (
                                 Math.abs(
                                     progressBonusMulti -
@@ -950,27 +981,27 @@ function dropRoll(n) {
                         const absDist = Math.random() * (400 - quality / 2550)
                         let rewardAmount, rewardDescriptionText, rewardStyle
                         if (absDist < 1) {
-                            rewardAmount = 120000
+                            rewardAmount = 1200000
                             rewardDescriptionText = 'PERFECT! +'
                             rewardStyle = 'text-amber-500'
                         } else if (absDist <= 2) {
-                            rewardAmount = 9000
+                            rewardAmount = 90000
                             rewardDescriptionText = 'INCREDIBLE +'
                             rewardStyle = 'text-pink-500'
                         } else if (absDist <= 4) {
-                            rewardAmount = 750
+                            rewardAmount = 7500
                             rewardDescriptionText = 'Excellent +'
                             rewardStyle = 'text-violet-500'
                         } else if (absDist <= 7) {
-                            rewardAmount = 85
+                            rewardAmount = 850
                             rewardDescriptionText = 'Great +'
                             rewardStyle = 'text-sky-500'
                         } else if (absDist <= 10) {
-                            rewardAmount = 25
+                            rewardAmount = 250
                             rewardDescriptionText = 'Good +'
                             rewardStyle = 'text-green-500'
                         } else {
-                            rewardAmount = 10
+                            rewardAmount = 100
                             rewardDescriptionText = 'Okay +'
                             rewardStyle = 'text-gray-400'
                         }

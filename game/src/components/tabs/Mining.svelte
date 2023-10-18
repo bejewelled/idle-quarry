@@ -14,7 +14,7 @@
                 [{romanNumerals[Math.max(0,ref.dropTiers[drop[0]]-1)]}]
                 </div>
                 <div class='col-span-3 text-left pl-[8px] {ref.colors[drop[0]] || 'text-white'}'>
-                    {$wallet[drop[0]] ? (ref.displayNames[drop[0]] || drop[0]) : '???'}
+                    {drop[0] in $permaWallet ? (ref.displayNames[drop[0]] || drop[0]) : '???'}
                 </div>
                 <div class='col-span-3 
                 {drop[1][0] >= drop[1][3] ? 'text-amber-200' : ''}
@@ -171,7 +171,7 @@
 	import { ascFormula } from './../../data/ascension.ts';
  //@ts-nocheck
 import { onMount } from 'svelte';
-import {progress, wallet, miningDropTable, miningUpgradeLevels, 
+import {progress, wallet, permaWallet, miningDropTable, miningUpgradeLevels, 
     settings, visibleTier, progressThisTick, antiFlickerFlags,
     progressAverage} from '../../data/player';
 import {progressThreshold, progressPerTick, miningUpgrades, 

@@ -137,8 +137,8 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
     }
 
     function calcMaxBuyAmount() {
-        if ($miningUpgrades[index]['maxLevel'] == 1)
-            return $miningUpgradeLevels[index] == 0 ? 1 : 0;
+        // if ($miningUpgrades[index]['maxLevel'] == 1)
+        //     return $miningUpgradeLevels[index] == 0 ? 1 : 0;
         const levelsRemaining = $miningUpgrades[index]['maxLevel'] - $miningUpgradeLevelsBought[index];
         maxBuyCalcFinished = false;
         let maxBuy = 1e9; // or any large number

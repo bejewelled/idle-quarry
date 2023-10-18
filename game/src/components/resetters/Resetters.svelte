@@ -55,7 +55,7 @@
         miningUpgradeLevelsFree,
         challengesCompleted,
         buttonRadiumProgress,
-        
+        permaWallet
     } from '../../data/player'
     import { buttonUpgrades } from '../../data/button'
     import {
@@ -121,6 +121,11 @@
             }
 
             $wallet = {
+                gems: 0,
+                antimatter: antimatterOnAscend,
+                totalAntimatter: antimatterOnAscend
+            }
+            $permaWallet = {
                 gems: 0,
                 antimatter: antimatterOnAscend,
                 totalAntimatter: antimatterOnAscend

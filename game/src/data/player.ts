@@ -178,12 +178,10 @@ function dropTable(context: any) {
                         (baseChance >= val[3] ? val[3] + Math.pow((baseChance-val[3])/3.5, 2.33) : baseChance),
                         //@ts-ignore
                         Math.max(1,(val[1])
-                        * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11])
                         * ((item === 'gold' || item === 'orbs')
                           ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1)),
                         //@ts-ignore
                         Math.max(1,(val[2])
-                        * get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11])
                         * ((item === 'gold' || item === 'orbs')
                         ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1)),
                         val[3],
@@ -207,6 +205,11 @@ function dropTable(context: any) {
 
 // edit when changing the level of the haste upgrade
 export const wallet = object({
+    gems: 0,
+    gold: 0,
+})
+
+export const permaWallet = object({
     gems: 0,
     gold: 0,
 })
@@ -238,8 +241,8 @@ export const keyUpgradeLevels = array(Array(50).fill(0));
 
 export const baseMiningDropTable = dropTable({
     gold: [0.20,1,3,1,1], // 20% chance to drop 1 - 3 gold, softcap at 100%, min tier 1 (lm0)
-    key1: [0.025,1,1,0.25, 1], 
-    orbs: [0.007,1,1,0.25, 1],
+    key1: [0.04,1,1,0.25, 1], 
+    orbs: [0.025,1,1,0.25, 1],
     //lm1
     beacons: [0.005,1,1, 0.1, 2],
     crystals: [0.002,0.4,0.9, 0.1, 2],
@@ -259,8 +262,8 @@ export const baseMiningDropTable = dropTable({
 
 export const miningDropTable = dropTable({
     gold: [0.20,1,3,1,1], // 20% chance to drop 1 - 3 gold, softcap at 100%, min tier 1 (lm0)
-    key1: [0.025,1,1,0.25, 1], 
-    orbs: [0.007,1,1,0.25, 1],
+    key1: [0.04,1,1,0.25, 1], 
+    orbs: [0.025,1,1,0.25, 1],
     //lm1
     beacons: [0.005,1,1, 0.1, 2],
     crystals: [0.002,0.4,0.9, 0.1, 2],
@@ -380,6 +383,12 @@ export const stats = object({
     relocateCount: 0,
 })
 
+export const totalCrafts = single(0);
+
+export const craftMasteryLevel = single(1);
+export const craftMasteryProgress = single(0);
+export const craftMasteryNextReq = single(100);
+
 export const keyCraftTimes = object({
     // [start, finish]
     energy: [-1, -1], 
@@ -436,7 +445,9 @@ export const saveVersion = single(0);
 
 export const startOfGame = single(Date.now());
 
-export const activityLogShow = object({})
+export const activityLogShow = object({
+    'always': true,
+})
 
 export const challengeActive = single(0);
 
@@ -445,6 +456,14 @@ export const challengeProgress = single(0);
 export const challenge3Multi = single(1);
 
 export const challengesCompleted = array(Array(30).fill(0));
+
+export const slurryToggles = object({
+    key1: false,
+    key2: false,
+    key3: false,
+    key4: false,
+    key5: false,
+})
 
 // ---
 

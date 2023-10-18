@@ -9,7 +9,7 @@
                 {/each}
          ]
         </div>
-        {#each [1,2,3,4,5] as i}
+        {#each [1,2,3,4,5] as i,j}
             <div class='col-span-1 py-1 {ref.colors['key' + i]}'>
                 {($wallet['key'+i] && $wallet['key'+i] >= 1) 
                 || $visibleTier >= i ? ref.keyMainNames[i]: '?????'}
@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                             {/if}
-                            {/each}
+                        {/each}
                             {#if $keyItemsUnlocked['key'+i].size < 
                             Object.entries(get(eval('key'+i+'DropTable'))).length - 1}
                             <div class='drop-table-disp grid grid-cols-10'>
@@ -64,17 +64,37 @@
                 </div>
 
                 <!-- key open buttons -->
-                <div class='col-span-3 py-1 text-left {ref.colors['key' + i]}'>
-                    <KeyOpenButton rarity={i} amt=1/>
+                {#if $wallet['slurry'] > 0 || $wallet['gold'] > 3}
+                <div class='col-span-1 text-left align-middle'>
+                    <!-- <label class='input-wrapper mr-3'> -->
+                        <input type='checkbox' id='slurry-check-{j+1}'
+                        on:click={() => {
+                            if ($slurryToggles[j+1] === undefined) $slurryToggles[j+1] = true;
+                        }}
+                        bind:checked={$slurryToggles[j+1]} class='hidden checkbox w-6 h-6'/>
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <label for='slurry-check-{j+1}'>
+                            <div class='{$slurryToggles[j+1] ? 'game-btn-toggleon' : 'game-btn'}
+                         col-span-1
+                        py-2 items-center text-center border-solid game-text text-small
+                        select-none mt-1'>
+                        Slurry {i}</div>
+                    </label>
+                    <!-- </label> -->
+                </div>
+                {/if}
+                <div class='{$wallet['slurry'] > 0 || $wallet['gold'] > 3
+                ? 'col-span-2' : 'col-span-3'} py-1 text-left {ref.colors['key' + i]}'>
+                    <KeyOpenButton rarity={i} amt='single'/>
+                </div>
+                <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
+                    <KeyOpenButton rarity={i} amt=10 />
                 </div>
                 <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
                     <KeyOpenButton rarity={i} amt=25 />
                 </div>
                 <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
-                    <KeyOpenButton rarity={i} amt=500 />
-                </div>
-                <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
-                    <KeyOpenButton rarity={i} amt=10000 />
+                    <KeyOpenButton rarity={i} amt=50 />
                 </div>
                 <div class='col-span-1 py-1 text-left {ref.colors['key' + i]}'>
                     <KeyOpenButton rarity={i} amt='max' />
@@ -123,9 +143,32 @@
         {/each}
     </div>
 
-    <div class='py-3'></div>
+    <div class='py-2'></div>
 
     {#if $wallet['slurry'] > 1}
+    <div class='row-span-1 grid grid-cols-12'>
+        <div class='col-span-2'>
+            <div class='grid grid-rows-2 text-left  text-amber-500'>
+                <div class='row-span-1'>Crafting Mastery {$craftMasteryLevel}</div>
+                <div class='row-span-1 text-xs'>x{f(formula.calcCraftMasterySpeedBonus($craftMasteryLevel), 2)} global speed bonus</div>
+            </div>
+        </div>
+
+        <div class='col-span-10 mine-bar-wrapper align-bottom'>
+            <div class="has-tooltip w-full my-1 bg-gray-200 rounded-full h-3 dark:bg-gray-700">
+                <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
+                border-white border-double border bg-[#222529] ml-16
+                pointer-events-none grid grid-cols-1'>
+                <span class='col-span-1 text-center text-amber-500 pb-1'>
+                    [{f($craftMasteryProgress)} / {f($craftMasteryNextReq)} crafts]
+                </span>
+            </span>
+                <div class="bg-amber-500 h-3 rounded-full" 
+                style="width:{craftMasteryWidth}"></div>
+            </div>
+        </div>
+    </div>
+
     <div class='grid grid-cols-12 pt-2'>
         {#each $keyCrafts as k, i}
         {#if $keyCrafts[i]['unlockAt']()}
@@ -142,10 +185,13 @@
 </div>
 
 <script lang='ts'>
+	import { keyCraftAmount, slurryToggles } from './../../data/player.ts';
+	import { onDestroy } from 'svelte';
     //@ts-nocheck
 import { onMount } from 'svelte';
 import {get} from 'svelte/store';
-import { wallet, visibleTier, keyItemsUnlocked, keysOpened } from '../../data/player';
+import { wallet, visibleTier, keyItemsUnlocked, keysOpened, 
+    craftMasteryLevel, craftMasteryNextReq, craftMasteryProgress } from '../../data/player';
 import { progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
 import { miningUpgradeLevels } from '../../data/player';
 import { keyRewardText, key1DropTable, key2DropTable, key3DropTable,
@@ -157,6 +203,7 @@ import SlurryUpgradeButton from '../buttons/SlurryUpgradeButton.svelte';
 import SlurryCraftButton from '../buttons/SlurryCraftButton.svelte';
 import formula from '../../calcs/formula';
 
+$: craftMasteryWidth = `${($craftMasteryProgress / $craftMasteryNextReq) * 100}%`;
 
 $: dropTable = [
    $key1DropTable,
@@ -166,6 +213,8 @@ $: dropTable = [
    $key5DropTable
 ];
 
+let updateInterval;
+
 onMount(() => {
     console.log(dropTable)
     key1DropTable.updateTable();
@@ -174,6 +223,14 @@ onMount(() => {
     key4DropTable.updateTable();
     key5DropTable.updateTable();
 
+})
+
+onDestroy(() => {
+    key1DropTable.updateTable();
+    key2DropTable.updateTable();
+    key3DropTable.updateTable();
+    key4DropTable.updateTable();
+    key5DropTable.updateTable();
 })
 
 const f = (n: number, pl = 0) => {
