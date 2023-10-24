@@ -325,7 +325,7 @@ export const enchantUpgradeLevels = array(Array(20).fill(0))
 export const automationItemsUnlocked = object({})
 
 // progress, maxProgress
-export const buttonRadiumProgress = array([0, 1000000])
+export const radiumProgress = array([0, 1000000])
 
 
 export const enchantProgress = object({

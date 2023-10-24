@@ -54,7 +54,7 @@
         miningUpgradeLevelsBought,
         miningUpgradeLevelsFree,
         challengesCompleted,
-        buttonRadiumProgress,
+        radiumProgress,
         permaWallet
     } from '../../data/player'
     import { buttonUpgrades } from '../../data/button'
@@ -159,7 +159,7 @@
             $challengesCompleted = Array(30).fill(0)
             challengeGoals.updateChallengeReqs()
             $buttonNumClicks = $baseButtonNumClicks
-            $buttonRadiumProgress = [0, 1000000]
+            $radiumProgress = [0, 1000000]
 
             for (let k in Object.keys($keyCraftTimes)) {
                 $keyCraftTimes[k] = [-1, -1]

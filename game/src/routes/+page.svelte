@@ -324,7 +324,7 @@
         challengeProgress,
         beaconSmartSplits,
         challenge3Multi,
-        buttonRadiumProgress,
+        radiumProgress,
         stats,
         ascensionStats, 
         masteryItemLevels ,
@@ -547,8 +547,8 @@
         localStorage.setItem("stats", JSON.stringify($stats));
         localStorage.setItem("ascensionStats", JSON.stringify($ascensionStats));
         localStorage.setItem(
-            "buttonRadiumProgress",
-            JSON.stringify($buttonRadiumProgress)
+            "radiumProgress",
+            JSON.stringify($radiumProgress)
         );
         localStorage.setItem(
             "keyUpgradeLevels",
@@ -700,9 +700,9 @@
                 JSON.parse(localStorage.getItem("miningUpgradeLevelsFreeTemp"))
             );
         }
-        if (localStorage.getItem("buttonRadiumProgress")) {
-            buttonRadiumProgress.set(
-                JSON.parse(localStorage.getItem("buttonRadiumProgress"))
+        if (localStorage.getItem("radiumProgress")) {
+            radiumProgress.set(
+                JSON.parse(localStorage.getItem("radiumProgress"))
             );
         }
         if (localStorage.getItem("ascensionLevels")) {

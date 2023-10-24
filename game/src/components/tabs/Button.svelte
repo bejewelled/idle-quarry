@@ -38,7 +38,7 @@
         <div class='col-span-3 text-left align-text-middle has-tooltip'>
             <div class='tooltip-text text-med'>Radioactivity 
             <span class='text-lime-300 text-med pl-3'>
-              {f($buttonRadiumProgress[0])} / {f($buttonRadiumProgress[1])}
+              {f($radiumProgress[0])} / {f($radiumProgress[1])}
             </span>
             {#if $radiumGainText.length > 0}
               <span class='text-lime-300 text-opacity-70 text-med pl-2'>
@@ -79,7 +79,7 @@
 
   import {buttonStats, buttonNumClicks,
     progress, wallet, enchantUpgradeLevels, miningDropTable,
-        settings, visibleTier, unlockedRes, buttonRadiumProgress} from '../../data/player';
+        settings, visibleTier, unlockedRes, radiumProgress} from '../../data/player';
   import {buttonUpgrades, radiumGainText} from '../../data/button';
   import { onMount, onDestroy} from 'svelte';
   import ButtonItem from '../buttons/ButtonItem.svelte';
@@ -102,7 +102,7 @@ onDestroy(() => {
   clearInterval(clockinterval);
 });
 
-$: buttonBarWidth = `${Math.min(1,$buttonRadiumProgress[0] / $buttonRadiumProgress[1]) * 100}%`;
+$: buttonBarWidth = `${Math.min(1,$radiumProgress[0] / $radiumProgress[1]) * 100}%`;
 $: crystalGains = formula.calcCrystalGainFromRadium()
 const f = (n, pl = 0) => {
         if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");

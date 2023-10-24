@@ -33,7 +33,7 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
     // @ts-ignore
     settings, visibleTier, progressThisTick, progressAverage,
 buttonNumClicks, mineLevel, buttonStats, buttonUpgradeLevels,
-automationItemsUnlocked, flags, buttonRadiumProgress} from '../../data/player';
+automationItemsUnlocked, flags, radiumProgress} from '../../data/player';
 // @ts-ignore
 import {progressThreshold, progressPerTick, miningUpgrades,
 // @ts-ignore
@@ -186,18 +186,18 @@ const BUTTON_SIZE= 100;
 
     $radiumGainText = '+ ' + f(rewardAmount)
 
-    if (rewardAmount + $buttonRadiumProgress[0] > $buttonRadiumProgress[1])
-      $radiumGainText += ('   [ + ' + f(Math.floor((rewardAmount + $buttonRadiumProgress[0]) / $buttonRadiumProgress[1])) + ' radium ]')
+    if (rewardAmount + $radiumProgress[0] > $radiumProgress[1])
+      $radiumGainText += ('   [ + ' + f(Math.floor((rewardAmount + $radiumProgress[0]) / $radiumProgress[1])) + ' radium ]')
     
-    if (rewardAmount + $buttonRadiumProgress[0] > $buttonRadiumProgress[1]*5)
-      $radiumGainText = '+ ' + f(Math.floor(rewardAmount + $buttonRadiumProgress[0] / $buttonRadiumProgress[1])) + ' radium'
+    if (rewardAmount + $radiumProgress[0] > $radiumProgress[1]*5)
+      $radiumGainText = '+ ' + f(Math.floor(rewardAmount + $radiumProgress[0] / $radiumProgress[1])) + ' radium'
 
     if (isNaN($wallet['radium'])) $wallet['radium'] = 1;
-    $buttonRadiumProgress[0] += rewardAmount;
-    if ($buttonRadiumProgress[0] >= $buttonRadiumProgress[1]) {
+    $radiumProgress[0] += rewardAmount;
+    if ($radiumProgress[0] >= $radiumProgress[1]) {
       $wallet['radium'] = ($wallet['radium'] || 0) 
-      + Math.floor($buttonRadiumProgress[0] / $buttonRadiumProgress[1])
-      $buttonRadiumProgress[0] %= $buttonRadiumProgress[1];
+      + Math.floor($radiumProgress[0] / $radiumProgress[1])
+      $radiumProgress[0] %= $radiumProgress[1];
     }
     
     setTimeout(() => {

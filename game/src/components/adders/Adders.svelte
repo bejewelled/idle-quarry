@@ -64,7 +64,7 @@
         miningUpgradeLevelsTemp,
         miningUpgradeLevelsBoughtTemp,
         miningUpgradeLevelsFreeTemp,
-        buttonRadiumProgress,
+        radiumProgress,
         masteryItemLevels,
         permaWallet
     } from '../../data/player'
@@ -145,7 +145,7 @@
             addProgress(dt)
             updateMiningLevel()
             checkForKeyCraftCompletion()
-
+            addReactorProgress(dt)
             addMastery(dt)
             // out of focus - update more slowly to conserve resources
             if ($settings['activeTab'] !== 'beacons') {
@@ -335,6 +335,9 @@
         // PROGRESS_BASE * $miningUpgrades[5]['formula']($miningUpgradeLevels[5]) : 0);
         // $progressAverage['key3'] = progKey3;
         // $progressThisTick['key3'] = progKey3 * delta;
+
+
+
     }
 
     let progressGain = 0
@@ -435,6 +438,22 @@
     }
     
 
+
+    function addReactorProgress(delta) {
+        if ($mineLevel['level'] < 8) return;
+        const val = $buttonUpgrades[0]['formula']($buttonUpgradeLevels[0])
+        * $buttonUpgrades[1]['formula']($buttonUpgradeLevels[1])
+
+
+        $radiumProgress[0] += ((delta * val) * (UPDATE_SPEED / 1000));
+        console.log($radiumProgress)
+
+
+        if ($radiumProgress[0] >= $radiumProgress[1]) {
+            $wallet['radium'] += Math.floor($radiumProgress[0] / $radiumProgress[1])
+            $radiumProgress[0] %= $radiumProgress[1]    
+        }
+    }
 
     /**
      * @param n - number of times to add gems
@@ -1006,15 +1025,15 @@ function dropRoll(n) {
                             rewardStyle = 'text-gray-400'
                         }
                         rewardAmount = Math.floor(rewardAmount * BASE_REWARD)
-                        $buttonRadiumProgress[0] += rewardAmount
+                        $radiumProgress[0] += rewardAmount
                         if (
-                            $buttonRadiumProgress[0] >= $buttonRadiumProgress[1]
+                            $radiumProgress[0] >= $radiumProgress[1]
                         ) {
                             $wallet['radium'] += Math.floor(
-                                $buttonRadiumProgress[0] /
-                                    $buttonRadiumProgress[1]
+                                $radiumProgress[0] /
+                                    $radiumProgress[1]
                             )
-                            $buttonRadiumProgress[0] %= $buttonRadiumProgress[1]
+                            $radiumProgress[0] %= $radiumProgress[1]
                         }
                         let warp = 0;
                         warp += Math.round(1 + (0.6 + Math.random()*0.8) * (Math.pow($buttonUpgradeLevels[6], 1.6) * 3))
