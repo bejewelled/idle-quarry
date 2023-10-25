@@ -2,7 +2,7 @@
   
   <div class='wrapper pt-2'>
     <div class='grid grid-cols-12'>
-        <div class='text-center pb-3 text-med game-text col-span-12'>
+        <!-- <div class='text-center pb-3 text-med game-text col-span-12'>
           Total Clicks: {f($buttonStats['totalClicks'])} 
           [ 
           <span class='text-amber-500 font-bold'>{f($buttonNumClicks['perfect'],0)}</span> + 
@@ -12,6 +12,13 @@
           <span class='text-green-500'>{f($buttonNumClicks['good'],0)}</span> + 
           <span class='text-gray-500'>{f($buttonNumClicks['okay'],0)}</span>
            ]
+        </div> -->
+
+        <div class='pb-3 col-span-12 game-text text-center'>
+          At your current <span class='text-yellow-300'>layer</span>, 
+          you gain <span class='{ref.colors['radium']} font-bold'>
+            {f(formula.calcRadioactivityGain(), 2)} radioactivity</span>
+          per mining cycle.
         </div>
 
         <div class='pb-3 col-span-12 game-text text-center'>
@@ -37,9 +44,12 @@
         </div>
         <div class='col-span-3 text-left align-text-middle has-tooltip'>
             <div class='tooltip-text text-med'>Radioactivity 
-            <span class='text-lime-300 text-med pl-3'>
+            <span class='text-lime-300 text-med pl-2 pr-2'>
               {f($radiumProgress[0])} / {f($radiumProgress[1])}
             </span>
+            for <span class='text-lime-300 text-med pl-0 pr-2'>
+              +{f(formula.calcRadiumGainWhenComplete(), 2)} radium
+            </span> 
             {#if $radiumGainText.length > 0}
               <span class='text-lime-300 text-opacity-70 text-med pl-2'>
                 {$radiumGainText}
@@ -71,7 +81,12 @@
           </div>
         {/each}
     </div>
-      <ButtonItem />
+
+    <div class='pb-16 pt-8 tooltip-text text-center w-full italic'>
+      Base radioactivity gain will increase after layer 100.<br/>
+  </div>
+
+  
   </div>
 
 <script>
@@ -82,7 +97,6 @@
         settings, visibleTier, unlockedRes, radiumProgress} from '../../data/player';
   import {buttonUpgrades, radiumGainText} from '../../data/button';
   import { onMount, onDestroy} from 'svelte';
-  import ButtonItem from '../buttons/ButtonItem.svelte';
   import {progressThreshold, progressPerTick } from '../../data/mining';
   import { enchantUpgrades } from '../../data/fame';
   import ref from '../../calcs/ref'

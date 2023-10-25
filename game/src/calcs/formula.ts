@@ -1,5 +1,5 @@
 import {buttonUpgradeLevels, miningUpgradeLevels, keyUpgradeLevels,
-keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet, ascensionLevels, ascensionStats, automationItemsUnlocked, masteryItemLevels, slurryToggles} from '../data/player';
+keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet, ascensionLevels, ascensionStats, automationItemsUnlocked, masteryItemLevels, slurryToggles, layer, settings} from '../data/player';
 import { beaconBonuses } from '../data/beacons';
 import {keyUpgrades, keyCrafts} from '../data/keys'
 import { get } from 'svelte/store';
@@ -282,6 +282,32 @@ export default class formula {
     * Math.max(1, Math.log((get(wallet)['totalFame'] || 0) / 6 + 1))
     if (isNaN(y)) return 1; 
     else return y;
+  }
+
+  static getLayersPerCycle() {
+    const miningLevels = this.sumArray(get(miningUpgradeLevels));
+    return 1 + Math.log(miningLevels+1);
+  }
+
+  static calcRadioactivityGain() {
+    const l = get(layer)['layer'];
+    let y;
+    if (l <= 100) y = 1;
+    else y = 1 + Math.pow(l-100, 1.125);
+    y = y 
+    * get(buttonUpgrades)[1]['formula'](get(buttonUpgradeLevels)[1]);
+    return y;
+  }
+
+  static calcRadiumGainWhenComplete() {
+    return 1;
+  }
+
+  // gives radioactivity
+  static calcThoriumDepositGain() {
+    const min = 18000;
+    const max = 75000 * get(buttonUpgrades)[2]['formula'](get(buttonUpgradeLevels)[2]);
+    return Math.floor(min + Math.random()*(max-min))
   }
 
   // PER SECOND

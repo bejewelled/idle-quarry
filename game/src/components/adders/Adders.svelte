@@ -1,6 +1,7 @@
 <script>
+	import { thoriumDepositActive } from './../../data/button.ts';
 	import { keyFinderBases } from './../../data/mining.ts';
-	import { craftMasteryProgress, craftMasteryNextReq, craftMasteryLevel } from './../../data/player.ts';
+	import { craftMasteryProgress, craftMasteryNextReq, craftMasteryLevel, keyUpgradeLevels } from './../../data/player.ts';
 // @ts-nocheck
 
     import { ascFormula } from './../../data/ascension.ts'
@@ -66,7 +67,11 @@
         miningUpgradeLevelsFreeTemp,
         radiumProgress,
         masteryItemLevels,
-        permaWallet
+        permaWallet,
+        perSecond,
+        walletStamp,
+        layer,
+        sumUpgradeLevels
     } from '../../data/player'
     import { buttonUpgrades } from '../../data/button'
     import {
@@ -144,8 +149,8 @@
             dt = (Date.now() - last) / UPDATE_SPEED * TEST_SPEEDUP
             addProgress(dt)
             updateMiningLevel()
+            updateLayer()
             checkForKeyCraftCompletion()
-            addReactorProgress(dt)
             addMastery(dt)
             // out of focus - update more slowly to conserve resources
             if ($settings['activeTab'] !== 'beacons') {
@@ -174,6 +179,9 @@
         const progressUpdater = setInterval(() => {
             updateprogressThisTick(dt)
         }, UPDATE_SPEED + Math.random() * 3) // set intervals to prime numbers to avoid sync
+        const perSecond = setInterval(() => {
+            checkThoriumDepositRoll();
+        },1003)
     })
 
     // set the permanent wallet, that keeps track of unlocked resources
@@ -182,6 +190,21 @@
             $permaWallet[k] = $wallet[k]
             
         }
+    }
+
+    function checkThoriumDepositRoll() {
+        const min = $buttonUpgrades[0]['formula']($buttonUpgradeLevels[0])
+        if (Math.random() < min && $thoriumDepositActive == 'off') {
+            $thoriumDepositActive = 'on';
+        }
+    }
+
+    function sumAllUpgradeLevels() {
+        const mining = formula.sumArray($miningUpgradeLevels)
+        const beacon = formula.sumArray($beaconUpgradeLevels)
+        const button = formula.sumArray($buttonUpgradeLevels)
+        const key = formula.sumArray($keyUpgradeLevels)
+        $sumUpgradeLevels = sumAllUpgradeLevels;
     }
 
     function checkForMasteryCompletion() {
@@ -209,6 +232,25 @@
             addToActivityLog(
                 'Mining level increased to ' + $mineLevel['level'],
                 'text-sky-500',
+                'always'
+            )
+            }
+
+    }
+
+    function updateLayer() {
+        if ($layer['blocks'] >= $layer['blocksNextReq']) {
+            $layer['blocks'] -= $layer['blocksNextReq']
+            $layer['layer']++
+            // 100 * (A73^3) * ((1.01+((A73^2)*$D$2))^A73) * (2+Max(0, A73-69)*0.3)^Max(0, A73)
+            const lv = $layer['layer']
+            const BASE = 0.00015
+            $layer['blocksNextReq'] =
+                100 * lv * lv * lv;
+
+            addToActivityLog(
+                'Layer ' + ($layer['layer']-1) + " mined",
+                'text-yellow-300',
                 'always'
             )
             }
@@ -408,8 +450,12 @@
             addGems($progress['gems'] / gemAt, $progressAverage['gems'])
             dropRoll(Math.floor($progress['gems'] / gemAt))
 
+            addReactorProgress($progress['gems'] / gemAt)
+
             $mineLevel['xp'] +=
                 ($progress['gems'] / gemAt) * formula.getMineXPPerCycle()
+            $layer['blocks'] +=
+                ($progress['gems'] / gemAt) * formula.getLayersPerCycle()
 
             $progress['gems'] = 0
         }
@@ -441,16 +487,13 @@
 
     function addReactorProgress(delta) {
         if ($mineLevel['level'] < 8) return;
-        const val = $buttonUpgrades[0]['formula']($buttonUpgradeLevels[0])
-        * $buttonUpgrades[1]['formula']($buttonUpgradeLevels[1])
 
-
-        $radiumProgress[0] += ((delta * val) * (UPDATE_SPEED / 1000));
-        console.log($radiumProgress)
+        $radiumProgress[0] += delta * formula.calcRadioactivityGain();
 
 
         if ($radiumProgress[0] >= $radiumProgress[1]) {
-            $wallet['radium'] += Math.floor($radiumProgress[0] / $radiumProgress[1])
+            $wallet['radium'] += 
+            Math.min(1,(Math.floor($radiumProgress[0] / $radiumProgress[1]) * formula.calcRadiumGainWhenComplete()))
             $radiumProgress[0] %= $radiumProgress[1]    
         }
     }

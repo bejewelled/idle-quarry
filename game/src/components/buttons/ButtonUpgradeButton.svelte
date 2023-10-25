@@ -126,7 +126,7 @@ select-none"
     } from '../../data/player'
     import { progressThreshold, progressPerTick } from '../../data/mining'
     import { enchantUpgrades } from '../../data/fame'
-    import { buttonUpgrades } from '../../data/button'
+    import { buttonUpgrades } from '../../data/button';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
     // @ts-nocheck

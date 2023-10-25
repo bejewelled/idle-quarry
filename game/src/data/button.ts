@@ -130,6 +130,12 @@ export const radiumGainText = single(0);
 // edit when changing the level of the haste upgrade
 export const progressPerTick = single(1);
 
+// whether the random thorium deposit event is active
+// 'off' - not active
+// 'transition' - just clicked, about to turn off
+// 'on' - active
+export const thoriumDepositActive = single('off');
+
 
 /* NOTE:
 *  The cost of a specific item must be at least 1 to be imposed on the player.
@@ -140,23 +146,22 @@ export const buttonUpgrades = array([
 {
     index: 0,
     name: 'Heat Sink',
-    description: 'Increases base radioactivity gain.',
+    description: 'Increases the frequency of thorium deposits.',
     cost: {
-        radium: 4,
+        crystals: 100,
     },
-    ratio: 1.7,
-    formula: (lv: any) => 1 + lv,
+    ratio: 3,
+    formula: (lv: any) => 0.001 + lv * 0.0002,
     unlockAt: () => (true),
-    isPercent: false,
-    suffix: ' radioactivity per second',
-    isRadiumUpgrade: true,
+    isPercent: true,
+    suffix: ' chance per second',
     maxLevel: 25,
     notes: ''
 },
 {
     index: 1,
     name: 'Coolant',
-    description: 'Increases radioactivity gain.',
+    description: 'Increases passive radioactivity gain.',
     cost: {
         crystals: 1100,
     },
@@ -170,35 +175,32 @@ export const buttonUpgrades = array([
 },
 {
     index: 2,
-    name: 'I\'m Feeling Nice',
-    description: 'The center of the button is highlighted.',
+    name: 'Rich Deposits',
+    description: 'Increases thorium deposit amount.',
     cost: {
         crystals: 10000,
     },
-    ratio: 4e150,
-    formula: (lv: any) => lv,
+    ratio: 1.33,
+    formula: (lv: any) => 1 + lv * 0.25,
     unlockAt: () => (true),
+    suffix: 'x max thorium deposit radioactivity',
     isPercent: false,
-    maxLevel: 1,
+    maxLevel: 250,
     notes: ''
 },
 {
     index: 3,
-    name: 'Insanity!',
-    description: 'Your lifetime Incredible and Perfect clicks increase mining speed; Perfect clicks have a drastically higher impact.',
+    name: 'Alpha Decay',
+    description: 'Increases radium gain from full radioactivity.',
     cost: {
-        radium: 25,
+        crystals: 1e6,
     },
-    ratio: 4e150,
-    formula: (lv: any) => 1 + 
-    Math.min(4,
-        (get(buttonNumClicks)['perfect']*0.00075 + get(buttonNumClicks)['incredible']*0.000075)*Math.min(1,lv)
-    ),
+    ratio: 1.33,
+    formula: (lv: any) => 1 + lv*0.1,
     unlockAt: () => (true),
     isPercent: false,
-    isRadiumUpgrade: true,
-    suffix: 'x speed multiplier',
-    maxLevel: 1,
+    suffix: 'x radium gain',
+    maxLevel: 250,
     notes: ''
 },
 {
@@ -210,7 +212,7 @@ export const buttonUpgrades = array([
     },
     ratio: 1.25,
     formula: (lv: any) => 1 + Math.pow(lv, 2.5)*1.35,
-    unlockAt: () => (get(wallet)['crystals'] > 1000),
+    unlockAt: () => (get(wallet)['crystals'] > 1e297),
     isPercent: false,
     suffix: 'x multiplier',
     maxLevel: 65,
@@ -225,7 +227,7 @@ export const buttonUpgrades = array([
     },
     ratio: 4,
     formula: (lv: any) => lv*0.01,
-    unlockAt: () => (get(wallet)['crystals'] > 10000),
+    unlockAt: () => (get(wallet)['crystals'] > 1e297),
     isPercent: true,
     suffix: ' chance',
     maxLevel: 25,
@@ -240,7 +242,7 @@ export const buttonUpgrades = array([
     },
     ratio: 2,
     formula: (lv: any) => lv * 0.04,
-    unlockAt: () => (get(wallet)['warp'] > 1 || formula.sumArray(get(challengesCompleted))>0),
+    unlockAt: () => (get(wallet)['warp'] > 1e297 ),
     isPercent: true,
     suffix: ' chance',
     maxLevel: 8,
@@ -255,7 +257,7 @@ export const buttonUpgrades = array([
     },
     ratio: 40,
     formula: (lv: any) => 111111,
-    unlockAt: () => (get(wallet)['crystals'] > 1e6),
+    unlockAt: () => (get(wallet)['crystals'] > 1e297),
     isRadiumUpgrade: true,
     isPercent: false,
     maxLevel: 1,

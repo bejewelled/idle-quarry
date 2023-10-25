@@ -195,7 +195,7 @@ export const beaconMiningLevelReqs = array([0,0,0,12,14,16,24,27,36,40])
 
 export const beaconFormulas = array([
    /*beacon power*/ function(lv: number) {return 1 + (Math.pow(lv,0.65) * 0.01)},
-   /*mining haste*/ function(lv: number) {return 1 + 3.125*(lv / (lv+40000))},
+   /*mining haste*/ function(lv: number) {return 1 + (lv < 10000 ? lv*0.0006 : 6 + Math.pow((lv-10000)*0.0006,0.4))},
    /*droprate*/ function(lv: number) {return 1 + (Math.pow(lv,0.8) * 0.0035)},
    /*gem bonus*/ function(lv: number) {return 1 + Math.pow(lv,0.9)*0.02},
     /* fame bonus */ function(lv: number) {return 1 + Math.pow(lv,0.5)*0.02},

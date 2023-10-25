@@ -55,9 +55,10 @@
         miningUpgradeLevelsFree,
         challengesCompleted,
         radiumProgress,
-        permaWallet
+        permaWallet,
+        layer
     } from '../../data/player'
-    import { buttonUpgrades } from '../../data/button'
+    import { buttonUpgrades } from '../../data/button';
     import {
         progressThreshold,
         progressPerTick,
@@ -160,6 +161,13 @@
             challengeGoals.updateChallengeReqs()
             $buttonNumClicks = $baseButtonNumClicks
             $radiumProgress = [0, 1000000]
+
+            $layer = {
+                layer: 0,
+                blocks: 0,
+                blocksNextReq: 100,
+            }
+
 
             for (let k in Object.keys($keyCraftTimes)) {
                 $keyCraftTimes[k] = [-1, -1]

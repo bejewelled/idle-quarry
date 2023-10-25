@@ -8,41 +8,13 @@
         <div class="px-2 res-display col-span-3">
             <div class="res-display-space py-2" />
             <div class="res-display-wrap grid grid-cols-12">
-                {#if $challengeActive !== 0}
-                    <div
-                        class="col-span-12 text-amber-500
-            text-left text-small pb-1"
-                    >
-                        Challenge {$challengeActive}
-                        [ {f($wallet["challengePoints"], 0)} / {f(
-                            $challengeGoals[$challengeActive - 1],
-                            0
-                        )}
-                        ]
-                    </div>
-                    <div class="col-span-12">
-                        <div class="mine-bar-wrapper pb-1">
-                            <div
-                                class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700"
-                            >
-                                <div
-                                    class="bg-amber-500 h-2.5 rounded-full"
-                                    style="width: {Math.min(
-                                        100,
-                                        challengeBarWidth
-                                    )}%"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                {/if}
 
                 {#each [1, 2, 3, 4, 5] as i}
                     {#each Object.entries($wallet) as res}
                         {#if ($permaWallet[res[0]] || $wallet[res[0]] >= 1) && !res[0].includes("key") && !ref.walletExclude[res[0]] && (ref.dropTiers[res[0]] || ref.dropTiers["default"]) == i}
                             <div
                                 class="{ref.colors[res[0]]} res-name
-                        has-tooltip col-span-7 text-[13px]"
+                        has-tooltip col-span-6 text-[13px]"
                             >
                                 {ref.displayNames[res[0]] || res[0]}
                                 {#if $settings["tutorialMode"]}
@@ -51,8 +23,13 @@
                                     </span>
                                 {/if}
                             </div>
-                            <div class="text-white text-[13px] res-amount col-span-5">
-                                {f(Math.floor(res[1]), 0)}
+                            <div class="text-white text-[13px] res-amount text-left col-span-6 grid grid-cols-4">
+                                <div class='grid-cols-4'>{f(Math.floor(res[1]), 0)}</div>
+                                <!-- <div class='grid-cols-0 text-xs text-right tooltip-text ml-4'>
+                                    ({$perSecond[res[0]] ? '+' : ''}{f($perSecond[res[0]], 
+                                    Math.abs($perSecond[res[0]]) > 1000 ? 0 :
+                                    Math.abs($perSecond[res[0]]) > 100 ? 2 : 3)}) 
+                                </div> -->
                             </div>
                         {/if}
                     {/each}
@@ -65,7 +42,7 @@
                     }
                         <div
                             class="{ref.colors[res[0]]} res-name
-                        has-tooltip col-span-7 text-[13px]"
+                        has-tooltip col-span-6 text-[13px]"
                         >
                             {ref.displayNames[res[0]] || res[0]}
                             {#if $settings["tutorialMode"]}
@@ -75,11 +52,16 @@
                             {/if}
                         </div>
 
-                        <div class="text-white text-[13px] res-amount col-span-5">
+                        <div class="text-white text-[13px] res-amount col-span-6">
                             {f(Math.floor(res[1]), 0)}
                         </div>
                     {/if}
                 {/each}
+
+                <div class='pt-2 mt-2'></div>
+                {#if $thoriumDepositActive !== 'off'}
+                ,<div class='col-span-12'><ThoriumDepositButton/></div>
+                {/if}
 
                 <div class="alog-break pt-4 col-span-12" />
                 <div class="alog-title game-text col-span-9">Activity Log</div>
@@ -155,35 +137,27 @@
                     class="py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950"
                     on:click={() => reset()}>Reset</button>
                 <button class="text-xs text-gray-600">v0.0.5a-4</button>
+               
                 <!-- mining level bar -->
                 <div class="wrapper grid grid-cols-9">
                     <div class="col-span-1 p-[1px] has-tooltip">
-                        <div
-                            class="text-[#989898] text-small text-left"
-                        >
+                        <div class="text-[#989898] text-small text-left">
                             Mining Level
-                            <span
-                                class="font-bold
-                        {$mineLevel['level'] > 69
+                            <span class="font-bold {$mineLevel['level'] > 69
                                     ? 'text-red-500'
-                                    : 'text-cyan-400'}"
-                            >
-                                {$mineLevel["level"]}</span
-                            >
+                                    : 'text-cyan-400'}">
+                                {$mineLevel["level"]}</span>
                         </div>
                     
                         <span
                             class="px-2 tooltip tooltip-text shadow-lg p-1
                             border-white border-double border bg-[#222529] ml-16
-                                pointer-events-none max-w-[300px] text-center weight-bold"
-                        >
+                                pointer-events-none max-w-[260px] text-center weight-bold" >
                             <div class="grid grid-cols-3">
                                 <div
-                                    class="col-span-3 text-center
-                        {$mineLevel['level'] > 69
+                                    class="col-span-3 text-center {$mineLevel['level'] > 69
                                         ? 'text-red-500'
-                                        : 'text-cyan-500'}"
-                                >
+                                        : 'text-cyan-500'}">
                                     [ {f($mineLevel["xp"], 0)} / {f(
                                         $mineLevel["xpNextReq"],
                                         0
@@ -196,7 +170,8 @@
                                 </div>
                                 <div class="col-span-3 text-center">
                                     This value increases based on the total
-                                    amount of fame gained in this ascension.
+                                    amount of fame gained in this ascension. <br/>
+                                    Your mining level unlocks various game features.
                                 </div>
                             </div>
                         </span>
@@ -219,6 +194,63 @@
                     </div>
                     <div class='col-span-1' />
                 </div>
+
+                <!-- layer bar -->
+                <div class="wrapper grid grid-cols-9">
+                    <div class="col-span-1 p-[1px] has-tooltip">
+                        <div class="text-[#989898] text-small text-left">
+                            Layer 
+                            <span class="font-bold text-yellow-300">
+                                {f($layer['layer'],0)}</span>
+                        </div>
+                    
+                        <span
+                            class="px-2 tooltip tooltip-text shadow-lg p-1
+                            border-white border-double border bg-[#222529] ml-16
+                                pointer-events-none max-w-[260px] text-center weight-bold" >
+                            <div class="grid grid-cols-3">
+                                <div
+                                    class="col-span-3 text-center text-yellow-300">
+                                    [ {f($layer["blocks"], 0)} / {f(
+                                        $layer["blocksNextReq"],
+                                        0
+                                    )} ]
+                                </div>
+                                <div class="col-span-3 text-center">
+                                    Each mine operation mines <strong
+                                        >{f(layersPerCycle, 2)}</strong
+                                    > blocks from the current layer.
+                                </div>
+                                <div class="col-span-3 text-center">
+                                    This value increases based on the sum of all upgrade levels. <br />
+                                    You gain various bonuses based on your current layer.
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+
+                    <div class="col-span-5 p-[1px] mt-1">
+                        <div class="layer-bar-wrapper">
+                            <div
+                                class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700"
+                            >
+                                <div
+                                    class="bg-yellow-300
+                        h-2.5 rounded-full"
+                                    style="width: {layerBarWidth}%"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-span-1' />
+                </div>
+
+
+
+
+
+
+
             </div>
 
             <div class="row-span-1 tab-buttons">
@@ -249,7 +281,7 @@
                     <Relocate />
                 {:else if tab === "enchants" && tabUnlockCriteria["enchants"]()}
                     <Enchants />
-                {:else if tab === "button" && tabUnlockCriteria["button"]()}
+                {:else if tab === "reactor" && tabUnlockCriteria["reactor"]()}
                     <Button />
                 {:else if tab === "augments" && tabUnlockCriteria["augments"]()}
                     <Automation />
@@ -276,9 +308,11 @@
 </div>
 
 <script lang='ts'>
+	import { thoriumDepositActive } from './../data/button.ts';
 	import { masteryNextReq, masteryItemInfo, masteryItemReqs } from './../data/mastery.ts';
-	import { ascensionLevels, ascensionUpgradeLevels, craftMasteryLevel, craftMasteryProgress } from './../data/player.ts';
+	import { ascensionLevels, ascensionUpgradeLevels, craftMasteryLevel, craftMasteryProgress, perSecond, sumUpgradeLevels } from './../data/player.ts';
 
+    import ThoriumDepositButton from '../components/buttons/ThoriumDepositButton.svelte';
 
     import Decimal from "break_infinity.js";
     import {
@@ -328,7 +362,8 @@
         stats,
         ascensionStats, 
         masteryItemLevels ,
-        totalCrafts
+        totalCrafts,
+        layer
     } from "../data/player.ts";
     import { upgradeSorting } from "../data/mining.ts";
     import {
@@ -382,10 +417,13 @@
     const GAME_SPEED = 1; //only for balancing, doesn't actually change the game speed
     $: mineLevelBarWidth =
         Math.min(1, $mineLevel["xp"] / $mineLevel["xpNextReq"]) * 100;
+    $: layerBarWidth =
+        Math.min(1, $layer["blocks"] / $layer["blocksNextReq"]) * 100;
     $: challengeBarWidth =
         ($wallet["challengePoints"] / $challengeGoals[$challengeActive - 1]) *
         100;
     $: xpPerCycle = formula.getMineXPPerCycle();
+    $: layersPerCycle = $sumUpgradeLevels
     let ct;
 
     const toggleAlog = () => {
@@ -452,7 +490,7 @@
             formula.sumArray($enchantUpgradeLevels) > 0 ||
             $miningUpgradeLevels[10] > 0 ||
             $miningUpgradeLevels[11] > 0,
-        button: () => $mineLevel["level"] >= 8,
+        reactor: () => $mineLevel["level"] >= 8,
         default: () => false,
         help: () => true,
         settings: () => true,
@@ -535,6 +573,7 @@
         localStorage.setItem("craftMasteryLevel", JSON.stringify($craftMasteryLevel));
         localStorage.setItem("craftMasteryProgress", JSON.stringify($craftMasteryProgress));
         localStorage.setItem("mineLevel", JSON.stringify($mineLevel));
+        localStorage.setItem("layer", JSON.stringify($layer));
         localStorage.setItem(
             "buttonNumClicks",
             JSON.stringify($buttonNumClicks)
@@ -683,6 +722,11 @@
         if (localStorage.getItem("miningUpgradeLevelsBought")) {
             miningUpgradeLevelsBought.set(
                 JSON.parse(localStorage.getItem("miningUpgradeLevelsBought"))
+            );
+        }
+        if (localStorage.getItem("layer")) {
+            layer.set(
+                JSON.parse(localStorage.getItem("layer"))
             );
         }
         if (localStorage.getItem("miningUpgradeLevelsFree")) {
@@ -1122,6 +1166,7 @@
         setInterval(() => {
             ct = Date.now();
             xpPerCycle = formula.getMineXPPerCycle();
+            layersPerCycle = formula.getLayersPerCycle();
         }, 1063);
 
         // use for visual refreshing or testing, not for any game-related logic
@@ -1286,6 +1331,17 @@
     :global(.game-btn-crystal:hover) {
         color: #a5b4fc;
         background-color: #333851;
+        cursor: pointer;
+    }
+
+    :global(.game-btn-thorium) {
+        border: 1px solid #a3e635;
+        color: #a3e635;
+        cursor: pointer;
+    }
+    :global(.game-btn-thorium:hover) {
+        color: #a3e635;
+        background-color: #384425;
         cursor: pointer;
     }
     

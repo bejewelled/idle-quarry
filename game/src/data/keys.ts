@@ -373,13 +373,13 @@ export const keyCrafts = array([
         style: 'text-blue-400',
         stylebg: 'bg-blue-400',
         cost: {
-            slurry: 100,
+            slurry: 10,
         },
-        craftTime: 100, // in seconds
-        min: 32,
-        max: 112,
+        craftTime: 35, // in seconds
+        min: 1,
+        max: 3,
         ratio: 1.04,
-        unlockAt: () => (get(wallet)['key2'] > 0 || get(keysOpened)[1] > 0 || get(keysOpened)[0] > 1e4),
+        unlockAt: () => (get(keysOpened)[0] > 1000 || get(keysOpened)[0] > 1e4),
     },
     {
         item: 'key3',
@@ -387,14 +387,16 @@ export const keyCrafts = array([
         style: 'text-pink-400',
         stylebg: 'bg-pink-400',
         cost: {
-            slurry: 1e4,
-            sigils: 10,
+            sigils: 1,
+            crystals: 1e6,
+            fame: 10000,
+
         },
-        craftTime: 860, // in seconds
-        min: 9,
-        max: 25,
+        craftTime: 140, // in seconds
+        min: 1,
+        max: 3,
         ratio: 1.04,
-        unlockAt: () => (get(wallet)['key3'] > 0 || get(keysOpened)[2] > 0 || get(keysOpened)[1] > 1e5),
+        unlockAt: () => (get(keysOpened)[1] > 1000 || get(keysOpened)[1] > 1e5),
     },
     // {
     //     item: 'key5',

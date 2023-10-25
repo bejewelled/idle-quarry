@@ -356,7 +356,7 @@ export const miningUpgrades = array([{
     || get(miningUpgradeLevelsBought)[9] > 0),
     formula: (lv: any) => (0),
     isPercent: false,
-    suffix: ' (no bonus)',
+    suffix: '',
     maxLevel: 1,
     style: 'game-btn-lootmaster',
     notes: ''
@@ -458,7 +458,7 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (0),
     isPercent: true,
     noResetRelocate: true,
-    suffix: ' (no bonus)',
+    suffix: '',
     maxLevel: 1,
     style: 'game-btn-lootmaster',
     notes: ''
@@ -564,7 +564,7 @@ export const miningUpgrades = array([{
         crystals: 40000,
     },
     ratio: 1.33,
-    unlockAt: () => (get(wallet)['crystals'] > 0),
+    unlockAt: () => (get(wallet)['crystals'] > 1e297),
     formula: (lv: any) =>  formula.dispCalcHardenedGemBonus(get(buttonNumClicks), lv),
     isPercent: true,
     prefix: '+',
@@ -772,7 +772,7 @@ export const miningUpgrades = array([{
     isPercent: true,
     noResetRelocate: true,
     noResetAscension: true,
-    suffix: ' (no bonus)',
+    suffix: '',
     maxLevel: 1,
     style: 'game-btn-lootmaster',
     notes: ''

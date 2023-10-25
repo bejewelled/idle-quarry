@@ -310,6 +310,8 @@ export const progressThisTick = object({})
 // assuming dt=1, used for display text
 export const progressAverage = object({})
 
+export const sumUpgradeLevels = single(0)
+
 export const beaconActivations = array(Array(30).fill(0))
 
 export const beaconLevels = array(Array(30).fill(0))
@@ -340,6 +342,12 @@ export const mineLevel = object({
     level: 0,
     xp: 0,
     xpNextReq: 100,
+})
+
+export const layer = object({
+    layer: 0,
+    blocks: 0,
+    blocksNextReq: 100,
 })
 
 export const buttonNumClicks = object({
@@ -456,6 +464,12 @@ export const challengeProgress = single(0);
 export const challenge3Multi = single(1);
 
 export const challengesCompleted = array(Array(30).fill(0));
+
+export const perSecond = object({})
+
+export const walletStamp = object({})
+
+
 
 export const slurryToggles = object({
     key1: false,
