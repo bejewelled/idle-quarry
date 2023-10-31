@@ -480,7 +480,7 @@ export const keyCrafts = array([
         style: 'text-amber-200',
         stylebg: 'bg-amber-200',
         cost: {
-            sigils: 1e8,
+            sigils: 1.25e7,
             energy: 1
         },
         craftTime: 180, // in seconds
