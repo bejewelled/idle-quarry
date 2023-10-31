@@ -133,37 +133,37 @@ export const masteryNextReq = single(100)
 
 export const masteryItemInfo = object({
     gems: {
-        base: 1e13,
-        increase: 1e3,
+        base: 1e9,
+        increase: 1e2,
         cap: 1e295
     },
     gold: {
-        base: 1e11,
+        base: 1e7,
         increase: 1e2,
         cap: 1e295
     },
     orbs: {
-        base: 1e10,
+        base: 1e7,
         increase: 1e2,
         cap: 1e295
     },
     crystals: {
-        base: 1e7,
+        base: 1e5,
         increase: 1e2,
         cap: 1e115
     },
     sigils: {
-        base: 1e6,
+        base: 1e3,
         increase: 1e2,
         cap: 1e115
     },
     slurry: {
-        base: 1e6,
+        base: 1e3,
         increase: 1e2,
         cap: 1e115
     },
     dust: {
-        base: 1e4,
+        base: 1e3,
         increase: 1e1,
         cap: 1e78
     },
@@ -173,7 +173,7 @@ export const masteryItemInfo = object({
         cap: 1e78
     },
     radium: {
-        base: 1e2,
+        base: 1e3,
         increase: 1e1,
         cap: 1e78
     },

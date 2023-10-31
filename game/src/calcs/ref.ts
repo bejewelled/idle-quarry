@@ -31,6 +31,7 @@ export default class ref {
         radium: "text-lime-300",
         antimatter:  "text-transparent text-stone-100 bg-clip-text bg-gradient-to-br from-blue-500 to-indigo-800",
         void: "text-gray-800",
+        layer: 'text-yellow-300'
     };
 
     static essenceBgColors = [
@@ -156,8 +157,8 @@ export default class ref {
         enchants: "Relocate and gain at least 100 fame to unlock.",
         automation: "Relocate and gain at least 1 fame to unlock.",
         mastery: "Buy mastery with fame to unlock.",
-        artifacts: "Find an artifact with a T3 [***] or higher key to unlock.",
-        ascension: "Obtain 1e15 fame.",
+        artifacts: "Find an artifact to unlock.",
+        ascension: "Obtain 1e13 fame.",
         button: "Reach Mining Level 8 to unlock.",
     };
 
@@ -175,16 +176,16 @@ export default class ref {
         "key mastery": 11,
         'legendary': 12,
         "efficiency ii": 13,
-        "legendary ii": 14,
+        'hardened': 14,
+        "legendary ii": 14.02, 
         "efficiency iii": 15,
-        "legendary iii": 16,
+        "kleptomaniac": 16,
         'expansive': 17,
         'clockwork': 18,
         'reflectors': 19,
         'mythical': 20,
         'lockpicks': 21,
         'overload': 22,
-        'hardened': 23,
         'excavator': 24,
 
         default: 1e300,
@@ -248,10 +249,10 @@ export default class ref {
     };
 
     static slurryGainFromKeys = [
-        1e-5,
-        1e-3,
-        1,
-        1e4,
-        1e9
+        1e-3, // t1
+        1e-1, // t2
+        10, // t3
+        1e4, // t4
+        1e9 // t5
     ]
 }

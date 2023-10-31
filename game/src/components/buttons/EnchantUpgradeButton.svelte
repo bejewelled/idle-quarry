@@ -22,16 +22,34 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
             {/if}
         </div>
         <div class='text-center effect-wrapper'>
+            {#if $enchantUpgrades[index]['extPrefix'] && $enchantUpgrades[index]['extSuffix']}
+            <div class='tooltip-text-xs text-[#999999]'>
+                 <span class='current text-[#999999] italic pb-1'>
+                    {$enchantUpgrades[index]['extPrefix']} 
+                    {f($enchantUpgrades[index]['extFormula']
+                    ($enchantUpgradeLevels[index],
+                    formula.getMineSize(),
+                    formula.getMineQuality()),($enchantUpgrades[index]['roundOverride'] || 3))}
+                    {$enchantUpgrades[index]['extSuffix']}
+                 </span>
+            </div>
+            {/if}
+        </div>
+        <div class='text-center effect-wrapper'>
             <div class='tooltip-text-xs text-[#cccccc]'>
                  <span class='current text-[#cccccc]'>
                     {$enchantUpgrades[index]['prefix'] || ""}{$enchantUpgrades[index]['isPercent'] ?
-                    fp($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]),3, false) :
-                    f($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]),3)}{$enchantUpgrades[index]['suffix'] || ""}
+                    fp($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]),
+                    $enchantUpgrades[index]['roundOverride'] || 3, false) :
+                    f($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]),
+                    $enchantUpgrades[index]['roundOverride'] || 3)}{$enchantUpgrades[index]['suffix'] || ""}
                  </span>
                  <span class='current text-[#999999]'>  => 
                     {$enchantUpgrades[index]['prefix'] || ""}{$enchantUpgrades[index]['isPercent'] ?
-                   fp($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]+buyAmount),3, false) :
-                   f($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]+buyAmount),3)}{$enchantUpgrades[index]['suffix'] || ""}
+                   fp($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]+buyAmount),
+                   $enchantUpgrades[index]['roundOverride'] || 3, false) :
+                   f($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]+buyAmount),
+                   $enchantUpgrades[index]['roundOverride'] || 3)}{$enchantUpgrades[index]['suffix'] || ""}
                  </span>
 
             </div>

@@ -127,10 +127,10 @@
     </div>
     <div class='pt-6'>
         <div class='wrapper'>
-            {#if $wallet['gold'] > 3e4 || $wallet['slurry'] > 0}
+            {#if $permaWallet['gold'] > 1e4 || $wallet['slurry'] > 0}
             <KeySlurryConvertButton />
             {:else}
-            <div class='game-btn-noafford text-center py-2'>Unlock a new feature at 30,000 gold</div>
+            <div class='game-btn-noafford text-center py-2'>Unlock a new feature at 10,000 gold</div>
             {/if}
         </div>
     </div>
@@ -179,13 +179,16 @@
         {/each}
     </div>
     {/if}
-    <div class='pb-16'></div>
+
+    <div class='pb-16 pt-8 tooltip-text text-center w-full italic'>
+        {$permaWallet['gold'] > 1e4 ? 'Click the "Slurry X" buttons to enable slurry conversion for each key tier.' : ''} <br/>     
+    </div>
 
 
 </div>
 
 <script lang='ts'>
-	import { keyCraftAmount, slurryToggles } from './../../data/player.ts';
+	import { keyCraftAmount, slurryToggles, permaWallet } from './../../data/player.ts';
 	import { onDestroy } from 'svelte';
     //@ts-nocheck
 import { onMount } from 'svelte';

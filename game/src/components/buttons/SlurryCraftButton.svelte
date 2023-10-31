@@ -30,13 +30,13 @@
                         <div class='{ref.colors[c[0]] || ref.colors['default']} text-left pr-3 col-span-2'>{
                         $wallet[c[0]] || $unlockedRes.has(c[0]) ? 
                         (ref.displayNames[c[0]] ? ref.displayNames[c[0]] : c[0]) : "???"}</div>
-                        <div class='col-span-2 text-left'>{f(c[1])}</div>
+                        <div class='col-span-2 text-left {!(thisTypeAffordable(c[0])) ?'text-red-600' : ''}'>{f(c[1])}</div>
                     {/if}
                 {/each}
                 <div class='col-span-4 py-1 items-center justify-center line'><hr/></div>
                 <div class='text-teal-100 text-left text-xs pr-3 col-span-2'>time</div>
                     <div class='col-span-2 text-xs text-left'>{f(
-                        $keyCrafts[index]['craftTime'] * Math.pow(0.9, masteryLevel-1),0
+                        calcCraftTime()/1000,0
                         )} seconds</div>
 
                 {/if}
@@ -171,6 +171,10 @@
     if (n < 1e9) return (n*100).toFixed((n*100 < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "%";
     else return (n*100).toExponential(pl).toString().replace('+', '') + "%";
 }
+
+function thisTypeAffordable(type) {
+        return ($wallet[type] >= costs[type]);
+    }
 
     function cost(start) {
        const base = start * Math.pow(

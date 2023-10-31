@@ -5,14 +5,14 @@
     </div>
     <div class="col-span-12 divider py-3" />
     {#each Object.entries($allMultipliers) as multi}
-      {#if $wallet["artifacts"] >= multi[1]["unlockAt"]}
+      {#if $wallet["artifacts"] >= multi[1]["unlockAt"] && multi[0] != 'startLayer'}
         <div class="col-span-4 game-text text-right">
           {multi[1]["description"]}
         </div>
         <div
           class="ml-2 col-span-2 text-left {ref.colors[multi[1]['colorStyle']]}"
         >
-          {multi[1]["prefix"]}{f(multi[1]["formula"]($wallet["artifacts"]), 3)}
+          {multi[1]["prefix"]}{f(multi[1]["formula"]($wallet["artifacts"]), multi[0] == 'startLayer' ? 0 : 3)}
         </div>
         <div class="col-span-6" />
       {/if}

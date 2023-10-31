@@ -75,6 +75,8 @@
 
 
 <script lang='ts'>
+	import { ascFormula } from './../../data/ascension.ts';
+	import { allMultipliers } from './../../data/artifacts';
  //@ts-nocheck
 import { onMount, onDestroy } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
@@ -83,7 +85,7 @@ import {progress, wallet, miningDropTable, miningUpgradeLevels,
      keysOpened, unlockedRes, beaconUpgradeLevels, flags, 
      enchantUpgradeLevels, enchantProgress, automationItemsUnlocked,
     mineLevel, buttonUpgradeLevels, stats, keyCraftAmount,
-miningUpgradeLevelsBought, miningUpgradeLevelsFree} from '../../data/player';
+miningUpgradeLevelsBought, miningUpgradeLevelsFree, layer} from '../../data/player';
 import {buttonUpgrades} from '../../data/button';
 import {progressThreshold, progressPerTick, miningUpgrades,
 gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
@@ -105,6 +107,7 @@ $: pbarWidths = Array(30).fill(0);
 $: beaconDispBonus = $beaconBonuses
 $: fameGainKeys = formula.calcFameGainKeys($keysOpened);
 $: fameMultiGems = formula.calcFameGemMulti($wallet['gems']);
+$: fameMultiLayer = formula.calcFameLayerMulti();
 $: fameMultiBeaconLevels = formula.calcFameGainBeacons(formula.sumArray($beaconLevels));
 let beaconDispBonus = $beaconBonuses;
 let reloadClock = true;
@@ -158,6 +161,12 @@ const fameGridInfo = [
      criteria: () => ($wallet['gems'] > 0)
     },
     {
+     name: 'Current Layer', 
+     value: () => fameMultiLayer, 
+     colorRef: 'layer',
+     criteria: () => ($wallet['gems'] > 0)
+    },
+    {
      name: 'Gem Amount', 
      value: () => fameMultiGems, 
      colorRef: 'gems',
@@ -178,8 +187,7 @@ const fameGridInfo = [
     {
      name: 'Legendary Upgrades', 
      value: () => ($miningUpgrades[16]['formula']($miningUpgradeLevels[16]) 
-        * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])
-        * $miningUpgrades[19]['formula']($miningUpgradeLevels[19])),
+        * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])),
      colorRef: '',
      criteria: () => ($wallet['totalFame'] > 200 || $wallet['fame'] > 200
      || $miningUpgradeLevels[16] > 0 || $miningUpgradeLevels[17] > 0 || $miningUpgradeLevels[19] > 0)
@@ -197,10 +205,10 @@ function calcFameGain() {
     return formula.productArray(fameGainKeys)
     * (($mineLevel['level']**1.5)*0.15 + 1)
     * fameMultiGems 
+    * fameMultiLayer
     * fameMultiBeaconLevels
     * $miningUpgrades[16]['formula']($miningUpgradeLevels[16]) // legendary i - iii 
     * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])
-    * $miningUpgrades[19]['formula']($miningUpgradeLevels[19])
     * $miningUpgrades[37]['formula']($miningUpgradeLevels[37]) // phantom legend
     * $beaconFormulas[4]($beaconLevels[4]) // beacon path
 }
@@ -240,6 +248,13 @@ export function relocate() {
                 }
                 $keysOpened = Array($keysOpened.length).fill(0);
                 $beaconBonuses = Array(30).fill(1)
+
+
+                $layer = {
+                    layer: (ascFormula.getVal('celestial') || 0),
+                    blocks: 0,
+                    blocksNextReq: 100,
+                }
 
                 // reset lootmaster
                 $miningUpgradeLevels[6] = 0;

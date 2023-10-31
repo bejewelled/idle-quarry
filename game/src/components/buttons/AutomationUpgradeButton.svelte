@@ -103,11 +103,12 @@ select-none'>{$automationUpgrades[index]['name']}
         $automationItemsUnlocked[$automationUpgrades[index]['name'].toLowerCase()] = true;
 
         // special cases
-        if ($automationUpgrades[index]['name'] == 'spellcaster') {
+        if ($automationUpgrades[index]['name'].toLowerCase() == 'spellcaster') {
+            console.log('working??')
             for (let i of Object.keys($enchantThreshold))
                 $enchantThreshold[i] *= 0.9;
         }
-        if ($automationUpgrades[index]['name'] == 'spellcaster ii') {
+        if ($automationUpgrades[index]['name'].toLowerCase() == 'spellcaster ii') {
             for (let i of Object.keys($enchantThreshold))
                 $enchantThreshold[i] *= 0.9;
         }

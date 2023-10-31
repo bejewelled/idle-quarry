@@ -11,7 +11,7 @@
 
                 {#each [1, 2, 3, 4, 5] as i}
                     {#each Object.entries($wallet) as res}
-                        {#if ($permaWallet[res[0]] || $wallet[res[0]] >= 1) && !res[0].includes("key") && !ref.walletExclude[res[0]] && (ref.dropTiers[res[0]] || ref.dropTiers["default"]) == i}
+                        {#if ($permaWallet[res[0]] || $wallet[res[0]] > 0) && !res[0].includes("key") && !ref.walletExclude[res[0]] && (ref.dropTiers[res[0]] || ref.dropTiers["default"]) == i}
                             <div
                                 class="{ref.colors[res[0]]} res-name
                         has-tooltip col-span-6 text-[13px]"
@@ -222,7 +222,7 @@
                                     > blocks from the current layer.
                                 </div>
                                 <div class="col-span-3 text-center">
-                                    This value increases based on the sum of all upgrade levels. <br />
+                                    This value primarily increases based on the sum of all upgrade levels. <br />
                                     You gain various bonuses based on your current layer.
                                 </div>
                             </div>
@@ -496,7 +496,7 @@
         settings: () => true,
         mastery: () => $automationItemsUnlocked["masterful"],
         artifacts: () => $wallet["artifacts"] && $wallet["artifacts"] >= 1,
-        ascension: () => ($wallet['totalFame'] > 1e15
+        ascension: () => ($wallet['totalFame'] > 1e13
         || $ascensionStats['ascensionCount'] > 0),
     };
     const tabsUnlocked = {
@@ -1168,6 +1168,7 @@
             xpPerCycle = formula.getMineXPPerCycle();
             layersPerCycle = formula.getLayersPerCycle();
         }, 1063);
+
 
         // use for visual refreshing or testing, not for any game-related logic
         setInterval(() => {

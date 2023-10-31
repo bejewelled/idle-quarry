@@ -117,6 +117,13 @@ const floor = (n: number) => Math.floor(n);
 const ceil = (n: number) => Math.ceil(n);
 
 export const allMultipliers = object({
+    startLayer: {
+        description: 'Starting layer increased to',
+        prefix: '',
+        unlockAt: 1,
+        formula: (amt: number) => 1 + Math.min(amt/4, 100) + Math.min(Math.sqrt(amt), 300) + Math.pow(amt, 0.25),
+        colorStyle: 'layer'
+    },
     gems: {
         description: 'Multiplying gem gain by',
         prefix: 'x',
@@ -146,7 +153,7 @@ export const allMultipliers = object({
         colorStyle: 'artifacts'
     },
     radium: {
-        description: 'Multiplying radioactivity gain by ',
+        description: 'Multiplying passive radioactivity gain by ',
         prefix: 'x',
         unlockAt: 10000,
         formula: (amt: number) => 1 + Math.log(Math.pow(amt,0.8)/1100+1),

@@ -162,12 +162,10 @@ function dropTable(context: any) {
                 i = {};
                 for (let [item, val] of Object.entries(get(baseMiningDropTable))) {
                     let baseChance = val[0] 
-                        * (ref.dropTiers[item] === 1 ?
-                        Math.max(get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2]),1)
-                        : 1) 
+                        * Math.max(get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2]),1)
                         * Math.max(1,get(miningUpgrades)[6]['formula'](get(miningUpgradeLevels)[6]))
-                        * Math.max(1,get(miningUpgrades)[22]['formula'](get(miningUpgradeLevels)[22]))
                         * Math.max(1,get(miningUpgrades)[11]['formula'](get(miningUpgradeLevels)[11]))
+                        * Math.max(1,get(miningUpgrades)[22]['formula'](get(miningUpgradeLevels)[22]))
                         * Math.max(1,get(beaconBonuses)[2])
                         * (item === 'beacons' ? get(beaconUpgrades)[1]['formula'](get(beaconUpgradeLevels)[1]) : 1)
                         * (item === 'artifacts' ? get(allMultipliers)['artifacts']['formula'](get(wallet)['artifacts'] || 0) : 1)
@@ -179,11 +177,17 @@ function dropTable(context: any) {
                         //@ts-ignore
                         Math.max(1,(val[1])
                         * ((item === 'gold' || item === 'orbs')
-                          ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1)),
+                          ? (get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) 
+                          * get(miningUpgrades)[19]['formula'](get(miningUpgradeLevels)[19]))
+                          : 1))
+                          * Math.max(1,get(miningUpgrades)[20]['formula'](get(miningUpgradeLevels)[20])),
                         //@ts-ignore
                         Math.max(1,(val[2])
                         * ((item === 'gold' || item === 'orbs')
-                        ? get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7]) : 1)),
+                        ? (get(miningUpgrades)[7]['formula'](get(miningUpgradeLevels)[7])
+                        * get(miningUpgrades)[19]['formula'](get(miningUpgradeLevels)[19]))
+                        : 1))
+                        * Math.max(1,get(miningUpgrades)[20]['formula'](get(miningUpgradeLevels)[20])),
                         val[3],
                         val[4]
                     ]
@@ -240,23 +244,23 @@ export const miningUpgradeLevelsTemp = array(Array(200).fill(0));
 export const keyUpgradeLevels = array(Array(50).fill(0));
 
 export const baseMiningDropTable = dropTable({
-    gold: [0.20,1,3,1,1], // 20% chance to drop 1 - 3 gold, softcap at 100%, min tier 1 (lm0)
-    key1: [0.04,1,1,0.25, 1], 
-    orbs: [0.025,1,1,0.25, 1],
+    gold: [0.25,1,3,10,1], // 20% chance to drop 1 - 3 gold, softcap at 100%, min tier 1 (lm0)
+    key1: [0.05,1,1,1, 1], 
+    orbs: [0.035,1,1,0.3, 1],
     //lm1
-    beacons: [0.005,1,1, 0.1, 2],
-    crystals: [0.002,0.4,0.9, 0.1, 2],
+    beacons:  [0.003,1,2,0.1,2],
+    fame:     [0.0005,1,3,0.025,2],
     //lm2
-    sigils: [0.0003,0.08,0.27, 0.02, 3],
-    key2: [0.0001,0.04, 0.16, 0.02, 3],
+    sigils: [0.000015,0.08,0.27,0.02,3],
+    key2:   [0.00000275,0.04,0.16,0.02,3],
     //lm3
-    dust: [1e-6, 0.06, 0.28, 0.004, 4],
-    key3: [2e-7, 0.01, 0.03, 0.004, 4],
+    dust:      [1e-6, 0.06, 0.28, 0.004, 4],
+    key3:      [2e-7, 0.01, 0.03, 0.004, 4],
     artifacts: [3.3e-8, 0.04, 0.05, 1e-5, 4],
     //lm4
     radium: [1e-7, 0.01, 0.03, 1e-4, 5],
     energy: [1e-9, 0.01, 0.03, 1e-6, 5],
-    void: [1e-13, 1e-6, 3e-6, 1e-7, 5]
+    void:   [1e-13, 1e-6, 3e-6, 1e-7, 5]
 
 });
 
@@ -395,7 +399,7 @@ export const totalCrafts = single(0);
 
 export const craftMasteryLevel = single(1);
 export const craftMasteryProgress = single(0);
-export const craftMasteryNextReq = single(100);
+export const craftMasteryNextReq = single(35);
 
 export const keyCraftTimes = object({
     // [start, finish]

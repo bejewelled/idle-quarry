@@ -1,31 +1,46 @@
 <script>
+	// @ts-ignore
 	import { thoriumDepositActive } from './../../data/button.ts';
+	// @ts-ignore
 	import { keyFinderBases } from './../../data/mining.ts';
+	// @ts-ignore
 	import { craftMasteryProgress, craftMasteryNextReq, craftMasteryLevel, keyUpgradeLevels } from './../../data/player.ts';
 // @ts-nocheck
 
+    // @ts-ignore
     import { ascFormula } from './../../data/ascension.ts'
     // @ts-nocheck
     // invisible component handling addition math
     import Decimal from 'break_infinity.js'
     import {
         progressThreshold,
+        // @ts-ignore
         progressPerTick,
         miningUpgrades,
         gemGainFlavorText,
+        // @ts-ignore
         gemProgressFlavorText,
+        // @ts-ignore
         gemProgressFlavorNextUpdate,
     } from '../../data/mining'
     import {
         keyGainFlavorText,
+        // @ts-ignore
         keyProgressFlavorText,
+        // @ts-ignore
         keyProgressFlavorNextUpdate,
+        // @ts-ignore
         key1DropTable,
+        // @ts-ignore
         key2DropTable,
+        // @ts-ignore
         key3DropTable,
+        // @ts-ignore
         key4DropTable,
+        // @ts-ignore
         key5DropTable,
         keyCrafts,
+        // @ts-ignore
         keyUpgrades,
     } from '../../data/keys'
     import {
@@ -41,6 +56,7 @@
         beaconActivations,
         beaconLevels,
         beaconProgress,
+        // @ts-ignore
         resources,
         beaconUpgradeLevels,
 
@@ -54,21 +70,30 @@
         keyCraftMastery,
         keyCraftTimes,
         keyCraftAmount,
+        // @ts-ignore
         antiFlickerFlags,
         miningUpgradeLevelsBought,
         miningUpgradeLevelsFree,
         activityLogShow,
+        // @ts-ignore
         challengeActive,
+        // @ts-ignore
         challengesCompleted,
         challengeProgress,
+        // @ts-ignore
         challenge3Multi,
+        // @ts-ignore
         miningUpgradeLevelsTemp,
+        // @ts-ignore
         miningUpgradeLevelsBoughtTemp,
+        // @ts-ignore
         miningUpgradeLevelsFreeTemp,
         radiumProgress,
         masteryItemLevels,
         permaWallet,
+        // @ts-ignore
         perSecond,
+        // @ts-ignore
         walletStamp,
         layer,
         sumUpgradeLevels
@@ -81,9 +106,11 @@
         beaconNums,
         beaconUpgrades,
         beaconPowerFlavorText,
+        // @ts-ignore
         beaconNameText,
     } from '../../data/beacons'
     import {masteryItemReqs, masteryItemInfo} from '../../data/mastery'
+    // @ts-ignore
     import { challengeGoals } from '../../data/challenges'
     import { enchantUpgrades, enchantThreshold } from '../../data/fame'
     import { allMultipliers } from '../../data/artifacts'
@@ -93,15 +120,19 @@
 
     import { onMount } from 'svelte'
 
+    // @ts-ignore
     const d = i => {
         return new Decimal(i)
     }
 
+    // @ts-ignore
     const fExp = (n, pl = 3) => {
         return n.toExponential(pl).toString().replace('+', '')
     }
 
+    // @ts-ignore
     const f = (n, pl = 0) => {
+        n = Math.floor(n)
         if (n < 1e9)
             return n
                 .toFixed(pl)
@@ -110,6 +141,7 @@
         else return n.toExponential(3).toString().replace('+', '')
     }
 
+    // @ts-ignore
     const fp = (n, pl = 3, subOne = false) => {
         if (subOne) n -= 1
         if (n < 1e9) return (n * 100).toFixed(pl).toLocaleString() + '%'
@@ -117,17 +149,25 @@
             return (n * 100).toExponential(pl).toString().replace('+', '') + '%'
     }
 
+    // @ts-ignore
     const fl = i => Math.floor(i)
+    // @ts-ignore
     const ce = i => Math.ceil(i)
+    // @ts-ignore
     const ro = i => Math.round(i)
+    // @ts-ignore
     const log = i => Math.log(i)
 
+    // @ts-ignore
     let gameSpeed = 1
+    // @ts-ignore
     const calcGameSpeed = () => {
         return 1
     }
 
+    // @ts-ignore
     let i = 0
+    // @ts-ignore
     function addToActivityLog(text, color, showParam) {
         if (!$activityLogShow[showParam]) return
         const timestamp = new Date().toLocaleTimeString('it-IT')
@@ -139,13 +179,16 @@
     let lastDropTableUpdate = Date.now()
 
     const UPDATE_SPEED = $settings['UPDATE_SPEED'] // ms per tick
+    // @ts-ignore
     let last, dt
     let beaconUpdateCounter = 0
     onMount(() => {
         updateBeaconBonuses()
         last = Date.now()
+        // @ts-ignore
         const mainLoop = setInterval(() => {
             const TEST_SPEEDUP = 1
+            // @ts-ignore
             dt = (Date.now() - last) / UPDATE_SPEED * TEST_SPEEDUP
             addProgress(dt)
             updateMiningLevel()
@@ -165,20 +208,28 @@
             if ($automationItemsUnlocked['beaconizer'])
                 $wallet['beacons'] =
                     ($wallet['beacons'] || 0) +
-                    50 * ((UPDATE_SPEED * dt) / 1000)
+                    15 * ((UPDATE_SPEED * dt) / 1000)
 
             last = Date.now()
         }, UPDATE_SPEED)
         // slowLoop updates at random intervals, do NOT add time-dependent items here!
+        // @ts-ignore
         const slowLoop = setInterval(() => {
             for (let [k, v] of Object.entries($wallet)) {
                 if (v > 0 && !$unlockedRes.has(k)) $unlockedRes.add(k)
             }
             setPermaWallet();
         }, 773 + Math.random() * 227)
+        // @ts-ignore
+        const passiveLoop = setInterval(() => {
+            miningDropTable.updateTable();
+        }, 5153 + Math.random() * 139)
+        // @ts-ignore
         const progressUpdater = setInterval(() => {
+            // @ts-ignore
             updateprogressThisTick(dt)
         }, UPDATE_SPEED + Math.random() * 3) // set intervals to prime numbers to avoid sync
+        // @ts-ignore
         const perSecond = setInterval(() => {
             checkThoriumDepositRoll();
         },1003)
@@ -187,7 +238,7 @@
     // set the permanent wallet, that keeps track of unlocked resources
     function setPermaWallet() {
         for (let k of Object.keys($wallet)) {
-            $permaWallet[k] = $wallet[k]
+            if ($wallet[k]) $permaWallet[k] = ($wallet[k] > $permaWallet[k] ? $wallet[k] : $permaWallet[k])
             
         }
     }
@@ -199,10 +250,15 @@
         }
     }
 
+    // @ts-ignore
     function sumAllUpgradeLevels() {
+        // @ts-ignore
         const mining = formula.sumArray($miningUpgradeLevels)
+        // @ts-ignore
         const beacon = formula.sumArray($beaconUpgradeLevels)
+        // @ts-ignore
         const button = formula.sumArray($buttonUpgradeLevels)
+        // @ts-ignore
         const key = formula.sumArray($keyUpgradeLevels)
         $sumUpgradeLevels = sumAllUpgradeLevels;
     }
@@ -225,8 +281,8 @@
             const BASE = 0.00015
             $mineLevel['xpNextReq'] =
                 100 *
-                (lv ** 2.65) *
-                Math.pow(1.01 + (lv ** 2) * BASE, lv) *
+                (lv ** 2.8) *
+                Math.pow(1.01 + (lv ** 2.1) * BASE, lv) *
                 Math.pow(2 + Math.max(0, lv - 69) * 0.3, lv > 69 ? lv : 0)
 
             addToActivityLog(
@@ -244,9 +300,16 @@
             $layer['layer']++
             // 100 * (A73^3) * ((1.01+((A73^2)*$D$2))^A73) * (2+Max(0, A73-69)*0.3)^Max(0, A73)
             const lv = $layer['layer']
+            // @ts-ignore
             const BASE = 0.00015
             $layer['blocksNextReq'] =
-                100 * lv * lv * lv;
+                //100 * lv * lv * lv;
+                (100 + (lv * 10)
+                + Math.floor((lv**2 * 0.125))
+                + (lv > 1000 ?    ((lv-1000)    **3  * 4) : 1)
+                + (lv > 10000 ?   ((lv-10000)   **4  * 0.6) : 1)
+                + (lv > 100000 ?  ((lv-100000)  **5  * 0.04) : 1)
+                + (lv > 1000000 ? ((lv-1000000) **6  * 0.0015) : 1))
 
             addToActivityLog(
                 'Layer ' + ($layer['layer']-1) + " mined",
@@ -260,6 +323,7 @@
     const PROGRESS_BASE = 1
     let progressBonusMulti = 1
 
+    // @ts-ignore
     function updateprogressThisTick(delta) {
 
         let progressMultiArtifacts = $allMultipliers['mineSpeed']['formula'](
@@ -273,14 +337,13 @@
         
 
         let progGems = 
-            PROGRESS_BASE *
-                $miningUpgrades[0]['formula']($miningUpgradeLevels[0]) * // haste
-                $miningUpgrades[13]['formula']($miningUpgradeLevels[13]) * // demon
-                Math.max(1, $beaconBonuses[1]) *
-                $buttonUpgrades[3]['formula']($buttonUpgradeLevels[3]) *
-                progressBonusMulti *
-                progressMultiArtifacts *
-                GLOBAL_MULTI
+            ($miningUpgrades[0]['formula']($miningUpgradeLevels[0]))
+                * $miningUpgrades[13]['formula']($miningUpgradeLevels[13])
+                * Math.max(1, $beaconBonuses[1]) 
+                * $buttonUpgrades[3]['formula']($buttonUpgradeLevels[3]) 
+                * progressBonusMulti 
+                * progressMultiArtifacts 
+                * GLOBAL_MULTI
 
         let softcapThresh =
             $progressThreshold['gems'] *
@@ -382,6 +445,7 @@
 
     }
 
+    // @ts-ignore
     let progressGain = 0
     let mineXpBackup = 0
     let enchProgressBackup = 0
@@ -402,7 +466,9 @@
             $wallet['challengePoints'] = challengeProgressBackup
     }
 
+    // @ts-ignore
     let tempGemProgress = 0
+    // @ts-ignore
     function addProgress(delta) {
         enchProgressBackup = $enchantProgress['t1'] || 0
         mineXpBackup = $mineLevel['xp'] || 0
@@ -433,6 +499,7 @@
         if ($progress['gems'] >= gemAt) {
             // increase fame thresholds
             // TODO: implement enchant proc method
+            // @ts-ignore
             for (let [k, v] of Object.entries($enchantProgress)) {
                 $enchantProgress[k] += 
                     formula.calcEnchantProgressGain(
@@ -485,6 +552,7 @@
     
 
 
+    // @ts-ignore
     function addReactorProgress(delta) {
         if ($mineLevel['level'] < 8) return;
 
@@ -494,7 +562,12 @@
         if ($radiumProgress[0] >= $radiumProgress[1]) {
             $wallet['radium'] += 
             Math.min(1,(Math.floor($radiumProgress[0] / $radiumProgress[1]) * formula.calcRadiumGainWhenComplete()))
-            $radiumProgress[0] %= $radiumProgress[1]    
+            $radiumProgress[0] %= $radiumProgress[1]   
+            
+            const starCheck = Math.random()
+            if (starCheck < $buttonUpgrades[5]['formula']($buttonUpgradeLevels[5])) {
+                $wallet['stars'] += 1
+            }
         }
     }
 
@@ -502,6 +575,7 @@
      * @param n - number of times to add gems
      */
     let lastGemGainTextUpdate = Date.now()
+    // @ts-ignore
     function addGems(n, avgProgress) {
         if (isNaN(n)) {
             n = 1
@@ -547,6 +621,7 @@
     }
 
 
+    // @ts-ignore
     function addKey(tier, n, keyAt) {
         const KEY_BASE = $keyFinderBases[tier];
         const keyGain =
@@ -606,11 +681,14 @@
 
     // }
 
+// @ts-ignore
 function dropRoll(n) {
     let rewards = {}
     for (let [item, vals] of Object.entries($miningDropTable)) {
+        // @ts-ignore
         if ($visibleTier >= ref.dropTiers[item]) {
             if (vals[0] >= 1) {
+                // @ts-ignore
                 rewards[item] = (rewards[item] || 0) 
                 + vals[1]+(Math.random() * (vals[2] - vals[1]));
                 continue;
@@ -629,6 +707,7 @@ function dropRoll(n) {
                             val[Math.floor(Math.random() * val.length)]) /
                         3
 
+                    // @ts-ignore
                     rewards[item] = (rewards[item] || 0) + numWins * rewardVal
                     // if E[x] < 1
                 } else {
@@ -665,6 +744,7 @@ function dropRoll(n) {
                     const valGain =
                         wins * (vals[1] + Math.random() * (vals[2] - vals[1]))
 
+                    // @ts-ignore
                     rewards[item] = (rewards[item] || 0) + valGain
                 }
             }
@@ -672,6 +752,9 @@ function dropRoll(n) {
 
         for (let [item, val] of Object.entries(rewards)) {
             $wallet[item] = ($wallet[item] || 0) + val
+            if (item == 'fame') {
+                $wallet['totalFame'] = ($wallet['totalFame'] || 0) + val
+            }
         }
     }
 
@@ -726,30 +809,40 @@ function dropRoll(n) {
                     addToActivityLog(
                         '[Keys] Crafting Mastery for ' +
                             val['name'] +
-                            'increased! (' +
+                            ' increased! (' +
                             $keyCraftMastery[item][0] +
                             ')',
                         'text-amber-400',
                         'crafting'
                     )
                 }
-                addToActivityLog(
-                    '[Crafting] Crafting complete: +' +
-                        f(gain) +
-                        ' ' +
-                        $keyCrafts[i]['name'],
-                    $keyCrafts[i]['style'] || 'text-white',
-                    'crafting'
-                )
+                if (item != '') {
+                    addToActivityLog(
+                        '[Crafting] Crafting complete: +' +
+                            f(gain) +
+                            ' ' +
+                            $keyCrafts[i]['name'],
+                        $keyCrafts[i]['style'] || 'text-white',
+                        'crafting'
+                    )
+                } else {
+                    addToActivityLog(
+                        '[Crafting] Practice craft complete, +1 global mastery.',
+                        'text-gray-400',
+                        'crafting'
+                    )
+                }
             }
         }
     }
 
    
     let locks = new Set() // makes sure levelups don't repeat when leveling up from next function call
+    // @ts-ignore
     function addBeaconProgress(delta, isOffFocus = false) {
         if (isNaN($wallet['beaconPower'])) $wallet['beaconPower'] = 0
         const progressGains = $beaconActivations.map(
+            // @ts-ignore
             (e, i) =>
                 e *
                 delta *
@@ -781,6 +874,7 @@ function dropRoll(n) {
         )
         
         $beaconProgress = $beaconProgress.map(
+            // @ts-ignore
             (e, i) =>
                 e + progressGains[i])
         // check for levelups
@@ -845,6 +939,7 @@ function dropRoll(n) {
             25 *
             (UPDATE_SPEED / 1000) *
             $beaconLevels.reduce(
+                // @ts-ignore
                 (s, c) => s * (c > 10000 ? formula.calcBeaconPowerMulti(c): 1),
                 1
             ) *
@@ -864,6 +959,7 @@ function dropRoll(n) {
     let masteryUpdateTicks = 0, m = formula.calcMasteryGainPerTick();
     const MASTERY_GAIN_UPDATE_AT = 11
     
+    // @ts-ignore
     function addMastery(dt) {
         if (masteryUpdateTicks > MASTERY_GAIN_UPDATE_AT) {
             m = formula.calcMasteryGainPerTick()
@@ -898,41 +994,44 @@ function dropRoll(n) {
      * @param {string | undefined} [tier]
      */
     function procEnchants(n, tier) {
+        // @ts-ignore
         if (n > 100) return
+        // @ts-ignore
         const size = $enchantUpgrades[0]['formula']($enchantUpgradeLevels[0])
+        // @ts-ignore
         const quality = $enchantUpgrades[1]['formula']($enchantUpgradeLevels[1])
 
         for (let [i, ench] of $enchantUpgrades.entries()) {
             if (ench['tier'] != tier) continue
+            // @ts-ignore
             const rand = Math.random() / n
 
             if (rand < ench['formula']($enchantUpgradeLevels[i])) {
+                const value = formula.getEnchantFormulaValue(i);
                 switch (i) {
                     case 0:
                         break
                     case 1:
                         break
                     case 2: // burst
-                        addGems(Math.pow(size, 1.4) / 36)
+                        addGems(value)
                         addToActivityLog(
-                            '[Burst] +' + f(size / 12) + ' mining cycles',
+                            '[Burst] +' + f(value) + ' mining cycles',
                             'text-violet-300',
                             'burst'
                         )
                         break
                     case 3: // orb rush
-                        const val =
-                            (Math.random() + 0.3) * Math.pow(1 + (quality/14), 3.5)
-                        $wallet['orbs'] += val
+                        $wallet['orbs'] = ($wallet['orbs'] || 0) + value
                         addToActivityLog(
-                            '[Orb Rush] +' + f(val) + ' orbs',
+                            '[Orb Rush] +' + f(value) + ' orbs',
                             'text-violet-300',
                             'orb rush'
                         )
                         break
                     case 4: // lightning blast
                         if (lightningBlastLockout) break
-                        progressBonusMulti = Math.pow(size, 0.25) + 3
+                        progressBonusMulti = value
                         lightningBlastLockout = true
                         setTimeout(() => {
                             progressBonusMulti = 1
@@ -948,7 +1047,7 @@ function dropRoll(n) {
                         }, 3000)
                         addToActivityLog(
                             '[Lightning Blast] ' +
-                                f(Math.pow(size, 0.7) * 3 + 3) +
+                                f(value, 2) +
                                 'x mining speed for 3 seconds!',
                             'text-violet-300',
                             'lightning blast'
@@ -981,129 +1080,46 @@ function dropRoll(n) {
                             }
                         }
                         break
-                    case 6: // key boon
-                        const keyRand = Math.random() + 0.2 * (quality / 1e6)
-                        const BASE_KEYGAIN = size
-                        let tier, amtDivider
-                        const randFactor = Math.random() * 0.2 + 0.9
-                        let reward = 1 + Math.floor(randFactor * BASE_KEYGAIN)
-                        if (keyRand > 1.18) {
-                            tier = 5
-                            reward = reward / 250000 + 1
-                            addToActivityLog(
-                                '[KEY BOON] INCREDIBLE! +' +
-                                    f(reward) +
-                                    ' [*****] keys!',
-                                'text-amber-400',
-                                'key boon'
-                            )
-                        } else if (keyRand > 1.15) {
-                            tier = 4
-                            reward = reward / 10000 + 1
-                            addToActivityLog(
-                                '[Key Boon] Excellent! +' +
-                                    f(reward) +
-                                    ' [****] keys',
-                                'text-violet-400',
-                                'key boon'
-                            )
-                        } else if (keyRand > 0.9975) {
-                            tier = 3
-                            reward = reward / 1000 + 1
-                            addToActivityLog(
-                                '[Key Boon] Great! +' +
-                                    f(reward) +
-                                    ' [***] keys',
-                                'text-pink-300',
-                                'key boon'
-                            )
-                        } else if (keyRand > 0.925) {
-                            tier = 2
-                            reward = reward / 10 + 1
-                            addToActivityLog(
-                                '[Key Boon] Great! +' +
-                                    f(reward) +
-                                    ' [**] keys',
-                                'text-blue-300',
-                                'key boon'
-                            )
-                        } else {
-                            tier = 1
-                            reward = reward * 10 + 1
-                            addToActivityLog(
-                                '[Key Boon] +' + f(reward) + ' [*] keys',
-                                'text-green-300',
-                                'key boon'
-                            )
-                        }
-                        $wallet['key' + tier] += reward
+                    case 6: // nuclear fission
+                         $wallet['radium'] = ($wallet['radium'] || 0) + value
+                         addToActivityLog(
+                             '[Nuclear Fission] +' + f(value) + ' radioactivity',
+                             'text-violet-300',
+                             'nuclear fission')
                         break
-                    case 7: //clicker hero
-                        const BASE_REWARD = size / 100
-                        const absDist = Math.random() * (400 - quality / 2550)
-                        let rewardAmount, rewardDescriptionText, rewardStyle
-                        if (absDist < 1) {
-                            rewardAmount = 1200000
-                            rewardDescriptionText = 'PERFECT! +'
-                            rewardStyle = 'text-amber-500'
-                        } else if (absDist <= 2) {
-                            rewardAmount = 90000
-                            rewardDescriptionText = 'INCREDIBLE +'
-                            rewardStyle = 'text-pink-500'
-                        } else if (absDist <= 4) {
-                            rewardAmount = 7500
-                            rewardDescriptionText = 'Excellent +'
-                            rewardStyle = 'text-violet-500'
-                        } else if (absDist <= 7) {
-                            rewardAmount = 850
-                            rewardDescriptionText = 'Great +'
-                            rewardStyle = 'text-sky-500'
-                        } else if (absDist <= 10) {
-                            rewardAmount = 250
-                            rewardDescriptionText = 'Good +'
-                            rewardStyle = 'text-green-500'
-                        } else {
-                            rewardAmount = 100
-                            rewardDescriptionText = 'Okay +'
-                            rewardStyle = 'text-gray-400'
-                        }
-                        rewardAmount = Math.floor(rewardAmount * BASE_REWARD)
-                        $radiumProgress[0] += rewardAmount
-                        if (
-                            $radiumProgress[0] >= $radiumProgress[1]
-                        ) {
-                            $wallet['radium'] += Math.floor(
-                                $radiumProgress[0] /
-                                    $radiumProgress[1]
-                            )
-                            $radiumProgress[0] %= $radiumProgress[1]
-                        }
-                        let warp = 0;
-                        warp += Math.round(1 + (0.6 + Math.random()*0.8) * (Math.pow($buttonUpgradeLevels[6], 1.6) * 3))
-                        $wallet['warp'] = ($wallet['warp'] || 0) + warp
-                        const text = '[Clicker Hero] ' +
-                                rewardDescriptionText +
-                                f(rewardAmount) +
-                                ' radioactivity' + 
-                                (warp > 0 ? ', ' + f(warp) + ' warp' : '')
+                    case 7: // key caller
+                        const rand = Math.random()
+                        let tier;
+                        if (rand > 0.9) tier = 3;
+                        else if (rand > 0.6) tier = 2;
+                        else tier = 1;
+
+                        let val = value;
+                        if (tier == 2) val /= 190;
+                        else if (tier == 3) val /= 100000;
+
+                        val = Math.floor(val)
+
+                        $wallet['key'+tier] = ($wallet['key'+tier] || 0) + val
                         addToActivityLog(
-                            text,
-                            rewardStyle,
-                            'clicker hero'
-                        )
-                        break
+                            // @ts-ignore
+                            '[Key Caller] +' + f(val) + ref.displayNames['key'+tier.toString()] + ' keys',
+                            'text-violet-300',
+                            'key caller')
+                        break;
                     case 8: // rift tearing
                         const essences = ['efire', 'eearth', 'ewater', 'emagic', 'ecelestial'];
                         const type = essences[Math.floor(Math.random() * essences.length)];
-                        const amt = 1 + Math.floor(size / 32750)
-                        $wallet[type] = ($wallet[type] || 0) + amt;
-                        addToActivityLog('[Rift Tearing] +' + f(amt) + ' ' + type.substring(1) + ' essence', 
+                        $wallet[type] = ($wallet[type] || 0) + value;
+                        addToActivityLog('[Rift Tearing] +' + f(value) + ' ' + type.substring(1) + ' essence', 
                         // @ts-ignore
                         ref.colors[type], 'rift tearing');
                         break
                     case 9: // double down
-                        addToActivityLog('[Double Down] Another enchant cycle completed.', 'text-violet-300', 'double down')
-                        procEnchants();
+                        for (let i of Object.keys($enchantProgress)) {
+                            $enchantProgress[i] += value;
+                        }
+                        addToActivityLog('[Double Down] Added ' + f(value) + ' progress to all tiers.', 'text-violet-300', 'double down')
                 }
             }
         }

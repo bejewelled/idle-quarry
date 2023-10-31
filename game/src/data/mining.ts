@@ -1,7 +1,7 @@
 
 import { writable, get } from 'svelte/store';
 import {wallet, miningUpgradeLevels, 
-    enchantUpgradeLevels,buttonNumClicks,buttonStats, miningUpgradeLevelsBought} from './player'
+    enchantUpgradeLevels,buttonNumClicks,buttonStats, miningUpgradeLevelsBought, permaWallet, stats, layer} from './player'
 import formula from '../calcs/formula';
 import Decimal  from 'break_infinity.js';
 
@@ -119,10 +119,10 @@ const floor = (n: number) => Math.floor(n);
 const ceil = (n: number) => Math.ceil(n);
 
 export const progressThreshold = object({
-    gems: 250,
+    gems: 250, // "base" rate = 1 progress per tick, 50 / second
     key1: 4000,
-    key2: 190000,
-    key3: 3650000,
+    key2: 37500,
+    key3: 1200000,
 })
 
 export const upgradeSorting = object({
@@ -191,9 +191,10 @@ export const miningUpgrades = array([{
         gems: 5,
     },
     ratio: 2,
-    formula: (lv: any) => lv*0.11 + 1,
+    formula: (lv: any) => 
+    (lv > 100 ? (21 + Math.pow((lv-100), 0.75)*0.2) : 1 + lv*0.2),
     unlockAt: () => (get(wallet)['gems'] >= 3),
-    suffix: 'x speed',
+    suffix: ' progress per tick',
     isPercent: false,
     maxLevel: 100,
 },
@@ -220,13 +221,13 @@ export const miningUpgrades = array([{
     index: 2,
     sortType: ['base'],
     name: 'Fortune',
-    description: 'Improves mining droprates for tier I drops.',
+    description: 'Improves mining droprates.',
     cost: {
         gold: 10
     },
-    ratio: 1.2,
+    ratio: 1.23,
     unlockAt: () => (get(wallet)['gems'] > 30 && get(wallet)['gold'] > 5),
-    formula: (lv: any) => (lv > 10000 ? 901 + Math.pow((lv-10000), 0.6)*0.08 : 1 + lv*0.09),
+    formula: (lv: any) => (lv > 10000 ? 601 + Math.pow((lv-10000), 0.6)*0.08 : 1 + lv*0.06),
     isPercent: true,
     prefix: '+',
     maxLevel: 1000,
@@ -257,15 +258,15 @@ export const miningUpgrades = array([{
     description: 'While mining, you will occasionally find a bundle of T2 [**] keys.' 
     + '\nUpgrades increase progress gained towards this milestone.',
     cost: {
-        orbs: 1e6,
-        key2: 10,
+        orbs: 1e7,
+        key2: 100,
     },
     ratio: 1.5,
-    unlockAt: () => (get(wallet)['key2'] >= 1),                 
+    unlockAt: () => (get(permaWallet)['key2'] >= 10),                 
     formula: (lv: any) => (1 + Math.pow(lv, 0.5)*0.15),
     isPercent: false,
     suffix: 'x speed',
-    maxLevel: 500,
+    maxLevel: 100,
     notes: '' 
 },
 // i = 5
@@ -371,8 +372,8 @@ export const miningUpgrades = array([{
         fame: 5
     },
     ratio: 1.4,
-    unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + lv*2) * Math.pow(1.01, lv),
+    unlockAt: () => (get(wallet)['fame'] > 0 && get(stats)['relocateCount'] > 0),
+    formula: (lv: any) => (1 + lv*2) * Math.pow(1.04, lv),
     isPercent: false,
     prefix: 'x',
     noResetRelocate: true,
@@ -390,11 +391,11 @@ export const miningUpgrades = array([{
         fame: 5
     },
     ratio: 1.75,
-    unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => 1 + 0.5*Math.pow(lv, 0.9),
+    unlockAt: () => (get(wallet)['fame'] > 0 && get(stats)['relocateCount'] > 0),
+    formula: (lv: any) => 1 + 0.55*Math.pow(lv, 0.9),
     isPercent: false,
     noResetRelocate: true,
-    suffix: 'x drop rate/quanity',
+    suffix: 'x drop rate',
     maxLevel: 100,
     style: 'game-btn-fame',
     notes: ''
@@ -409,8 +410,8 @@ export const miningUpgrades = array([{
         fame: 20,
     },
     ratio: 1.4,
-    unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => (1 + 0.75*lv)* Math.pow(1.01, lv),
+    unlockAt: () => (get(wallet)['fame'] > 0 && get(stats)['relocateCount'] > 0),
+    formula: (lv: any) => (1 + 0.75*lv)* Math.pow(1.03, lv),
     isPercent: false,
     prefix: 'x',
     suffix: ' beacon progress',
@@ -428,8 +429,8 @@ export const miningUpgrades = array([{
         fame: 20,
     },
     ratio: 1.75,
-    unlockAt: () => (get(wallet)['fame'] > 0),
-    formula: (lv: any) => 1 + 0.15*Math.pow(lv, 0.85),
+    unlockAt: () => (get(wallet)['fame'] > 0 && get(stats)['relocateCount'] > 0),
+    formula: (lv: any) => 1 + 0.175*Math.pow(lv, 0.85),
     isPercent: false,
     noResetRelocate: true,
     prefix: 'x',
@@ -445,11 +446,10 @@ export const miningUpgrades = array([{
     description: 'Unlocks a new tier of findable drops, and automatically unlocks LM1 and LM2 if they aren\'t already.',
     cost: {
         slurry: 1e6,
-        sigils: 1e4,
-        warp: 4000,
-        key3: 1000,
-        trophies: 3,
-        artifacts: 1,
+        sigils: 1e5,
+        key3: 10000,
+        radium: 1000,
+        artifacts: 10,
 
     },
     ratio: 1e90,
@@ -473,7 +473,7 @@ export const miningUpgrades = array([{
         fame: 1200,
     },
     ratio: 200,
-    unlockAt: () => (get(wallet)['totalFame'] > 200),
+    unlockAt: () => (get(wallet)['totalFame'] > 200 && get(stats)['relocateCount'] > 0),
     formula: (lv: any) => (0),
     noResetRelocate: true,
     isPercent: true,
@@ -489,9 +489,9 @@ export const miningUpgrades = array([{
     description: 'Increases fame gain on relocation.',
     cost: {
         gems: 3e5,
-        gold: 6000,
+        gold: 2500,
     },
-    ratio: 1.4,
+    ratio: 1.35,
     unlockAt: () => (get(wallet)['totalFame'] > 60),
     formula: (lv: any) => 1 + lv * 0.25,
     isPercent: true,
@@ -528,48 +528,50 @@ export const miningUpgrades = array([{
     + '\nUpgrades increase progress gained towards this milestone.',
     cost: {
         orbs: 1e8,
-        key3: 10,
+        key3: 10000,
     },
     ratio: 1.5,
     unlockAt: () => (get(wallet)['key3'] > 0),
     formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
     isPercent: false,
     suffix: 'x speed',
-    maxLevel: 400,
+    maxLevel: 100,
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
 {
     index: 19,
     sortType: ['sigils'],
-    name: 'Legendary III',
-    description: 'Increases fame gain on relocation.',
+    name: 'Kleptomaniac',
+    description: 'Increases gold gained from mining drops.',
     cost: {
-        sigils: 2500
+        sigils: 1
     },
-    ratio: 2,
-    unlockAt: () => (get(wallet)['sigils'] > 0),
-    formula: (lv: any) => (1 + 0.1 * lv),
+    ratio: 3,
+    unlockAt: () => (get(permaWallet)['sigils'] > 0),
+    formula: (lv: any) => (1 + 0.35 * lv),
     isPercent: false,
-    suffix: 'x fame gain',
+    noResetRelocate: true,
+    suffix: 'x gold drops',
     style: 'game-btn-sigil',
-    maxLevel: 300,
+    maxLevel: 25,
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
 {
     index: 20,
     sortType: ['crystals'],
     name: 'Hardened',
-    description: 'Your lifetime number of quality button clicks increase gem gain.',
+    description: 'Increases mining drop quantities based on your current layer.',
     cost: {
-        crystals: 40000,
+        crystals: 10000,
     },
     ratio: 1.33,
-    unlockAt: () => (get(wallet)['crystals'] > 1e297),
-    formula: (lv: any) =>  formula.dispCalcHardenedGemBonus(get(buttonNumClicks), lv),
-    isPercent: true,
-    prefix: '+',
-    suffix: ' gems',
-    maxLevel: 1000,
+    unlockAt: () => (get(permaWallet)['crystals'] > 0),
+    formula: (lv: any) => (lv == 0 ? 1 : 
+        1 + Math.pow((get(layer)['layer']), 1+(lv*0.01))*0.004 + 0.003*lv*get(layer)['layer']),
+    isPercent: false,
+    prefix: 'x',
+    suffix: ' drop quantity',
+    maxLevel: 100,
     style: 'game-btn-crystal',
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
@@ -580,7 +582,7 @@ export const miningUpgrades = array([{
     description: 'Artifact droprate from keys is improved.',
     cost: {
         sigils: 42500,
-        warp: 12500,
+        warp: 5000,
     },
     ratio: 1.33,
     unlockAt: () => (get(wallet)['artifacts'] || 
@@ -602,7 +604,7 @@ export const miningUpgrades = array([{
         gems: 1e13,
     },
     ratio: 1.65,
-    unlockAt: () => (get(wallet)['crystals'] > 0),
+    unlockAt: () => (get(wallet)['gems'] > 1e9),
     formula: (lv: any) =>  1 + Math.pow(lv,0.8)/10,
     isPercent: false,
     suffix: 'x droprates',
@@ -612,16 +614,16 @@ export const miningUpgrades = array([{
     index: 23,
     sortType: ['base'],
     name: 'Isotopes',
-    description: 'Increases radioactivity gain from the button. ',
+    description: 'Excavate additional blocks per mining cycle from the current layer.',
     cost: {
         gems: 1e19,
     },
-    ratio: 1.65,
-    unlockAt: () => (get(wallet)['crystals'] > 0),
-    formula: (lv: any) =>  1 + Math.pow(lv,0.8)*0.03,
+    ratio: 1.4,
+    unlockAt: () => (get(wallet)['gems'] > 1e13),
+    formula: (lv: any) => lv*0.50,
     isPercent: false,
-    prefix: 'x',
-    suffix: ' radioactivity',
+    prefix: '+',
+    suffix: ' blocks per mining cycle',
     maxLevel: 400,
 },
 {
@@ -633,7 +635,7 @@ export const miningUpgrades = array([{
         gems: 1e22,
     },
     ratio: 1.65,
-    unlockAt: () => (get(wallet)['crystals'] > 0),
+    unlockAt: () => (get(wallet)['gems'] > 1e17),
     formula: (lv: any) =>  1 + Math.pow(lv,0.8)/4,
     isPercent: true,
     prefix: '+',
@@ -644,18 +646,19 @@ export const miningUpgrades = array([{
     index: 25,
     sortType: ['sigils'],
     name: 'Efficiency III',
-    description: 'Increases gem gain again.',
+    description: 'Increases gem yield.',
     cost: {
-        sigils: 25,
+        sigils: 1,
     },
-    ratio: 1.3,
+    ratio: 3,
     unlockAt: () => (get(wallet)['sigils'] > 0),
-    formula: (lv: any) =>  1 + Math.pow(lv, 0.9)*0.4,
-    isPercent: true,
-    prefix: '+',
-    suffix: ' gem gain',
+    formula: (lv: any) =>  1 + lv*0.75,
+    isPercent: false,
+    prefix: 'x',
+    suffix: ' gems',
     style: 'game-btn-sigil',
-    maxLevel: 200,
+    noResetRelocate: true,
+    maxLevel: 25,
 },
 {
     index: 26,
@@ -667,7 +670,7 @@ export const miningUpgrades = array([{
     },
     ratio: 1.4,
     unlockAt: () => (get(wallet)['totalFame'] > 200),
-    formula: (lv: any) => 1 + lv*0.1,
+    formula: (lv: any) => 1 + (lv*0.1) * Math.pow(1.01, lv),
     noResetRelocate: true,
     isPercent: false,
     suffix: 'x speed/amount',
@@ -722,8 +725,8 @@ export const miningUpgrades = array([{
         fame: 100000,
     },
     ratio: 1.4,
-    unlockAt: () => (get(wallet)['totalFame'] > 100000),
-    formula: (lv: any) => 1 + lv * 0.16 * Math.pow(1.01, lv),
+    unlockAt: () => (get(wallet)['totalFame'] > 100000 && get(stats)['relocateCount'] > 0),
+    formula: (lv: any) => 1 + lv * 0.11 * Math.pow(1.01, lv),
     noResetRelocate: true,
     isPercent: false,
     suffix: 'x crystal gain',
@@ -907,9 +910,28 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
     isPercent: false,
     suffix: 'x speed',
-    maxLevel: 500,
+    maxLevel: 100,
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
+// {
+//     index: 39,
+//     sortType: ['keys', 'base'],
+//     name: '[****] Key Finder',
+//     description: 'Based on your current layer, increase' 
+//     + '\nUpgrades increase progress gained towards this milestone.',
+//     cost: {
+//         orbs: 3e19,
+//         key4: 2500,
+//         void: 750,
+//     },
+//     ratio: 1.3,
+//     unlockAt: () => (get(miningUpgradeLevels)[18] > 0.003 && (get(wallet)['key4'] > 0 && get(wallet)['totalAntimatter'] > 0)),
+//     formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
+//     isPercent: false,
+//     suffix: 'x speed',
+//     maxLevel: 500,
+//     notes: '(1 + floor(level/10)) * level^0.6' 
+// },
 
 
 ]);

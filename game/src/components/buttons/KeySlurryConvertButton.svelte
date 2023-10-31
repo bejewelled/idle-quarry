@@ -1,14 +1,14 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 {#key reloadClock}
-{#if $wallet['gold'] > 3e4 || $wallet['slurry'] > 0}
+{#if $permaWallet['gold'] > 1e4 || $wallet['slurry'] > 0}
 <div on:click={() => buy()}
 class='has-tooltip tooltip-text game-btn text-teal-400 
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
     Convert Keys Into Slurry 
     <span class='text-teal-400'>[ +{f(Math.floor(slurryGain))} ]</span>
     {#if sigilGain > 1}
-    <span class='text-fuchsia-600'>[ +{f(Math.floor(sigilGain))} ]</span>
+    <span class='text-fuchsia-x600'>[ +{f(Math.floor(sigilGain))} ]</span>
     {/if}
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] ml-16
@@ -48,7 +48,7 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
     import { onDestroy, onMount } from 'svelte';
     import { progress, wallet, enchantUpgradeLevels, miningDropTable,
          settings, visibleTier, unlockedRes, 
-         buttonStats, buttonNumClicks, buttonUpgradeLevels} from '../../data/player';
+         buttonStats, buttonNumClicks, buttonUpgradeLevels, permaWallet} from '../../data/player';
     import {progressThreshold, progressPerTick } from '../../data/mining';
     import { enchantUpgrades } from '../../data/fame';
     import {buttonUpgrades} from '../../data/button';

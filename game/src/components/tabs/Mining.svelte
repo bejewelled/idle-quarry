@@ -31,6 +31,7 @@
             {/if}
           {/each}
           
+          <div class='pt-1 tooltip-text-xs italic'>Yellow values are softcapped, red values are hardcapped.</div>
         </span>
     </div>
     {/key}

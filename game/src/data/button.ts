@@ -1,6 +1,6 @@
 
 import { writable, get } from 'svelte/store';
-import {wallet, miningUpgradeLevels, enchantUpgradeLevels, buttonNumClicks, challengesCompleted} from './player'
+import {wallet, miningUpgradeLevels, enchantUpgradeLevels, buttonNumClicks, challengesCompleted, permaWallet} from './player'
 import Decimal  from 'break_infinity.js';
 import formula from '../calcs/formula';
 
@@ -150,12 +150,12 @@ export const buttonUpgrades = array([
     cost: {
         crystals: 100,
     },
-    ratio: 3,
-    formula: (lv: any) => 0.001 + lv * 0.0002,
+    ratio: 1.75,
+    formula: (lv: any) => 0.001 + lv * 0.000325,
     unlockAt: () => (true),
     isPercent: true,
     suffix: ' chance per second',
-    maxLevel: 25,
+    maxLevel: 50,
     notes: ''
 },
 {
@@ -163,10 +163,10 @@ export const buttonUpgrades = array([
     name: 'Coolant',
     description: 'Increases passive radioactivity gain.',
     cost: {
-        crystals: 1100,
+        crystals: 1000,
     },
     ratio: 1.33,
-    formula: (lv: any) => 1 + lv * 0.12,
+    formula: (lv: any) => 1 + Math.pow(lv,0.925) * 0.18,
     unlockAt: () => (true),
     suffix: 'x radioactivity gain',
     isPercent: false,
@@ -205,32 +205,35 @@ export const buttonUpgrades = array([
 },
 {
     index: 4,
-    name: 'Fractals',
-    description: 'Increases mining experience gained from excellent+ button clicks.',
+    name: 'Nuclear Mining',
+    description: 'Excavate additional blocks in the current layer on each mining cycle.',
     cost: {
-        crystals: 1e5,
+        radium: 4,
     },
-    ratio: 1.25,
-    formula: (lv: any) => 1 + Math.pow(lv, 2.5)*1.35,
-    unlockAt: () => (get(wallet)['crystals'] > 1e297),
+    ratio: 1.75,
+    formula: (lv: any) => lv*0.25,
+    unlockAt: () => (get(permaWallet)['radium'] > 0),
     isPercent: false,
-    suffix: 'x multiplier',
-    maxLevel: 65,
+    prefix: '+',
+    suffix: ' layer progress / cycle',
+    isRadiumUpgrade: true,
+    maxLevel: 100,
     notes: ''
 },
 {
     index: 5,
-    name: 'The Duck',
-    description: 'Increases the chance you get "lucky" and multiply your radioactivity.',
+    name: 'Plutonium Beaming',
+    description: 'When you gain radium from radioactivity, you have a small chance to gain a star.',
     cost: {
-        crystals: 1e6,
+        radium: 5000,
     },
-    ratio: 4,
-    formula: (lv: any) => lv*0.01,
-    unlockAt: () => (get(wallet)['crystals'] > 1e297),
+    ratio: 2.5,
+    formula: (lv: any) => lv*0.0075,
+    unlockAt: () => (get(wallet)['totalFame'] > 1e13 || get(wallet)['ascensionCount'] > 0),
     isPercent: true,
+    isRadiumUpgrade: true,
     suffix: ' chance',
-    maxLevel: 25,
+    maxLevel: 20,
     notes: ''
 },
 {

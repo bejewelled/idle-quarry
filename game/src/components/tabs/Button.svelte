@@ -17,7 +17,7 @@
         <div class='pb-3 col-span-12 game-text text-center'>
           At your current <span class='text-yellow-300'>layer</span>, 
           you gain <span class='{ref.colors['radium']} font-bold'>
-            {f(formula.calcRadioactivityGain(), 2)} radioactivity</span>
+            {f(radioactivityGain, 2)} radioactivity</span>
           per mining cycle.
         </div>
 
@@ -56,22 +56,7 @@
               </span>
             {/if}
             </div>
-            <span class='tooltip tooltip-style'>
-              <div class='grid grid-cols-6'>
-              <div class='col-span-6 text-center'>Radioactivity Gains</div>
-              {#each Object.entries(ref.buttonColors) as [k,v]}
-                <div class='col-span-2 text-small text-left'>
-                  <span class='{v}'>{k}</span>
-                </div>
-                <div class='col-span-2 text-small text-center'>
-                  <span class='{v} text-small'>{k !== 'okay' ? "<" + f(formula.getButtonDistanceVals()[k]) + 'px' : ''}</span>
-                </div>
-                <div class='col-span-2 text-small text-right'>
-                  <span class='tooltip-text text-small'>+{f(ref.buttonBaseRewards[k] * formula.calcButtonRewardBonus())}</span>
-                </div>
-              {/each}
-            </div>
-            </span>
+  
         </div>
 
         </div>
@@ -83,13 +68,26 @@
     </div>
 
     <div class='pb-16 pt-8 tooltip-text text-center w-full italic'>
-      Base radioactivity gain will increase after layer 100.<br/>
+      The chance of discovering a thorium deposit is <span class='text-lime-500'>
+        {fp($buttonUpgrades[0]['formula']($buttonUpgradeLevels[0]))}</span> per second.<br/>
+      {#if $wallet['totalFame'] > 1e13 || $stats['ascensionCount'] > 0}
+        When you gain radium, you have a 
+        <span class={ref.colors['stars']}>
+          {fp($buttonUpgrades[5]['formula']($buttonUpgradeLevels[5]))}
+        </span>
+        chance to gain a <span class='{ref.colors['stars']}'>star.</span>
+        <br/>
+      {/if}
+      Base radioactivity gain increases after layer 500. <br/>
+
+
   </div>
 
   
   </div>
 
 <script>
+	import { buttonUpgradeLevels, stats } from './../../data/player.ts';
 // @ts-nocheck
 
   import {buttonStats, buttonNumClicks,
@@ -104,11 +102,13 @@
   import ButtonUpgradeButton from '../buttons/ButtonUpgradeButton.svelte';
 // @ts-nocheck
 
-let clockinterval
+let clockinterval;
+let radioactivityGain = formula.calcRadioactivityGain();
 
 onMount(() => {
   clockinterval = setInterval(() => {
     crystalGains = formula.calcCrystalGainFromRadium();
+    radioactivityGain = formula.calcRadioactivityGain();
   }, 653);
 });
 

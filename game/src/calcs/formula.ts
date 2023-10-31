@@ -1,5 +1,7 @@
 import {buttonUpgradeLevels, miningUpgradeLevels, keyUpgradeLevels,
-keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet, ascensionLevels, ascensionStats, automationItemsUnlocked, masteryItemLevels, slurryToggles, layer, settings} from '../data/player';
+keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet, 
+ascensionLevels, ascensionStats, automationItemsUnlocked, masteryItemLevels, 
+slurryToggles, layer, settings, enchantUpgradeLevels} from '../data/player';
 import { beaconBonuses } from '../data/beacons';
 import {keyUpgrades, keyCrafts} from '../data/keys'
 import { get } from 'svelte/store';
@@ -8,6 +10,7 @@ import { allMultipliers } from '../data/artifacts';
 import { buttonUpgrades } from '../data/button';
 import { miningUpgrades } from '../data/mining';
 import { antimatterBonusAscensionReqs, ascFormula } from '../data/ascension';
+import { enchantUpgrades } from '../data/fame';
 export default class formula {
 
     // returns a normally random value
@@ -150,7 +153,13 @@ export default class formula {
     }
 
     static calcFameGemMulti(n: number) {
-      return (Math.log10(n+1))
+      return (Math.log10(n+1)**Math.min(1.25, 1+Math.log10(n+1)*0.0075))
+    }
+
+    static calcFameLayerMulti() {
+      const l = get(layer)['layer'];
+      return (l > 10000 ? 300 + Math.pow(l-10000, 0.75)*0.035
+      : l * 0.03)
     }
 
     static calcFameGainBeacons(n: number) {
@@ -237,11 +246,11 @@ export default class formula {
   }
 
   static calcCraftMasteryNextReq(lv: number) {
-    return 100 * lv**3 * (lv/13)**4.5;
+    return 35*(lv+1) + ((lv+1)**3)
   }
 
   static calcCraftMasterySpeedBonus(lv: number) {
-    const y = 1 + (lv-1)*0.75 + ((lv-1)**2)*0.004 + ((lv-1)**3)*3e-6;
+    const y = 1 + (lv-1)*0.3 + ((lv-1)**2)*0.004 + ((lv-1)**3)*3e-6;
     console.log(y)
     if (isNaN(y)) return 1
     else return y
@@ -266,11 +275,13 @@ export default class formula {
     return Math.floor(min + Math.random()*(max-min))
     * get(beaconBonuses)[6]
     * (i == 'beacons' ? 
-    Math.pow(formula.sumArray(get(beaconLevels)), 0.65) : 1);
+    Math.pow(formula.sumArray(get(beaconLevels)), 0.65) : 1)
+    * get(keyUpgrades)[2]['formula'](get(keyUpgradeLevels)[2]);
 }
 
   static calcWarpGainFromMastery() {
-    const y = get(wallet)['totalTrophies'] || 0;
+    const y = (get(wallet)['totalTrophies'] || 0)
+    * ascFormula.getVal('water');;
     return 0.25*y + 0.00067*y**2;
   }
 
@@ -286,16 +297,46 @@ export default class formula {
 
   static getLayersPerCycle() {
     const miningLevels = this.sumArray(get(miningUpgradeLevels));
-    return 1 + Math.log(miningLevels+1);
+    const enchantLevels = this.sumArray(get(enchantUpgradeLevels)) * 3.5;
+    const buttonLevels = this.sumArray(get(buttonUpgradeLevels)) * 1.75;
+    const keyLevels = this.sumArray(get(keyUpgradeLevels)) * 2.25;
+    const sum = miningLevels + enchantLevels + buttonLevels + keyLevels;
+    const base = 
+    1 + (sum / 150)
+    + get(miningUpgrades)[23]['formula'](get(miningUpgradeLevels)[23])
+    + get(buttonUpgrades)[4]['formula'](get(buttonUpgradeLevels)[4]);
+    return base;
+  }
+
+  static getMineSize() {
+    return get(enchantUpgrades)[0]['formula'](get(enchantUpgradeLevels)[0]);
+  }
+
+  static getMineQuality() {
+    return get(enchantUpgrades)[1]['formula'](get(enchantUpgradeLevels)[1]);
+  }
+
+  static getEnchantFormulaValue(i: number) {
+    console.log(get(enchantUpgradeLevels)[i])
+    console.log(get(enchantUpgrades)[i]['extFormula'](get(enchantUpgradeLevels)[i]))
+    return get(enchantUpgrades)[i]['extFormula'](
+      get(enchantUpgradeLevels)[i],
+      this.getMineSize(),
+      this.getMineQuality());
+  }
+
+  static getMiningUpgradeValue(i: number) {
+    return get(miningUpgrades)[i]['formula'](get(miningUpgradeLevels)[i]);
   }
 
   static calcRadioactivityGain() {
     const l = get(layer)['layer'];
     let y;
-    if (l <= 100) y = 1;
-    else y = 1 + Math.pow(l-100, 1.125);
+    if (l <= 500) y = 1;
+    else y = 1 + Math.pow(l-500, 0.92)*0.004;
     y = y 
-    * get(buttonUpgrades)[1]['formula'](get(buttonUpgradeLevels)[1]);
+    * get(buttonUpgrades)[1]['formula'](get(buttonUpgradeLevels)[1])
+    * get(allMultipliers)['radium']['formula'](get(wallet)['artifacts'] || 0)
     return y;
   }
 
@@ -313,11 +354,15 @@ export default class formula {
   // PER SECOND
   static calcCrystalGainFromRadium() {
     const y = (get(wallet)['radium'] || 0);
-    return (y < 100 ? 
-      30 * Math.pow(y, 2)*0.01 :
-      3000 + Math.pow(y - 100, 0.9)* 8)
-      * get(miningUpgrades)[29]['formula'](get(miningUpgradeLevels)[29])
-      * ascFormula.getVal('earth')
+
+    const base = (y < 1000 ? 
+      y + ((y/8)**2) :
+      256 + (((y-1000)/32)**2) + (y-1000)*1.33) * (Math.log10(((y-1000)/150)+1));
+
+    const multi = get(miningUpgrades)[29]['formula'](get(miningUpgradeLevels)[29])
+    * ascFormula.getVal('earth')
+
+    return base * multi;
   }
 
   static getAntimatterBonusAmount(i: number) {
@@ -348,7 +393,6 @@ export default class formula {
       y *= this.calcMasteryGainMulti(i)
     }
     y *= get(allMultipliers)['mastery']['formula'](get(wallet)['artifacts'] || 0)
-    y *= ascFormula.getVal('water');
     console.log(y)
     return y
   }

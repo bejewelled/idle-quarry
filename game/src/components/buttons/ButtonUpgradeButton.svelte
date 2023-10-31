@@ -60,7 +60,7 @@ select-none"
                                 ? fp(
                                       $buttonUpgrades[index]['formula'](
                                           $buttonUpgradeLevels[index] +
-                                              $settings['buyAmount']
+                                              buyAmount
                                       ),
                                       3,
                                       false
@@ -68,7 +68,7 @@ select-none"
                                 : f(
                                       $buttonUpgrades[index]['formula'](
                                           $buttonUpgradeLevels[index] +
-                                              $settings['buyAmount']
+                                              buyAmount
                                       ),
                                       3
                                   )}{$buttonUpgrades[index]['suffix'] || ''}
@@ -159,7 +159,6 @@ select-none"
                 costs = getCosts();
             } else {
                 buyAmount = $settings['buyAmount'];
-                costs = getCosts();
             }
             affordable = canAfford()
             unlocked = isUnlocked()
@@ -204,7 +203,7 @@ select-none"
                 $buttonUpgradeLevels[index]
             )
         const r = $buttonUpgrades[index]['ratio']
-        const l = $settings['buyAmount']
+        const l = (Math.max(1, buyAmount));
 
         return formula.gSum(base, r, l)
     }

@@ -169,7 +169,7 @@ export const elementBonusText = array([
     {
         prefix: "+",
         suffix: "",
-        text: "mastery gain",
+        text: "warp gain",
         isPercent: true
     },
     {
@@ -179,9 +179,9 @@ export const elementBonusText = array([
         isPercent: true
     },
     {
-        prefix: "+",
+        prefix: "",
         suffix: "",
-        text: "celestial beacon upgrades",
+        text: "starting layer",
         isPercent: false
     },
     {
@@ -207,7 +207,7 @@ export const ascensionConstants = object({
             earth: 2,
             water: 2,
             magic: 2,
-            celestial: 15,
+            celestial: 2,
         }
     },
     antimatterLevelFormula: (lv: number) => 35 + (Math.pow(lv,2) * 3),
@@ -231,9 +231,9 @@ export const ascensionElements = array([
 export const ascFormula = ascFormulaGetter({
     fire: (lv: number) => 1 + 0.4*Math.pow(lv-1, 0.6), // mine speed softcap
     earth: (lv: number) => 1 + 0.3*Math.pow(lv-1, 0.8), // crystal gain
-    water: (lv: number) => 1 + 0.13*Math.pow(lv-1, 0.7), // challenge point gain
+    water: (lv: number) => 1 + 0.13*Math.pow(lv-1, 0.7), // warp gain
     magic: (lv: number) => 1 + 0.04*Math.pow(lv-1, 0.8), // enchant proc speed
-    celestial: (lv: number) => lv-1, // beacon special levels
+    celestial: (lv: number) => (lv < 20 ? lv*20 : 400 + Math.pow(lv, 0.9)*15), // starting layer
     antimatter: (lv: number) => 1 + 0.24*Math.pow(lv-1, 0.75), // minespeed/droprate
 })
 
@@ -244,7 +244,7 @@ export const antimatterBonusAscensionReqs = array([
 export const antimatterBonusText = object([
     "Mining Speed",
     "Key Droprate",
-    "Radioactivity Gain",
+    "Passive Radioactivity Gain",
     "Slurry Gain",
     "Dust Droprate"
 ].concat(Array(20).fill('[to be implemented]')))
