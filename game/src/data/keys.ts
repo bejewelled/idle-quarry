@@ -442,7 +442,7 @@ export const keyCrafts = array([
         min: 2,
         max: 9,
         ratio: 1.1,
-        unlockAt: () => (get(wallet)['totalFame'] > 1e13),
+        unlockAt: () => (get(permaWallet)['totalFame'] > 1e13),
     },
     {
         item: 'eearth',
@@ -457,7 +457,7 @@ export const keyCrafts = array([
         min: 2,
         max: 9,
         ratio: 1.1,
-        unlockAt: () => (get(wallet)['dust'] > 750),
+        unlockAt: () => (get(permaWallet)['dust'] > 750),
     },
     {
         item: 'ewater',
@@ -472,7 +472,7 @@ export const keyCrafts = array([
         min: 2,
         max: 9,
         ratio: 1.1,
-        unlockAt: () => (get(wallet)['orbs'] > 1.5e9),
+        unlockAt: () => (get(permaWallet)['orbs'] > 1.5e9),
     },
     {
         item: 'emagic',
@@ -487,7 +487,7 @@ export const keyCrafts = array([
         min: 2,
         max: 9,
         ratio: 1.1,
-        unlockAt: () => (get(wallet)['sigils'] > 1e7),
+        unlockAt: () => (get(permaWallet)['sigils'] > 1e7),
     },
     {
         item: 'ecelestial',
@@ -502,7 +502,7 @@ export const keyCrafts = array([
         min: 2,
         max: 9,
         ratio: 1.1,
-        unlockAt: () => (get(wallet)['stars'] >= 1),
+        unlockAt: () => (get(permaWallet)['stars'] >= 1),
     },
 
 
