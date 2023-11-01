@@ -198,7 +198,7 @@ export const enchantUpgrades = array([{
     tier: 1,
     ratio: 10,
     formula: (lv: any) => (0.12/20) * lv,
-    extFormula: (lv: number, size: number, quality: number) => lv * (quality ** 3.6) + (quality * 12000),
+    extFormula: (lv: number, size: number, quality: number) => lv * (quality ** 3.6) + 16*(quality ** 2),
     extPrefix: "You will gain ",
     extSuffix: " orbs on proc.",
     unlockAt: () => (get(wallet)['totalFame'] >= 100 || get(enchantUpgradeLevels)[0] > 0),
