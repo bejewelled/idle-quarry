@@ -229,11 +229,11 @@ export const ascensionElements = array([
 // formula for bonuses
 // returns a non-percentile value
 export const ascFormula = ascFormulaGetter({
-    fire: (lv: number) => 1 + 0.4*Math.pow(lv-1, 0.6), // mine speed softcap
+    fire: (lv: number) => 1 + 0.3*Math.pow(lv-1, 0.6), // mine speed softcap
     earth: (lv: number) => 1 + 0.3*Math.pow(lv-1, 0.8), // crystal gain
     water: (lv: number) => 1 + 0.13*Math.pow(lv-1, 0.7), // warp gain
     magic: (lv: number) => 1 + 0.04*Math.pow(lv-1, 0.8), // enchant proc speed
-    celestial: (lv: number) => (lv < 20 ? lv*20 : 400 + Math.pow(lv, 0.9)*15), // starting layer
+    celestial: (lv: number) => (lv == 1 ? 0 : ((lv < 20 ? lv*20 : 400 + Math.pow(lv, 0.9)*15))), // starting layer
     antimatter: (lv: number) => 1 + 0.24*Math.pow(lv-1, 0.75), // minespeed/droprate
 })
 

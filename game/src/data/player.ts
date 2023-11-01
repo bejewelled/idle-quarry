@@ -474,6 +474,11 @@ export const perSecond = object({})
 export const walletStamp = object({})
 
 
+export const resetLastTimes = object({
+    relocate: Date.now(),
+    ascension: Date.now(),
+})
+
 
 export const slurryToggles = object({
     key1: false,
@@ -493,6 +498,10 @@ export const ascensionLevels = object({
     magic: [1, 0, 2],
     celestial: [1, 0, 2], 
     antimatter: [1, 0, 35],
+    
+})
+
+export const artifactPermanentBonuses = object({
     
 })
 

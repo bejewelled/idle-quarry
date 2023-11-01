@@ -22,7 +22,7 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
             <br/> <div class='tooltip-text-xs text-[#999999] italic'>Not reset on relocation</div>
             {/if}
             {#if $miningUpgrades[index]['noResetAscension']}
-            <br/> <div class='tooltip-text-xs italic'>Not reset on ascension</div>
+            <div class='tooltip-text-xs italic'>Not reset on ascension</div>
             {/if}
             {#if $miningUpgrades[index]['name'] == 'Expansive'}
                 <span class='text-orange-400'> (Upgrades in orange aren't reset when you relocate.) </span>

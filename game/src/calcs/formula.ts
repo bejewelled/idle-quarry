@@ -317,8 +317,6 @@ export default class formula {
   }
 
   static getEnchantFormulaValue(i: number) {
-    console.log(get(enchantUpgradeLevels)[i])
-    console.log(get(enchantUpgrades)[i]['extFormula'](get(enchantUpgradeLevels)[i]))
     return get(enchantUpgrades)[i]['extFormula'](
       get(enchantUpgradeLevels)[i],
       this.getMineSize(),
@@ -334,14 +332,14 @@ export default class formula {
     let y;
     if (l <= 500) y = 1;
     else y = 1 + Math.pow(l-500, 0.92)*0.004;
-    y = y 
+    y = y
     * get(buttonUpgrades)[1]['formula'](get(buttonUpgradeLevels)[1])
     * get(allMultipliers)['radium']['formula'](get(wallet)['artifacts'] || 0)
     return y;
   }
 
   static calcRadiumGainWhenComplete() {
-    return 1;
+    return 1 * get(buttonUpgrades)[3]['formula'](get(buttonUpgradeLevels)[3]);
   }
 
   // gives radioactivity

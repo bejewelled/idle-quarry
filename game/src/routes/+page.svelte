@@ -310,7 +310,7 @@
 <script lang='ts'>
 	import { thoriumDepositActive } from './../data/button.ts';
 	import { masteryNextReq, masteryItemInfo, masteryItemReqs } from './../data/mastery.ts';
-	import { ascensionLevels, ascensionUpgradeLevels, craftMasteryLevel, craftMasteryProgress, perSecond, sumUpgradeLevels } from './../data/player.ts';
+	import { ascensionLevels, ascensionUpgradeLevels, craftMasteryLevel, craftMasteryProgress, perSecond, sumUpgradeLevels, resetLastTimes, artifactPermanentBonuses } from './../data/player.ts';
 
     import ThoriumDepositButton from '../components/buttons/ThoriumDepositButton.svelte';
 
@@ -526,6 +526,14 @@
         localStorage.setItem(
             "miningUpgradeLevelsFree",
             JSON.stringify($miningUpgradeLevelsFree)
+        );
+        localStorage.setItem(
+            "resetLastTimes",
+            JSON.stringify($resetLastTimes)
+        );
+        localStorage.setItem(
+            "artifactPermanentBonuses",
+            JSON.stringify($artifactPermanentBonuses)
         );
         localStorage.setItem(
             "miningUpgradeLevelsTemp",
@@ -747,6 +755,16 @@
         if (localStorage.getItem("radiumProgress")) {
             radiumProgress.set(
                 JSON.parse(localStorage.getItem("radiumProgress"))
+            );
+        }
+        if (localStorage.getItem("resetLastTimes")) {
+            resetLastTimes.set(
+                JSON.parse(localStorage.getItem("resetLastTimes"))
+            );
+        }
+        if (localStorage.getItem("artifactPermanentBonuses")) {
+            artifactPermanentBonuses.set(
+                JSON.parse(localStorage.getItem("artifactPermanentBonuses"))
             );
         }
         if (localStorage.getItem("ascensionLevels")) {

@@ -75,6 +75,7 @@
 
 
 <script lang='ts'>
+	import { resetLastTimes } from './../../data/player.ts';
 	import { ascFormula } from './../../data/ascension.ts';
 	import { allMultipliers } from './../../data/artifacts';
  //@ts-nocheck
@@ -317,6 +318,8 @@ export function relocate() {
                     $miningUpgradeLevelsBought[9] = 1;
                     $visibleTier = 3;
                 }
+
+                $resetLastTimes['relocate'] = Date.now()
             }
         }
     }

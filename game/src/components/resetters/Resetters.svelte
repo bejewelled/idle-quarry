@@ -56,7 +56,8 @@
         challengesCompleted,
         radiumProgress,
         permaWallet,
-        layer
+        layer,
+        resetLastTimes
     } from '../../data/player'
     import { buttonUpgrades } from '../../data/button';
     import {
@@ -193,6 +194,8 @@
             key5DropTable.updateTable()
             $beaconNextReqs = $baseBeaconNextReqs
             console.log(ascFormula.getVal('magic'))
+
+            $resetLastTimes['ascension'] = Date.now();
             
             setTimeout(() => {
                 console.log($keyCraftMastery)

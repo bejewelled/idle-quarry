@@ -561,12 +561,15 @@
 
         if ($radiumProgress[0] >= $radiumProgress[1]) {
             $wallet['radium'] += 
-            Math.min(1,(Math.floor($radiumProgress[0] / $radiumProgress[1]) * formula.calcRadiumGainWhenComplete()))
+            Math.max(1,(Math.floor($radiumProgress[0] / $radiumProgress[1]) * formula.calcRadiumGainWhenComplete()))
             $radiumProgress[0] %= $radiumProgress[1]   
             
             const starCheck = Math.random()
+            console.log($buttonUpgrades[5]['formula']($buttonUpgradeLevels[5]))
+            console.log(starCheck)
             if (starCheck < $buttonUpgrades[5]['formula']($buttonUpgradeLevels[5])) {
-                $wallet['stars'] += 1
+                console.log('oi')
+                $wallet['stars'] = ($wallet['stars'] || 0) + 1
             }
         }
     }

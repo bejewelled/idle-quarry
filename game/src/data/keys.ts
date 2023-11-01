@@ -502,7 +502,7 @@ export const keyCrafts = array([
         min: 2,
         max: 9,
         ratio: 1.1,
-        unlockAt: () => (get(permaWallet)['stars'] >= 1),
+        unlockAt: () => (get(wallet)['stars'] >= 1),
     },
 
 

@@ -788,7 +788,7 @@ export const miningUpgrades = array([{
     cost: {
         antimatter: 250,
     },
-    ratio: 1,
+    ratio: 10,
     unlockAt: () => (get(wallet)['antimatter'] > 0),
     formula: (lv: any) => 1 - (0.15 * lv),
     isPercent: false,
