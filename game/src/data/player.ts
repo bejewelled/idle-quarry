@@ -257,7 +257,7 @@ export const baseMiningDropTable = dropTable({
     dust:      [1e-6, 0.06, 0.28, 0.004, 4],
     key3:      [2e-7, 0.01, 0.03, 0.004, 4],
     artifacts: [3.3e-8, 0.04, 0.05, 1e-5, 4],
-    //lm4
+    //lm4a
     radium: [1e-7, 0.01, 0.03, 1e-4, 5],
     energy: [1e-9, 0.01, 0.03, 1e-6, 5],
     void:   [1e-13, 1e-6, 3e-6, 1e-7, 5]
@@ -491,7 +491,7 @@ export const ascensionLevels = object({
     earth: [1, 0, 2],
     water: [1, 0, 2],
     magic: [1, 0, 2],
-    celestial: [1, 0, 15], 
+    celestial: [1, 0, 2], 
     antimatter: [1, 0, 35],
     
 })
