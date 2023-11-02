@@ -97,6 +97,7 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
 
 
     function buy() {
+        
         $wallet['slurry'] = ($wallet['slurry'] || 0) + slurryGain;
         if (isNaN($wallet['slurry'])) $wallet['slurry'] = 0;
         if (sigilGain >= 1) $wallet['sigils'] += sigilGain;

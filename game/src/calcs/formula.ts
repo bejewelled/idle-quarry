@@ -339,7 +339,7 @@ export default class formula {
   }
 
   static calcRadiumGainWhenComplete() {
-    return 1 * get(buttonUpgrades)[3]['formula'](get(buttonUpgradeLevels)[3]);
+    return Math.max(1,1 * get(buttonUpgrades)[3]['formula'](get(buttonUpgradeLevels)[3]));
   }
 
   // gives radioactivity
@@ -357,7 +357,7 @@ export default class formula {
 
     const base = (y < 1000 ? 
       y + ((y/8)**2) :
-      256 + (((y-1000)/32)**2) + (y-1000)*1.33 * (Math.log10(((y-999)/150)+1)))
+      256 + (((y-1000)/32)**2) + (y-1000)*2.75)
 
     const multi = get(miningUpgrades)[29]['formula'](get(miningUpgradeLevels)[29])
     * ascFormula.getVal('earth')

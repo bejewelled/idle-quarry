@@ -311,7 +311,7 @@
 	import { miningUpgrades } from './../data/mining.ts';
 	import { thoriumDepositActive } from './../data/button.ts';
 	import { masteryNextReq, masteryItemInfo, masteryItemReqs } from './../data/mastery.ts';
-	import { ascensionLevels, ascensionUpgradeLevels, craftMasteryLevel, craftMasteryProgress, perSecond, sumUpgradeLevels, resetLastTimes, artifactPermanentBonuses, miningUpgradeLevelsBought } from './../data/player.ts';
+	import { ascensionLevels, ascensionUpgradeLevels, craftMasteryLevel, craftMasteryProgress, perSecond, sumUpgradeLevels, resetLastTimes, artifactPermanentBonuses, miningUpgradeLevelsBought, craftMasteryNextReq } from './../data/player.ts';
 
     import ThoriumDepositButton from '../components/buttons/ThoriumDepositButton.svelte';
 
@@ -995,6 +995,8 @@
         // update mastery current for each item
         updateMasteryLevels()
         updateMasteryReqs()
+
+        $craftMasteryNextReq = formula.calcCraftMasteryNextReq($craftMasteryLevel)
 
         loadingFinished = true;
         console.log($activityLogShow);
