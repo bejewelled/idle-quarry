@@ -353,10 +353,11 @@ export default class formula {
   static calcCrystalGainFromRadium() {
     const y = (get(wallet)['radium'] || 0);
     if (y == 0) return 0;
+    if (isNaN(y)) return 0;
 
     const base = (y < 1000 ? 
       y + ((y/8)**2) :
-      256 + (((y-1000)/32)**2) + (y-1000)*1.33) * (Math.log10(((y-1000)/150)+1));
+      256 + (((y-1000)/32)**2) + (y-1000)*1.33 * (Math.log10(((y-999)/150)+1)))
 
     const multi = get(miningUpgrades)[29]['formula'](get(miningUpgradeLevels)[29])
     * ascFormula.getVal('earth')

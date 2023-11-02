@@ -308,9 +308,10 @@
 </div>
 
 <script lang='ts'>
+	import { miningUpgrades } from './../data/mining.ts';
 	import { thoriumDepositActive } from './../data/button.ts';
 	import { masteryNextReq, masteryItemInfo, masteryItemReqs } from './../data/mastery.ts';
-	import { ascensionLevels, ascensionUpgradeLevels, craftMasteryLevel, craftMasteryProgress, perSecond, sumUpgradeLevels, resetLastTimes, artifactPermanentBonuses } from './../data/player.ts';
+	import { ascensionLevels, ascensionUpgradeLevels, craftMasteryLevel, craftMasteryProgress, perSecond, sumUpgradeLevels, resetLastTimes, artifactPermanentBonuses, miningUpgradeLevelsBought } from './../data/player.ts';
 
     import ThoriumDepositButton from '../components/buttons/ThoriumDepositButton.svelte';
 
@@ -710,6 +711,11 @@
             miningUpgradeLevels.set(
                 JSON.parse(localStorage.getItem("miningUpgradeLevels"))
             );
+            for (let i in miningUpgradeLevels) {
+                if ($miningUpgradeLevelsBought[i] > $miningUpgrades[i]['maxLevel']) {
+                    $miningUpgradeLevelsBought[i] = $miningUpgrades[i]['maxLevel']
+                }
+            }
         }
         if (localStorage.getItem("ascensionUpgradeLevels")) {
             ascensionUpgradeLevels.set(
