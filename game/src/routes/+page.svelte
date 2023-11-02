@@ -348,7 +348,6 @@
         antiFlickerFlags,
         automationItemsUnlocked,
         saveVersion,
-        miningUpgradeLevelsBought,
         miningUpgradeLevelsFree,
         miningUpgradeLevelsBoughtTemp,
         miningUpgradeLevelsFreeTemp,
