@@ -160,6 +160,11 @@ function dropTable(context: any) {
             update((i: any) => {
                 for (let [item, val] of Object.entries(i)) {
                     if (item == 'tier') continue;
+                    if (val == undefined) {
+                        delete i[item];
+                        continue;
+                    }
+                    console.log(item + " " + val)
                     let baseChance = val[3] 
                     * get(keyUpgrades)[0]['formula'](get(keyUpgradeLevels)[0])
                     * (item === 'artifacts' ? get(miningUpgrades)[21]['formula'](get(miningUpgradeLevels)[21]) : 1)

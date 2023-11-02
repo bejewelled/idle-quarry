@@ -115,7 +115,10 @@ select-none'>{$automationUpgrades[index]['name']}
                 $enchantThreshold[i] *= 0.9;
         }
         if ($automationUpgrades[index]['name'].toLowerCase() == 'gateway') {
-            $key2DropTable['key3'] = [(1/750000),1, 1, (1/750000), (1/30000)]
+
+            //console.log($key2DropTable)
+            $key2DropTable['key3'] = [(1/350000),1, 1, (1/350000), (1/30000)];
+            console.log($key2DropTable)
             key2DropTable.updateTable();
         }
 

@@ -160,6 +160,7 @@ select-none"
                 break
         }
         for (let [type, vals] of Object.entries(dropTable)) {
+            if (vals == undefined) continue
             if (type == 'tier') continue
 
             else if (Number(amt) == 1) {
