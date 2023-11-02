@@ -236,7 +236,8 @@ export default class formula {
   static calcKeySlurryGain(obj: { [x: string]: number; }) {
     const vals = ref.slurryGainFromKeys;
     const y = vals.reduce((sum: number, value: number, i: number) => 
-    sum + (get(slurryToggles)[i+1] ? value*(obj['key'+(i+1)] || 0) : 0), 0) * formula.getAntimatterBonusAmount(3); // get antimatter bonus if # of ascensions is 3 or more
+    sum + (get(slurryToggles)['key'+(i+1).toString()] ? 
+    value*(obj['key'+(i+1)] || 0) : 0), 0) * formula.getAntimatterBonusAmount(3); // get antimatter bonus if # of ascensions is 3 or more
     if (isNaN(y)) {
       alert('note: this feature is bugged, please report this on Discord - reduced slurry gained (using "safe" formula)')
       return obj['key1'] / 8e5;

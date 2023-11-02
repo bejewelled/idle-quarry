@@ -219,7 +219,6 @@
                 if (v > 0 && !$unlockedRes.has(k)) $unlockedRes.add(k)
             }
             setPermaWallet();
-            console.log($permaWallet)
         }, 773 + Math.random() * 227)
         // @ts-ignore
         const passiveLoop = setInterval(() => {

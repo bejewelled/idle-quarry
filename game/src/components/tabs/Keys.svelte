@@ -71,10 +71,10 @@
                         on:click={() => {
                             if ($slurryToggles[j+1] === undefined) $slurryToggles[j+1] = true;
                         }}
-                        bind:checked={$slurryToggles[j+1]} class='hidden checkbox w-6 h-6'/>
+                        bind:checked={$slurryToggles['key'+(j+1).toString()]} class='hidden checkbox w-6 h-6'/>
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                         <label for='slurry-check-{j+1}'>
-                            <div class='{$slurryToggles[j+1] ? 'game-btn-toggleon' : 'game-btn'}
+                            <div class='{$slurryToggles['key'+(j+1).toString()] ? 'game-btn-toggleon' : 'game-btn'}
                          col-span-1
                         py-2 items-center text-center border-solid game-text text-small
                         select-none mt-1'>

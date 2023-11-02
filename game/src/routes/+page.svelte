@@ -311,7 +311,7 @@
 	import { miningUpgrades } from './../data/mining.ts';
 	import { thoriumDepositActive } from './../data/button.ts';
 	import { masteryNextReq, masteryItemInfo, masteryItemReqs } from './../data/mastery.ts';
-	import { ascensionLevels, ascensionUpgradeLevels, craftMasteryLevel, craftMasteryProgress, perSecond, sumUpgradeLevels, resetLastTimes, artifactPermanentBonuses, miningUpgradeLevelsBought, craftMasteryNextReq } from './../data/player.ts';
+	import { ascensionLevels, ascensionUpgradeLevels, craftMasteryLevel, craftMasteryProgress, perSecond, sumUpgradeLevels, resetLastTimes, artifactPermanentBonuses, miningUpgradeLevelsBought, craftMasteryNextReq, slurryToggles } from './../data/player.ts';
 
     import ThoriumDepositButton from '../components/buttons/ThoriumDepositButton.svelte';
 
@@ -1198,7 +1198,6 @@
             ct = Date.now();
             xpPerCycle = formula.getMineXPPerCycle();
             layersPerCycle = formula.getLayersPerCycle();
-            console.log($miningUpgradeLevelsBought)
         }, 1063);
 
 

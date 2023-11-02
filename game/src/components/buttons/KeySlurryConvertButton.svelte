@@ -43,6 +43,7 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
         
 
  <script>
+	import { slurryToggles } from './../../data/player.ts';
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
@@ -97,12 +98,12 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
 
 
     function buy() {
-        
+
         $wallet['slurry'] = ($wallet['slurry'] || 0) + slurryGain;
         if (isNaN($wallet['slurry'])) $wallet['slurry'] = 0;
         if (sigilGain >= 1) $wallet['sigils'] += sigilGain;
         for (let k of Object.keys($wallet))
-          if (k.includes('key')) $wallet[k] = 0; 
+          if (k.includes('key') && $slurryToggles[k]) $wallet[k] = 0; 
           
         console.log($wallet['slurry'])
     }
