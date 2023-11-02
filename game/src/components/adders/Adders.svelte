@@ -562,7 +562,8 @@
 
 
         if ($radiumProgress[0] >= $radiumProgress[1]) {
-            $wallet['radium'] += 
+            if (isNaN($wallet['radium'])) $wallet['radium'] = 0
+            $wallet['radium'] = ($wallet['radium'] || 0) +
             Math.max(1,(Math.floor($radiumProgress[0] / $radiumProgress[1]) * formula.calcRadiumGainWhenComplete()))
             $radiumProgress[0] %= $radiumProgress[1]   
             
@@ -1086,6 +1087,7 @@ function dropRoll(n) {
                         }
                         break
                     case 6: // nuclear fission
+            
                          $wallet['radium'] = ($wallet['radium'] || 0) + value
                          addToActivityLog(
                              '[Nuclear Fission] +' + f(value) + ' radioactivity',
