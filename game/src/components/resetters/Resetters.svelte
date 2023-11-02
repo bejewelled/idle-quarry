@@ -127,7 +127,7 @@
                 antimatter: antimatterOnAscend,
                 totalAntimatter: antimatterOnAscend
             }
-            $permaWallet = {
+            $permaWallet ={
                 gems: 0,
                 antimatter: antimatterOnAscend,
                 totalAntimatter: antimatterOnAscend

@@ -219,6 +219,7 @@
                 if (v > 0 && !$unlockedRes.has(k)) $unlockedRes.add(k)
             }
             setPermaWallet();
+            console.log($permaWallet)
         }, 773 + Math.random() * 227)
         // @ts-ignore
         const passiveLoop = setInterval(() => {
@@ -238,6 +239,7 @@
     // set the permanent wallet, that keeps track of unlocked resources
     function setPermaWallet() {
         for (let k of Object.keys($wallet)) {
+            if (!$permaWallet[k] || $permaWallet[k] == undefined) $permaWallet[k] = $wallet[k]
             if ($wallet[k]) $permaWallet[k] = ($wallet[k] > $permaWallet[k] ? $wallet[k] : $permaWallet[k])
             
         }
