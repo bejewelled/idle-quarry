@@ -711,7 +711,8 @@
                 JSON.parse(localStorage.getItem("miningUpgradeLevels"))
             );
             for (let i in miningUpgradeLevels) {
-                if ($miningUpgradeLevelsBought[i] > $miningUpgrades[i]['maxLevel']) {
+                if (!($miningUpgrades[i] == undefined) 
+                && $miningUpgradeLevelsBought[i] > $miningUpgrades[i]['maxLevel']) {
                     $miningUpgradeLevelsBought[i] = $miningUpgrades[i]['maxLevel']
                 }
             }
@@ -1195,6 +1196,7 @@
             ct = Date.now();
             xpPerCycle = formula.getMineXPPerCycle();
             layersPerCycle = formula.getLayersPerCycle();
+            console.log($miningUpgradeLevelsBought)
         }, 1063);
 
 
