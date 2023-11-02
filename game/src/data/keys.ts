@@ -193,12 +193,12 @@ export const key1DropTable = dropTable({
 
 export const key2DropTable = dropTable({
     tier: 2,
-    gems: [0.25, 1e6, 1e7, 0.25, 0.6], // [chance, min, max, base]
+    gems: [0.25, 1e6, 1e7, 0.25, 0.6], // [chance, min, max, base, chanceSoftcap]
     gold: [0.15, 1e4, 1e5, 0.15, 0.6],
     orbs: [0.15, 3200, 18000, 0.15, 0.6],
     sigils: [0.11, 1, 1, 0.11, 0.6],
     beacons: [0.06, 250, 1000, 0.06, 0.6],
-    artifacts: [(1/20000), 1, 1, (1/20000), (1/1000)]
+    artifacts: [(1/20000), 1, 1, (1/20000), (1/1000)],
 })
 
 export const key3DropTable = dropTable({
