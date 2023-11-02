@@ -527,8 +527,8 @@ export const miningUpgrades = array([{
     description: 'While mining, you will occasionally find a bundle of T3 [***] keys.' 
     + '\nUpgrades increase progress gained towards this milestone.',
     cost: {
-        orbs: 1e8,
-        key3: 10000,
+        orbs: 1e9,
+        key3: 1000,
     },
     ratio: 1.5,
     unlockAt: () => (get(wallet)['key3'] > 0),

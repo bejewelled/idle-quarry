@@ -499,6 +499,16 @@ export const automationUpgrades = array([{
     unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1),
     isPercent: true,
 },
+{
+    index: 14,
+    name: 'Gateway',
+    description: 'T2 [**] keys can now give T3 [***] keys.',
+    cost: {
+        antimatter: 6,
+    },
+    unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1),
+    isPercent: true,
+},
 
 
 

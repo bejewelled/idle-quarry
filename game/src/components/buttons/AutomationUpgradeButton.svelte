@@ -48,6 +48,7 @@ select-none'>{$automationUpgrades[index]['name']}
     import { enchantUpgrades, automationUpgrades, enchantThreshold } from '../../data/fame';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
+    import { key2DropTable } from '../../data/keys';
 // @ts-nocheck
     /**
      * @type {string | number}
@@ -102,6 +103,7 @@ select-none'>{$automationUpgrades[index]['name']}
         }
         $automationItemsUnlocked[$automationUpgrades[index]['name'].toLowerCase()] = true;
 
+
         // special cases
         if ($automationUpgrades[index]['name'].toLowerCase() == 'spellcaster') {
             console.log('working??')
@@ -111,6 +113,10 @@ select-none'>{$automationUpgrades[index]['name']}
         if ($automationUpgrades[index]['name'].toLowerCase() == 'spellcaster ii') {
             for (let i of Object.keys($enchantThreshold))
                 $enchantThreshold[i] *= 0.9;
+        }
+        if ($automationUpgrades[index]['name'].toLowerCase() == 'gateway') {
+            $key2DropTable['key3'] = [(1/750000),1, 1, (1/750000), (1/30000)]
+            key2DropTable.updateTable();
         }
 
         if ($automationItemsUnlocked['deep pockets']) {

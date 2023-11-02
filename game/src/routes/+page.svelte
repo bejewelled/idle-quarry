@@ -972,6 +972,11 @@
         key4DropTable.updateTable();
         key5DropTable.updateTable();
 
+        if ($automationItemsUnlocked['gateway']) {
+            $key2DropTable['key3'] = [(1/750000),1, 1, (1/750000), (1/30000)]
+            key2DropTable.updateTable();
+        }
+
         challengeGoals.updateChallengeReqs();
 
         $masteryNextReq = formula.calcMasteryNextReq()
