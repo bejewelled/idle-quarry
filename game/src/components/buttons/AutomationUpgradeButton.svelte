@@ -114,6 +114,9 @@ select-none'>{$automationUpgrades[index]['name']}
             for (let i of Object.keys($enchantThreshold))
                 $enchantThreshold[i] *= 0.9;
         }
+        if ($automationUpgrades[index]['name'].toLowerCase() == 'auto-fission') {
+            $wallet['radium'] = ($wallet['radium'] || 0) + 1;
+        }
         if ($automationUpgrades[index]['name'].toLowerCase() == 'gateway') {
 
             //console.log($key2DropTable)
