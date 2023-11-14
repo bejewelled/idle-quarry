@@ -1086,9 +1086,8 @@ function dropRoll(n) {
                         }
                         break
                     case 6: // nuclear fission
-            
-                         $wallet['radium'] = ($wallet['radium'] || 0) + value
-                         addToActivityLog(
+                        $radiumProgress[0] += value;
+                        addToActivityLog(
                              '[Nuclear Fission] +' + f(value) + ' radioactivity',
                              'text-violet-300',
                              'nuclear fission')

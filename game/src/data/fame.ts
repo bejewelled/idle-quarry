@@ -246,14 +246,14 @@ export const enchantUpgrades = array([{
 {
     index: 6,
     name: 'Nuclear Fission',
-    description: 'Gives radium, based on mine size and quality.',
+    description: 'Gives radioactivity, based on mine size and quality.',
     cost: {
         fame: 1e11,
     },
     tier: 1,
     ratio: 100,
     formula: (lv: any) => (lv/30) * 0.025,
-    extFormula: (lv: number, size: number, quality: number) => Math.floor(1 + Math.pow(size, 0.8) + Math.pow(quality, 0.8)),
+    extFormula: (lv: number, size: number, quality: number) => (size * quality * 12),
     extPrefix: "You will gain ",
     extSuffix: " radium on proc.",
     unlockAt: () => (get(wallet)['totalFame'] >= 1e6),
@@ -481,12 +481,12 @@ export const automationUpgrades = array([{
 },
 {
     index: 12,
-    name: 'Violent Openings',
-    description: 'Opening a lot of keys at once gives key fragments.',
+    name: '[unimplemented]',
+    description: '---',
     cost: {
-        antimatter: 45,
+        antimatter: 4500000,
     },
-    unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1),
+    unlockAt: () => (get(wallet)['antimatter'] >= 1e29 || get(wallet)['totalAntimatter'] >= 1e29),
     isPercent: true,
 },
 {
@@ -498,16 +498,29 @@ export const automationUpgrades = array([{
     },
     unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1),
     isPercent: true,
+    noResetAscension: true,
 },
 {
     index: 14,
     name: 'Gateway',
-    description: 'T2 [**] keys can now give T3 [***] keys.',
+    description: 'T2 [**] keys can give T3 [***] keys.',
     cost: {
-        antimatter: 6,
+        antimatter: 20,
     },
     unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1),
     isPercent: true,
+    noResetAscension: true,
+},
+{
+    index: 15,
+    name: 'Auto-fission',
+    description: 'Gain 1 radium; start each ascension with 1 radium.',
+    cost: {
+        antimatter: 160,
+    },
+    unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1),
+    isPercent: true,
+    noResetAscension: true,
 },
 
 

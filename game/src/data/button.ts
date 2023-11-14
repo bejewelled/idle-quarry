@@ -151,7 +151,7 @@ export const buttonUpgrades = array([
         crystals: 100,
     },
     ratio: 1.75,
-    formula: (lv: any) => 0.001 + lv * 0.000325,
+    formula: (lv: any) => 0.004 + lv * 0.001375,
     unlockAt: () => (true),
     isPercent: true,
     suffix: ' chance per second',

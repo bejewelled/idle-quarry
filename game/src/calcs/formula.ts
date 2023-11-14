@@ -345,8 +345,8 @@ export default class formula {
 
   // gives radioactivity
   static calcThoriumDepositGain() {
-    const min = 18000;
-    const max = 75000 * get(buttonUpgrades)[2]['formula'](get(buttonUpgradeLevels)[2]);
+    const min = 25000;
+    const max = 90000 * get(buttonUpgrades)[2]['formula'](get(buttonUpgradeLevels)[2]);
     return Math.floor(min + Math.random()*(max-min))
   }
 

@@ -41,7 +41,7 @@
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <div class='setting col-span-3 mx-1 px-1 py-1 text-center
                     {$activityLogShow['challenges'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                    on:click={() => changeActivityLogShow('challenges')}>Challenges</div>
+                    on:click={() => changeActivityLogShow('layer')}>Layers</div>
                 </div>
                 <div class='col-span-12 py-1'></div>
                 {#each $enchantUpgrades as e}

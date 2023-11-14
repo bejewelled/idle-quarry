@@ -16,6 +16,11 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
         Craft essences to gain power in the next legacy. Each element's essence
         gives a unique bonus.
     </div>
+    <div class="game-text justify-center w-full flex">Gain 
+        <span class='{ref.colors['antimatter']}'>
+        &nbsp;[antimatter]&nbsp; </span> 
+        equal to the sum of all essence produced this ascension.
+    </div>
 
     <div class="grid grid-cols-12 pt-3">
         {#key clock}

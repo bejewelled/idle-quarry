@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
     import {
         keyCrafts,
         key1DropTable,
@@ -132,6 +134,11 @@
                 antimatter: antimatterOnAscend,
                 totalAntimatter: antimatterOnAscend
             }
+            if ($automationItemsUnlocked['auto-fission']) {
+                $wallet['radium'] = ($wallet['radium'] || 0) + 1;
+                $permaWallet['radium'] = ($permaWallet['radium'] || 0) + 1;
+        
+            }
             $resources = {}
             // for (let k in Object.keys($wallet)) {
             //     // @ts-ignore
@@ -156,7 +163,13 @@
             $beaconActivations = Array(30).fill(0)
             $buttonStats = $baseButtonStats
             $enchantUpgradeLevels = Array(200).fill(0)
-            $automationItemsUnlocked = {}
+            let tempAutomations = {}
+            for (let i of Object.keys($automationItemsUnlocked)) {
+                if ($automationItemsUnlocked[i]) {
+                    tempAutomations[i] = true;
+                }
+            }
+            $automationItemsUnlocked = tempAutomations
             $enchantThreshold['t1'] = 100;
             $challengesCompleted = Array(30).fill(0)
             challengeGoals.updateChallengeReqs()
