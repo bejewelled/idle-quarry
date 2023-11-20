@@ -15,6 +15,9 @@ select-none'>{$automationUpgrades[index]['name']}
          <div class='title text-small-gray items-start text-center pb-1'>
             {$automationUpgrades[index]['description']}
         </div>
+        {#if $automationUpgrades[index]['noResetAscension']}
+        <div class='text-xs italic text-indigo-300'>Not reset on ascension or lower</div>
+        {/if}
         <hr />
         <div class='pt-1 cost items-start text-center grid grid-cols-4'>
             {#if ($automationItemsUnlocked[$automationUpgrades[index]['id']])}

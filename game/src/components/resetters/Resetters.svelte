@@ -168,13 +168,17 @@
             $beaconActivations = Array(30).fill(0)
             $buttonStats = $baseButtonStats
             $enchantUpgradeLevels = Array(200).fill(0)
-            // let tempAutomations = {}
-            // for (let i of Object.keys($automationItemsUnlocked)) {
-            //     if ($automationItemsUnlocked[i]) {
-            //         tempAutomations[i] = true;
-            //     }
-            // }
-            if (!$automationItemsUnlocked['robotic']) $automationItemsUnlocked = {}
+            let tempAutomations = {}
+            if (!$automationItemsUnlocked['robotic']) {
+                for (let i in Object.keys($automationUpgrades)) {
+                    if ($automationItemsUnlocked[$automationUpgrades[i]['name'].toLowerCase()] 
+                    &&  $automationUpgrades[i]['noResetAscension']) {
+                        tempAutomations[i] = true;
+                    }
+                }
+                $automationItemsUnlocked = tempAutomations;
+            }
+            
             $enchantThreshold['t1'] = 100;
             $challengesCompleted = Array(30).fill(0)
             challengeGoals.updateChallengeReqs()
