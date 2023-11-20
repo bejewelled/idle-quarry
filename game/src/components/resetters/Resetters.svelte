@@ -81,7 +81,7 @@
         beaconNameText,
         baseBeaconNextReqs,
     } from '../../data/beacons'
-    import { enchantUpgrades, enchantThreshold } from '../../data/fame'
+    import { enchantUpgrades, enchantThreshold, automationUpgrades } from '../../data/fame'
     import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte'
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
