@@ -871,6 +871,9 @@
                 JSON.parse(localStorage.getItem("enchantUpgradeLevels"))
             );
         }
+        for (let i in $enchantUpgradeLevels) {
+            if ($enchantUpgradeLevels[i] < 0) $enchantUpgradeLevels[i] = 0;
+        }
         if (localStorage.getItem("mineLevel")) {
             mineLevel.set(JSON.parse(localStorage.getItem("mineLevel")));
         }
