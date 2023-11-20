@@ -247,7 +247,8 @@ export const miningUpgrades = array([{
     unlockAt: () => (get(wallet)['key1'] >= 1),
     formula: (lv: any) => 1 + lv*0.2,
     isPercent: false,
-    suffix: 'x speed',
+    prefix: 'x',
+    suffix: 'speed',
     maxLevel: 100,
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
@@ -265,7 +266,8 @@ export const miningUpgrades = array([{
     unlockAt: () => (get(permaWallet)['key2'] >= 10),                 
     formula: (lv: any) => (1 + Math.pow(lv, 0.5)*0.15),
     isPercent: false,
-    suffix: 'x speed',
+    prefix: 'x',
+    suffix: 'speed',
     maxLevel: 100,
     notes: '' 
 },
@@ -283,7 +285,8 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (lv > 1000 ? 201 + Math.pow((lv-1000), 0.2)*0.06
     :(1 + lv * 0.2)),
     isPercent: false,
-    suffix: 'x keys',
+    prefix: 'x',
+    suffix: 'keys',
     maxLevel: 1000,
     notes: ''
 },
@@ -319,14 +322,15 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (lv > 10000 ? 1501+Math.pow((lv-10000), 0.7)*0.15 
     :(1 + lv*0.15)),
     isPercent: false,
-    suffix: 'x gold/orb drops',
+    prefix: 'x',
+    suffix: 'gold/orb drops',
     maxLevel: 1000,
     notes: ''
 },
 // i = 8
 {
     index: 8,
-    sortType: ['crystals'],
+    sortType: ['base'],
     name: 'Efficiency II',
     description: 'Increases gem yield.',
     cost: {
@@ -348,7 +352,7 @@ export const miningUpgrades = array([{
     description: 'Unlocks a new tier of findable drops.',
     cost: {
         orbs: 1e6,
-        crystals: 30000,
+        crystals: 10000,
         beacons: 2500,
         key2: 150,
     },
@@ -395,7 +399,8 @@ export const miningUpgrades = array([{
     formula: (lv: any) => 1 + 0.55*Math.pow(lv, 0.9),
     isPercent: false,
     noResetRelocate: true,
-    suffix: 'x drop rate',
+    prefix: 'x',
+    suffix: 'drop rate',
     maxLevel: 100,
     style: 'game-btn-fame',
     notes: ''
@@ -534,7 +539,8 @@ export const miningUpgrades = array([{
     unlockAt: () => (get(wallet)['key3'] > 0),
     formula: (lv: any) => (1 + Math.max(0,Math.pow(lv-1, 0.6)*0.15)),
     isPercent: false,
-    suffix: 'x speed',
+    prefix: 'x',
+    suffix: 'speed',
     maxLevel: 100,
     notes: '(1 + floor(level/10)) * level^0.6' 
 },
@@ -551,7 +557,8 @@ export const miningUpgrades = array([{
     formula: (lv: any) => (1 + 0.35 * lv),
     isPercent: false,
     noResetRelocate: true,
-    suffix: 'x gold drops',
+    prefix: 'x',
+    suffix: 'gold drops',
     style: 'game-btn-sigil',
     maxLevel: 25,
     notes: '(1 + floor(level/10)) * level^0.6' 
@@ -607,7 +614,8 @@ export const miningUpgrades = array([{
     unlockAt: () => (get(wallet)['gems'] > 1e9),
     formula: (lv: any) =>  1 + Math.pow(lv,0.8)/10,
     isPercent: false,
-    suffix: 'x droprates',
+    prefix: 'x',
+    suffix: 'droprates',
     maxLevel: 400,
 },
 {
@@ -618,7 +626,7 @@ export const miningUpgrades = array([{
     cost: {
         gems: 1e19,
     },
-    ratio: 1.4,
+    ratio: 1.6,
     unlockAt: () => (get(wallet)['gems'] > 1e13),
     formula: (lv: any) => lv*0.50,
     isPercent: false,
@@ -673,7 +681,8 @@ export const miningUpgrades = array([{
     formula: (lv: any) => 1 + (lv*0.1) * Math.pow(1.01, lv),
     noResetRelocate: true,
     isPercent: false,
-    suffix: 'x speed/amount',
+    prefix: 'x',
+    suffix: 'speed/amount',
     maxLevel: 100,
     style: 'game-btn-fame',
     notes: ''
@@ -682,14 +691,15 @@ export const miningUpgrades = array([{
     index: 27,
     sortType: ['dust'],
     name: 'Cosmic Brilliance',
-    description: 'The first four mining upgrades gain 50 free levels.',
+    description: 'The first four mining upgrades gain 4 free levels that never reset (haste gets 1 level).',
     cost: {
         dust: 100,
     },
     ratio: 1.25,
     unlockAt: () => (get(wallet)['dust'] > 0),
-    formula: (lv: any) => 50 * lv,
+    formula: (lv: any) => 4 * lv,
     noResetRelocate: true,
+    noResetAscension: true,
     isDust: true,
     isPercent: false,
     suffix: ' free levels',
@@ -729,7 +739,8 @@ export const miningUpgrades = array([{
     formula: (lv: any) => 1 + lv * 0.11 * Math.pow(1.01, lv),
     noResetRelocate: true,
     isPercent: false,
-    suffix: 'x crystal gain',
+    prefix: 'x',
+    suffix: 'crystal gain',
     maxLevel: 100,
     style: 'game-btn-fame',
     notes: ''
@@ -748,7 +759,8 @@ export const miningUpgrades = array([{
     noResetRelocate: true,
     noResetAscension: true,
     isPercent: false,
-    suffix: 'x gem gain',
+    prefix: 'x',
+    suffix: 'gem gain',
     maxLevel: 10,
     style: 'game-btn-antimatter',
     notes: ''
@@ -784,7 +796,7 @@ export const miningUpgrades = array([{
     index: 32,
     sortType: ['antimatter'],
     name: 'Negative Mass',
-    description: 'Decreases the cost ratios of mining upgrades.',
+    description: 'Decreases the cost multipliers of mining upgrades.',
     cost: {
         antimatter: 250,
     },
@@ -794,7 +806,9 @@ export const miningUpgrades = array([{
     isPercent: false,
     noResetRelocate: true,
     noResetAscension: true,
-    suffix: 'x cost ratios',
+    costRatioChange: true,
+    prefix: 'x',
+    suffix: 'cost multipliers',
     maxLevel: 1,
     style: 'game-btn-antimatter',
     notes: ''
@@ -803,7 +817,7 @@ export const miningUpgrades = array([{
     index: 33,
     sortType: ['antimatter'],
     name: 'Collapse',
-    description: 'Decreases the cost ratios of mining upgrades.',
+    description: 'Decreases the cost multipliers of mining upgrades.',
     cost: {
         antimatter: 16000,
     },
@@ -813,7 +827,9 @@ export const miningUpgrades = array([{
     isPercent: false,
     noResetRelocate: true,
     noResetAscension: true,
-    suffix: 'x cost ratios',
+    costRatioChange: true,
+    prefix: 'x',
+    suffix: 'cost multipliers',
     maxLevel: 1,
     style: 'game-btn-antimatter',
     notes: ''
@@ -822,7 +838,7 @@ export const miningUpgrades = array([{
     index: 34,
     sortType: ['antimatter'],
     name: 'Event Horizon',
-    description: 'Decreases the cost ratios of mining upgrades.',
+    description: 'Decreases the cost multipliers of mining upgrades.',
     cost: {
         antimatter: 9e6,
     },
@@ -832,7 +848,9 @@ export const miningUpgrades = array([{
     isPercent: false,
     noResetRelocate: true,
     noResetAscension: true,
-    suffix: 'x cost ratios',
+    costRatioChange: true,
+    prefix: 'x',
+    suffix: 'cost multipliers',
     maxLevel: 1,
     style: 'game-btn-antimatter',
     notes: ''
@@ -841,7 +859,7 @@ export const miningUpgrades = array([{
     index: 35,
     sortType: ['antimatter'],
     name: 'Total Darkness',
-    description: 'Decreases the cost ratios of mining upgrades.',
+    description: 'Decreases the cost multipliers of mining upgrades.',
     cost: {
         antimatter: 2.5e8,
     },
@@ -851,7 +869,9 @@ export const miningUpgrades = array([{
     isPercent: false,
     noResetRelocate: true,
     noResetAscension: true,
-    suffix: 'x cost ratios',
+    costRatioChange: true,
+    prefix: 'x',
+    suffix: 'cost multipliers',
     maxLevel: 1,
     style: 'game-btn-antimatter',
     notes: ''
@@ -869,6 +889,8 @@ export const miningUpgrades = array([{
     formula: (lv: any) => 1 + 0.95*Math.pow(lv,1.65),
     noResetRelocate: true,
     noResetAscension: true,
+    
+
     isPercent: false,
     suffix: 'x key droprates',
     maxLevel: 10,

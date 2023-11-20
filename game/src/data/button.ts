@@ -166,7 +166,7 @@ export const buttonUpgrades = array([
         crystals: 1000,
     },
     ratio: 1.33,
-    formula: (lv: any) => 1 + Math.pow(lv,0.925) * 0.18,
+    formula: (lv: any) => 1 + Math.pow(lv,0.925) * 0.25,
     unlockAt: () => (true),
     suffix: 'x radioactivity gain',
     isPercent: false,
@@ -225,7 +225,7 @@ export const buttonUpgrades = array([
     name: 'Plutonium Beaming',
     description: 'When you gain radium from radioactivity, you have a small chance to gain a star.',
     cost: {
-        radium: 5000,
+        radium: 1250,
     },
     ratio: 2.5,
     formula: (lv: any) => lv*0.0075,

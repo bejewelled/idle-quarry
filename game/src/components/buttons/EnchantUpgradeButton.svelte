@@ -23,8 +23,8 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
         </div>
         <div class='text-center effect-wrapper'>
             {#if $enchantUpgrades[index]['extPrefix'] && $enchantUpgrades[index]['extSuffix']}
-            <div class='tooltip-text-xs text-[#999999]'>
-                 <span class='current text-[#999999] italic pb-1'>
+            <div class='tooltip-text-xs text-[#888888]'>
+                 <span class='current text-[#888888] italic pb-1'>
                     {$enchantUpgrades[index]['extPrefix']} 
                     {f($enchantUpgrades[index]['extFormula']
                     ($enchantUpgradeLevels[index],
@@ -37,27 +37,34 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
         </div>
         <div class='text-center effect-wrapper'>
             <div class='tooltip-text-xs text-[#cccccc]'>
+                <span class='current text-[#cccccc]'>{$enchantUpgrades[index]['prefix'] || ""}</span>  
                  <span class='current text-[#cccccc]'>
-                    {$enchantUpgrades[index]['prefix'] || ""}{$enchantUpgrades[index]['isPercent'] ?
+                    {$enchantUpgrades[index]['isPercent'] ?
                     fp($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]),
                     $enchantUpgrades[index]['roundOverride'] || 3, false) :
                     f($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]),
-                    $enchantUpgrades[index]['roundOverride'] || 3)}{$enchantUpgrades[index]['suffix'] || ""}
+                    $enchantUpgrades[index]['roundOverride'] || 3)}
                  </span>
-                 <span class='current text-[#999999]'>  => 
-                    {$enchantUpgrades[index]['prefix'] || ""}{$enchantUpgrades[index]['isPercent'] ?
+                 <span class='current text-[#888888]'>  => 
+                    {$enchantUpgrades[index]['isPercent'] ?
                    fp($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]+buyAmount),
                    $enchantUpgrades[index]['roundOverride'] || 3, false) :
                    f($enchantUpgrades[index]['formula']($enchantUpgradeLevels[index]+buyAmount),
-                   $enchantUpgrades[index]['roundOverride'] || 3)}{$enchantUpgrades[index]['suffix'] || ""}
+                   $enchantUpgrades[index]['roundOverride'] || 3)}
                  </span>
-
+                 <span class='current text-[#cccccc]'>{$enchantUpgrades[index]['suffix'] || ""}</span>  
+                 {#if $settings['costRatios']}
+                 <br/>
+                 <span class='current text-[#888888]'>
+                 Cost Multiplier: {f($enchantUpgrades[index]['ratio'],3)}x
+                 </span>
+                 {/if}
             </div>
         </div>
         <hr />
         <div class='pt-1 cost items-start text-center grid grid-cols-4'>
             {#if $enchantUpgradeLevels[index] >= $enchantUpgrades[index]['maxLevel']}
-                <div class='col-span-4 text-[#999999]'>This upgrade is at max level.</div>
+                <div class='col-span-4 text-[#888888]'>This upgrade is at max level.</div>
             {:else}
             {#each Object.entries(costs) as c}
                 {#if c[1] >= 1}

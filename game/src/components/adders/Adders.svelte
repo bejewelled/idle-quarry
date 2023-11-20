@@ -777,7 +777,7 @@ function dropRoll(n) {
                 const gain = formula.calcKeyCraftAmountGained(i)
                 $keyCraftAmount[item]++
                 $wallet[item] =
-                    ($wallet[item] || 0) + formula.calcKeyCraftAmountGained(i)
+                    ($wallet[item] || 0) + gain
                 $keyCraftTimes[item][1] = -1
 
                 $craftMasteryProgress++;
@@ -1108,7 +1108,7 @@ function dropRoll(n) {
                         $wallet['key'+tier] = ($wallet['key'+tier] || 0) + val
                         addToActivityLog(
                             // @ts-ignore
-                            '[Key Caller] +' + f(val) + ref.displayNames['key'+tier.toString()] + ' keys',
+                            '[Key Caller] +' + f(val) + ' ' + ref.displayNames['key'+tier.toString()],
                             'text-violet-300',
                             'key caller')
                         break;

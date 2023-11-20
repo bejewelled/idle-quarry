@@ -24,25 +24,33 @@ select-none'>
         </div>
         <div class='text-center effect-wrapper'>
             <div class='tooltip-text-xs text-[#cccccc]'>
+                <span class='current text-[#cccccc]'>{$keyUpgrades[index]['prefix'] || ""}</span>  
                  <span class='current text-[#cccccc]'>
-                    {$keyUpgrades[index]['prefix'] || ""}{$keyUpgrades[index]['isPercent'] ?
+                    {$keyUpgrades[index]['isPercent'] ?
                     fp($keyUpgrades[index]['formula']($keyUpgradeLevels[index]),3, false) :
-                    f($keyUpgrades[index]['formula']($keyUpgradeLevels[index]),3)}{$keyUpgrades[index]['suffix'] || ""}
+                    f($keyUpgrades[index]['formula']($keyUpgradeLevels[index]),3)}
                  </span>
-                 <span class='current text-[#999999]'>  => 
-                    {$keyUpgrades[index]['prefix'] || ""}{$keyUpgrades[index]['isPercent'] ?
+                 <span class='current text-[#888888]'>  => 
+                    {$keyUpgrades[index]['isPercent'] ?
                    fp($keyUpgrades[index]['formula']($keyUpgradeLevels[index]+Math.max(1,buyAmount)),3, false) :
-                   f($keyUpgrades[index]['formula']($keyUpgradeLevels[index]+Math.max(1,buyAmount)),3)}{$keyUpgrades[index]['suffix'] || ""}
+                   f($keyUpgrades[index]['formula']($keyUpgradeLevels[index]+Math.max(1,buyAmount)),3)}
                  </span> 
+                 <span class='current text-[#cccccc]'>{$keyUpgrades[index]['prefix'] || ""}</span>  
                  {#if buyAmount > 1}
                  (x{buyAmount})
+                 {/if}
+                 {#if $settings['costRatios']}
+                 <br/>
+                 <span class='current text-[#888888]'>
+                 Cost Multiplier: {f($keyUpgrades[index]['ratio'],3)}x
+                 </span>
                  {/if}
             </div>
         </div>
         <hr />
         <div class='pt-1 cost items-start text-center grid grid-cols-4'>
             {#if $keyUpgradeLevels[index] >= $keyUpgrades[index]['maxLevel']}
-                <div class='col-span-4 text-[#999999]'>This upgrade is at max level.</div>
+                <div class='col-span-4 text-[#888888]'>This upgrade is at max level.</div>
             {:else}
             {#each Object.entries(costs) as c}
                 {#if c[1] >= 1}

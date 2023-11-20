@@ -18,30 +18,37 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
          <span class='tooltip tooltip-style'>
          <div class='title text-small-gray items-start text-center pb-1'>
             {$miningUpgrades[index]['description']} 
-            {#if $miningUpgrades[index]['noResetRelocate']}
-            <br/> <div class='tooltip-text-xs text-[#999999] italic'>Not reset on relocation</div>
-            {/if}
             {#if $miningUpgrades[index]['noResetAscension']}
-            <div class='tooltip-text-xs italic'>Not reset on ascension</div>
-            {/if}
-            {#if $miningUpgrades[index]['name'] == 'Expansive'}
-                <span class='text-orange-400'> (Upgrades in orange aren't reset when you relocate.) </span>
+            <div class='text-xs italic text-indigo-300'>Not reset on ascension or lower</div>
+            {:else if $miningUpgrades[index]['noResetRelocate']}
+            <br/> <div class='text-xs text-orange-300 italic'>Not reset on relocation</div>
             {/if}
         </div>
         <div class='text-center effect-wrapper'>
             <div class='tooltip-text-xs text-[#cccccc]'>
-                 <span class='current text-[#cccccc]'>
-                    {$miningUpgrades[index]['prefix'] || ""}{$miningUpgrades[index]['isPercent'] ?
-                    fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]),3, true) :
-                    f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]),3)}{$miningUpgrades[index]['suffix'] || ""}
-                 </span>
-                 <span class='current text-[#999999]'>  => 
-                    {$miningUpgrades[index]['prefix'] || ""}{$miningUpgrades[index]['isPercent'] ?
-                   fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+Math.max(1,buyAmount)),3, true) :
-                   f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+Math.max(1,buyAmount)),3)}{$miningUpgrades[index]['suffix'] || ""}
-                 </span>
-                 {#if $settings['maxBuy'] && buyAmount >= 1}
-                 (x{buyAmount})
+                
+                    <span class='current text-[#cccccc]'>{$miningUpgrades[index]['prefix'] || ""}</span>  
+                    <span class='current text-[#cccccc]'>
+                        {$miningUpgrades[index]['isPercent'] ?
+                        fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]),3, true) :
+                        f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]),3)}
+                    </span>
+                {#if $miningUpgradeLevelsBought[index] < $miningUpgrades[index]['maxLevel']} 
+                    <span class='current text-[#888888]'>  => 
+                        {$miningUpgrades[index]['isPercent'] ?
+                    fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+Math.max(1,buyAmount)),3, true) :
+                    f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]+Math.max(1,buyAmount)),3)}
+                    </span>
+                    <span class='current text-[#cccccc]'>{$miningUpgrades[index]['suffix'] || ""}</span>    
+                    {#if $settings['maxBuy'] && buyAmount >= 1}
+                    (x{buyAmount})
+                    {/if}
+                    <br/>
+                    {#if $settings['costRatios'] && $miningUpgrades[index]['maxLevel'] > 1}
+                        <span class='current text-[#888888]'>
+                        Cost Multiplier: {f(formula.calcMiningCostRatio($miningUpgrades[index]['ratio']),3)}x
+                        </span>
+                    {/if}
                  {/if}
 
             </div>
@@ -49,12 +56,12 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
         <hr />
         <div class='pt-1 cost items-start text-center grid grid-cols-4'>
             {#if $miningUpgradeLevelsBought[index] >= $miningUpgrades[index]['maxLevel']}
-                <div class='col-span-4 text-[#999999]'>This upgrade is at max level.</div>
+                <div class='col-span-4 text-[#888888]'>This upgrade is at max level.</div>
             {:else}
             {#each Object.entries(costs) as c}
                 {#if c[1] >= 1}
                     <div class='{ref.colors[c[0]] || ref.colors['default']} text-right pr-3 col-span-2'>{
-                    $wallet[c[0]] || $unlockedRes.has(c[0]) ? 
+                    $permaWallet[c[0]] || $unlockedRes.has(c[0]) ? 
                     (ref.displayNames[c[0]] ? ref.displayNames[c[0]] : c[0]) : "???"}</div>
                     <div class='col-span-2 {!(thisTypeAffordable(c[0])) ?'text-red-600' : ''}
                     text-left'>{f(c[1])}</div>
@@ -75,13 +82,14 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
     import { onDestroy, onMount } from 'svelte';
     import { progress, wallet, miningUpgradeLevels, miningDropTable,
          settings, visibleTier, unlockedRes, miningUpgradeLevelsBought, 
-         miningUpgradeLevelsFree, challengeActive} from '../../data/player';
+         miningUpgradeLevelsFree, challengeActive, permaWallet, flags} from '../../data/player';
     import {progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
 // @ts-nocheck
     export let index;
     let getCosts = () => {
+        
         let c = {};
         for (let [type, base] of Object.entries($miningUpgrades[index]['cost'])) {
             c[type] = cost(base, type);
@@ -112,6 +120,10 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
                 costs = getCosts();
             } else {
                 buyAmount = $settings['buyAmount'];
+            }
+            if ($flags['costRatioChange']) {
+                costs=getCosts();
+                $flags['costRatioChange'] = false;
             }
         }, 100 + (Math.random() * 20))
     })
@@ -150,9 +162,10 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
         let maxBuy = 1e9; // or any large number
         for (let [type, bCost] of Object.entries($miningUpgrades[index]['cost'])) {
             if (!$wallet[type]) return 0;
-            const base = bCost * Math.pow($miningUpgrades[index]['ratio'], $miningUpgradeLevelsBought[index]); 
+            const ratio =  formula.calcMiningCostRatio($miningUpgrades[index]['ratio'])
+            const base = bCost * Math.pow(ratio, $miningUpgradeLevelsBought[index]);
             maxBuy = Math.min(maxBuy, 
-            formula.maxNumGeom($wallet[type], base, $miningUpgrades[index]['ratio']));
+            formula.maxNumGeom($wallet[type], base, ratio));
         }
         maxBuyCalcFinished = true;
         return Math.min(levelsRemaining, maxBuy);
@@ -180,10 +193,10 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
         if (index == 27) {
             const levels = Math.min(buyAmount,
                 $miningUpgrades[27]['maxLevel'] - $miningUpgradeLevelsFree[27]);
-            $miningUpgradeLevelsFree[0] += 50*levels;
-            $miningUpgradeLevelsFree[1] += 50*levels;
-            $miningUpgradeLevelsFree[2] += 50*levels;
-            $miningUpgradeLevelsFree[7] += 50*levels;
+            $miningUpgradeLevelsFree[0] += 1*levels;
+            $miningUpgradeLevelsFree[1] += 4*levels;
+            $miningUpgradeLevelsFree[2] += 4*levels;
+            $miningUpgradeLevelsFree[7] += 4*levels;
         }
         
         $miningUpgradeLevels = $miningUpgradeLevels.map(

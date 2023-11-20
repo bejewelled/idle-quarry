@@ -123,7 +123,6 @@ onMount(() => {
     }, 100)
     reloadNumbers = setInterval(() => {
         reloadClock= !reloadClock;
-        console.log(formula.productArray(fameGainKeys))
     }, 1049)
 })
 
@@ -270,8 +269,12 @@ export function relocate() {
 
                         // if cosmic brilliance unlocked, use that formula
                         $miningUpgradeLevelsFree[i] = 
-                        (i == 0 || i == 1 || i == 2 || i == 7
-                        ? $miningUpgrades[27]['formula']($miningUpgradeLevels[27]): 0 );
+                        (parseInt(i) == 1 || parseInt(i) == 2 || parseInt(i) == 7
+                        ? $miningUpgrades[27]['formula']($miningUpgradeLevels[27]): 
+                        (parseInt(i) == 0
+                        ? Math.round($miningUpgrades[27]['formula']($miningUpgradeLevels[27])/4): 0));
+                        
+
 
                         if (!$automationItemsUnlocked['omnipotent']) {
                             if (!($miningUpgrades[i]['noResetRelocate']))  {

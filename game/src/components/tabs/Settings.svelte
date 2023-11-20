@@ -40,7 +40,7 @@
                 <div class='col-span-3 grid-cols-3 pt-1'>
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <div class='setting col-span-3 mx-1 px-1 py-1 text-center
-                    {$activityLogShow['challenges'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
+                    {$activityLogShow['layer'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
                     on:click={() => changeActivityLogShow('layer')}>Layers</div>
                 </div>
                 <div class='col-span-12 py-1'></div>
@@ -79,10 +79,10 @@
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class='col-span-3 grid-cols-3 pt-1'>
                     <div class='setting has-tooltip col-span-3 mx-1 px-1 py-1 text-center
-                    {$settings['exclusiveSort'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                    on:click={() => changeSetting('exclusiveSort')}>Exclusive Sort
+                    {$settings['costRatios'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
+                    on:click={() => changeSetting('costRatios')}>Cost Multipliers
                         <span class='tooltip tooltip-style'>
-                        When enabled, changing upgrade sort tags will remove all other sorting tags.
+                        When enabled, cost multipliers will appear on all upgrade tooltips.
                         </span>
                     </div>
                 </div>

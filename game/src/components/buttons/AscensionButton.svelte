@@ -14,7 +14,7 @@
       ASCEND
   </div>
   {:else}
-    You need at least {ascReq()} total essence to ascend. [{f(formula.sumEssence())} / {f(ascReq())}]
+    You need at least {f(ascReq())} total essence to ascend. [{f(formula.sumEssence())} / {f(ascReq())}]
   {/if}
 </div>
 
@@ -80,7 +80,7 @@
 
 let resetFuncs: any;
 
-  const ascReq = () => Math.ceil(30 * Math.pow($ascensionStats['ascensionCount']+1, 1.33));
+  const ascReq = () => formula.calcAscensionEssenceRequirement($ascensionStats['ascensionCount'])
 
   function canAscend() {
     if (formula.sumEssence() >= ascReq()) return true;

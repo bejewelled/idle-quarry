@@ -73,13 +73,30 @@
 
 
     <!-- progress bar (gems) -->
-    <div class='text-[#989898] text-small pt-4'>gem progress [ 
+    <div class='text-[#989898] text-small has-tooltip pt-4'>gem progress [ 
         <strong>
             {$progressAverage['gems'] > $progressThreshold['gems'] ? "~" : ""}
             {$gemGainFlavorText > 1 ? f($gemGainFlavorText,0) : 1}</strong>
-          <span class='{$progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'] > (25*ascFormula.getVal('fire')) ? 'text-amber-200' : ''}'>
+          <span class='{isSoftcapped('gems') ? 'text-amber-200' : ''}'>
         x {f($progressAverage['gems']*(1000/$settings['UPDATE_SPEED'])/$progressThreshold['gems'], 2) } times / sec ]
             </span>
+        {#if isSoftcapped('gems') || $progressAverage['gems'] > $progressThreshold['gems']}
+            <span class='tooltip tooltip-style text-xs text-center'>
+                {#if isSoftcapped('gems')}
+                <span class='text-[#aaaaaa] text-xs'>
+                    Your mining speed is softcapped above 
+                    <span class='text-amber-200'>{f(25*ascFormula.getVal('fire'),2)}</span> 
+                    cycles per second. Excess progress is raised to ^0.5.
+                </span>
+                {/if}
+                <!-- {#if $progressAverage['gems'] > $progressThreshold['gems']}
+                <br/>
+
+                    Due to the high speed of mining cycles, gems gained is approximated and may be +/- 2% of the displayed value.
+                </span>
+                {/if} -->
+            </span>
+        {/if}
     </div>
     <div class='mine-bar-wrapper pb-2'>
         <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
@@ -144,6 +161,8 @@
             </div>
         {/if}
     </div>
+    <div class='text-[#989898] text-small text-center w-full p-1'>
+        Cost multipliers are reduced by {fp(1-formula.calcMiningCostRatioMulti(), 0)} (minimum 1.025x).</div>
     {#key $upgradeSorting }
     <div class='mine-upgrade-wrapper flex flex-wrap'>
         {#each upgradeOrder as i}
@@ -180,6 +199,7 @@ gemGainFlavorText, gemProgressFlavorText, upgradeSorting } from '../../data/mini
 import {keyGainFlavorText} from '../../data/keys';
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
+    import formula from '../../calcs/formula.js'
 
 $: mineBarWidth = `${Math.min(1,$progress['gems'] / $progressThreshold['gems']) * 100}%`;
 $: key1BarWidth = `${Math.min(1,$progress['key1'] / $progressThreshold['key1']) * 100}%`;
@@ -192,6 +212,9 @@ let clockr = false;
 let renderedUpgrades = $miningUpgrades;
 let upgradeTab = 'regular';
 let mountCheck = false;
+
+const isSoftcapped = (item) => ($progressAverage[item.toString()]
+*(1000/$settings['UPDATE_SPEED'])/$progressThreshold[item.toString()] > (25*ascFormula.getVal('fire')))
 
 onMount(() => {
     mountCheck = !mountCheck

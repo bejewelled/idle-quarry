@@ -251,7 +251,7 @@ export default class formula {
   }
 
   static calcCraftMasterySpeedBonus(lv: number) {
-    const y = 1 + (lv-1)*0.3 + ((lv-1)**2)*0.004 + ((lv-1)**3)*3e-6;
+    const y = 1 + (lv)*0.3 + ((lv)**2)*0.004 + ((lv)**3)*3e-6;
     console.log(y)
     if (isNaN(y)) return 1
     else return y
@@ -273,12 +273,19 @@ export default class formula {
   static calcKeyCraftAmountGained(i: string) {
     const min = get(keyCrafts)[i]['min']
     const max = get(keyCrafts)[i]['max']
-    return Math.floor(min + Math.random()*(max-min))
-    * get(beaconBonuses)[6]
-    * (i == 'beacons' ? 
-    Math.pow(formula.sumArray(get(beaconLevels)), 0.65) : 1)
+    return Math.floor(min + Math.random()*(max-min)
+    * this.getKeyCraftBonuses());
+  }
+  static calcMinMaxCraftAmount(i: string) {
+    const min = get(keyCrafts)[i]['min']
+    const max = get(keyCrafts)[i]['max']
+    return [min*this.getKeyCraftBonuses(), max*this.getKeyCraftBonuses()];
+  }
+
+  static getKeyCraftBonuses() {
+    return 1 * get(beaconBonuses)[6]
     * get(keyUpgrades)[2]['formula'](get(keyUpgradeLevels)[2]);
-}
+  }
 
   static calcWarpGainFromMastery() {
     const y = (get(wallet)['totalTrophies'] || 0)
@@ -328,11 +335,19 @@ export default class formula {
     return get(miningUpgrades)[i]['formula'](get(miningUpgradeLevels)[i]);
   }
 
+
+  static calcAscensionEssenceRequirement(c: number) {
+    const firstTen = [30, 200, 1200, 6000, 20000, 42500, 77500, 120000, 185000, 260000]
+    if (c < 10) return firstTen[c];
+    else return firstTen[9] + (100000 * (c-9)) * Math.pow(1.1, c-10);
+  }
+
   static calcRadioactivityGain() {
     const l = get(layer)['layer'];
     let y;
-    if (l <= 500) y = 1;
-    else y = 1 + Math.pow(l-500, 0.92)*0.004;
+    if (l <= 100) y = 1;
+    else if (l <= 1e5) (y = 1 + 1.2*((l-100) * (0.0125-(l/3e7))));
+    else y = 1100 + Math.pow(l, 0.75)*0.075;
     y = y
     * get(buttonUpgrades)[1]['formula'](get(buttonUpgradeLevels)[1])
     * get(allMultipliers)['radium']['formula'](get(wallet)['artifacts'] || 0)
@@ -378,7 +393,14 @@ export default class formula {
 
   static calcMiningCostRatio(n: number) {
     return Math.max(1.025, 
-      1 + ((n-1) * (get(miningUpgrades)[32]['formula'](get(miningUpgradeLevels)[32]))))
+      1 + ((n-1) * this.calcMiningCostRatioMulti()))
+  }
+
+  static calcMiningCostRatioMulti() {
+    return 1 * (get(miningUpgrades)[32]['formula'](get(miningUpgradeLevels)[32]))
+    * (get(miningUpgrades)[33]['formula'](get(miningUpgradeLevels)[33]))
+    * (get(miningUpgrades)[34]['formula'](get(miningUpgradeLevels)[34]))
+    * (get(miningUpgrades)[35]['formula'](get(miningUpgradeLevels)[35]))
   }
 
   static calcKeyFinderAbundanceBonus(t: number) {

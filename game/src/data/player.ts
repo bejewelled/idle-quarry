@@ -250,38 +250,36 @@ export const baseMiningDropTable = dropTable({
     //lm1
     beacons:  [0.003,1,2,0.1,2],
     fame:     [0.0005,1,3,0.025,2],
-    //lm2
-    sigils: [0.000015,0.08,0.27,0.02,3],
-    key2:   [0.00000275,0.04,0.16,0.02,3],
+    //lm2    chance, min, max, softcap, tier
+    sigils: [0.000015,0.08,0.27,0.02, 3],
+    dust:   [1e-6,0.5, 0.625, 0.005, 3],
     //lm3
-    dust:      [1e-6, 0.06, 0.28, 0.004, 4],
-    key3:      [2e-7, 0.01, 0.03, 0.004, 4],
+    key2:   [0.00000275,0.04,0.16,0.02,4],
     artifacts: [3.3e-8, 0.04, 0.05, 1e-5, 4],
     //lm4a
+    key3:   [2e-7, 0.01, 0.03, 0.004, 5],
     radium: [1e-7, 0.01, 0.03, 1e-4, 5],
-    energy: [1e-9, 0.01, 0.03, 1e-6, 5],
     void:   [1e-13, 1e-6, 3e-6, 1e-7, 5]
 
 });
 
 export const miningDropTable = dropTable({
-    gold: [0.20,1,3,1,1], // 20% chance to drop 1 - 3 gold, softcap at 100%, min tier 1 (lm0)
-    key1: [0.04,1,1,0.25, 1], 
-    orbs: [0.025,1,1,0.25, 1],
+    gold: [0.25,1,3,10,1], // 20% chance to drop 1 - 3 gold, softcap at 100%, min tier 1 (lm0)
+    key1: [0.05,1,1,1, 1], 
+    orbs: [0.035,1,1,0.3, 1],
     //lm1
-    beacons: [0.005,1,1, 0.1, 2],
-    crystals: [0.002,0.4,0.9, 0.1, 2],
-    //lm2
-    sigils: [0.0003,0.08,0.27, 0.02, 3],
-    key2: [0.0001,0.04, 0.16, 0.02, 3],
+    beacons:  [0.003,1,2,0.1,2],
+    fame:     [0.0005,1,3,0.025,2],
+    //lm2    chance, min, max, softcap, tier
+    sigils: [0.000015,0.08,0.27,0.02, 3],
+    dust:   [1e-6,0.5, 0.625, 0.005, 3],
     //lm3
-    dust: [1e-6, 0.06, 0.28, 0.004, 4],
-    key3: [2e-7, 0.01, 0.03, 0.004, 4],
+    key2:   [0.00000275,0.04,0.16,0.02,4],
     artifacts: [3.3e-8, 0.04, 0.05, 1e-5, 4],
-    //lm4
+    //lm4a
+    key3:   [2e-7, 0.01, 0.03, 0.004, 5],
     radium: [1e-7, 0.01, 0.03, 1e-4, 5],
-    energy: [1e-9, 0.01, 0.03, 1e-6, 5],
-    void: [1e-13, 1e-6, 3e-6, 1e-7, 5]
+    void:   [1e-13, 1e-6, 3e-6, 1e-7, 5]
 
 });
 
@@ -297,6 +295,7 @@ export const settings = object({
 export const flags = object({
     relocateNavBack: false,
     pressButton: false,
+    costRatioChanged: false,
     showMineXPGain: -1,
 })
 

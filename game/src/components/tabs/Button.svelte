@@ -78,7 +78,7 @@
         chance to gain a <span class='{ref.colors['stars']}'>star.</span>
         <br/>
       {/if}
-      Base radioactivity gain increases after layer 500. <br/>
+      Base radioactivity gain increases after layer 100. <br/>
 
 
   </div>

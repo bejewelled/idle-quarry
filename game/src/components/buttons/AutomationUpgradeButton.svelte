@@ -18,7 +18,7 @@ select-none'>{$automationUpgrades[index]['name']}
         <hr />
         <div class='pt-1 cost items-start text-center grid grid-cols-4'>
             {#if ($automationItemsUnlocked[$automationUpgrades[index]['id']])}
-                <div class='col-span-4 text-[#999999]'>This automation has been purchased!</div>
+                <div class='col-span-4 text-[#888888]'>This automation has been purchased!</div>
             {:else}
             {#each Object.entries(costs) as c}
                 {#if c[1] >= 1}
@@ -120,7 +120,7 @@ select-none'>{$automationUpgrades[index]['name']}
         if ($automationUpgrades[index]['name'].toLowerCase() == 'gateway') {
 
             //console.log($key2DropTable)
-            $key2DropTable['key3'] = [(1/350000),1, 1, (1/350000), (1/30000)];
+            $key2DropTable['key3'] = [(1/150000),1, 1, (1/150000), (1/10000)]
             console.log($key2DropTable)
             key2DropTable.updateTable();
         }

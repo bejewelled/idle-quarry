@@ -4,7 +4,7 @@
         class="text-center items-center justify-center text-3xl font-bold
 bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparent select-none"
     >
-        Ascension {$ascensionStats['ascensionCount']}
+        Ascension {$ascensionStats['ascensionCount']} >>> {$ascensionStats['ascensionCount']+1}
     </div>
     <div class="py-2"><AscensionButton /></div>
 
@@ -18,8 +18,10 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
     </div>
     <div class="game-text justify-center w-full flex">Gain 
         <span class='{ref.colors['antimatter']}'>
-        &nbsp;[antimatter]&nbsp; </span> 
-        equal to the sum of all essence produced this ascension.
+        &nbsp;antimatter&nbsp; </span> 
+        equal to the sum of all essence produced this ascension 
+        <span class='{ref.colors['antimatter']}'>
+            &nbsp;({f(formula.sumEssence())})&nbsp; </span>.
     </div>
 
     <div class="grid grid-cols-12 pt-3">
@@ -128,8 +130,7 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
                     <div class='col-span-12 text-indigo-500 text-small text-left'>{a}</div>
                 {/if}
             {/each}
-            <br/>
-            Ascensions will eventually unlock more boosts.
+            <div class='text-small italic text-indigo-300'>Next bonus at ascension {f(getNextAntimatterReq())}.</div>
         </div>
     </div>
     <div class="grid grid-cols-12">
@@ -208,6 +209,15 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
     $: pbarWidths = [0, 0, 0, 0, 0, 0];
     $: pbarForecastWidths = [0, 0, 0, 0, 0, 0];
     $: forecastNums = [];
+    const getNextAntimatterReq = () => {
+        const count = $ascensionStats['ascensionCount'];
+        for (let i in $antimatterBonusAscensionReqs) {
+            if (count < $antimatterBonusAscensionReqs[i]) {
+                return $antimatterBonusAscensionReqs[i];
+            }
+        }
+        return $antimatterBonusAscensionReqs.length;
+    }
     let clock = false;
     const sumEssence = () => {
                         let sum = 0;

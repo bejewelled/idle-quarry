@@ -234,7 +234,7 @@ export const ascFormula = ascFormulaGetter({
     water: (lv: number) => 1 + 0.13*Math.pow(lv-1, 0.7), // warp gain
     magic: (lv: number) => 1 + 0.04*Math.pow(lv-1, 0.8), // enchant proc speed
     celestial: (lv: number) => (lv == 1 ? 0 : ((lv < 20 ? lv*20 : 400 + Math.pow(lv, 0.9)*15))), // starting layer
-    antimatter: (lv: number) => 1 + 0.24*Math.pow(lv-1, 0.75), // minespeed/droprate
+    antimatter: (lv: number) => 1 + 0.25*Math.pow(lv-1, 0.75), // minespeed/droprate
 })
 
 export const antimatterBonusAscensionReqs = array([

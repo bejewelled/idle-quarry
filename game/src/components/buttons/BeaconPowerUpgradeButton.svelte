@@ -22,9 +22,9 @@ select-none"
             </div>
             <div class="text-center effect-wrapper">
                 <div class="tooltip-text-xs text-[#cccccc]">
+                    <span class='current text-[#cccccc]'>{$beaconUpgrades[index]['prefix'] || ""}</span>  
                     <span class="current text-[#cccccc]">
-                        {$beaconUpgrades[index]['prefix'] ||
-                            ''}{$beaconUpgrades[index]['isPercent']
+                        {$beaconUpgrades[index]['isPercent']
                             ? fp(
                                   $beaconUpgrades[index]['formula'](
                                       $beaconUpgradeLevels[index]
@@ -37,12 +37,11 @@ select-none"
                                       $beaconUpgradeLevels[index]
                                   ),
                                   3
-                              )}{$beaconUpgrades[index]['suffix'] || ''}
+                              )}
                     </span>
-                    <span class="current text-[#999999]">
+                    <span class="current text-[#888888]">
                         =>
-                        {$beaconUpgrades[index]['prefix'] ||
-                            ''}{$beaconUpgrades[index]['isPercent']
+                        {$beaconUpgrades[index]['isPercent']
                             ? fp(
                                   $beaconUpgrades[index]['formula'](
                                       $beaconUpgradeLevels[index]+Math.max(1,buyAmount),3
@@ -55,10 +54,17 @@ select-none"
                                      $beaconUpgradeLevels[index]+Math.max(1,buyAmount),3
                                   ),
                                   3
-                              )}{$beaconUpgrades[index]['suffix'] || ''}
+                              )}
                     </span>
+                    <span class='current text-[#cccccc]'>{$beaconUpgrades[index]['suffix'] || ""}</span>  
                     {#if $settings['maxBuy'] && buyAmount >= 1}
                     (x{buyAmount})
+                    {/if}
+                    {#if $settings['costRatios']}
+                    <br/>
+                    <span class='current text-[#888888]'>
+                    Cost Multiplier: {f($beaconUpgrades[index]['ratio'],3)}x
+                    </span>
                     {/if}
                 </div>
             </div>

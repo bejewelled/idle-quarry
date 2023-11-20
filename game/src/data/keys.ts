@@ -214,8 +214,7 @@ export const key3DropTable = dropTable({
     orbs: [0.06, 2.2e6, 1.1e7, 0.06, 0.25],
     beacons: [0.04, 1000, 3500, 0.04, 0.25],
     sigils: [0.035, 45, 160, 0.035, 0.25],
-    artifacts: [4.2e-7, 0.65, 1, 4.2e-6, 0.001],
-    key4: [(1/1e7), 0.84, 0.84, (1/1e7), 0.0004]
+    artifacts: [(1/1250), 0.65, 1, (1/1250), 0.025]
     
 })
 
@@ -251,11 +250,11 @@ export const keyUpgrades = array([
         description: 'Concoct a potion that improves key rates for ALL keys.',
         cost: {
             slurry: 100,
-            sigils: 100,
+            sigils: 10,
         },
         ratio: 1.3,
-        formula: (lv: any) => 1 + 0.15*Math.pow(lv, 0.875),
-        unlockAt: () => (get(wallet)['slurry'] > 0),
+        formula: (lv: any) => 1 + 0.2*Math.pow(lv, 0.875),
+        unlockAt: () => (get(permaWallet)['slurry'] > 0),
         isPercent: false,
         suffix: 'x droprates',
         maxLevel: 600,
@@ -270,7 +269,7 @@ export const keyUpgrades = array([
         },
         ratio: 1.3,
         formula: (lv: any) => 1 + 0.2 * lv,
-        unlockAt: () => (get(wallet)['slurry'] > 0),
+        unlockAt: () => (get(permaWallet)['slurry'] > 0),
         isPercent: false,
         suffix: 'x slurry',
         maxLevel: 400,
@@ -295,9 +294,9 @@ export const keyUpgrades = array([
     {
         index: 3,
         name: 'Rift Control',
-        description: 'Decreases the cost ratio for energized crystals.',
+        description: '[unimplemented] ???',
         cost: {
-            slurry: 1e11,
+            slurry: 1e300,
         },
         ratio: 1.3,
         formula: (lv: any) => 0.8 + 0.2 * lv,
@@ -310,13 +309,13 @@ export const keyUpgrades = array([
     {
         index: 4,
         name: 'Capacitor',
-        description: 'Increases all crafting yields.',
+        description: '??? [unimplemented]',
         cost: {
-            slurry: 7500
+            slurry: 7e29,
         },
         ratio: 10,
         formula: (lv: any) => 1 + lv * 0.25,
-        unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1)
+        unlockAt: () => (get(wallet)['antimatter'] >= 1e290)
         && (get(wallet)['slurry'] >= 1),
         isPercent: false,
         suffix: ' craft yields',
@@ -332,7 +331,7 @@ export const keyUpgrades = array([
         },
         ratio: 10,
         formula: (lv: any) => 1 + lv**2,
-        unlockAt: () => (get(wallet)['antimatter'] >= 190 || get(wallet)['totalAntimatter'] >= 190),
+        unlockAt: () => (get(wallet)['antimatter'] >= 1e290),
         isPercent: true,
         suffix: ' craft bonus',
         maxLevel: 40,
@@ -353,22 +352,8 @@ export const keyCrafts = array([
         craftTime: 300, // in seconds
         min: 0,
         max: 0,
-        ratio: 1,
+        ratio: 1.00002,
         unlockAt: () => (get(permaWallet)['slurry'] > 0),
-    },
-    {
-        item: 'energy',
-        name: 'Energy',
-        style: 'text-emerald-300',
-        stylebg: 'bg-emerald-300',
-        cost: {
-            crystals: 1
-        },
-        craftTime: 60, // in seconds
-        min: 3,
-        max: 3,
-        ratio: 10,
-        unlockAt: () => (get(wallet)['crystals'] > 0),
     },
     {
         item: 'relics',
@@ -439,13 +424,12 @@ export const keyCrafts = array([
         style: 'text-red-500',
         stylebg: 'bg-red-500',
         cost: {
-            fame: 1e13,
-            energy: 1
+            fame: 1e13
         },
-        craftTime: 180, // in seconds
-        min: 2,
-        max: 9,
-        ratio: 1.1,
+        craftTime: 100, // in seconds
+        min: 1,
+        max: 5,
+        ratio: 1.25,
         unlockAt: () => (get(permaWallet)['totalFame'] > 1e13),
     },
     {
@@ -454,13 +438,12 @@ export const keyCrafts = array([
         style: 'text-emerald-200',
         stylebg: 'bg-emerald-200',
         cost: {
-            dust: 7500,
-            energy: 1
+            dust: 7500
         },
-        craftTime: 180, // in seconds
-        min: 2,
-        max: 9,
-        ratio: 1.1,
+        craftTime: 100, // in seconds
+        min: 1,
+        max: 5,
+        ratio: 1.25,
         unlockAt: () => (get(permaWallet)['dust'] > 750),
     },
     {
@@ -469,13 +452,12 @@ export const keyCrafts = array([
         style: 'text-sky-300',
         stylebg: 'bg-sky-300',
         cost: {
-            orbs: 1.25e10,
-            energy: 1
+            orbs: 1.25e10
         },
-        craftTime: 180, // in seconds
-        min: 2,
-        max: 9,
-        ratio: 1.1,
+        craftTime: 100, // in seconds
+        min: 1,
+        max: 5,
+        ratio: 1.25,
         unlockAt: () => (get(permaWallet)['orbs'] > 1.5e9),
     },
     {
@@ -484,13 +466,12 @@ export const keyCrafts = array([
         style: 'text-amber-200',
         stylebg: 'bg-amber-200',
         cost: {
-            sigils: 1.25e7,
-            energy: 1
+            sigils: 1.25e7
         },
-        craftTime: 180, // in seconds
-        min: 2,
-        max: 9,
-        ratio: 1.1,
+        craftTime: 100, // in seconds
+        min: 1,
+        max: 5,
+        ratio: 1.25,
         unlockAt: () => (get(permaWallet)['sigils'] > 1e7),
     },
     {
@@ -499,13 +480,12 @@ export const keyCrafts = array([
         style: 'text-transparent bg-clip-text bg-gradient-to-br from-fuchsia-300 to-violet-700',
         stylebg: 'bg-gradient-to-br from-fuchsia-300 to-violet-700',
         cost: {
-            stars: 1,
-            energy: 1
+            stars: 2,
         },
-        craftTime: 180, // in seconds
-        min: 2,
-        max: 9,
-        ratio: 1.1,
+        craftTime: 100, // in seconds
+        min: 1,
+        max: 5,
+        ratio: 1.25,
         unlockAt: () => (get(wallet)['stars'] >= 1),
     },
 

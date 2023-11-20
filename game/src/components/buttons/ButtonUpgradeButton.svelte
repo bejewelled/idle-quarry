@@ -36,9 +36,9 @@ select-none"
                 </div>
                 <div class="text-center effect-wrapper">
                     <div class="tooltip-text-xs text-[#cccccc]">
+                        <span class='current text-[#cccccc]'>{$buttonUpgrades[index]['prefix'] || ""}</span>  
                         <span class="current text-[#cccccc]">
-                            {$buttonUpgrades[index]['prefix'] ||
-                                ''}{$buttonUpgrades[index]['isPercent']
+                            {$buttonUpgrades[index]['isPercent']
                                 ? fp(
                                       $buttonUpgrades[index]['formula'](
                                           $buttonUpgradeLevels[index]
@@ -51,12 +51,11 @@ select-none"
                                           $buttonUpgradeLevels[index]
                                       ),
                                       3
-                                  )}{$buttonUpgrades[index]['suffix'] || ''}
+                                  )}
                         </span>
-                        <span class="current text-[#999999]">
+                        <span class="current text-[#888888]">
                             =>
-                            {$buttonUpgrades[index]['prefix'] ||
-                                ''}{$buttonUpgrades[index]['isPercent']
+                            {$buttonUpgrades[index]['isPercent']
                                 ? fp(
                                       $buttonUpgrades[index]['formula'](
                                           $buttonUpgradeLevels[index] +
@@ -71,14 +70,21 @@ select-none"
                                               buyAmount
                                       ),
                                       3
-                                  )}{$buttonUpgrades[index]['suffix'] || ''}
+                                  )}
                         </span>
+                        <span class='current text-[#cccccc]'>{$buttonUpgrades[index]['suffix'] || ""}</span>  
+                        {#if $settings['costRatios']}
+                        <br/>
+                        <span class='current text-[#888888]'>
+                        Cost Multiplier: {f($buttonUpgrades[index]['ratio'],3)}x
+                        </span>
+                        {/if}
                     </div>
                 </div>
                 <hr />
                 <div class="pt-1 cost items-start text-center grid grid-cols-4">
                     {#if $buttonUpgradeLevels[index] >= $buttonUpgrades[index]['maxLevel']}
-                        <div class="col-span-4 text-[#999999]">
+                        <div class="col-span-4 text-[#888888]">
                             This upgrade is at max level.
                         </div>
                     {:else}

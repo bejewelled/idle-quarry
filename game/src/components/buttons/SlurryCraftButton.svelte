@@ -38,6 +38,11 @@
                     <div class='col-span-2 text-xs text-left'>{f(
                         calcCraftTime()/1000,0
                         )} seconds</div>
+                <div class='text-teal-100 text-left text-xs pr-3 col-span-2'>yield</div>
+                <div class='col-span-2 text-xs text-left'>
+                    {f(formula.calcMinMaxCraftAmount(index)[0])} - 
+                    {f(formula.calcMinMaxCraftAmount(index)[1])}
+                    </div>
 
                 {/if}
             </div>
@@ -149,6 +154,7 @@
         craftFinishTime = $keyCraftTimes[item][1];
         costUpdater = setInterval(() => {
             costs = getCosts();
+            console.log(costs)
         }, 793)
         affordInterval = setInterval(() => {
             affordable = canAfford();

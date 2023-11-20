@@ -4,8 +4,8 @@
     <Adders />
 {/if}
 <div class="wrapper">
-    <div class="main-page grid grid-cols-12">
-        <div class="px-2 res-display col-span-3">
+    <div class="main-page flex">
+        <div class="flex-none w-1/5 px-2 res-display ">
             <div class="res-display-space py-2" />
             <div class="res-display-wrap grid grid-cols-12">
 
@@ -94,7 +94,7 @@
         </div>
 
         <!-- main display -->
-        <div class="px-2 py-2 main-panel col-span-8 flexbox">
+        <div class="overflow-y-auto px-2 py-2 main-panel ml-3 w-3/5">
             <div class="py-1 control-buttons resize-none">
                 <button
                     class="py-1 text-small save-btn control-btn {saveConfirm
@@ -134,9 +134,14 @@
                     on:click={() => changeTab("settings")}>Settings</button
                 >
                 <button
-                    class="py-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950"
+                    class="py-1 px-1 text-small border-2 border-violet-400 text-violet-500 hover:bg-violet-900"
+                >
+                <a href="https://discord.gg/h9D9ASc7bz" target="_blank">Discord</a>
+                </button>
+                <button
+                    class="py-1 px-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950"
                     on:click={() => reset()}>Reset</button>
-                <button class="text-xs text-gray-600">v0.1.0a</button>
+                <button class="text-xs text-gray-600">v0.11a</button>
                
                 <!-- mining level bar -->
                 <div class="wrapper grid grid-cols-9">
@@ -665,8 +670,8 @@
     };
 
     const reset = () => {
-        if (confirm("Are you sure? This is a HARD RESET!!!!")) {
-            if (confirm("Are you SURE sure?")) {
+        if (confirm("Are you sure? This is a HARD RESET! All bonuses from ALL reset layers will be lost; you will start with a fresh game.")) {
+            if (prompt("Type the word 'miscellaneous' to reset.")?.toString().toLowerCase() === 'miscellaneous') {
                 localStorage.clear();
                 location.reload();
             }
@@ -979,7 +984,7 @@
         key5DropTable.updateTable();
 
         if ($automationItemsUnlocked['gateway']) {
-            $key2DropTable['key3'] = [(1/750000),1, 1, (1/750000), (1/30000)]
+            $key2DropTable['key3'] = [(1/150000),1, 1, (1/150000), (1/10000)]
             key2DropTable.updateTable();
         }
 

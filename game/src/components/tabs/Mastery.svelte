@@ -11,7 +11,7 @@
     </span> 
     </div>
     <div class='col-span-12 text-white text-small'>Your total trophies this ascension
-        <span class='text-orange-400'>({f($wallet['totalTrophies'])})</span>
+        <span class='text-orange-400'>({f($wallet['totalTrophies'] || 0)})</span>
     {$wallet['totalTrophies'] == 1 ? 'is' : 'are'} producing <span class='{ref.colors['warp']}'>{f(formula.calcWarpGainFromMastery(), 2)} warp per second.</span></div>
 
 <div class='col-span-12'>
@@ -32,7 +32,7 @@
     {#each Object.entries($masteryItemLevels) as m}
         {#if $wallet[m[0]]}
             <div class='col-span-2'>
-                <span class='{ref.colors[m[0]]}'>{m[0]}</span>
+                <span class='{ref.colors[m[0]]}'>{m[0]} ({(f($wallet[m[0]]))})</span>
             </div>
             <div class='col-span-1'>
                 <span class='{ref.colors[m[0]]}'>🌟{f(m[1])}</span>
@@ -148,3 +148,24 @@ function toggleMasteryUseLogScale() {
     $settings['masteryUseLogScale'] = !($settings['masteryUseLogScale'] || false);
 }
 </script>
+
+<style>
+.bg-yellow-500 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(234 179 8 / var(--tw-bg-opacity))
+}
+
+.bg-neutral-400 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(163 163 163 / var(--tw-bg-opacity))
+}
+
+.bg-teal-400 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(45 212 191 / var(--tw-bg-opacity))
+}
+.bg-slate-200 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(226 232 240 / var(--tw-bg-opacity))
+}
+</style>

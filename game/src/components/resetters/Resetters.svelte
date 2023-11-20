@@ -150,6 +150,11 @@
             $miningUpgradeLevelsFree = Array(200).fill(0)
             for (let i in $miningUpgrades) {
                 if (!($miningUpgrades[i]['noResetAscension']))  {
+                    $miningUpgradeLevelsFree[i] = 
+                        (parseInt(i) == 1 || parseInt(i) == 2 || parseInt(i) == 7
+                        ? $miningUpgrades[27]['formula']($miningUpgradeLevelsBought[27]): 
+                        (parseInt(i) == 0
+                        ? Math.round($miningUpgrades[27]['formula']($miningUpgradeLevelsBought[27])/4): 0));
                     $miningUpgradeLevelsBought[i] = 0;
                     $miningUpgradeLevels[i] = $miningUpgradeLevelsBought[i]
                     + $miningUpgradeLevelsFree[i];
@@ -163,13 +168,13 @@
             $beaconActivations = Array(30).fill(0)
             $buttonStats = $baseButtonStats
             $enchantUpgradeLevels = Array(200).fill(0)
-            let tempAutomations = {}
-            for (let i of Object.keys($automationItemsUnlocked)) {
-                if ($automationItemsUnlocked[i]) {
-                    tempAutomations[i] = true;
-                }
-            }
-            $automationItemsUnlocked = tempAutomations
+            // let tempAutomations = {}
+            // for (let i of Object.keys($automationItemsUnlocked)) {
+            //     if ($automationItemsUnlocked[i]) {
+            //         tempAutomations[i] = true;
+            //     }
+            // }
+            if (!$automationItemsUnlocked['robotic']) $automationItemsUnlocked = {}
             $enchantThreshold['t1'] = 100;
             $challengesCompleted = Array(30).fill(0)
             challengeGoals.updateChallengeReqs()
@@ -177,7 +182,7 @@
             $radiumProgress = [0, 1000000]
 
             $layer = {
-                layer: 0,
+                layer: (ascFormula.getVal('celestial') || 0),
                 blocks: 0,
                 blocksNextReq: 100,
             }
@@ -190,10 +195,14 @@
                 $keyCraftAmount[i] = 0
             }
 
-            $keyCraftMastery = $baseKeyCraftMastery
+            // $keyCraftMastery = $baseKeyCraftMastery
             $keyUpgradeLevels = Array(200).fill(0)
             $buttonUpgradeLevels = Array(200).fill(0)
-            $beaconUpgradeLevels = Array(200).fill(0)
+            for (let i in $beaconUpgrades) {
+                if (!$beaconUpgrades[i]['noResetAscension']) {
+                    $beaconUpgradeLevels[i] = 0
+                }
+            }
             $beaconBonuses = Array(30).fill(1)
             $beaconProgress = Array(30).fill(0)
 
