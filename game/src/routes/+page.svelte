@@ -141,7 +141,7 @@
                 <button
                     class="py-1 px-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950"
                     on:click={() => reset()}>Reset</button>
-                <button class="text-xs text-gray-600">v0.11a</button>
+                <button class="text-xs text-gray-600">v0.11 (alpha)</button>
                
                 <!-- mining level bar -->
                 <div class="wrapper grid grid-cols-9">
