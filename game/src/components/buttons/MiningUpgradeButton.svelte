@@ -41,7 +41,7 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
                     </span>
                     <span class='current text-[#cccccc]'>{$miningUpgrades[index]['suffix'] || ""}</span>    
                     {#if $settings['maxBuy'] && buyAmount >= 1}
-                    (x{buyAmount})
+                    <span class='text-[#888888]'>(x{buyAmount})</span>
                     {/if}
                     <br/>
                     {#if $settings['costRatios'] && $miningUpgrades[index]['maxLevel'] > 1}

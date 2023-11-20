@@ -161,7 +161,7 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
         for (let [type, val] of Object.entries(costs)) {
             if (val >= 1) $wallet[type] -= val;
         }
-        const levelsTillMax = Math.min($enchantUpgrades[index]['maxLevel'] - $enchantUpgradeLevels[index], 0)
+        const levelsTillMax = Math.max($enchantUpgrades[index]['maxLevel'] - $enchantUpgradeLevels[index], 0)
         $enchantUpgradeLevels[index] += Math.min(levelsTillMax,buyAmount);
         costs = getCosts();
         permUnlocked = true;
