@@ -282,12 +282,12 @@ export const keyUpgrades = array([
         cost: {
             slurry: 1e6,
         },
-        ratio: 10,
-        formula: (lv: any) => 1 + lv*0.5,   
+        ratio: 2,
+        formula: (lv: any) => 1 + Math.pow(lv, 1.2)*0.25,   
         unlockAt: () => (get(permaWallet)['key2'] > 1e4 || get(permaWallet)['slurry'] > 2e4),
         isPercent: false,
         prefix: 'x',
-        suffix: ' crafting yield',
+        suffix: ' yield',
         maxLevel: 40,
         notes: ''
     },

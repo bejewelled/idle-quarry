@@ -35,7 +35,7 @@ select-none'>
                    fp($keyUpgrades[index]['formula']($keyUpgradeLevels[index]+Math.max(1,buyAmount)),3, false) :
                    f($keyUpgrades[index]['formula']($keyUpgradeLevels[index]+Math.max(1,buyAmount)),3)}
                  </span> 
-                 <span class='current text-[#cccccc]'>{$keyUpgrades[index]['prefix'] || ""}</span>  
+                 <span class='current text-[#cccccc]'>{$keyUpgrades[index]['suffix'] || ""}</span>  
                  {#if buyAmount > 1}
                  (x{buyAmount})
                  {/if}
