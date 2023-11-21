@@ -33,6 +33,9 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
                         fp($miningUpgrades[index]['formula']($miningUpgradeLevels[index]),3, true) :
                         f($miningUpgrades[index]['formula']($miningUpgradeLevels[index]),3)}
                     </span>
+                {#if $miningUpgradeLevels[index] >= $miningUpgradeLevels[index]['maxLevel']}
+                <span class='current text-[#cccccc]'>{$miningUpgrades[index]['suffix'] || ""}</span> 
+                {/if}
                 {#if $miningUpgradeLevelsBought[index] < $miningUpgrades[index]['maxLevel']} 
                     <span class='current text-[#888888]'>  => 
                         {$miningUpgrades[index]['isPercent'] ?

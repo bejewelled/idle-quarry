@@ -337,9 +337,11 @@ export default class formula {
 
 
   static calcAscensionEssenceRequirement(c: number) {
-    const firstTen = [30, 200, 1200, 6000, 20000, 42500, 77500, 120000, 185000, 260000]
+
+    const firstTen = [30, 200, 600, 2500, 8000, 20000, 67500, 140000, 225000, 320000]
+
     if (c < 10) return firstTen[c];
-    else return firstTen[9] + (100000 * (c-9)) * Math.pow(1.1, c-10);
+    else return firstTen[9] + (firstTen[9]/3 * (c-9)) * Math.pow(1.1, c-10);
   }
 
   static calcRadioactivityGain() {
