@@ -169,7 +169,7 @@ function dropTable(context: any) {
                     * (item === 'artifacts' ? get(miningUpgrades)[21]['formula'](get(miningUpgradeLevels)[21]) : 1)
                     * get(miningUpgrades)[36]['formula'](get(miningUpgradeLevels)[36])
                     * get(beaconBonuses)[7]
-                    * formula.getAntimatterBonusAmount(1);
+                    * formula.getAntimatterBonusAtAscensionNumber(2);
                     i[item]= [
                         Math.min(1,
                         (baseChance > val[4] ? val[4] + Math.pow(baseChance-val[4], 3) : baseChance)),
@@ -201,20 +201,20 @@ export const key2DropTable = dropTable({
     gold: [0.15, 1e4, 1e5, 0.15, 0.6],
     orbs: [0.15, 3200, 18000, 0.15, 0.6],
     sigils: [0.11, 1, 1, 0.11, 0.6],
-    beacons: [0.06, 250, 1000, 0.06, 0.6],
+    beacons: [0.06, 8, 20, 0.06, 0.6],
     artifacts: [(1/20000), 1, 1, (1/20000), (1/1000)],
 })
 
 export const key3DropTable = dropTable({
     tier: 3,
     // [chance (w/ multipliers), min, max, baseChance, chanceSoftcap]
-    gems: [0.25, 1e14, 1e15, 0.25, 0.4], 
-    gold: [0.15, 1e8, 5e8, 0.075, 0.4],
-    crystals: [0.11, 1000, 10000, 0.11, 0.25],
-    orbs: [0.06, 2.2e6, 1.1e7, 0.06, 0.25],
-    beacons: [0.04, 1000, 3500, 0.04, 0.25],
-    sigils: [0.035, 45, 160, 0.035, 0.25],
-    artifacts: [(1/1250), 0.65, 1, (1/1250), 0.025]
+    gems: [0.05, 1e14, 1e15, 0.05, 0.4], 
+    gold: [0.05, 1e8, 5e8, 0.05, 0.4],
+    crystals: [0.024, 1000, 10000, 0.024, 0.25],
+    orbs: [0.012, 2.2e6, 1.1e7, 0.012, 0.25],
+    beacons: [0.001, 1000, 3500, 0.001, 0.25],
+    sigils: [0.000275, 45, 160, 0.000275, 0.25],
+    artifacts: [(1/1750), 0.65, 1, (1/1750), 0.025]
     
 })
 
@@ -282,8 +282,8 @@ export const keyUpgrades = array([
         cost: {
             slurry: 1e6,
         },
-        ratio: 2,
-        formula: (lv: any) => 1 + Math.pow(lv, 1.2)*0.25,   
+        ratio: 3,
+        formula: (lv: any) => 1 + lv,   
         unlockAt: () => (get(permaWallet)['key2'] > 1e4 || get(permaWallet)['slurry'] > 2e4),
         isPercent: false,
         prefix: 'x',
@@ -427,8 +427,8 @@ export const keyCrafts = array([
             fame: 1e13
         },
         craftTime: 100, // in seconds
-        min: 1,
-        max: 5,
+        min: 2,
+        max: 4,
         ratio: 1.25,
         unlockAt: () => (get(permaWallet)['totalFame'] > 1e13),
     },
@@ -441,8 +441,8 @@ export const keyCrafts = array([
             dust: 7500
         },
         craftTime: 100, // in seconds
-        min: 1,
-        max: 5,
+        min: 2,
+        max: 4,
         ratio: 1.25,
         unlockAt: () => (get(permaWallet)['dust'] > 750),
     },
@@ -455,8 +455,8 @@ export const keyCrafts = array([
             orbs: 1.25e10
         },
         craftTime: 100, // in seconds
-        min: 1,
-        max: 5,
+        min: 2,
+        max: 4,
         ratio: 1.25,
         unlockAt: () => (get(permaWallet)['orbs'] > 1.5e9),
     },
@@ -469,8 +469,8 @@ export const keyCrafts = array([
             sigils: 1.25e7
         },
         craftTime: 100, // in seconds
-        min: 1,
-        max: 5,
+        min: 2,
+        max: 4,
         ratio: 1.25,
         unlockAt: () => (get(permaWallet)['sigils'] > 1e7),
     },
@@ -480,11 +480,11 @@ export const keyCrafts = array([
         style: 'text-transparent bg-clip-text bg-gradient-to-br from-fuchsia-300 to-violet-700',
         stylebg: 'bg-gradient-to-br from-fuchsia-300 to-violet-700',
         cost: {
-            stars: 2,
+            stars: 1,
         },
         craftTime: 100, // in seconds
-        min: 1,
-        max: 5,
+        min: 3,
+        max: 3,
         ratio: 1.25,
         unlockAt: () => (get(wallet)['stars'] >= 1),
     },

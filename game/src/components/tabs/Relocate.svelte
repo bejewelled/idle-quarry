@@ -299,9 +299,7 @@ export function relocate() {
                 if ($automationItemsUnlocked['beaconizer']) {
                     $wallet['beacons'] = 50000;
                 }
-                if ($automationItemsUnlocked['omnipotent'] && $miningUpgradeLevels[14] >= 1) {
-                    $miningUpgradeLevels[14] = 1;
-                    $miningUpgradeLevelsBought[14] = 1;
+                if ($miningUpgradeLevels[14] >= 1) {
                     $visibleTier = 4;
                 }
 

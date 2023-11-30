@@ -4,7 +4,7 @@
 	// @ts-ignore
 	import { keyFinderBases } from './../../data/mining.ts';
 	// @ts-ignore
-	import { craftMasteryProgress, craftMasteryNextReq, craftMasteryLevel, keyUpgradeLevels } from './../../data/player.ts';
+	import { craftMasteryProgress, craftMasteryNextReq, craftMasteryLevel, keyUpgradeLevels, starProgress } from './../../data/player.ts';
 // @ts-nocheck
 
     // @ts-ignore
@@ -333,7 +333,7 @@
 
 
 
-        const GLOBAL_MULTI = formula.getAntimatterBonusAmount(0)
+        const GLOBAL_MULTI = formula.getAntimatterBonusAtAscensionNumber(1)
 
         
 
@@ -547,6 +547,10 @@
             ($wallet['fame'] || 0) +
             $miningUpgrades[28]['formula']($miningUpgradeLevels[28]) *
                 (UPDATE_SPEED / 1000)
+        $wallet['totalFame'] =
+            ($wallet['totalFame'] || 0) +
+            $miningUpgrades[28]['formula']($miningUpgradeLevels[28]) *
+                (UPDATE_SPEED / 1000)
 
         sanityChecks()
     }
@@ -562,17 +566,24 @@
 
         if ($radiumProgress[0] >= $radiumProgress[1]) {
             if (isNaN($wallet['radium'])) $wallet['radium'] = 0
-            $wallet['radium'] = ($wallet['radium'] || 0) +
-            Math.max(1,(Math.floor($radiumProgress[0] / $radiumProgress[1]) * formula.calcRadiumGainWhenComplete()))
+            const n = Math.max(1,(Math.floor($radiumProgress[0] / $radiumProgress[1]) * formula.calcRadiumGainWhenComplete()))
+            $wallet['radium'] = ($wallet['radium'] || 0) + n
             $radiumProgress[0] %= $radiumProgress[1]   
             
-            const starCheck = Math.random()
-            console.log($buttonUpgrades[5]['formula']($buttonUpgradeLevels[5]))
-            console.log(starCheck)
-            if (starCheck < $buttonUpgrades[5]['formula']($buttonUpgradeLevels[5])) {
-                console.log('oi')
-                $wallet['stars'] = ($wallet['stars'] || 0) + 1
-            }
+            addStarProgress(n);
+        }
+    }
+
+    // @ts-ignore
+    function addStarProgress(n) {
+        if ($mineLevel['level'] < 8) return;
+        $starProgress[0] += n * formula.calcStarProgressGain();
+
+        if ($starProgress[0] >= $starProgress[1]) {
+            if (isNaN($wallet['stars'])) $wallet['stars'] = 0
+            const n = Math.max(1,(Math.floor($starProgress[0] / $starProgress[1]) * formula.calcStarGainWhenComplete()))
+            $wallet['stars'] = ($wallet['stars'] || 0) + n
+            $starProgress[0] %= $starProgress[1]   
         }
     }
 

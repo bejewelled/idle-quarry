@@ -2,13 +2,14 @@
 
 {#if loadingFinished}
     <Adders />
+    <PerSecond />
 {/if}
 <div class="wrapper">
     <div class="main-page flex">
         <div class="flex-none w-1/5 px-2 res-display ">
             <div class="res-display-space py-2" />
             <div class="res-display-wrap grid grid-cols-12">
-
+                <!-- Resource Display -->
                 {#each [1, 2, 3, 4, 5] as i}
                     {#each Object.entries($wallet) as res}
                         {#if ($permaWallet[res[0]] || $wallet[res[0]] > 0) && !res[0].includes("key") && !ref.walletExclude[res[0]] && (ref.dropTiers[res[0]] || ref.dropTiers["default"]) == i}
@@ -24,7 +25,8 @@
                                 {/if}
                             </div>
                             <div class="text-white text-[13px] res-amount text-left col-span-6 grid grid-cols-4">
-                                <div class='grid-cols-4'>{f(Math.floor(res[1]), 0)}</div>
+                                <div class='grid-cols-4 col-span-2'>{f(Math.floor(res[1]), 0)}</div>
+                                <!-- <div class='tooltip-text-xs pl-2 col-span-1 text-right'>{f($perSecond[res[0]])}</div> -->
                                 <!-- <div class='grid-cols-0 text-xs text-right tooltip-text ml-4'>
                                     ({$perSecond[res[0]] ? '+' : ''}{f($perSecond[res[0]], 
                                     Math.abs($perSecond[res[0]]) > 1000 ? 0 :
@@ -296,6 +298,8 @@
                     <Artifacts />
                 {:else if tab === "ascension" && tabUnlockCriteria["ascension"]()}
                     <Ascension />
+                {:else if tab === "religion" && tabUnlockCriteria["religion"]()}
+                    <Religion />
                 {:else if tab === "help"}
                     <Help />
                 {:else if tab === "settings"}
@@ -316,7 +320,9 @@
 	import { miningUpgrades } from './../data/mining.ts';
 	import { thoriumDepositActive } from './../data/button.ts';
 	import { masteryNextReq, masteryItemInfo, masteryItemReqs } from './../data/mastery.ts';
-	import { ascensionLevels, ascensionUpgradeLevels, craftMasteryLevel, craftMasteryProgress, perSecond, sumUpgradeLevels, resetLastTimes, artifactPermanentBonuses, miningUpgradeLevelsBought, craftMasteryNextReq, slurryToggles } from './../data/player.ts';
+	import { ascensionLevels, ascensionUpgradeLevels, 
+        craftMasteryLevel, craftMasteryProgress, perSecond, sumUpgradeLevels, resetLastTimes, artifactPermanentBonuses, 
+        miningUpgradeLevelsBought, craftMasteryNextReq, slurryToggles, starProgress } from './../data/player.ts';
 
     import ThoriumDepositButton from '../components/buttons/ThoriumDepositButton.svelte';
 
@@ -407,6 +413,8 @@
     import Artifacts from "../components/tabs/Artifacts.svelte";
     import MiningUpgradeButton from "../components/buttons/MiningUpgradeButton.svelte";
     import Ascension from "../components/tabs/Ascension.svelte";
+    import PerSecond from '../components/adders/PerSecond.svelte';
+    import Religion from '../components/tabs/Religion.svelte';
     import ref from "../calcs/ref.ts";
 
     import { onMount } from "svelte";
@@ -503,6 +511,7 @@
         artifacts: () => $wallet["artifacts"] && $wallet["artifacts"] >= 1,
         ascension: () => ($wallet['totalFame'] > 1e13
         || $ascensionStats['ascensionCount'] > 0),
+        religion: () => $ascensionStats['ascensionCount'] >= 3,
     };
     const tabsUnlocked = {
         mining: true,
@@ -601,6 +610,10 @@
         localStorage.setItem(
             "radiumProgress",
             JSON.stringify($radiumProgress)
+        );
+        localStorage.setItem(
+            "starProgress",
+            JSON.stringify($starProgress)
         );
         localStorage.setItem(
             "keyUpgradeLevels",
@@ -766,6 +779,11 @@
         if (localStorage.getItem("radiumProgress")) {
             radiumProgress.set(
                 JSON.parse(localStorage.getItem("radiumProgress"))
+            );
+        }
+        if (localStorage.getItem("starProgress")) {
+            starProgress.set(
+                JSON.parse(localStorage.getItem("starProgress"))
             );
         }
         if (localStorage.getItem("resetLastTimes")) {
@@ -1197,6 +1215,8 @@
     let clockTabs;
     onMount(() => {
         loadFunc();
+        // $miningDropTable = $baseMiningDropTable;
+        // miningDropTable.updateTable()
         setInterval(() => {
             if (AUTOSAVE) {
                 save();
@@ -1227,7 +1247,7 @@
 
 <style>
     :global(body) {
-        font-family: "Monaco", sans-serif;
+        font-family: 'Trebuchet MS', sans-serif;
     }
     :global(body) {
         background-color: #1a1a1a;

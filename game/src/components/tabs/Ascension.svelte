@@ -18,10 +18,8 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
     </div>
     <div class="game-text justify-center w-full flex">Gain 
         <span class='{ref.colors['antimatter']}'>
-        &nbsp;antimatter&nbsp; </span> 
-        equal to the sum of all essence produced this ascension 
-        <span class='{ref.colors['antimatter']}'>
-            &nbsp;({f(formula.sumEssence())})&nbsp; </span>.
+        &nbsp;{f(formula.calcAntimatterGain())}&nbsp;antimatter&nbsp;</span> 
+        based on the sum of all essence produced this ascension.
     </div>
 
     <div class="grid grid-cols-12 pt-3">
@@ -29,9 +27,9 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
         {#each $ascensionElements as e, i}
             <!-- names -->
             <div class="wrapper col-span-12 grid grid-cols-12 py-2">
-                <div class="col-span-2 text-large game-text">
+                <div class="col-span-3 text-large game-text">
                     <span class={ref.essenceTextColors[i]}
-                        >{$elementNames[i]}</span
+                        >{$elementNames[i]} [{f($ascensionLevels[e][0], 0)}]</span
                     >
                 </div>
                 <div class="pbar-desc col-span-7 grid grid-rows-2">
@@ -71,7 +69,7 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
                     </div>
                 </div>
                 <div
-                    class="bonus-text col-span-3 grid grid-rows-2 ml-1 p-1 text-small game-text"
+                    class="bonus-text col-span-2 grid grid-rows-2 ml-1 p-1 text-small game-text"
                 >
                     <div
                         class="{ref.essenceTextColors[
@@ -79,22 +77,22 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
                         ]} font-bold row-span-1 text-large"
                     >
                         {$elementBonusText[i]["prefix"]}{$elementBonusText[i]['isPercent'] ?
-                        fp(
+                        f(
                             ascFormula.getVal($ascensionElements[i])*
-                        ($elementBonusText['isPercent'] ? 100 : 1) - 1,2) :
+                        ($elementBonusText['isPercent'] ? 100 : 1) - 1,3) :
                         f(ascFormula.getVal($ascensionElements[i])*
-                        ($elementBonusText['isPercent'] ? 100 : 1),0)}
+                        ($elementBonusText['isPercent'] ? 100 : 1),3)}
                         {$elementBonusText[i]["suffix"]}
                         <span class="font-normal text-small"
                             >>> 
                             {#if e === 'antimatter'}
-                            {fp(ascFormula.getValAt(e, Math.floor(
+                            {f(ascFormula.getValAt(e, Math.floor(
                                 formula.maxFinitePoly2(
                                     ($ascensionLevels[e][1] || 0) + 
                                     sumEssence(), $ascensionLevels[e][0],
                                     $ascensionConstants['antimatterLevelFormulaNums'],
                                     'antimatter'
-                            )))-1,2)}
+                            ))),3)}
                             {:else}
                             {$elementBonusText[i]['isPercent'] ? fp(ascFormula.getValAt(e, Math.floor(
                                 formula.maxFinitePoly2(
@@ -109,7 +107,7 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
                                     ($wallet['e'+e]||0), $ascensionLevels[e][0],
                                     $ascensionConstants['levelFormulaNums'],
                                     e
-                            ))), 0)}
+                            ))), 3)}
                             {/if}
                              
                             

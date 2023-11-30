@@ -15,9 +15,13 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
 {#if ($settings['maxBuy'] && buyAmount > 0) || buyAmount > 1}
 <span class='text-gray-400'>(x{buyAmount})</span>
 {/if}
+        {#key $layer['layer']}
          <span class='tooltip tooltip-style'>
          <div class='title text-small-gray items-start text-center pb-1'>
-            {$miningUpgrades[index]['description']} 
+            {$miningUpgrades[index]['description']}
+            {#if index == 2 && $automationItemsUnlocked['irreversible greed']}
+            <span class='{ref.colors['antimatter']}'>Droprate softcaps are increased by 6.5% of this value.</span>
+            {/if}
             {#if $miningUpgrades[index]['noResetAscension']}
             <div class='text-xs italic text-indigo-300'>Not reset on ascension or lower</div>
             {:else if $miningUpgrades[index]['noResetRelocate']}
@@ -73,6 +77,8 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
             {/if}
         </div>
          </span>
+         {/key}
+
      </div>
         {/if}
     {/key}
@@ -85,7 +91,8 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
     import { onDestroy, onMount } from 'svelte';
     import { progress, wallet, miningUpgradeLevels, miningDropTable,
          settings, visibleTier, unlockedRes, miningUpgradeLevelsBought, 
-         miningUpgradeLevelsFree, challengeActive, permaWallet, flags} from '../../data/player';
+         miningUpgradeLevelsFree, challengeActive, permaWallet, flags, layer,
+        automationItemsUnlocked} from '../../data/player';
     import {progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'

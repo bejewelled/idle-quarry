@@ -169,11 +169,14 @@ function dropTable(context: any) {
                         * Math.max(1,get(beaconBonuses)[2])
                         * (item === 'beacons' ? get(beaconUpgrades)[1]['formula'](get(beaconUpgradeLevels)[1]) : 1)
                         * (item === 'artifacts' ? get(allMultipliers)['artifacts']['formula'](get(wallet)['artifacts'] || 0) : 1)
-                        * (item === 'dust' ? formula.getAntimatterBonusAmount(4) : 1)
+                        * (item === 'dust' ? formula.getAntimatterBonusAtAscensionNumber(7) : 1)
+                        
                         i[item]= [
                         // add drop table multipliers here
                         //@ts-ignore
-                        (baseChance >= val[3] ? val[3] + Math.pow((baseChance-val[3])/3.5, 2.33) : baseChance),
+                        (baseChance >= val[3]*formula.calcMiningDropSoftcapIncrease(val[3])
+                             ? val[3]*formula.calcMiningDropSoftcapIncrease(val[3]) 
+                             + Math.pow((baseChance-val[3])/3.5, 2.33) : baseChance),
                         //@ts-ignore
                         Math.max(1,(val[1])
                         * ((item === 'gold' || item === 'orbs')
@@ -191,6 +194,7 @@ function dropTable(context: any) {
                         val[3],
                         val[4]
                     ]
+                    //overload
                     if (get(miningUpgradeLevels)[15] > 0 && i[item][0] > 1) {
                         i[item][1] += Math.max(0, Math.pow(
                             (i[item][0]-1)*i[item][1], 0.45))
@@ -232,6 +236,8 @@ export const progress = object({
     key1: 0
 });
 
+
+export const starProgress = array([0, 1000])
 
 
 export const miningUpgradeLevelsBought = array(Array(200).fill(0));

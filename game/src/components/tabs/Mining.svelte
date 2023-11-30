@@ -17,7 +17,8 @@
                     {drop[0] in $permaWallet ? (ref.displayNames[drop[0]] || drop[0]) : '???'}
                 </div>
                 <div class='col-span-3 
-                {drop[1][0] >= drop[1][3] ? 'text-amber-200' : ''}
+                {drop[1][0] >= 
+                drop[1][3]*formula.calcMiningDropSoftcapIncrease(drop[1][3]) ? 'text-amber-200' : ''}
                 text-left pl-1'>
                     {fp(Math.min(1,drop[1][0]), 
                     drop[1][0] < 1e-3 ? 
@@ -228,6 +229,8 @@ onMount(() => {
 
 function changeUpgradeType(type) {
     upgradeTab = type;
+    console.log($upgradeSorting)
+    if (upgradeTab == 'dust') $upgradeSorting['all']['on'] = true
 }
 
 function changeUpgradeSorting(type) {

@@ -211,7 +211,7 @@ export const buttonUpgrades = array([
         radium: 4,
     },
     ratio: 1.75,
-    formula: (lv: any) => lv*0.25,
+    formula: (lv: any) => Math.pow(lv, 2)*0.09,
     unlockAt: () => (get(permaWallet)['radium'] > 0),
     isPercent: false,
     prefix: '+',
@@ -223,17 +223,17 @@ export const buttonUpgrades = array([
 {
     index: 5,
     name: 'Plutonium Beaming',
-    description: 'When you gain radium from radioactivity, you have a small chance to gain a star.',
+    description: 'Gaining radium adds beam energy. At max energy, gain something new.',
     cost: {
-        radium: 1250,
+        radium: 500,
     },
-    ratio: 2.5,
-    formula: (lv: any) => lv*0.0075,
+    ratio: 3,
+    formula: (lv: any) => (lv > 0 ? 0.75 + lv*0.25 : 0),
     unlockAt: () => (get(wallet)['totalFame'] > 1e13 || get(wallet)['ascensionCount'] > 0),
-    isPercent: true,
+    isPercent: false,
     isRadiumUpgrade: true,
-    suffix: ' chance',
-    maxLevel: 20,
+    suffix: ' energy gain',
+    maxLevel: 10,
     notes: ''
 },
 {

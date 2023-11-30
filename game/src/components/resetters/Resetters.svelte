@@ -102,7 +102,7 @@
         try {
             $ascensionStats['ascensionCount']++
             const antimatterOnAscend =
-                ($wallet['antimatter'] || 0) + sumEssence()
+                ($wallet['antimatter'] || 0) + formula.calcAntimatterGain()
             for (let i of $ascensionElements) {
                 if (i == 'antimatter') {
                     $ascensionLevels[i][1] += sumEssence()
@@ -115,7 +115,7 @@
                             i + ' ascended!' + ' ' + $ascensionLevels[i][2]
                         )
                         $ascensionLevels[i][1] -= $ascensionLevels[i][2]
-                        $ascensionLevels[i][0]++
+                        $ascensionLevels[i][0]= (parseInt($ascensionLevels[i][0])) + 1
                         $ascensionLevels[i][2] = $ascensionConstants[
                             'levelFormula'
                         ]($ascensionLevels[i][0])
@@ -173,10 +173,11 @@
                 for (let i in Object.keys($automationUpgrades)) {
                     if ($automationItemsUnlocked[$automationUpgrades[i]['name'].toLowerCase()] 
                     &&  $automationUpgrades[i]['noResetAscension']) {
-                        tempAutomations[i] = true;
+                        tempAutomations[$automationUpgrades[i]['name'].toLowerCase()] = true;
                     }
                 }
-                $automationItemsUnlocked = tempAutomations;
+                console.log(tempAutomations)
+                $automationItemsUnlocked = JSON.parse(JSON.stringify(tempAutomations));
             }
             
             $enchantThreshold['t1'] = 100;

@@ -29,7 +29,7 @@ export default class ref {
         ewater: "text-sky-300 text-shadow-gray",
         ecelestial: "text-violet-300 text-shadow-gray",
         radium: "text-lime-300",
-        antimatter:  "text-transparent text-stone-100 bg-clip-text bg-gradient-to-br from-blue-500 to-indigo-800",
+        antimatter:  "text-transparent text-stone-100 bg-clip-text bg-gradient-to-br from-blue-400 to-indigo-700",
         void: "text-gray-800",
         layer: 'text-yellow-300'
     };
@@ -148,6 +148,7 @@ export default class ref {
         "mastery",
         "artifacts",
         "ascension",
+        "religion"
     ];
 
     static tabNotUnlockedText = {

@@ -64,8 +64,9 @@ export default class formula {
     }
 
     static maxFinitePoly2(n: number, p: number, nums: object, e: string, log: boolean = false) {
+      const print = (e == 'antimatter' ? true : false)
       let left = n, q = p;
-      if (log) console.log('left: ' + left + ' q: ' + q);
+      if (print) console.log('left: ' + left + ' start: ' + q);
       while (left > 0) {
         if (e == 'antimatter') left -= (nums['const'] + nums['multi']*(q**2));
         else left -= (nums['const'][e] + nums['multi'][e]*(q**2));
@@ -97,7 +98,8 @@ export default class formula {
 
     static calcAntimatterGain() {
       return this.sumEssence()
-      * get(beaconBonuses)[9];
+      * get(beaconBonuses)[9]
+      * get(allMultipliers)['antimatter']['formula'](get(wallet)['artifacts'] || 0);
     }
 
     static calcEssenceXPGain(e: string) {
@@ -237,7 +239,7 @@ export default class formula {
     const vals = ref.slurryGainFromKeys;
     const y = vals.reduce((sum: number, value: number, i: number) => 
     sum + (get(slurryToggles)['key'+(i+1).toString()] ? 
-    value*(obj['key'+(i+1)] || 0) : 0), 0) * formula.getAntimatterBonusAmount(3); // get antimatter bonus if # of ascensions is 3 or more
+    value*(obj['key'+(i+1)] || 0) : 0), 0) * formula.getAntimatterBonusAtAscensionNumber(5); // get antimatter bonus if # of ascensions is 3 or more
     if (isNaN(y)) {
       alert('note: this feature is bugged, please report this on Discord - reduced slurry gained (using "safe" formula)')
       return obj['key1'] / 8e5;
@@ -335,13 +337,29 @@ export default class formula {
     return get(miningUpgrades)[i]['formula'](get(miningUpgradeLevels)[i]);
   }
 
+  static calcMiningDropSoftcapIncrease(base: number) {
+    let y = 1;
+    if (get(automationItemsUnlocked)['irreversible greed']) {
+      y *= (1 + get(miningUpgrades)[2]['formula'](get(miningUpgradeLevels)[2]) * 0.065);
+    }
+    return y;
+  }
+
+
+  static calcStarProgressGain() {
+    let y = get(buttonUpgrades)[5]['formula'](get(buttonUpgradeLevels)[5]);
+    return y;
+  }
+  static calcStarGainWhenComplete() {
+    return 1;
+  }
 
   static calcAscensionEssenceRequirement(c: number) {
 
-    const firstTen = [30, 200, 600, 2500, 8000, 20000, 67500, 140000, 225000, 320000]
+    const firstTen = [30, 150, 300, 1200, 3500, 9000, 15000, 30000, 50000, 80000]
 
     if (c < 10) return firstTen[c];
-    else return firstTen[9] + (firstTen[9]/3 * (c-9)) * Math.pow(1.1, c-10);
+    else return firstTen[9] + (firstTen[9]/2.5 * (c-9)) * Math.pow(1.1, c-10);
   }
 
   static calcRadioactivityGain() {
@@ -353,6 +371,7 @@ export default class formula {
     y = y
     * get(buttonUpgrades)[1]['formula'](get(buttonUpgradeLevels)[1])
     * get(allMultipliers)['radium']['formula'](get(wallet)['artifacts'] || 0)
+    * this.getAntimatterBonusAtAscensionNumber(3);
     return y;
   }
 
@@ -383,9 +402,14 @@ export default class formula {
     return base * multi;
   }
 
-  static getAntimatterBonusAmount(i: number) {
-    if (get(ascensionStats)["ascensionCount"] >= get(antimatterBonusAscensionReqs)[i])
+  static getAntimatterBonusAtAscensionNumber(i: number) {
+    const array = get(antimatterBonusAscensionReqs);
+    if (!array.includes(i)) {
+      console.error("ERROR - The ascension number " + i + " is not in the array of ascension numbers that give antimatter bonuses.");
+    }
+    if (get(ascensionStats)["ascensionCount"] >= i) {
       return get(ascFormula)['antimatter'](get(ascensionLevels)['antimatter'][0]);
+    }
     else return 1;      
   }
 

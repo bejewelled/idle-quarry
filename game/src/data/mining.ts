@@ -376,7 +376,7 @@ export const miningUpgrades = array([{
         fame: 5
     },
     ratio: 1.4,
-    unlockAt: () => (get(wallet)['fame'] > 0 && get(stats)['relocateCount'] > 0),
+    unlockAt: () => (get(wallet)['fame'] > 0 && (get(stats)['relocateCount'] > 0 || get(wallet)['totalFame'] > 10000)),
     formula: (lv: any) => (1 + lv*2) * Math.pow(1.04, lv),
     isPercent: false,
     prefix: 'x',
@@ -395,7 +395,7 @@ export const miningUpgrades = array([{
         fame: 5
     },
     ratio: 1.75,
-    unlockAt: () => (get(wallet)['fame'] > 0 && get(stats)['relocateCount'] > 0),
+    unlockAt: () => (get(wallet)['fame'] > 0 && (get(stats)['relocateCount'] > 0 || get(wallet)['totalFame'] > 10000)),
     formula: (lv: any) => 1 + 0.55*Math.pow(lv, 0.9),
     isPercent: false,
     noResetRelocate: true,
@@ -415,7 +415,7 @@ export const miningUpgrades = array([{
         fame: 20,
     },
     ratio: 1.4,
-    unlockAt: () => (get(wallet)['fame'] > 0 && get(stats)['relocateCount'] > 0),
+    unlockAt: () => (get(wallet)['fame'] > 0 && (get(stats)['relocateCount'] > 0 || get(wallet)['totalFame'] > 10000)),
     formula: (lv: any) => (1 + 0.75*lv)* Math.pow(1.03, lv),
     isPercent: false,
     prefix: 'x',
@@ -434,7 +434,7 @@ export const miningUpgrades = array([{
         fame: 20,
     },
     ratio: 1.75,
-    unlockAt: () => (get(wallet)['fame'] > 0 && get(stats)['relocateCount'] > 0),
+    unlockAt: () => (get(wallet)['fame'] > 0 && (get(stats)['relocateCount'] > 0 || get(wallet)['totalFame'] > 10000)),
     formula: (lv: any) => 1 + 0.175*Math.pow(lv, 0.85),
     isPercent: false,
     noResetRelocate: true,
@@ -453,9 +453,9 @@ export const miningUpgrades = array([{
         slurry: 1e6,
         sigils: 1e5,
         key3: 10000,
-        radium: 1000,
-        artifacts: 10,
-
+        artifacts: 5000,
+        radium: 250,
+        trophies: 25
     },
     ratio: 1e90,
     unlockAt: () => ((get(wallet)['fame'] > 0 && get(miningUpgradeLevels)[9] > 0.003)
@@ -478,7 +478,7 @@ export const miningUpgrades = array([{
         fame: 1200,
     },
     ratio: 200,
-    unlockAt: () => (get(wallet)['totalFame'] > 200 && get(stats)['relocateCount'] > 0),
+    unlockAt: () => (get(wallet)['totalFame'] > 200 && (get(stats)['relocateCount'] > 0 || get(wallet)['totalFame'] > 10000)),
     formula: (lv: any) => (0),
     noResetRelocate: true,
     isPercent: true,
@@ -754,7 +754,7 @@ export const miningUpgrades = array([{
     cost: {
         antimatter: 5,
     },
-    ratio: 150,
+    ratio: 60,
     unlockAt: () => (get(wallet)['antimatter'] > 0),
     formula: (lv: any) => 1 + lv*3 + Math.pow(lv,2.75),
     noResetRelocate: true,
@@ -885,7 +885,7 @@ export const miningUpgrades = array([{
     cost: {
         antimatter: 5,
     },
-    ratio: 150,
+    ratio: 60,
     unlockAt: () => (get(wallet)['antimatter'] > 0),
     formula: (lv: any) => 1 + 0.95*Math.pow(lv,1.65),
     noResetRelocate: true,
@@ -906,7 +906,7 @@ export const miningUpgrades = array([{
     cost: {
         antimatter: 5,
     },
-    ratio: 150,
+    ratio: 60,
     unlockAt: () => (get(wallet)['antimatter'] > 0),
     formula: (lv: any) => 1 + 0.75*Math.pow(lv,1.9),
     noResetRelocate: true,

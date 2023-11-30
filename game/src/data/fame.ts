@@ -1,6 +1,6 @@
 
 import { writable, get } from 'svelte/store';
-import {wallet, miningUpgradeLevels, enchantUpgradeLevels, automationItemsUnlocked, challengesCompleted} from './player'
+import {wallet, miningUpgradeLevels, enchantUpgradeLevels, automationItemsUnlocked, challengesCompleted, ascensionStats} from './player'
 import Decimal  from 'break_infinity.js';
 import formula from '../calcs/formula';
 
@@ -252,7 +252,7 @@ export const enchantUpgrades = array([{
     },
     tier: 1,
     ratio: 100,
-    formula: (lv: any) => (lv/30) * 0.025,
+    formula: (lv: any) => Math.sqrt(lv)*0.0045645,
     extFormula: (lv: number, size: number, quality: number) => (size * quality * 12),
     extPrefix: "You will gain ",
     extSuffix: " radioactivity on proc.",
@@ -520,6 +520,28 @@ export const automationUpgrades = array([{
         antimatter: 300,
     },
     unlockAt: () => (get(wallet)['antimatter'] >= 1 || get(wallet)['totalAntimatter'] >= 1),
+    isPercent: true,
+    noResetAscension: true,
+},
+{
+    index: 17,
+    name: 'Irreversible Greed',
+    description: 'Fortune slightly increases mining droprate softcaps.',
+    cost: {
+        antimatter: 65,
+    },
+    unlockAt: () => (get(ascensionStats)['ascensionCount'] >= 2 || get(wallet)['totalAntimatter'] >= 100),
+    isPercent: true,
+    noResetAscension: true,
+},
+{
+    index: 18,
+    name: 'Artificer',
+    description: 'T3 [***] keys can drop T4 [****] keys.',
+    cost: {
+        antimatter: 24000,
+    },
+    unlockAt: () => (get(ascensionStats)['ascensionCount'] >= 7),
     isPercent: true,
     noResetAscension: true,
 },

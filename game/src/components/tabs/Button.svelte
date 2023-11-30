@@ -31,6 +31,8 @@
 
         <div class='col-span-12 pb-3 game-text text-center'>
 
+
+        <!-- radium progress -->
         <div class='col-span-9'>
           <div class='w-full my-1 bg-gray-200 rounded-sm h-4 dark:bg-gray-700'>
               <div class="
@@ -59,6 +61,31 @@
   
         </div>
 
+        <!-- star progress -->
+        <div class='col-span-9'>
+          <div class='w-full my-1 bg-gray-200 rounded-sm h-1 dark:bg-gray-700'>
+              <div class="
+              flex justify-start items-left">
+                <div class="bg-gradient-to-br from-fuchsia-300 to-violet-700 w-4 h-1 rounded-sm 
+                relative z-0" 
+                style="width: {starBarWidth}; transition: width 0.1s;"> 
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class='col-span-3 text-left align-text-middle has-tooltip'>
+            <div class='tooltip-text text-xs'>Plutonium Beaming
+            <span class='text-violet-400 text-xs pl-2 pr-2'>
+              {f($starProgress[0])} / {f($starProgress[1])}
+            </span>
+            <span class='tooltip-text text-xs'> for
+            <span class='text-xs {ref.colors['stars']}'>
+              {$permaWallet['stars'] > 0 ? f(formula.calcStarGainWhenComplete(), 2) + ' stars': "???"}</span>
+            </span>
+          </div>
+  
+        </div>
+
         </div>
         {#each $buttonUpgrades as b,i}
           <div class='col-span-3 pb-1 '>
@@ -70,14 +97,6 @@
     <div class='pb-16 pt-8 tooltip-text text-center w-full italic'>
       The chance of discovering a thorium deposit is <span class='text-lime-500'>
         {fp($buttonUpgrades[0]['formula']($buttonUpgradeLevels[0]))}</span> per second.<br/>
-      {#if $wallet['totalFame'] > 1e13 || $stats['ascensionCount'] > 0}
-        When you gain radium, you have a 
-        <span class={ref.colors['stars']}>
-          {fp($buttonUpgrades[5]['formula']($buttonUpgradeLevels[5]))}
-        </span>
-        chance to gain a <span class='{ref.colors['stars']}'>star.</span>
-        <br/>
-      {/if}
       Base radioactivity gain increases after layer 100. <br/>
 
 
@@ -87,12 +106,12 @@
   </div>
 
 <script>
-	import { buttonUpgradeLevels, stats } from './../../data/player.ts';
+	import { buttonUpgradeLevels, permaWallet, stats } from './../../data/player.ts';
 // @ts-nocheck
 
   import {buttonStats, buttonNumClicks,
     progress, wallet, enchantUpgradeLevels, miningDropTable,
-        settings, visibleTier, unlockedRes, radiumProgress} from '../../data/player';
+        settings, visibleTier, unlockedRes, radiumProgress, starProgress} from '../../data/player';
   import {buttonUpgrades, radiumGainText} from '../../data/button';
   import { onMount, onDestroy} from 'svelte';
   import {progressThreshold, progressPerTick } from '../../data/mining';
@@ -117,6 +136,7 @@ onDestroy(() => {
 });
 
 $: buttonBarWidth = `${Math.min(1,$radiumProgress[0] / $radiumProgress[1]) * 100}%`;
+$: starBarWidth = `${Math.min(1,$starProgress[0] / $starProgress[1]) * 100}%`;
 $: crystalGains = formula.calcCrystalGainFromRadium()
 const f = (n, pl = 0) => {
         if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");

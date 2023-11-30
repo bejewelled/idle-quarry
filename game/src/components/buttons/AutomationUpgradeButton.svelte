@@ -143,6 +143,9 @@ select-none'>{$automationUpgrades[index]['name']}
             $miningUpgradeLevelsBought[14] = 1;
             $visibleTier = 4;
         }
+        if ($automationItemsUnlocked['irreversible greed']) {
+            miningDropTable.updateTable();
+        }
     }
 
     function canAfford() {

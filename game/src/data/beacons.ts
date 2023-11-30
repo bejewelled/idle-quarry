@@ -285,7 +285,7 @@ export const beaconUpgrades = array([{
 {
     index: 3,
     name: 'Angelic Intervention',
-    description: 'Glory, oh glory. Beacons gain additional power based on the path\'s level.',
+    description: 'Beacons gain additional power based on the path\'s level.',
     cost: {
         antimatter: 8,
     },
