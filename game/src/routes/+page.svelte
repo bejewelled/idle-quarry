@@ -322,7 +322,7 @@
 	import { masteryNextReq, masteryItemInfo, masteryItemReqs } from './../data/mastery.ts';
 	import { ascensionLevels, ascensionUpgradeLevels, 
         craftMasteryLevel, craftMasteryProgress, perSecond, sumUpgradeLevels, resetLastTimes, artifactPermanentBonuses, 
-        miningUpgradeLevelsBought, craftMasteryNextReq, slurryToggles, starProgress } from './../data/player.ts';
+        miningUpgradeLevelsBought, craftMasteryNextReq, slurryToggles, starProgress, deity } from './../data/player.ts';
 
     import ThoriumDepositButton from '../components/buttons/ThoriumDepositButton.svelte';
 
@@ -411,7 +411,7 @@
     import Settings from "../components/tabs/Settings.svelte";
     import Mastery from "../components/tabs/Mastery.svelte";
     import Artifacts from "../components/tabs/Artifacts.svelte";
-    import MiningUpgradeButton from "../components/buttons/MiningUpgradeButton.svelte";
+    import MiningUpgradeButton from "../components/buttons/UpgradeButtons/MiningUpgradeButton.svelte";
     import Ascension from "../components/tabs/Ascension.svelte";
     import PerSecond from '../components/adders/PerSecond.svelte';
     import Religion from '../components/tabs/Religion.svelte';
@@ -604,6 +604,10 @@
             "buttonUpgradeLevels",
             JSON.stringify($buttonUpgradeLevels)
         );
+        localStorage.setItem(
+            "deity",
+            JSON.stringify($deity)
+        );
         localStorage.setItem("buttonStats", JSON.stringify($buttonStats));
         localStorage.setItem("stats", JSON.stringify($stats));
         localStorage.setItem("ascensionStats", JSON.stringify($ascensionStats));
@@ -789,6 +793,11 @@
         if (localStorage.getItem("resetLastTimes")) {
             resetLastTimes.set(
                 JSON.parse(localStorage.getItem("resetLastTimes"))
+            );
+        }
+        if (localStorage.getItem("deity")) {
+            deity.set(
+                JSON.parse(localStorage.getItem("deity"))
             );
         }
         if (localStorage.getItem("artifactPermanentBonuses")) {

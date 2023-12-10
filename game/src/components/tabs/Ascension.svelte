@@ -194,12 +194,12 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
         elementDescriptions,
         elementBonusText,
     } from "../../data/ascension";
-    import MiningUpgradeButton from "../buttons/MiningUpgradeButton.svelte";
+    import MiningUpgradeButton from "../buttons/UpgradeButtons/MiningUpgradeButton.svelte";
     import ref from "../../calcs/ref";
     import formula from "../../calcs/formula";
     import BeaconToggleButton from "../buttons/BeaconToggleButton.svelte";
-    import BeaconPowerUpgradeButton from "../buttons/BeaconPowerUpgradeButton.svelte";
-    import EnchantUpgradeButton from "../buttons/EnchantUpgradeButton.svelte";
+    import BeaconPowerUpgradeButton from "../buttons/UpgradeButtons/BeaconPowerUpgradeButton.svelte";
+    import EnchantUpgradeButton from "../buttons/UpgradeButtons/EnchantUpgradeButton.svelte";
     import AscensionButton from "../buttons/AscensionButton.svelte";
 
     let resetFuncs: Resetters;

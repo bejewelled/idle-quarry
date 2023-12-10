@@ -239,13 +239,13 @@ export const buttonUpgrades = array([
 {
     index: 6,
     name: 'Gamma Radiation',
-    description: 'Clicks sometimes give warp.',
+    description: 'Clicks sometimes give mist.',
     cost: {
         crystals: 1e8,
     },
     ratio: 2,
     formula: (lv: any) => lv * 0.04,
-    unlockAt: () => (get(wallet)['warp'] > 1e297 ),
+    unlockAt: () => (get(wallet)['mist'] > 1e297 ),
     isPercent: true,
     suffix: ' chance',
     maxLevel: 8,

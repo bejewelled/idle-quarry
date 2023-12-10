@@ -983,7 +983,7 @@ function dropRoll(n) {
         }
         if (!$automationItemsUnlocked['masterful']) return
         $wallet['mastery'] = ($wallet['mastery'] || 0) + m
-        $wallet['warp'] = ($wallet['warp'] || 0) + (dt * formula.calcWarpGainFromMastery() / (1000/UPDATE_SPEED))
+        $wallet['mist'] = ($wallet['mist'] || 0) + (dt * formula.calcmistGainFromMastery() / (1000/UPDATE_SPEED))
         checkForMasteryCompletion()
         checkForItemMasteryLevelUp()
     }

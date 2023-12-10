@@ -118,7 +118,7 @@
   import { enchantUpgrades } from '../../data/fame';
   import ref from '../../calcs/ref'
   import formula from '../../calcs/formula'
-  import ButtonUpgradeButton from '../buttons/ButtonUpgradeButton.svelte';
+  import ButtonUpgradeButton from '../buttons/UpgradeButtons/ButtonUpgradeButton.svelte';
 // @ts-nocheck
 
 let clockinterval;

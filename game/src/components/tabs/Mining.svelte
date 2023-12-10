@@ -198,7 +198,7 @@ import {progress, wallet, permaWallet, miningDropTable, miningUpgradeLevels,
 import {progressThreshold, progressPerTick, miningUpgrades, 
 gemGainFlavorText, gemProgressFlavorText, upgradeSorting } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
-import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
+import MiningUpgradeButton from '../buttons/UpgradeButtons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
     import formula from '../../calcs/formula.js'
 

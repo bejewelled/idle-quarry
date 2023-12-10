@@ -82,12 +82,12 @@
         baseBeaconNextReqs,
     } from '../../data/beacons'
     import { enchantUpgrades, enchantThreshold, automationUpgrades } from '../../data/fame'
-    import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte'
+    import MiningUpgradeButton from '../buttons/UpgradeButtons/MiningUpgradeButton.svelte'
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
     import BeaconToggleButton from '../buttons/BeaconToggleButton.svelte'
-    import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte'
-    import EnchantUpgradeButton from '../buttons/EnchantUpgradeButton.svelte'
+    import BeaconPowerUpgradeButton from '../buttons/UpgradeButtons/BeaconPowerUpgradeButton.svelte'
+    import EnchantUpgradeButton from '../buttons/UpgradeButtons/EnchantUpgradeButton.svelte'
 
     const resourceResetItems = ['beaconPower']
     const sumEssence = () => {

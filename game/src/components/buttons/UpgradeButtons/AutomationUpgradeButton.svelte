@@ -41,17 +41,17 @@ select-none'>{$automationUpgrades[index]['name']}
         
 
  <script>
-	import { miningUpgradeLevels, miningUpgradeLevelsBought } from './../../data/player.ts';
+	import { miningUpgradeLevels, miningUpgradeLevelsBought } from '../../../data/player';
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
     import { progress, wallet, enchantUpgradeLevels, miningDropTable,
-         settings, visibleTier, unlockedRes, automationItemsUnlocked} from '../../data/player';
-    import {progressThreshold, progressPerTick } from '../../data/mining';
-    import { enchantUpgrades, automationUpgrades, enchantThreshold } from '../../data/fame';
-    import ref from '../../calcs/ref'
-    import formula from '../../calcs/formula'
-    import { key2DropTable } from '../../data/keys';
+         settings, visibleTier, unlockedRes, automationItemsUnlocked} from '../../../data/player';
+    import {progressThreshold, progressPerTick } from '../../../data/mining';
+    import { enchantUpgrades, automationUpgrades, enchantThreshold } from '../../../data/fame';
+    import ref from '../../../calcs/ref'
+    import formula from '../../../calcs/formula'
+    import { key2DropTable } from '../../../data/keys';
 // @ts-nocheck
     /**
      * @type {string | number}

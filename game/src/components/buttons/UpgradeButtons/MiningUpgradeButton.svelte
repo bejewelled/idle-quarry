@@ -92,10 +92,10 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
     import { progress, wallet, miningUpgradeLevels, miningDropTable,
          settings, visibleTier, unlockedRes, miningUpgradeLevelsBought, 
          miningUpgradeLevelsFree, challengeActive, permaWallet, flags, layer,
-        automationItemsUnlocked} from '../../data/player';
-    import {progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
-    import ref from '../../calcs/ref'
-    import formula from '../../calcs/formula'
+        automationItemsUnlocked} from '../../../data/player';
+    import {progressThreshold, progressPerTick, miningUpgrades } from '../../../data/mining';
+    import ref from '../../../calcs/ref'
+    import formula from '../../../calcs/formula'
 // @ts-nocheck
     export let index;
     let getCosts = () => {

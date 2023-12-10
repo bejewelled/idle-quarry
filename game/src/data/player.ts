@@ -530,3 +530,10 @@ export const masteryItemLevels = object({
     artifacts: 0,
     radium: 0
 })
+
+
+export const deity = object({
+    level: 0,
+    xp: 0,
+    xpNextReq: 1000,
+})

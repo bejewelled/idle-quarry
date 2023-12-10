@@ -123,11 +123,11 @@ import {beaconPower, beaconBonuses, beaconSpendAmt,
     beaconFormulas, beaconNums, beaconNextReqs,
  beaconNameText, beaconPowerFlavorText,
 beaconMaxLevels, beaconMiningLevelReqs} from '../../data/beacons';
-import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
+import MiningUpgradeButton from '../buttons/UpgradeButtons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
 import formula from '../../calcs/formula';
 import BeaconToggleButton from '../buttons/BeaconToggleButton.svelte';
-import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte';
+import BeaconPowerUpgradeButton from '../buttons/UpgradeButtons/BeaconPowerUpgradeButton.svelte';
 import BeaconSmartSplitChecks from '../buttons/BeaconSmartSplitChecks.svelte';
 
 $: pbarWidths = Array(30).fill(0);

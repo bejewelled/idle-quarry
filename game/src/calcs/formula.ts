@@ -289,7 +289,7 @@ export default class formula {
     * get(keyUpgrades)[2]['formula'](get(keyUpgradeLevels)[2]);
   }
 
-  static calcWarpGainFromMastery() {
+  static calcmistGainFromMastery() {
     const y = (get(wallet)['totalTrophies'] || 0)
     * ascFormula.getVal('water');;
     return 0.25*y + 0.00067*y**2;

@@ -147,7 +147,7 @@ export const elementNames = array([
 export const elementDescriptions = array([
     "Engulf your mines with the fury of flames, increasing your speed.",
     "Fortify your mines with the earth, giving yourself more access to its wealth.",
-    "Empower your mines with the relentlessness of water, improving your warp.",
+    "Empower your mines with the relentlessness of water, improving your mist.",
     "Enchant your mines with the magic of the arcane, increasing the frequency of enchants.",
     "Harness the power of the stars themselves, unlocking incredible beacon powers.",
     "Your prowess creates unstable, but lucrative, ripples of antimatter through the universe."
@@ -169,7 +169,7 @@ export const elementBonusText = array([
     {
         prefix: "x",
         suffix: "",
-        text: "warp gain",
+        text: "mist gain",
         isPercent: false
     },
     {
@@ -231,7 +231,7 @@ export const ascensionElements = array([
 export const ascFormula = ascFormulaGetter({
     fire: (lv: number) => 1 + 0.25*Math.pow(lv-1, 0.7), // mine speed softcap
     earth: (lv: number) => 1 + 0.5*Math.pow(lv-1, 0.85), // crystal gain
-    water: (lv: number) => 1 + 0.13*Math.pow(lv-1, 0.7), // warp gain
+    water: (lv: number) => 1 + 0.13*Math.pow(lv-1, 0.7), // mist gain
     magic: (lv: number) => 1 + 0.027*Math.pow(lv-1, 0.9), // enchant proc speed
     celestial: (lv: number) => (lv == 1 ? 0 : ((lv < 20 ? lv*20 : 400 + Math.pow(lv, 0.9)*15))), // starting layer
     antimatter: (lv: number) => 1 + 0.25*Math.pow(lv-1, 0.75), // minespeed/droprate

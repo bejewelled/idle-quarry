@@ -12,7 +12,7 @@
     </div>
     <div class='col-span-12 text-white text-small'>Your total trophies this ascension
         <span class='text-orange-400'>({f($wallet['totalTrophies'] || 0)})</span>
-    {$wallet['totalTrophies'] == 1 ? 'is' : 'are'} producing <span class='{ref.colors['warp']}'>{f(formula.calcWarpGainFromMastery(), 2)} warp per second.</span></div>
+    {$wallet['totalTrophies'] == 1 ? 'is' : 'are'} producing <span class='{ref.colors['mist']}'>{f(formula.calcmistGainFromMastery(), 2)} mist per second.</span></div>
 
 <div class='col-span-12'>
     <div class='mine-bar-wrapper align-middle'>

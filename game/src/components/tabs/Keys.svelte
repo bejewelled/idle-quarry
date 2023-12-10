@@ -202,7 +202,7 @@ import { keyRewardText, key1DropTable, key2DropTable, key3DropTable,
 import ref from '../../calcs/ref';
 import KeyOpenButton  from '../buttons/KeyOpenButton.svelte';
 import KeySlurryConvertButton from '../buttons/KeySlurryConvertButton.svelte';
-import SlurryUpgradeButton from '../buttons/SlurryUpgradeButton.svelte';
+import SlurryUpgradeButton from '../buttons/UpgradeButtons/SlurryUpgradeButton.svelte';
 import SlurryCraftButton from '../buttons/SlurryCraftButton.svelte';
 import formula from '../../calcs/formula';
 

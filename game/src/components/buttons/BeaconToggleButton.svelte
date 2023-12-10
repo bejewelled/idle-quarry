@@ -24,7 +24,7 @@ gemGainFlavorText, gemProgressFlavorText } from '../../data/mining';
 import {keyGainFlavorText} from '../../data/keys';
 import {beaconPower, beaconBonuses, beaconFormulas, 
     beaconNums, beaconNextReqs, beaconSpendAmt} from '../../data/beacons';
-import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
+import MiningUpgradeButton from './UpgradeButtons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
 // @ts-nocheck
 

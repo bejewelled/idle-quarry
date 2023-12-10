@@ -108,11 +108,11 @@ select-none"
         visibleTier,
         unlockedRes,
         resources,
-    } from '../../data/player'
-    import { progressThreshold, progressPerTick } from '../../data/mining'
-    import { beaconUpgrades } from '../../data/beacons'
-    import ref from '../../calcs/ref'
-    import formula from '../../calcs/formula'
+    } from '../../../data/player'
+    import { progressThreshold, progressPerTick } from '../../../data/mining'
+    import { beaconUpgrades } from '../../../data/beacons'
+    import ref from '../../../calcs/ref'
+    import formula from '../../../calcs/formula'
     // @ts-nocheck
     export let index
     let getCosts = () => {

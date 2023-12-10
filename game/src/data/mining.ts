@@ -589,11 +589,11 @@ export const miningUpgrades = array([{
     description: 'Artifact droprate from keys is improved.',
     cost: {
         sigils: 42500,
-        warp: 5000,
+        mist: 5000,
     },
     ratio: 1.33,
     unlockAt: () => (get(wallet)['artifacts'] || 
-    (get(wallet)['sigils'] > 25000 && get(wallet)['warp'] > 10000)),
+    (get(wallet)['sigils'] > 25000 && get(wallet)['mist'] > 10000)),
     formula: (lv: any) => 1 + lv * 0.15,
     noResetRelocate: true,
     isPercent: true,
@@ -772,7 +772,7 @@ export const miningUpgrades = array([{
     name: 'Lootmaster IV [unimplemented]',
     description: 'Unlocks a new tier of findable drops, and automatically unlocks LM1-3 if they aren\'t already.',
     cost: {
-        warp: 1e7,
+        mist: 1e7,
         antimatter: 75000,
         efire: 21000,
         eearth: 21000,

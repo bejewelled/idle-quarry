@@ -395,7 +395,7 @@ export const keyCrafts = array([
             gems: 1e15,
             slurry: 10000,
             sigils: 5000,
-            warp: 2500,
+            mist: 2500,
         },
         craftTime: 180, // in seconds
         min: 3,
