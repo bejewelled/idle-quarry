@@ -372,21 +372,6 @@ export const keyCrafts = array([
         unlockAt: () => (get(wallet)['fragments'] > 0),
     },
     {
-        item: 'key2',
-        name: '[**] Key',
-        style: 'text-blue-400',
-        stylebg: 'bg-blue-400',
-        cost: {
-            fame: 1e4,
-            slurry: 10,
-        },
-        craftTime: 35, // in seconds
-        min: 1,
-        max: 3,
-        ratio: 1.04,
-        unlockAt: () => (get(keysOpened)[0] > 1000 || get(permaWallet)['gold'] > 1000000),
-    },
-    {
         item: 'key3',
         name: '[***] Key',
         style: 'text-pink-400',
@@ -429,7 +414,7 @@ export const keyCrafts = array([
         craftTime: 100, // in seconds
         min: 2,
         max: 4,
-        ratio: 1.25,
+        ratio: 1.3,
         unlockAt: () => (get(permaWallet)['totalFame'] > 1e13),
     },
     {
@@ -443,7 +428,7 @@ export const keyCrafts = array([
         craftTime: 100, // in seconds
         min: 2,
         max: 4,
-        ratio: 1.25,
+        ratio: 1.3,
         unlockAt: () => (get(permaWallet)['dust'] > 750),
     },
     {
@@ -457,7 +442,7 @@ export const keyCrafts = array([
         craftTime: 100, // in seconds
         min: 2,
         max: 4,
-        ratio: 1.25,
+        ratio: 1.3,
         unlockAt: () => (get(permaWallet)['orbs'] > 1.5e9),
     },
     {
@@ -471,7 +456,7 @@ export const keyCrafts = array([
         craftTime: 100, // in seconds
         min: 2,
         max: 4,
-        ratio: 1.25,
+        ratio: 1.3,
         unlockAt: () => (get(permaWallet)['sigils'] > 1e7),
     },
     {
@@ -485,7 +470,7 @@ export const keyCrafts = array([
         craftTime: 100, // in seconds
         min: 3,
         max: 3,
-        ratio: 1.25,
+        ratio: 1.3,
         unlockAt: () => (get(wallet)['stars'] >= 1),
     },
 

@@ -536,4 +536,5 @@ export const deity = object({
     level: 0,
     xp: 0,
     xpNextReq: 1000,
+    mistInvested: 0,
 })

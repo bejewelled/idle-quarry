@@ -4,7 +4,7 @@
 	// @ts-ignore
 	import { keyFinderBases } from './../../data/mining.ts';
 	// @ts-ignore
-	import { craftMasteryProgress, craftMasteryNextReq, craftMasteryLevel, keyUpgradeLevels, starProgress } from './../../data/player.ts';
+	import { craftMasteryProgress, craftMasteryNextReq, craftMasteryLevel, keyUpgradeLevels, starProgress, deity } from './../../data/player.ts';
 // @ts-nocheck
 
     // @ts-ignore
@@ -119,6 +119,7 @@
     import formula from '../../calcs/formula'
 
     import { onMount } from 'svelte'
+    import { get } from 'svelte/store'
 
     // @ts-ignore
     const d = i => {
@@ -191,6 +192,7 @@
             // @ts-ignore
             dt = (Date.now() - last) / UPDATE_SPEED * TEST_SPEEDUP
             addProgress(dt)
+            addDeityProgress(dt)
             updateMiningLevel()
             updateLayer()
             checkForKeyCraftCompletion()
@@ -584,6 +586,16 @@
             const n = Math.max(1,(Math.floor($starProgress[0] / $starProgress[1]) * formula.calcStarGainWhenComplete()))
             $wallet['stars'] = ($wallet['stars'] || 0) + n
             $starProgress[0] %= $starProgress[1]   
+        }
+    }
+
+    function addDeityProgress(dt) {
+        const gain = dt*formula.calcDeityPower();
+        $deity['xp'] += gain;
+        if ($deity['xp'] >= $deity['xpNextReq']) {
+            $deity['xp'] -= $deity['xpNextReq']
+            $deity['level']++
+            $deity['xpNextReq'] = formula.getDeityNextReq($deity['level'])
         }
     }
 

@@ -1,7 +1,7 @@
 import {buttonUpgradeLevels, miningUpgradeLevels, keyUpgradeLevels,
 keyCraftAmount, keyCraftMastery, beaconLevels, challengeActive, wallet, 
 ascensionLevels, ascensionStats, automationItemsUnlocked, masteryItemLevels, 
-slurryToggles, layer, settings, enchantUpgradeLevels} from '../data/player';
+slurryToggles, layer, settings, enchantUpgradeLevels, deity} from '../data/player';
 import { beaconBonuses } from '../data/beacons';
 import {keyUpgrades, keyCrafts} from '../data/keys'
 import { get } from 'svelte/store';
@@ -273,10 +273,9 @@ export default class formula {
   }
 
   static calcKeyCraftAmountGained(i: string) {
-    const min = get(keyCrafts)[i]['min']
-    const max = get(keyCrafts)[i]['max']
-    return Math.floor(min + Math.random()*(max-min)
-    * this.getKeyCraftBonuses());
+    const min = get(keyCrafts)[i]['min'] * this.getKeyCraftBonuses()
+    const max = get(keyCrafts)[i]['max'] * this.getKeyCraftBonuses()
+    return Math.floor(min + Math.random()*(max-min));
   }
   static calcMinMaxCraftAmount(i: string) {
     const min = get(keyCrafts)[i]['min']
@@ -285,8 +284,11 @@ export default class formula {
   }
 
   static getKeyCraftBonuses() {
-    return 1 * get(beaconBonuses)[6]
+    const y = 1 * get(beaconBonuses)[6]
     * get(keyUpgrades)[2]['formula'](get(keyUpgradeLevels)[2]);
+    console.log(y)
+    
+    return y;
   }
 
   static calcmistGainFromMastery() {
@@ -345,6 +347,16 @@ export default class formula {
     return y;
   }
 
+  static calcDeityPower() {
+    const y = (get(deity)['mistInvested'] || 0);
+    const basePower = Math.log((y/1e6)+1) * 0.1;
+    return basePower;
+  }
+
+  static getDeityNextReq(i: number) {
+    const vals = [1000, 1e6, 1e9, 5e11, 1.5e13, 6e14, 1.8e16, 3.6e17, 6.4e18, 9.6e19]
+    return vals[i];
+  }
 
   static calcStarProgressGain() {
     let y = get(buttonUpgrades)[5]['formula'](get(buttonUpgradeLevels)[5]);

@@ -62,7 +62,7 @@
 
                 <div class='pt-2 mt-2'></div>
                 {#if $thoriumDepositActive !== 'off'}
-                ,<div class='col-span-12'><ThoriumDepositButton/></div>
+                <div class='col-span-12'><ThoriumDepositButton/></div>
                 {/if}
 
                 <div class="alog-break pt-4 col-span-12" />
@@ -1035,6 +1035,7 @@
 
         loadingFinished = true;
         console.log($activityLogShow);
+
         return true;
     };
 
@@ -1360,15 +1361,15 @@
     }
 
     :global(.game-btn-encht2) {
-        border: 1px solid #5e9460;
-        color: #5e9460;
+        border: 1px solid #75b877;
+        color: #75b877;
         cursor: pointer;
     }
 
     :global(.game-btn-encht2:hover) {
-        border: 1px solid #7fbf8a;
-        color: #7fbf8a;
-        background-color: #2e4e2a;
+        border: 1px solid #9febab;
+        color: #9febab;
+        background-color: #21381e;
         cursor: pointer;
     }
 

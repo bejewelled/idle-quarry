@@ -11,20 +11,19 @@
         select-none'> 
         {#key craftFinishTime}
         {#if craftFinishTime > ct}
-            Crafting... {f(progressBarWidth,2)}%
+        <span class='{$keyCrafts[index]['style'] || 'text-white'}'>{$keyCrafts[index]['name']}</span> [{f(progressBarWidth,2)}%]
         {:else}
         Craft 
         <span class='{$keyCrafts[index]['style'] || 'text-white'}'>{$keyCrafts[index]['name']}</span>
         {/if}
         {/key}
+        {#if craftFinishTime < ct}
         <span class='px-2 mx-4 {craftFinishTime > ct ? 'max-w-[90px]' : 'max-w-[300px]'}
             tooltip tooltip-text shadow-lg p-1
         border-white border-double border bg-[#222529] ml-16
             pointer-events-none'>
             <div class='cost items-center text-center grid grid-cols-4'>
-            {#if craftFinishTime > ct}
-                <div class='tooltip-text text-center'>Crafting... </div>
-            {:else}
+            
                 {#each Object.entries(costs) as c}
                     {#if c[1] >= 1} 
                         <div class='{ref.colors[c[0]] || ref.colors['default']} text-left pr-3 col-span-2'>{
@@ -44,9 +43,10 @@
                     {f(formula.calcMinMaxCraftAmount(index)[1])}
                     </div>
 
-                {/if}
+                
             </div>
         </span>
+        {/if}
     </div>
     <div class='col-span-8 grid grid-rows-2 align-middle items-right'>
         <!-- progress bar -->

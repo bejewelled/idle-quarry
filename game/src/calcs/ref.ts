@@ -30,6 +30,8 @@ export default class ref {
         ecelestial: "text-violet-300 text-shadow-gray",
         radium: "text-lime-300",
         antimatter:  "text-transparent text-stone-100 bg-clip-text bg-gradient-to-br from-blue-400 to-indigo-700",
+        faith: 'text-zinc-100 text-shadow-white',
+        deity: 'text-amber-100',
         void: "text-gray-800",
         layer: 'text-yellow-300'
     };

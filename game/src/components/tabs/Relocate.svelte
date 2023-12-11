@@ -75,7 +75,7 @@
 
 
 <script lang='ts'>
-	import { resetLastTimes } from './../../data/player.ts';
+	import { resetLastTimes, deity } from './../../data/player.ts';
 	import { ascFormula } from './../../data/ascension.ts';
 	import { allMultipliers } from './../../data/artifacts';
  //@ts-nocheck
@@ -198,6 +198,12 @@ const fameGridInfo = [
      colorRef: 'antimatter',
      criteria: () => ($wallet['antimatter'] > 0 || $wallet['totalAntimatter'] > 0)
     },
+    {
+     name: 'Deity Tier', 
+     value: () => (Math.pow($deity['level']+1, 1.5)),
+     colorRef: 'faith',
+     criteria: () => ($deity['level'] >= 1)
+    },
 ]
 
 // make sure to update the description when updating this!
@@ -211,6 +217,7 @@ function calcFameGain() {
     * $miningUpgrades[17]['formula']($miningUpgradeLevels[17])
     * $miningUpgrades[37]['formula']($miningUpgradeLevels[37]) // phantom legend
     * $beaconFormulas[4]($beaconLevels[4]) // beacon path
+    * Math.pow($deity['level']+1, 1.5) // deity tier
 }
 
 // ONLY things in these arrays will be reset on relocate

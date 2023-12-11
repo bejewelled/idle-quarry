@@ -39,7 +39,7 @@
               flex justify-start items-left">
                 <div class="bg-lime-300 w-4 h-4 rounded-sm 
                 relative z-0" 
-                style="width: {buttonBarWidth}; transition: width 0.1s;"> 
+                style="width: {buttonBarWidth};"> 
                 </div>
               </div>
           </div>

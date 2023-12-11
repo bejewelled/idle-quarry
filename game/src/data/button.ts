@@ -181,7 +181,7 @@ export const buttonUpgrades = array([
         crystals: 10000,
     },
     ratio: 1.33,
-    formula: (lv: any) => 1 + lv * 0.25,
+    formula: (lv: any) => 1 + lv * (0.25+lv*0.029),
     unlockAt: () => (true),
     suffix: 'x max thorium deposit radioactivity',
     isPercent: false,
