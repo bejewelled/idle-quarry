@@ -33,7 +33,8 @@ export default class ref {
         faith: 'text-zinc-100 text-shadow-white',
         deity: 'text-amber-100',
         void: "text-gray-800",
-        layer: 'text-yellow-300'
+        layer: 'text-yellow-300',
+        blood: "text-transparent text-red-300 bg-clip-text bg-gradient-to-tr from-amber-200 to-red-700",
     };
 
     static essenceBgColors = [

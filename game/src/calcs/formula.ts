@@ -358,6 +358,11 @@ export default class formula {
     return vals[i];
   }
 
+  static calcFaithGain() {
+    const y = Math.pow(get(deity)['level'], 3) * Math.pow(2, get(deity)['level']-1);
+    return Math.max(0, y);
+  }
+
   static calcStarProgressGain() {
     let y = get(buttonUpgrades)[5]['formula'](get(buttonUpgradeLevels)[5]);
     return y;

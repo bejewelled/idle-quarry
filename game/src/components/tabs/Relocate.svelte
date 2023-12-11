@@ -201,7 +201,7 @@ const fameGridInfo = [
     {
      name: 'Deity Tier', 
      value: () => (Math.pow($deity['level']+1, 1.5)),
-     colorRef: 'faith',
+     colorRef: 'deity',
      criteria: () => ($deity['level'] >= 1)
     },
 ]
@@ -243,12 +243,13 @@ export function relocate() {
                     $progressAverage[i[0]] = 0;
                     $progressThisTick[i[0]] = 0;
                 }
-                if (!($automationItemsUnlocked['persistent beacons'])) {
-                    for (let i in $beaconLevels) {
-                        $beaconLevels[i] = 0;
-                        $beaconProgress[i] = 0;
-                        $beaconActivations[i] = 0;
-                    }
+                for (let i in $beaconLevels) {
+                    if ($automationItemsUnlocked['inextinguishable']) 
+                    $beaconLevels[i] = Math.floor($beaconLevels[i]*0.7)
+                    else $beaconLevels[i] = 0;
+
+                    $beaconProgress[i] = 0;
+                    $beaconActivations[i] = 0;
                 }
                 for (let bR in $beaconNextReqs) {
                     $beaconNextReqs[bR] = ($beaconLevels[bR]+1) * $baseBeaconNextReqs[bR];
@@ -325,6 +326,11 @@ export function relocate() {
                     $miningUpgradeLevels[9] = 1;
                     $miningUpgradeLevelsBought[9] = 1;
                     $visibleTier = 3;
+                }
+                if ($automationItemsUnlocked['deep pockets iii']) {
+                    $miningUpgradeLevels[14] = 1;
+                    $miningUpgradeLevelsBought[14] = 1;
+                    $visibleTier = 4;
                 }
 
                 $resetLastTimes['relocate'] = Date.now()

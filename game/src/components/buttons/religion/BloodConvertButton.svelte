@@ -3,13 +3,12 @@
 <div on:click={() => buy()}
 class='has-tooltip tooltip-text game-btn text-teal-400 
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
-    Convert Mist into Deity Power
+    Shed <span class='{ref.colors['blood']}'>Blood</span> 
          <span class='px-2 mx-4 max-w-[300px] tooltip tooltip-text shadow-lg p-1
        border-white border-double border bg-[#222529] mr-16
          pointer-events-none'>
         <div class='title text-small-gray items-start text-center pb-1'>
-            Your deity is attracted by the strength of your mine. <br/>
-            Convert all mist into deity power.
+            Worship always comes at a price...
         </div>
          </span>
      </div>
@@ -22,12 +21,12 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
     import { onDestroy, onMount } from 'svelte';
     import { progress, wallet, enchantUpgradeLevels, miningDropTable,
          settings, visibleTier, unlockedRes, 
-         buttonStats, buttonNumClicks, buttonUpgradeLevels, permaWallet, deity} from '../../data/player';
-    import {progressThreshold, progressPerTick } from '../../data/mining';
-    import { enchantUpgrades } from '../../data/fame';
-    import {buttonUpgrades} from '../../data/button';
-    import ref from '../../calcs/ref'
-    import formula from '../../calcs/formula'
+         buttonStats, buttonNumClicks, buttonUpgradeLevels, permaWallet, deity} from '../../../data/player';
+    import {progressThreshold, progressPerTick } from '../../../data/mining';
+    import { enchantUpgrades } from '../../../data/fame';
+    import {buttonUpgrades} from '../../../data/button';
+    import ref from '../../../calcs/ref'
+    import formula from '../../../calcs/formula'
 // @ts-nocheck
 
     onMount(() => {

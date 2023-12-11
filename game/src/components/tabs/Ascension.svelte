@@ -27,10 +27,13 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
         {#each $ascensionElements as e, i}
             <!-- names -->
             <div class="wrapper col-span-12 grid grid-cols-12 py-2">
-                <div class="col-span-3 text-large game-text">
-                    <span class={ref.essenceTextColors[i]}
-                        >{$elementNames[i]} [{f($ascensionLevels[e][0], 0)}]</span
+                <div class="col-span-3 text-large game-text grid-rows-2">
+                    <div class='row-span-1 {ref.essenceTextColors[i]}'
+                        >{$elementNames[i]} <strong>[{f($ascensionLevels[e][0], 0)}]</strong></div
                     >
+                    <div class='row-span-1 pt-1'>
+                        <AscensionPrestigeButton/>
+                    </div>
                 </div>
                 <div class="pbar-desc col-span-7 grid grid-rows-2">
                     <div class="row-span-1 game-text text-small">
@@ -136,6 +139,7 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
 </div>
 
 <script lang="ts">
+	import AscensionPrestigeButton from '../buttons/AscensionPrestigeButton.svelte';
 	import Resetters from './../resetters/Resetters.svelte';
     import { ascensionLevels, ascensionStats } from "./../../data/player.ts";
     import { ascFormula, ascensionElements, ascensionConstants,

@@ -597,6 +597,8 @@
             $deity['level']++
             $deity['xpNextReq'] = formula.getDeityNextReq($deity['level'])
         }
+
+        $wallet['faith'] = ($wallet['faith'] || 0) + (formula.calcFaithGain() / (1000 / UPDATE_SPEED) * dt);
     }
 
     /**

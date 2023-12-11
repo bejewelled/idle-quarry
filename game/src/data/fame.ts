@@ -545,6 +545,29 @@ export const automationUpgrades = array([{
     isPercent: true,
     noResetAscension: true,
 },
+{
+    index: 19,
+    name: 'Inextinguishable',
+    description: 'Keep 70% of beacon levels each relocation.',
+    cost: {
+        antimatter: 700,
+        trophies: 15,
+    },
+    unlockAt: () => (get(ascensionStats)['ascensionCount'] >= 3),
+    isPercent: true,
+    noResetAscension: true,
+},
+{
+    index: 1,
+    name: 'Deep Pockets III',
+    description: 'Lootmaster III is automatially unlocked and stays unlocked on relocate.',
+    cost: {
+        trophies: 40,
+    },
+    unlockAt: () => (get(wallet)['ascensionCount'] >= 4),
+    isPercent: true,
+    suffix: ' chance',
+},
 
 
 

@@ -31,16 +31,17 @@
 <div class='col-span-12 pb-2'></div>
     {#each Object.entries($masteryItemLevels) as m}
         {#if $wallet[m[0]]}
-            <div class='col-span-2'>
-                <span class='{ref.colors[m[0]]}'>{m[0]} ({(f($wallet[m[0]]))})</span>
-            </div>
             <div class='col-span-1'>
+                <span class='{ref.colors[m[0]]}'>{m[0]}</span>
+            </div>
+            <div class='col-span-1
+            '>
                 <span class='{ref.colors[m[0]]}'>🌟{f(m[1])}</span>
             </div>
             <div class='col-span-2 text-left pr-2 text-med'>
                 <span class='text-orange-400'>[ x{f(formula.calcMasteryGainMulti($masteryItemLevels[m[0]]), 2)} progress]</span>
             </div>
-            <div class='col-span-5 grid grid-rows-2 mt-1 mx-5'>
+            <div class='col-span-6 grid grid-rows-2 mt-1 mx-5'>
                 <div class='bar-wrapper align-middle'>
                     <div class="w-full my-1 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 has-tooltip">
                         <div class="bg-{ref.colors[m[0]].substring(5)} h-2.5 rounded-full has-tooltip" 

@@ -42,16 +42,27 @@
   <DeityConvertMistButton />
   </div>
   {#if $deity['level'] >= 1}
-  <div class='col-span-3 text-center has-tooltip py-1'>
+  <div class='col-span-3 pb-1 text-center has-tooltip py-1'>
     <div class='tooltip-text text-med'>You have 
-      <span class='{ref.colors['faith']} font-bold'>{f($wallet['faith'] || 0)}</span> faith.
+      <span class='{ref.colors['faith']} font-bold'>{f($wallet['faith'] || 0)}</span> faith 
+      [<span class='{ref.colors['faith']}'>+{f(formula.calcFaithGain(), 0)}</span> per second].
+    </div>
+    <div class='grid grid-cols-4 pt-1'>
+      <div class='col-span-2 px-1'>
+        <LightConvertButton />
+      </div>
+      <div class='col-span-2 px-1'>
+        <BloodConvertButton />
+      </div>
     </div>
   </div>
   {/if}
 </div>
 
 <script lang="ts">
-	import DeityConvertMistButton from "../buttons/DeityConvertMistButton.svelte";
+	import LightConvertButton from './../buttons/religion/LightConvertButton.svelte';
+	import BloodConvertButton from "../buttons/religion/BloodConvertButton.svelte";
+	import DeityConvertMistButton from "../buttons/religion/DeityConvertMistButton.svelte";
   //@ts-nocheck
   import { onMount, onDestroy } from "svelte";
   import {
