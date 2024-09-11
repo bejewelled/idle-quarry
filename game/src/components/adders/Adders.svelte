@@ -322,7 +322,7 @@
             addToActivityLog(
                 'Layer ' + ($layer['layer']-1) + " mined",
                 'text-yellow-300',
-                'always'
+                'layer'
             )
             }
 
