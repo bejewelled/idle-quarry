@@ -273,8 +273,9 @@ export default class formula {
   static calcKeyCraftAmountGained(i: string) {
     const min = get(keyCrafts)[i]['min']
     const max = get(keyCrafts)[i]['max']
-    return Math.floor(min + Math.random()*(max-min)
-    * this.getKeyCraftBonuses());
+    const amount = Math.floor((min + Math.random()*(max-min))
+    * this.getKeyCraftBonuses())
+    return amount;
   }
   static calcMinMaxCraftAmount(i: string) {
     const min = get(keyCrafts)[i]['min']

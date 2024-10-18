@@ -299,6 +299,13 @@
         if ($layer['blocks'] >= $layer['blocksNextReq']) {
             $layer['blocks'] -= $layer['blocksNextReq']
             $layer['layer']++
+            // Hotfix layers `rounding` to the nearest integer to be sure they always align to correct bounds
+            let layerDiff = $layer['layer'] - Math.floor($layer['layer'])
+            if ( layerDiff > 0 && layerDiff < 0.5) {
+                $layer['layer'] = Math.floor($layer['layer'])
+            } else if (layerDiff >= 0.5) {
+                $layer['layer'] = Math.ceil($layer['layer'])
+            }
             // 100 * (A73^3) * ((1.01+((A73^2)*$D$2))^A73) * (2+Max(0, A73-69)*0.3)^Max(0, A73)
             const lv = $layer['layer']
             // @ts-ignore
@@ -315,7 +322,7 @@
             addToActivityLog(
                 'Layer ' + ($layer['layer']-1) + " mined",
                 'text-yellow-300',
-                'always'
+                'layer'
             )
             }
 
