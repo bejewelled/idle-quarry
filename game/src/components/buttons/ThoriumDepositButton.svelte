@@ -1,6 +1,6 @@
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 <div class='game-btn-thorium pt-1 pb-1 text-small text-center select-none
-lg:w-[112px] sm:w-[290px] xl:w-full' on:click={() => collectThorium()}>
+lg:w-[112px] sm:w-[290px] xl:w-full' onclick={() => collectThorium()}>
     {#if $thoriumDepositActive == 'on'}
         Thorium! Click to collect.
     {:else if $thoriumDepositActive == 'transition'}
@@ -31,7 +31,7 @@ lg:w-[112px] sm:w-[290px] xl:w-full' on:click={() => collectThorium()}>
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
 
-    let thoriumGained = 0;
+    let thoriumGained = $state(0);
 
     const f = (n, pl = 0) => {
         if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");

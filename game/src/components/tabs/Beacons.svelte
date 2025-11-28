@@ -14,20 +14,20 @@
             <input id='max' class="content-center w-20  bg-gray-700 text-white" placeholder='1' bind:value={$beaconSpendAmt}>
         </div>
         {#if $automationItemsUnlocked['beacon tools']}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class='game-btn m-1 text-med col-span-3' on:click={() => splitBeacons()}>
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <div class='game-btn m-1 text-med col-span-3' onclick={() => splitBeacons()}>
             Split Beacons Evenly
         </div>
         {#if $automationItemsUnlocked['beacon tools ii']}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class='game-btn m-1 text-med col-span-3' on:click={() => smartSplitBeacons()}>
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <div class='game-btn m-1 text-med col-span-3' onclick={() => smartSplitBeacons()}>
             Smart Split Beacons
         </div>
         {:else}
         <div class='col-span-3'></div>
         {/if}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class='game-btn m-1 text-med col-span-3' on:click={() => recallBeacons()}>
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <div class='game-btn m-1 text-med col-span-3' onclick={() => recallBeacons()}>
             Recall Beacons
         </div>
         <div class='col-span-1'></div>
@@ -108,6 +108,8 @@
 
 
 <script lang='ts'>
+    import { run } from 'svelte/legacy';
+
 	import { beaconUpgrades } from './../../data/beacons.ts';
  //@ts-nocheck
 import { onMount, onDestroy } from 'svelte';
@@ -130,9 +132,11 @@ import BeaconToggleButton from '../buttons/BeaconToggleButton.svelte';
 import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte';
 import BeaconSmartSplitChecks from '../buttons/BeaconSmartSplitChecks.svelte';
 
-$: pbarWidths = Array(30).fill(0);
-$: beaconDispBonus = $beaconBonuses
-let beaconDispBonus = $beaconBonuses;
+let pbarWidths = $derived(Array(30).fill(0));
+run(() => {
+        beaconDispBonus = $beaconBonuses
+    });
+let beaconDispBonus = $state($beaconBonuses);
 
 
 onMount(() => {

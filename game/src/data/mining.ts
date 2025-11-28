@@ -171,7 +171,7 @@ export const progressPerTick = single(1);
 
 export const keyFinderBases = object({
     1: 18,
-    2: 3,
+    2: 1,
     3: 0.04,
     4: 0.00002
 })

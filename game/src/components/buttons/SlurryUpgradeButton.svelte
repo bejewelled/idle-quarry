@@ -1,8 +1,8 @@
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 {#key permUnlocked || affordable || $keyUpgradeLevels[index] > 0}
 {#if $keyUpgrades[index]['unlockAt']() || permUnlocked || $keyUpgradeLevels[index] > 0}
-<div on:click={() => buy()}
+<div onclick={() => buy()}
 class='has-tooltip tooltip-text py-1
 {(
 ($keyUpgradeLevels[index] >= $keyUpgrades[index]['maxLevel']) ?
@@ -69,7 +69,7 @@ select-none'>
 
         
 
- <script>
+ <script lang="ts">
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
@@ -84,8 +84,13 @@ select-none'>
     import {buttonUpgrades} from '../../data/button';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
-// @ts-nocheck
-    export let index;
+
+  interface Props {
+    // @ts-nocheck
+    index: any;
+  }
+
+  let { index }: Props = $props();
     let getCosts = () => {
         let c = {};
         for (let [type, base] of Object.entries($keyUpgrades[index]['cost'])) {
@@ -93,11 +98,11 @@ select-none'>
         }
         return c;
     }
-    let costs = {};
-    let affordable, unlocked;
-    let permUnlocked = ($keyUpgradeLevels[index] > 0)
+    let costs = $state({});
+    let affordable = $state(), unlocked;
+    let permUnlocked = ($state($keyUpgradeLevels[index] > 0))
     let affordInterval;
-    let buyAmount;
+    let buyAmount = $state();
     
     onMount(() => {
         setTimeout(() => {

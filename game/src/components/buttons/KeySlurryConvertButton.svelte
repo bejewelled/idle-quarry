@@ -1,8 +1,8 @@
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 {#key reloadClock}
 {#if $permaWallet['gold'] > 1e4 || $wallet['slurry'] > 0}
-<div on:click={() => buy()}
+<div onclick={() => buy()}
 class='has-tooltip tooltip-text game-btn text-teal-400 
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
     Convert Keys Into Slurry 
@@ -56,16 +56,16 @@ py-2 items-center text-center border-solid ml-1 mr-1 col-span-12 select-none'>
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
 // @ts-nocheck
-    let reloadClock, rcInterval;
-    let keysInWallet = {
+    let reloadClock = $state(), rcInterval;
+    let keysInWallet = $state({
       key1: $wallet['key1'],
       key2: $wallet['key2'],
       key3: $wallet['key3'],
       key4: $wallet['key4'],
       key5: $wallet['key5'],
-    }
-    $: slurryGain = formula.calcKeySlurryGain(keysInWallet);
-    $: sigilGain = formula.calcKeySigilGain(slurryGain);
+    })
+    let slurryGain = $derived(formula.calcKeySlurryGain(keysInWallet));
+    let sigilGain = $derived(formula.calcKeySigilGain(slurryGain));
 
     onMount(() => {
       reloadClock = false;

@@ -1,8 +1,8 @@
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 {#key permUnlocked || affordable || $enchantUpgradeLevels[index] > 0}
 {#if $enchantUpgrades[index]['unlockAt']() || permUnlocked || $enchantUpgradeLevels[index] > 0}
-<div on:click={() => buy(index)}
+<div onclick={() => buy(index)}
 class='has-tooltip tooltip-text 
 {(affordable && maxBuyCalcFinished
  && ($enchantUpgradeLevels[index] < $enchantUpgrades[index]['maxLevel'])  ?
@@ -83,7 +83,7 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
 
         
 
- <script>
+ <script lang="ts">
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
@@ -93,8 +93,13 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
     import { enchantUpgrades } from '../../data/fame';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
-// @ts-nocheck
-    export let index;
+
+  interface Props {
+    // @ts-nocheck
+    index: any;
+  }
+
+  let { index }: Props = $props();
     let getCosts = () => {
         let c = {};
         for (let [type, base] of Object.entries($enchantUpgrades[index]['cost'])) {
@@ -102,12 +107,12 @@ select-none'>{$enchantUpgrades[index]['name']} [{f($enchantUpgradeLevels[index],
         }
         return c;
     }
-    let costs = {};
-    let affordable, unlocked;
-    let permUnlocked = ($enchantUpgradeLevels[index] > 0)
+    let costs = $state({});
+    let affordable = $state(), unlocked;
+    let permUnlocked = ($state($enchantUpgradeLevels[index] > 0))
     let affordInterval;
-    let maxBuyCalcFinished = true;
-    let buyAmount = $settings['buyAmount']
+    let maxBuyCalcFinished = $state(true);
+    let buyAmount = $state($settings['buyAmount'])
     
     onMount(() => {
         setTimeout(() => {

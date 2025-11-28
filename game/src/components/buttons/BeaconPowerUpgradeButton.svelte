@@ -1,6 +1,6 @@
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
-    on:click={() => buy(index)}
+    onclick={() => buy(index)}
     class="has-tooltip tooltip-text py-1
 {affordable ? ($beaconUpgrades[index]['isCelestial'] ? 'game-btn-celestial' : 'game-btn') : 
 ($beaconUpgrades[index]['isCelestial'] ? 'game-btn-celestial-noafford' : 'game-btn-noafford')}
@@ -95,7 +95,7 @@ select-none"
     {/key}
 </div>
 
-<script>
+<script lang="ts">
     // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte'
@@ -113,8 +113,13 @@ select-none"
     import { beaconUpgrades } from '../../data/beacons'
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
-    // @ts-nocheck
-    export let index
+    
+    interface Props {
+        // @ts-nocheck
+        index: any;
+    }
+
+    let { index }: Props = $props();
     let getCosts = () => {
         let c = {}
         for (let [type, base] of Object.entries(
@@ -124,11 +129,11 @@ select-none"
         }
         return c
     }
-    let costs = {}
-    let affordable, unlocked
+    let costs = $state({})
+    let affordable = $state(), unlocked
     let permUnlocked = $beaconUpgradeLevels[index] > 0
     let affordInterval
-    let buyAmount;
+    let buyAmount = $state();
 
     onMount(() => {
         setTimeout(() => {

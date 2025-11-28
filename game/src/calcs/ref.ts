@@ -159,7 +159,7 @@ export default class ref {
         mastery: "Buy mastery with fame to unlock.",
         artifacts: "Find an artifact to unlock.",
         ascension: "Obtain 1e13 fame.",
-        button: "Reach Mining Level 8 to unlock.",
+        reactor: "Reach Mining Level 8 to unlock.",
         augments: "Relocate once to unlock."
     };
 

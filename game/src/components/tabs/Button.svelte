@@ -103,7 +103,7 @@
 // @ts-nocheck
 
 let clockinterval;
-let radioactivityGain = formula.calcRadioactivityGain();
+let radioactivityGain = $state(formula.calcRadioactivityGain());
 
 onMount(() => {
   clockinterval = setInterval(() => {
@@ -116,8 +116,8 @@ onDestroy(() => {
   clearInterval(clockinterval);
 });
 
-$: buttonBarWidth = `${Math.min(1,$radiumProgress[0] / $radiumProgress[1]) * 100}%`;
-$: crystalGains = formula.calcCrystalGainFromRadium()
+let buttonBarWidth = $derived(`${Math.min(1,$radiumProgress[0] / $radiumProgress[1]) * 100}%`);
+let crystalGains = $derived(formula.calcCrystalGainFromRadium())
 const f = (n, pl = 0) => {
         if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         else return n.toExponential(3).toString().replace('+', '');

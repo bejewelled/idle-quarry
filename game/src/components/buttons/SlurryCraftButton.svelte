@@ -1,9 +1,9 @@
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 {#key $wallet[item] >= 0.9}
 
 <div class='wrapper grid grid-cols-12 py-1'>
-    <div on:click={() => buy(index)}
+    <div onclick={() => buy(index)}
         class='has-tooltip tooltip-text 
         {affordable && craftFinishTime <= ct
         ? 'game-btn text-indigo-300' : 'game-btn-noafford text-indigo-300'}
@@ -87,7 +87,7 @@
 {/key}
         
 
- <script>
+ <script lang="ts">
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
@@ -102,42 +102,33 @@
     import {buttonUpgrades} from '../../data/button';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
-// @ts-nocheck
-    export let index;
-    let renderFlag = false, updateClock = false;
-    $: getCosts = () => {
-        let c = {};
 
-        for (let [type, base] of Object.entries($keyCrafts[index]['cost'])) {
-            if (type == 'energy') {
-                c[type] = base;
-                continue;
-            }
-            c[type] = cost(base);
-        }
-        return c;
-    }
-    $: costs = {};
-    let affordable, unlocked;
+  interface Props {
+    // @ts-nocheck
+    index: any;
+  }
+
+  let { index }: Props = $props();
+    let renderFlag = false, updateClock = false;
+    let affordable = $state(), unlocked;
     let affordInterval;
     let item = $keyCrafts[index]['item'];
     console.log(item);
     let craftStartTime = $keyCraftTimes[item][0];
-    let craftFinishTime = $keyCraftTimes[item][1];
+    let craftFinishTime = $state($keyCraftTimes[item][1]);
     if (!$keyCraftMastery[item]) $keyCraftMastery[item] = [1,0,10];
-    $: masteryLevel = $keyCraftMastery[item][0];
 
-    let progressBarWidth = 0;
+    let progressBarWidth = $state(0);
     let getProgressBarWidth = (ct) => 
         ((craftFinishTime != craftStartTime) ?
         Math.min(100,(craftFinishTime > ct ?
     (ct - craftStartTime) / (craftFinishTime - craftStartTime) * 100 :
     0)) : 0);
-    let masteryBarWidth = 0;
+    let masteryBarWidth = $state(0);
     const getMasteryBarWidth = () => (($keyCraftMastery[item][1] / $keyCraftMastery[item][2])*100)
 
     let updateInterval, costUpdater;
-    let ct = Date.now();
+    let ct = $state(Date.now());
     onMount(() => {
         setTimeout(() => {
             costs = getCosts();
@@ -249,7 +240,21 @@ function thisTypeAffordable(type) {
         return display[index];
     }
 
- </script>
+     let getCosts = $derived(() => {
+        let c = {};
+
+        for (let [type, base] of Object.entries($keyCrafts[index]['cost'])) {
+            if (type == 'energy') {
+                c[type] = base;
+                continue;
+            }
+            c[type] = cost(base);
+        }
+        return c;
+    })
+    let costs = $derived({});
+    let masteryLevel = $derived($keyCraftMastery[item][0]);
+</script>
 <style>
   .tooltip {
     @apply invisible absolute;

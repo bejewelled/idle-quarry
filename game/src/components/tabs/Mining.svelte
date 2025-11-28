@@ -39,12 +39,12 @@
     <!-- reg / dust upgrade selector -->
     {#if $wallet['dust']}
         <div class='pt-2 grid grid-cols-6'>
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class='mx-1 p-1 col-span-3 game-btn text-med' on:click={() => changeUpgradeType('regular')}>
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <div class='mx-1 p-1 col-span-3 game-btn text-med' onclick={() => changeUpgradeType('regular')}>
                 Mining Upgrades
             </div>
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class='mx-1 p-1 col-span-3 game-btn text-med' on:click={() => changeUpgradeType('dust')}>
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <div class='mx-1 p-1 col-span-3 game-btn text-med' onclick={() => changeUpgradeType('dust')}>
                 Dust Upgrades
             </div>
         </div>
@@ -57,11 +57,11 @@
             {#key mountCheck}
             {#each Object.entries($upgradeSorting) as u}
                 {#if u[1] !== undefined && u[1]['unlockAt']()}
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <div class='m-1 text-center 
                     {$upgradeSorting[u[0]]['on'] ? 'control-btn-toggleon' : 'control-btn'}
                     col-span-1 tooltip-text select-none' 
-                    on:click={() => changeUpgradeSorting(u[0])}>
+                    onclick={() => changeUpgradeSorting(u[0])}>
                         {u[0]}
                     </div>
                 {/if}
@@ -163,7 +163,7 @@
     </div>
     <div class='text-[#989898] text-small text-center w-full p-1'>
         Cost multipliers are reduced by {fp(1-formula.calcMiningCostRatioMulti(), 0)} (minimum 1.025x).</div>
-    {#key $upgradeSorting }
+    {#key $upgradeSorting}
     <div class='mine-upgrade-wrapper flex flex-wrap'>
         {#each upgradeOrder as i}
             {#if ((upgradeTab == 'regular' && !$miningUpgrades[i]['isDust'])
@@ -201,17 +201,11 @@ import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
     import formula from '../../calcs/formula.js'
 
-$: mineBarWidth = `${Math.min(1,$progress['gems'] / $progressThreshold['gems']) * 100}%`;
-$: key1BarWidth = `${Math.min(1,$progress['key1'] / $progressThreshold['key1']) * 100}%`;
-$: key2BarWidth = `${Math.min(1,$progress['key2'] / $progressThreshold['key2']) * 100}%`;
-$: key3BarWidth = `${Math.min(1,$progress['key3'] / $progressThreshold['key3']) * 100}%`;
-$: mDropTable = Object.entries($miningDropTable)
-$: upgradeOrder = renderedUpgrades.map((_,i) => i).sort((a,b) => miningSort([a,renderedUpgrades[a]], [b,renderedUpgrades[b]]))
 // for triggering #key
-let clockr = false;
-let renderedUpgrades = $miningUpgrades;
-let upgradeTab = 'regular';
-let mountCheck = false;
+let clockr = $state(false);
+let renderedUpgrades = $state($miningUpgrades);
+let upgradeTab = $state('regular');
+let mountCheck = $state(false);
 
 const isSoftcapped = (item) => ($progressAverage[item.toString()]
 *(1000/$settings['UPDATE_SPEED'])/$progressThreshold[item.toString()] > (25*ascFormula.getVal('fire')))
@@ -282,4 +276,10 @@ const upgradeSortShow = (i) => {
     return false;
 }
 
+let mineBarWidth = $derived(`${Math.min(1,$progress['gems'] / $progressThreshold['gems']) * 100}%`);
+let key1BarWidth = $derived(`${Math.min(1,$progress['key1'] / $progressThreshold['key1']) * 100}%`);
+let key2BarWidth = $derived(`${Math.min(1,$progress['key2'] / $progressThreshold['key2']) * 100}%`);
+let key3BarWidth = $derived(`${Math.min(1,$progress['key3'] / $progressThreshold['key3']) * 100}%`);
+let mDropTable = $derived(Object.entries($miningDropTable))
+let upgradeOrder = $derived(renderedUpgrades.map((_,i) => i).sort((a,b) => miningSort([a,renderedUpgrades[a]], [b,renderedUpgrades[b]])))
 </script>

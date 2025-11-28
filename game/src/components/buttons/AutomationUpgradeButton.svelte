@@ -1,8 +1,8 @@
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 {#key affordable}
 {#if $automationUpgrades[index]['unlockAt']() || permUnlocked || $enchantUpgradeLevels[index] > 0}
-<div on:click={() => buy(index)}
+<div onclick={() => buy(index)}
 class='has-tooltip tooltip-text 
 {affordable ?
 (($automationItemsUnlocked[$automationUpgrades[index]['name'].toLowerCase()]) ? 'game-btn-automation-maxed': 'game-btn')
@@ -53,10 +53,14 @@ select-none'>{$automationUpgrades[index]['name']}
     import formula from '../../calcs/formula'
     import { key2DropTable } from '../../data/keys';
 // @ts-nocheck
-    /**
-     * @type {string | number}
-     */
-     export let index;
+    
+  /**
+   * @typedef {Object} Props
+   * @property {string | number} index
+   */
+
+  /** @type {Props} */
+  let { index } = $props();
     let getCosts = () => {
         let c = {};
         for (let [type, base] of Object.entries($automationUpgrades[index]['cost'])) {
@@ -64,8 +68,8 @@ select-none'>{$automationUpgrades[index]['name']}
         }
         return c;
     }
-    let costs = {};
-    let affordable, unlocked;
+    let costs = $state({});
+    let affordable = $state(), unlocked;
     let permUnlocked = false;
     let affordInterval;
     

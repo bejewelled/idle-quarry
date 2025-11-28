@@ -3,7 +3,7 @@
     <div class="col-span-12 pb-1 artifact-display text-center game-text">
       You have <span class="text-slate-200">{f($wallet["artifacts"])}</span> artifacts.
     </div>
-    <div class="col-span-12 divider py-3" />
+    <div class="col-span-12 divider py-3"></div>
     {#each Object.entries($allMultipliers) as multi}
       {#if $wallet["artifacts"] >= multi[1]["unlockAt"] && multi[0] != 'startLayer'}
         <div class="col-span-4 game-text text-right">
@@ -14,7 +14,7 @@
         >
           {multi[1]["prefix"]}{f(multi[1]["formula"]($wallet["artifacts"]), multi[0] == 'startLayer' ? 0 : 3)}
         </div>
-        <div class="col-span-6" />
+        <div class="col-span-6"></div>
       {/if}
     {/each}
 
@@ -24,7 +24,7 @@
           >{f(getNextArtifactUnlock())}</span
         > artifacts ]
       </div>
-      <div class="col-span-8" />
+      <div class="col-span-8"></div>
     {/if}
   </div>
 </div>
