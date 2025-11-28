@@ -27,7 +27,7 @@
 <div class='col-span-12 pb-3'></div>
 <button class='col-span-4 text-small
 {$settings['masteryUseLogScale'] ? 'game-btn-toggleon'
-: 'game-btn'}' on:click={() => {toggleMasteryUseLogScale()}}>Use log scale for progress bars</button>
+: 'game-btn'}' onclick={() => {toggleMasteryUseLogScale()}}>Use log scale for progress bars</button>
 <div class='col-span-12 pb-2'></div>
     {#each Object.entries($masteryItemLevels) as m}
         {#if $wallet[m[0]]}
@@ -91,19 +91,7 @@ import {enchantUpgrades, enchantThreshold} from '../../data/fame.js';
 import ref from '../../calcs/ref.js'
 import formula from '../../calcs/formula.js';
 
-//@ts-nocheck
 
-$: nextTrophyBarWidth = `${Math.min(1,$wallet['mastery'] / $masteryNextReq) * 100}%`;
-
-$: masteryBarWidth = () => {
-    const w = {}
-    for (let i of Object.keys($masteryItemLevels)) {
-        if ($settings['masteryUseLogScale'])
-        w[i] = (100 * (Math.log10($wallet[i]) || 0) / Math.log10($masteryItemReqs[i])) + "%"
-        else w[i] = (100 * ($wallet[i] || 0) / $masteryItemReqs[i]) + "%"
-    }
-    return w;
-}
 
 onMount(() => {
     // @ts-ignore
@@ -111,21 +99,6 @@ onMount(() => {
 });
 
 
-// this assumes 50 ticks per second
-$: calcTimeUntilNextTrophy = () => {
-    const diff = $masteryNextReq - ($wallet['mastery'] || 0);
-    const seconds = (diff / (50 * formula.calcMasteryGainPerTick()));
-    const minutes = seconds / 60;
-    const hours = minutes / 60;
-    const days = hours / 24;
-    let text = ''
-    if (seconds == Infinity) return 'inf';
-    if (days > 1) text += f(Math.floor(days)) + 'd ';
-    if (hours > 1) text += f(Math.floor(hours % 24)) + 'h ';
-    if (minutes > 1) text += f(Math.floor(minutes % 60)) + 'm ';
-    if (seconds > 1) text += f(Math.floor(seconds % 60)) + 's ';
-    return text;
-}
 
 const f = (n: number, pl = 0) => {
         if (n < 1e9) return n.toFixed((n < 1e3 ? pl : 0)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -147,6 +120,33 @@ function toggleMasteryUseLogScale() {
 
     $settings['masteryUseLogScale'] = !($settings['masteryUseLogScale'] || false);
 }
+//@ts-nocheck
+
+let nextTrophyBarWidth = $derived(`${Math.min(1,$wallet['mastery'] / $masteryNextReq) * 100}%`);
+let masteryBarWidth = $derived(() => {
+    const w = {}
+    for (let i of Object.keys($masteryItemLevels)) {
+        if ($settings['masteryUseLogScale'])
+        w[i] = (100 * (Math.log10($wallet[i]) || 0) / Math.log10($masteryItemReqs[i])) + "%"
+        else w[i] = (100 * ($wallet[i] || 0) / $masteryItemReqs[i]) + "%"
+    }
+    return w;
+})
+// this assumes 50 ticks per second
+let calcTimeUntilNextTrophy = $derived(() => {
+    const diff = $masteryNextReq - ($wallet['mastery'] || 0);
+    const seconds = (diff / (50 * formula.calcMasteryGainPerTick()));
+    const minutes = seconds / 60;
+    const hours = minutes / 60;
+    const days = hours / 24;
+    let text = ''
+    if (seconds == Infinity) return 'inf';
+    if (days > 1) text += f(Math.floor(days)) + 'd ';
+    if (hours > 1) text += f(Math.floor(hours % 24)) + 'h ';
+    if (minutes > 1) text += f(Math.floor(minutes % 60)) + 'm ';
+    if (seconds > 1) text += f(Math.floor(seconds % 60)) + 's ';
+    return text;
+})
 </script>
 
 <style>

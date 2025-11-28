@@ -1,10 +1,10 @@
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 <div class='grid grid-cols-2'>
-<div on:click={() => sub()}
+<div onclick={() => sub()}
 class='has-tooltip tooltip-text game-btn 
 py-2 items-center text-center border-solid select-none m-1'>-</div>
-<div on:click={() => add()}
+<div onclick={() => add()}
 class='has-tooltip tooltip-text game-btn
 py-2 items-center text-center border-solid select-none m-1'>+</div>
 
@@ -13,7 +13,7 @@ py-2 items-center text-center border-solid select-none m-1'>+</div>
 
         
 
- <script>
+ <script lang="ts">
 // @ts-nocheck
 import { onMount, onDestroy } from 'svelte';
 import {progress, wallet, miningDropTable, miningUpgradeLevels, 
@@ -26,9 +26,14 @@ import {beaconPower, beaconBonuses, beaconFormulas,
     beaconNums, beaconNextReqs, beaconSpendAmt} from '../../data/beacons';
 import MiningUpgradeButton from '../buttons/MiningUpgradeButton.svelte';
 import ref from '../../calcs/ref'
-// @ts-nocheck
 
-    export let index;
+
+  interface Props {
+    // @ts-nocheck
+    index: any;
+  }
+
+  let { index }: Props = $props();
     let affordable, unlocked;
     let permUnlocked = ($miningUpgradeLevels[index] > 0)
     let affordInterval;

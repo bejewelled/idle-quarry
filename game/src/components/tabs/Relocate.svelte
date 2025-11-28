@@ -12,9 +12,9 @@
     <div class='col-span-12 py-1'><hr /></div> 
 
     <div class='col-span-12 pt-3'>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div class='
-        {calcFameGain() >= 10 ? 'game-btn' : 'game-btn-noafford'} text-center' on:click={() => relocate()}>
+        {calcFameGain() >= 10 ? 'game-btn' : 'game-btn-noafford'} text-center' onclick={() => relocate()}>
             {calcFameGain() >= 10 ? 'Relocate' : 'You need to gain at least 10 fame to relocate.'}
         </div>
     </div>
@@ -75,6 +75,8 @@
 
 
 <script lang='ts'>
+    import { run } from 'svelte/legacy';
+
 	import { resetLastTimes } from './../../data/player.ts';
 	import { ascFormula } from './../../data/ascension.ts';
 	import { allMultipliers } from './../../data/artifacts';
@@ -103,17 +105,19 @@ import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte
 import EnchantUpgradeButton from '../buttons/EnchantUpgradeButton.svelte';
 
 
-$: encht1BarWidth = `${$enchantProgress['t1']/$enchantThreshold['t1'] * 100}%`
-$: pbarWidths = Array(30).fill(0);
-$: beaconDispBonus = $beaconBonuses
-$: fameGainKeys = formula.calcFameGainKeys($keysOpened);
-$: fameMultiGems = formula.calcFameGemMulti($wallet['gems']);
-$: fameMultiLayer = formula.calcFameLayerMulti();
-$: fameMultiBeaconLevels = formula.calcFameGainBeacons(formula.sumArray($beaconLevels));
-let beaconDispBonus = $beaconBonuses;
-let reloadClock = true;
+let encht1BarWidth = $derived(`${$enchantProgress['t1']/$enchantThreshold['t1'] * 100}%`)
+let pbarWidths = $derived(Array(30).fill(0));
+run(() => {
+        beaconDispBonus = $beaconBonuses
+    });
+let fameGainKeys = $derived(formula.calcFameGainKeys($keysOpened));
+let fameMultiGems = $derived(formula.calcFameGemMulti($wallet['gems']));
+let fameMultiLayer = $derived(formula.calcFameLayerMulti());
+let fameMultiBeaconLevels = $derived(formula.calcFameGainBeacons(formula.sumArray($beaconLevels)));
+let beaconDispBonus = $state($beaconBonuses);
+let reloadClock = $state(true);
 let reloadNumbers;
-export let ghost;
+    let { ghost } = $props();
 
 onMount(() => {
     const reloadFameGain = setTimeout(() => {

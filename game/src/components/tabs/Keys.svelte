@@ -68,11 +68,11 @@
                 <div class='col-span-1 text-left align-middle'>
                     <!-- <label class='input-wrapper mr-3'> -->
                         <input type='checkbox' id='slurry-check-{j+1}'
-                        on:click={() => {
+                        onclick={() => {
                             if ($slurryToggles[j+1] === undefined) $slurryToggles[j+1] = true;
                         }}
                         bind:checked={$slurryToggles['key'+(j+1).toString()]} class='hidden checkbox w-6 h-6'/>
-                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <!-- svelte-ignore a11y_click_events_have_key_events -->
                         <label for='slurry-check-{j+1}'>
                             <div class='{$slurryToggles['key'+(j+1).toString()] ? 'game-btn-toggleon' : 'game-btn'}
                          col-span-1
@@ -206,15 +206,15 @@ import SlurryUpgradeButton from '../buttons/SlurryUpgradeButton.svelte';
 import SlurryCraftButton from '../buttons/SlurryCraftButton.svelte';
 import formula from '../../calcs/formula';
 
-$: craftMasteryWidth = `${($craftMasteryProgress / $craftMasteryNextReq) * 100}%`;
+let craftMasteryWidth = $derived(`${($craftMasteryProgress / $craftMasteryNextReq) * 100}%`);
 
-$: dropTable = [
+let dropTable = $derived([
    $key1DropTable,
    $key2DropTable,
    $key3DropTable,
    $key4DropTable,
    $key5DropTable
-];
+]);
 
 let updateInterval;
 

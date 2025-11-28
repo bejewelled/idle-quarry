@@ -1,9 +1,9 @@
 <!-- There is a lot of math in this file. -->
 <!-- If you aren't familiar with what's going on here, please don't touch anything. -->
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
-    on:click={() => open()}
+    onclick={() => open()}
     class="has-tooltip tooltip-text
 {affordable && keyKnowledgeCriteria() ? 'game-btn' : 'game-btn-noafford'}
 py-2 items-center text-center border-solid ml-1 mr-1 col-span-12
@@ -67,11 +67,16 @@ select-none"
     import { keyRewardText } from '../../data/keys'
     import { combinations } from 'mathjs'
     // @ts-nocheck
+    
     /**
-     * @type {string | number}
+     * @typedef {Object} Props
+     * @property {string | number} rarity
+     * @property {string | number} amt
      */
-     export let rarity, amt
-    let affordable, unlocked
+
+    /** @type {Props} */
+    let { rarity, amt } = $props();
+    let affordable = $state(), unlocked = $state()
     let affordInterval
 
     onMount(() => {

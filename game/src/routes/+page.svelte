@@ -6,7 +6,7 @@
 <div class="wrapper">
     <div class="main-page flex">
         <div class="flex-none w-1/5 px-2 res-display ">
-            <div class="res-display-space py-2" />
+            <div class="res-display-space py-2"></div>
             <div class="res-display-wrap grid grid-cols-12">
 
                 {#each [1, 2, 3, 4, 5] as i}
@@ -38,8 +38,7 @@
                 <!-- keys -->
                 {#each Object.entries($wallet) as res}
                     {#if ($wallet[res[0]] || $unlockedRes.has(res[0])) 
-                    && (res[0].includes("key") || res[0].includes("fragments"))
-                    }
+                    && (res[0].includes("key") || res[0].includes("fragments"))}
                         <div
                             class="{ref.colors[res[0]]} res-name
                         has-tooltip col-span-6 text-[13px]"
@@ -63,16 +62,16 @@
                 ,<div class='col-span-12'><ThoriumDepositButton/></div>
                 {/if}
 
-                <div class="alog-break pt-4 col-span-12" />
+                <div class="alog-break pt-4 col-span-12"></div>
                 <div class="alog-title game-text col-span-9">Activity Log</div>
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <div
                     class="alog-minimize col-span-3 game-btn text-center game-text"
-                    on:click={() => toggleAlog()}
+                    onclick={() => toggleAlog()}
                 >
                     {alogShow ? "-" : "+"}
                 </div>
-                <div class="col-span-12 py-1" />
+                <div class="col-span-12 py-1"></div>
                 {#if alogShow}
                     <div
                         class="alog-cont col-span-12 h-64 relative bg-gray-700 border-4 border-gray-600"
@@ -100,21 +99,21 @@
                     class="py-1 text-small save-btn control-btn {saveConfirm
                         ? 'bg-green-400'
                         : ''}"
-                    on:click={() => save()}>Save</button
+                    onclick={() => save()}>Save</button
                 >
                 <button
                     class="py-1 text-small save-btn control-btn"
-                    on:click={() => load(true)}>Import</button
+                    onclick={() => load(true)}>Import</button
                 >
                 <button
                     class="py-1 text-small save-btn control-btn {exportConfirm
                         ? 'bg-green-400'
                         : ''}"
-                    on:click={() => save(true)}>Export</button
+                    onclick={() => save(true)}>Export</button
                 >
                 <button
                     class="py-1 px-1 text-small save-btn control-btn"
-                    on:click={() => cycleBuyAmount()}>Buy x{buyAmount}</button
+                    onclick={() => cycleBuyAmount()}>Buy x{buyAmount}</button
                 >
                 <button
                     class="py-1 px-1 text-small save-btn has-tooltip {$settings[
@@ -122,16 +121,16 @@
                     ]
                         ? 'game-btn-toggleon'
                         : 'control-btn'}"
-                    on:click={() => toggleMaxBuy()}
+                    onclick={() => toggleMaxBuy()}
                     >Buy Max
                 </button>
                 <button
                     class="py-1 px-1 text-small save-btn control-btn"
-                    on:click={() => changeTab("help")}>Help!</button
+                    onclick={() => changeTab("help")}>Help!</button
                 >
                 <button
                     class="py-1 px-1 text-small save-btn control-btn"
-                    on:click={() => changeTab("settings")}>Settings</button
+                    onclick={() => changeTab("settings")}>Settings</button
                 >
                 <button
                     class="py-1 px-1 text-small border-2 border-violet-400 text-violet-500 hover:bg-violet-900"
@@ -140,7 +139,7 @@
                 </button>
                 <button
                     class="py-1 px-1 text-small border-2 border-red-600 text-red-600 hover:bg-red-950"
-                    on:click={() => reset()}>Reset</button>
+                    onclick={() => reset()}>Reset</button>
                 <button class="text-xs text-gray-600">v0.11 (alpha)</button>
                
                 <!-- mining level bar -->
@@ -193,11 +192,11 @@
                                         : 'bg-cyan-500'} 
                         h-2.5 rounded-full"
                                     style="width: {mineLevelBarWidth}%"
-                                />
+></div>
                             </div>
                         </div>
                     </div>
-                    <div class='col-span-1' />
+                    <div class='col-span-1'></div>
                 </div>
 
                 <!-- layer bar -->
@@ -243,11 +242,11 @@
                                     class="bg-yellow-300
                         h-2.5 rounded-full"
                                     style="width: {layerBarWidth}%"
-                                />
+></div>
                             </div>
                         </div>
                     </div>
-                    <div class='col-span-1' />
+                    <div class='col-span-1'></div>
                 </div>
 
 
@@ -270,7 +269,7 @@
                                     ? 'control-btn-selected'
                                     : 'control-btn'
                                 : 'control-btn-nounlock'}"
-                            on:click={() => changeTab(t)}>{t}</button
+                            onclick={() => changeTab(t)}>{t}</button
                         >
                     {/each}
                 {/key}
@@ -412,23 +411,23 @@
     import { onMount } from "svelte";
     import formula from "../calcs/formula.ts";
 
-    let tab = "mining";
+    let tab = $state("mining");
     let AUTOSAVE = true;
     let AUTOSAVE_INTERVAL = 30000;
-    let saveConfirm, exportConfirm;
-    let buyAmount = 1;
-    let loadingFinished = false;
-    let alogShow = true;
+    let saveConfirm = $state(), exportConfirm = $state();
+    let buyAmount = $state(1);
+    let loadingFinished = $state(false);
+    let alogShow = $state(true);
     const GAME_SPEED = 1; //only for balancing, doesn't actually change the game speed
-    $: mineLevelBarWidth =
-        Math.min(1, $mineLevel["xp"] / $mineLevel["xpNextReq"]) * 100;
-    $: layerBarWidth =
-        Math.min(1, $layer["blocks"] / $layer["blocksNextReq"]) * 100;
-    $: challengeBarWidth =
-        ($wallet["challengePoints"] / $challengeGoals[$challengeActive - 1]) *
-        100;
-    $: xpPerCycle = formula.getMineXPPerCycle();
-    $: layersPerCycle = $sumUpgradeLevels
+    let mineLevelBarWidth =
+        $derived(Math.min(1, $mineLevel["xp"] / $mineLevel["xpNextReq"]) * 100);
+    let layerBarWidth =
+        $derived(Math.min(1, $layer["blocks"] / $layer["blocksNextReq"]) * 100);
+    let challengeBarWidth =
+        $derived(($wallet["challengePoints"] / $challengeGoals[$challengeActive - 1]) *
+        100);
+    let xpPerCycle = $derived(formula.getMineXPPerCycle());
+    let layersPerCycle = $derived($sumUpgradeLevels)
     let ct;
 
     const toggleAlog = () => {
@@ -458,7 +457,8 @@
         $settings["maxBuy"] = !$settings["maxBuy"];
     };
 
-    $: speedText = ''
+    let speedText = $state('');
+    
     const toggleSpeed = () => {
         if (!$settings["speed"]) $settings["speed"] = 1;
         $settings["speed"] = ($settings["speed"] + 1) % 3;
@@ -1194,7 +1194,7 @@
             miningDropTable.updateTable();
         }, 250);
     }
-    let clockTabs;
+    let clockTabs = $state();
     onMount(() => {
         loadFunc();
         setInterval(() => {

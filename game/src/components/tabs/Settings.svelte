@@ -1,28 +1,28 @@
 <div class='wrapper pt-3'>
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
     
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
     <div class='wrapper bg-gray-700 my-1 border-2 border-gray-600'>
         <div class='w-full text-left py-1 pl-1 text-medium text-gray-400'>Anti-Flickering - Bar will appear as solid when enabled</div>
             <div class='wrapper grid grid-cols-1 py-1'>
                 <div class='wrapper col-span-1 grid grid-cols-8'>
                     <div class='setting col-span-2 mx-1 px-1 py-1 text-center
                     {$antiFlickerFlags['gems'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                    on:click={() => changeFlickerFlag('gems')}>Mining (gems)</div>
+                    onclick={() => changeFlickerFlag('gems')}>Mining (gems)</div>
                     <div class='setting col-span-2 mx-1 px-1 py-1 text-center
                     {$antiFlickerFlags['keyfinder'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                    on:click={() => changeFlickerFlag('keyfinder')}>Mining (key finder)</div>
+                    onclick={() => changeFlickerFlag('keyfinder')}>Mining (key finder)</div>
                     <div class='setting col-span-2 mx-1 px-1 py-1 text-center
                     {$antiFlickerFlags['crafting'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                    on:click={() => changeFlickerFlag('crafting')}>Crafting</div>
+                    onclick={() => changeFlickerFlag('crafting')}>Crafting</div>
                     <div class='setting col-span-2 mx-1 px-1 py-1 text-center
                     {$antiFlickerFlags['beacons'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                    on:click={() => changeFlickerFlag('beacons')}>Beacons</div>
+                    onclick={() => changeFlickerFlag('beacons')}>Beacons</div>
                 </div>
                 <div class='wrapper col-span-1 py-1 grid grid-cols-8'>
                     <div class='setting col-span-2 mx-1 px-1 py-1 text-center
                     {$antiFlickerFlags['enchants'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                    on:click={() => changeFlickerFlag('enchants')}>Enchants</div>
+                    onclick={() => changeFlickerFlag('enchants')}>Enchants</div>
                 </div>
             </div>
     </div>
@@ -31,26 +31,26 @@
     <div class='wrapper bg-gray-700 my-1 border-2 border-gray-600'>
         <div class='w-full text-left py-1 pl-1 text-medium text-gray-400'>Enable/disable activity log entries</div>
            <div class='grid grid-cols-12 py-1'>
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <div class='col-span-3 grid-cols-3 pt-1'>
                     <div class='setting col-span-3 mx-1 px-1 py-1 text-center
                     {$activityLogShow['crafting'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                    on:click={() => changeActivityLogShow('crafting')}>Crafting</div>
+                    onclick={() => changeActivityLogShow('crafting')}>Crafting</div>
                 </div>
                 <div class='col-span-3 grid-cols-3 pt-1'>
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <div class='setting col-span-3 mx-1 px-1 py-1 text-center
                     {$activityLogShow['layer'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                    on:click={() => changeActivityLogShow('layer')}>Layers</div>
+                    onclick={() => changeActivityLogShow('layer')}>Layers</div>
                 </div>
                 <div class='col-span-12 py-1'></div>
                 {#each $enchantUpgrades as e}
                 {#if !(e['name'] == 'Mine Size' || e['name'] == 'Mine Quality')}
                 <div class='col-span-3 grid-cols-3 pt-1'>
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <div class='setting col-span-3 mx-1 px-1 py-1 text-center
                     {$activityLogShow[e['name'].toLowerCase()] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                    on:click={() => changeActivityLogShow(e['name'].toLowerCase())}>{e['name']}</div>
+                    onclick={() => changeActivityLogShow(e['name'].toLowerCase())}>{e['name']}</div>
                 </div>
                 {/if}
                 {/each}
@@ -62,11 +62,11 @@
     <div class='wrapper bg-gray-700 my-1 border-2 border-gray-600'>
         <div class='w-full text-left py-1 pl-1 text-medium text-gray-400'>Progression</div>
            <div class='grid grid-cols-12 py-1'>
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <div class='col-span-3 grid-cols-3 pt-1'>
                     <div class='setting col-span-3 mx-1 px-1 py-1 text-center
                     {$settings['offlineProgress'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                    on:click={() => changeOfflineProgress()}>Offline Progress</div>
+                    onclick={() => changeOfflineProgress()}>Offline Progress</div>
                 </div>
 
            </div>
@@ -76,22 +76,22 @@
     <div class='wrapper bg-gray-700 my-1 border-2 border-gray-600'>
         <div class='w-full text-left py-1 pl-1 text-medium text-gray-400'>Other</div>
            <div class='grid grid-cols-12 py-1'>
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <div class='col-span-3 grid-cols-3 pt-1'>
                     <div class='setting has-tooltip col-span-3 mx-1 px-1 py-1 text-center
                     {$settings['costRatios'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                    on:click={() => changeSetting('costRatios')}>Cost Multipliers
+                    onclick={() => changeSetting('costRatios')}>Cost Multipliers
                         <span class='tooltip tooltip-style'>
                         When enabled, cost multipliers will appear on all upgrade tooltips.
                         </span>
                     </div>
                 </div>
 
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <div class='col-span-3 grid-cols-3 pt-1'>
                     <div class='setting select-none has-tooltip col-span-3 mx-1 px-1 py-1 text-center
                     {$settings['tutorialMode'] ? 'game-btn-toggleon' : 'game-btn-toggleoff' } py-1' 
-                    on:click={() => changeSetting('tutorialMode')}>Tutorial Mode
+                    onclick={() => changeSetting('tutorialMode')}>Tutorial Mode
                         <span class='tooltip tooltip-style'>
                         When enabled, hovering over resource displays will show the sources of that resource. NOTE: This may spoil some future content.
                         </span>

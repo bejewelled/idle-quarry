@@ -6,8 +6,8 @@
  p-1 w-full"
 >
   {#if canAscend()}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div on:click={() => ascend()}
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <div onclick={() => ascend()}
       class="text-center items-center justify-center text-xl font-bold
     bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparent"
     >
@@ -78,7 +78,7 @@
   import BeaconPowerUpgradeButton from "../buttons/BeaconPowerUpgradeButton.svelte";
   import EnchantUpgradeButton from "../buttons/EnchantUpgradeButton.svelte";
 
-let resetFuncs: any;
+let resetFuncs: any = $state();
 
   const ascReq = () => formula.calcAscensionEssenceRequirement($ascensionStats['ascensionCount'])
 

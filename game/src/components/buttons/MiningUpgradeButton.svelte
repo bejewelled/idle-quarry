@@ -1,9 +1,9 @@
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 {#key permUnlocked || affordable || $miningUpgradeLevels[index] > 0}
 {#if $miningUpgrades[index]['unlockAt']() || permUnlocked || $miningUpgradeLevels[index] > 0}
 <div class='pt-1'></div>
-<div on:click={() => buy(index)}
+<div onclick={() => buy(index)}
 class='has-tooltip tooltip-text 
 {affordable && $miningUpgradeLevelsBought[index] < $miningUpgrades[index]['maxLevel']
  ? $miningUpgrades[index]['style'] || 'game-btn' : ($miningUpgrades[index]['style'] || 'game-btn')+'-noafford'}
@@ -79,7 +79,7 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
 
         
 
- <script>
+ <script lang="ts">
 // @ts-nocheck
 
     import { onDestroy, onMount } from 'svelte';
@@ -89,8 +89,13 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
     import {progressThreshold, progressPerTick, miningUpgrades } from '../../data/mining';
     import ref from '../../calcs/ref'
     import formula from '../../calcs/formula'
-// @ts-nocheck
-    export let index;
+
+  interface Props {
+    // @ts-nocheck
+    index: any;
+  }
+
+  let { index }: Props = $props();
     let getCosts = () => {
         
         let c = {};
@@ -99,12 +104,12 @@ select-none'>{$miningUpgrades[index]['name']} [ {f($miningUpgradeLevelsBought[in
         }
         return c;
     }
-    let costs = {};
-    let affordable, unlocked;
-    let permUnlocked = ($miningUpgradeLevels[index] > 0)
+    let costs = $state({});
+    let affordable = $state(), unlocked;
+    let permUnlocked = ($state($miningUpgradeLevels[index] > 0))
     let affordInterval;
     let maxBuyCalcFinished = false;
-    let buyAmount = $settings['buyAmount'];
+    let buyAmount = $state($settings['buyAmount']);
     
     onMount(() => {
         

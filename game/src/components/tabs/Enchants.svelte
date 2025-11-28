@@ -70,6 +70,8 @@
 
 
 <script lang='ts'>
+    import { run } from 'svelte/legacy';
+
 	import { enchantTierUnlockAt } from './../../data/fame.ts';
 	import { enchantUpgradeLevels } from './../../data/player.ts';
  //@ts-nocheck
@@ -94,14 +96,16 @@ import BeaconPowerUpgradeButton from '../buttons/BeaconPowerUpgradeButton.svelte
 import EnchantUpgradeButton from '../buttons/EnchantUpgradeButton.svelte';
 
 
-$: encht1BarWidth = `${$enchantProgress['t1']/$enchantThreshold['t1'] * 100}%`
-$: encht2BarWidth = `${$enchantProgress['t2']/$enchantThreshold['t2'] * 100}%`
-$: pbarWidths = Array(30).fill(0);
-$: beaconDispBonus = $beaconBonuses
-$: fameGainKeys = formula.calcFameGainKeys($keysOpened);
-$: fameMultiGems = formula.calcFameGemMulti($wallet['gems']);
-$: fameMultiBeaconLevels = formula.calcFameGainBeacons(formula.sumArray($beaconLevels));
-let beaconDispBonus = $beaconBonuses;
+let encht1BarWidth = $derived(`${$enchantProgress['t1']/$enchantThreshold['t1'] * 100}%`)
+let encht2BarWidth = $derived(`${$enchantProgress['t2']/$enchantThreshold['t2'] * 100}%`)
+let pbarWidths = $derived(Array(30).fill(0));
+run(() => {
+        beaconDispBonus = $beaconBonuses
+    });
+let fameGainKeys = $derived(formula.calcFameGainKeys($keysOpened));
+let fameMultiGems = $derived(formula.calcFameGemMulti($wallet['gems']));
+let fameMultiBeaconLevels = $derived(formula.calcFameGainBeacons(formula.sumArray($beaconLevels)));
+let beaconDispBonus = $state($beaconBonuses);
 let reloadClock = true;
 let reloadNumbers;
 

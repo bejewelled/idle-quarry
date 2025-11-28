@@ -48,7 +48,7 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
                                         i
                                     ]} rounded-sm h-4 z-20"
                                     style="width: {pbarWidths[i]}%"
-                                />
+></div>
                             </div>
                             <div
                                 class="w-full h-4 bg-transparent absolute top-1 left-0"
@@ -58,7 +58,7 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
                                         i
                                     ]} bg-opacity-40 rounded-sm h-4"
                                     style="width: {pbarForecastWidths[i]}%"
-                                />
+></div>
                             </div>
                             <span class="tooltip tooltip-style ml-6">
                                 <span class={ref.essenceTextColors[i]}>
@@ -204,11 +204,11 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
     import EnchantUpgradeButton from "../buttons/EnchantUpgradeButton.svelte";
     import AscensionButton from "../buttons/AscensionButton.svelte";
 
-    let resetFuncs: Resetters;
+    let resetFuncs: Resetters = $state();
 
-    $: pbarWidths = [0, 0, 0, 0, 0, 0];
-    $: pbarForecastWidths = [0, 0, 0, 0, 0, 0];
-    $: forecastNums = [];
+    let pbarWidths = $derived([0, 0, 0, 0, 0, 0]);
+    let pbarForecastWidths = $derived([0, 0, 0, 0, 0, 0]);
+    let forecastNums = $derived([]);
     const getNextAntimatterReq = () => {
         const count = $ascensionStats['ascensionCount'];
         for (let i in $antimatterBonusAscensionReqs) {
@@ -218,7 +218,7 @@ bg-clip-text bg-gradient-to-tl from-purple-300 to bg-fuchsia-600 text-transparen
         }
         return $antimatterBonusAscensionReqs.length;
     }
-    let clock = false;
+    let clock = $state(false);
     const sumEssence = () => {
                         let sum = 0;
                         for (let i = 0; i < $ascensionElements.length; i++) {
